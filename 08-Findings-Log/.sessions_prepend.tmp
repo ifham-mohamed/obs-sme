@@ -1,0 +1,289 @@
+## 2026-05-21 — Session 51: Completeness verify endpoint hardening (timeout, CORS, WS URL, state reset) (F-178)
+
+**Worked on:** The verify-completeness feature shipped in Session 50 worked on the happy path but hit a cascade of operational issues during integration testing. Eight bugs surfaced in sequence and got knocked down one by one. (1) 404 on first verify click — frontend `lib/api/m1-completeness.ts` URLs missed the `/api/v1` prefix (existing client convention). Three-occurrence replace_all fixed it. (2) `httpx.ReadTimeout` — documents.gov.lk's listing body sometimes trickles in over 60-90 s; the bare `_HTTP_TIMEOUT_S = 30.0` budget wasn't enough. Replaced with `httpx.Timeout(connect=10.0, read=120.0, write=10.0, pool=10.0)` + `_HTTP_RETRY_ATTEMPTS = 2` with a retry-on-Timeout loop. (3) 500 without CORS headers — unhandled exceptions bubbled past Starlette's `ServerErrorMiddleware` (which sits above CORS middleware in the stack); resulting 500 had no `Access-Control-Allow-Origin` header so the browser blocked it with "Cannot reach the API server". Added catch-all `except Exception as exc` in `_run_verify` that raises `HTTPException(500, detail=f"Verification failed: {type(exc).__name__}: {first_line[:240]}")` plus `logger.exception(...)`. Also added explicit `httpx.TimeoutException → 504` and `httpx.HTTPError → 502` mappings. (4) WebSocket dialled the wrong host — `useExtractionLiveFeed.ts` built `ws://window.location.host/...` which resolves to the Next.js dev port (3000); backend is on 8000. Replaced with `process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"` + `.replace(/^http/i, "ws")`. (5) WS reconnect storm — after a terminal task the server's `done` frame closed the connection; client's `onclose` exponentially reconnected every ~7 s, each attempt re-running the DB query that resolved task → source. Two-sided fix: backend sends `{type:"done", celery_status, terminal:true}` then `ws.close(code=1000, reason="task terminal")`; client `onmessage` flips `cancelledRef.current = true` on `frame.terminal`, and `onclose` short-circuits on `event.code === 1000`. (6) `AttributeError: 'URL' object has no attribute 'human_repr'` — surfaced thanks to the new 500 detail format. Installed httpx predates 0.27. Two-site replace `resp.url.human_repr()` → `str(resp.url)`. (7) Backend not running — between bugs the user's `uvicorn --reload` died silently; recommended venv-activated relaunch. (8) Stale panel state on task switch — switching to a different historical run kept the previous run's "No gaps detected" until the new verify finished. Added `useEffect(() => { setResult(null); setRefetchResult(null); setAutoRan(false); }, [taskId])` before the auto-trigger effect.
+
+**Status flips:** F-178 🟢 (hardening pass tied to F-177).
+
+### Done
+
+- **Backend (3 modified):**
+  - `enigmatrix-backend/app/services/m1_completeness_check.py` — `_HTTP_TIMEOUT = httpx.Timeout(connect=10/read=120/write=10/pool=10)`; `_HTTP_RETRY_ATTEMPTS = 2`; retry-on-Timeout loop; `resp.url.human_repr()` → `str(resp.url)` at lines 192 + 193.
+  - `enigmatrix-backend/app/api/v1/m1_completeness.py` — `_run_verify` wraps `find_missing(...)` with three branches: `httpx.TimeoutException → 504`, `httpx.HTTPError → 502`, catch-all `Exception → 500` with `Verification failed: <ExceptionClass>: <first 240 chars>` detail. Added `import httpx`.
+  - `enigmatrix-backend/app/api/v1/m1_extraction_ws.py` — `_celery_terminal_watcher` sends `{type:"done", celery_status, terminal:true}` then `ws.close(code=1000, reason="task terminal")`.
+- **Frontend (3 modified):**
+  - `enigmatrix-frontend/lib/api/m1-completeness.ts` — three URLs prefixed `/api/v1`.
+  - `enigmatrix-frontend/lib/hooks/useExtractionLiveFeed.ts` — `getWebSocketUrl` uses `NEXT_PUBLIC_API_BASE_URL` + `.replace(/^http/i, "ws")`. `ServerFrame` done branch extended with `terminal?: boolean; celery_status?: string`. `onmessage` flips `cancelledRef.current = true` on `frame.terminal`; `onclose` short-circuits on `event.code === 1000`.
+  - `enigmatrix-frontend/components/m1-extraction/missing-gazettes-panel.tsx` — new `useEffect([taskId])` resets `result`, `refetchResult`, `autoRan`.
+- **Vault tracker (4 modified):** SESSIONS.md (this entry), FEATURES.md, CHANGES.md, plans/2026-05-21_Plan Completeness verify endpoint hardening — timeout, CORS, WS URL, state reset.md.
+
+### Decisions
+
+- **Belt-and-braces for WS termination.** Server sends `terminal: true` AND uses close code 1000. Client honours either signal.
+- **`str(resp.url)` over upgrading httpx.** Avoids touching the workspace lockfile.
+- **240-char cap on exception message** in 500 detail.
+- **Panel reset effect BEFORE the auto-trigger effect.**
+
+### Risks / open follow-ups
+
+- Per-task_id WS channel routing remains a follow-up.
+- `uvicorn --reload` fragility — `watchexec --restart --exts py -- uvicorn app.main:app` is the more robust alternative.
+
+### Files (this slice)
+
+**Modified backend (3):** `enigmatrix-backend/app/{services/m1_completeness_check.py, api/v1/m1_completeness.py, api/v1/m1_extraction_ws.py}`.
+
+**Modified frontend (3):** `enigmatrix-frontend/{lib/api/m1-completeness.ts, lib/hooks/useExtractionLiveFeed.ts, components/m1-extraction/missing-gazettes-panel.tsx}`.
+
+**Modified vault (4):** `c:\sme\08-Findings-Log\{SESSIONS, CHANGES, FEATURES}.md` + plan file.
+
+---
+
+## 2026-05-21 — Session 50: Completeness check + re-fetch + spider EN→SI→TA fallback (F-177)
+
+**Worked on:** User had manually compared the source website's published gazette list against the DB across two months — found a 12% miss rate in Feb 2026 (25 of 207 missing) and a 40% miss rate in Jan 2026 (103 of 260 missing, including a 10-day blackout Jan 19-28). Substantive regulatory gazettes were in the gap. Separately the existing `gazette_spider.py` dropped any URL ending `_s.pdf` / `_t.pdf`, so Sinhala-only / Tamil-only gazettes were silently ignored. Planning questions confirmed: language storage → fallback EN→SI→TA (no schema change), verification → both manual + auto-trigger on terminal, missing items → table with per-row + bulk re-fetch, unlinked rows → show all known fields with "unparsed" pills. **What landed:** backend `app/services/m1_completeness_check.py` (httpx + lxml listing diff against `m1_gazette_items`, per-source URL templates + regexes, year-listing fetch with EN-priority deduplication); backend `app/api/v1/m1_completeness.py` (3 endpoints — `POST /verify/{task_id}`, `POST /verify`, `POST /refetch-missing` — with Pydantic schemas `MissingItemOut`, `VerifyResultOut`, `VerifyByScopeIn`, `RefetchMissingIn`, `RefetchOneOut`, `RefetchMissingOut`); registered in `app/api/v1/router.py` under `prefix="/admin/m1/extraction"`; frontend `lib/api/m1-completeness.ts` typed client; frontend `components/m1-extraction/missing-gazettes-panel.tsx` (auto-trigger on Celery terminal + manual button + missing-items table with `unparsed` pills + per-row + bulk "Re-fetch all" + refetch summary block); wired into source extraction page above `<ExtractionSummaryCard>` via python-atomic-write; spider `scraper/spiders/gazette_spider.py` rewritten to buffer-then-pick per `document_number` with `_LANG_PRIORITY = {"en":0,"si":1,"ta":2}` — one yield per gazette, English-first with fallback.
+
+**Status flips:** F-177 🟢 (completeness check + re-fetch + spider lang fallback shipped).
+
+### Done
+
+- **Backend (2 new + 2 modified):**
+  - `enigmatrix-backend/app/services/m1_completeness_check.py` (NEW, 265 lines).
+  - `enigmatrix-backend/app/api/v1/m1_completeness.py` (NEW, 382 lines) — three endpoints + Pydantic schemas. `refetch_missing` mirrors `M1RegulationsInsertPipeline._insert_rows`, then enqueues `extract_gazette.delay(...)`.
+  - `enigmatrix-backend/app/api/v1/router.py` — registered new router under `prefix="/admin/m1/extraction"`.
+  - `enigmatrix-backend/scraper/spiders/gazette_spider.py` — `_LANG_PRIORITY` + `_language_for(url)` helper; `parse()` buffers items into `best_by_number[document_number] = (priority, dict(item))`; yields one `GazetteItem` per gazette.
+- **Frontend (2 new + 1 modified):**
+  - `enigmatrix-frontend/lib/api/m1-completeness.ts` (NEW) — typed API client.
+  - `enigmatrix-frontend/components/m1-extraction/missing-gazettes-panel.tsx` (NEW, 372 lines).
+  - `enigmatrix-frontend/app/(admin)/admin/m1/pipeline/sources/[sourceId]/extraction/page.tsx` — added import + `<MissingGazettesPanel sourceId={...} taskId={task.task_id} autoVerifyTrigger={isTerminal} token={token} />`.
+- **Vault tracker (4 modified):** SESSIONS.md (this entry), FEATURES.md, CHANGES.md, plans/2026-05-21_Plan Completeness check + re-fetch + spider EN-SI-TA fallback.md.
+
+### Decisions
+
+- **Endpoints in their own module** (`m1_completeness.py`) rather than appended to the 1000+ line `m1_gazette_extraction.py`.
+- **Year-listing URL templates duplicated** between spider and completeness service — avoids importing Scrapy from the API request path.
+- **Refetch inserts rows mirroring `M1RegulationsInsertPipeline._insert_rows`** so DB shape matches spider-created rows exactly.
+- **No per-language `raw_text` schema migration.** Fallback-only.
+
+### Risks / open follow-ups
+
+- documents.gov.lk slow / unhealthy — addressed in Session 51 hardening pass.
+- Refetch panel reflects queued counts but doesn't itself stream per-row progress.
+
+### Files (this slice)
+
+**New backend (2) + modified (2):** see above.
+
+**New frontend (2) + modified (1):** see above.
+
+**Modified vault (4):** `c:\sme\08-Findings-Log\{SESSIONS, CHANGES, FEATURES}.md` + plan file.
+
+---
+
+## 2026-05-21 — Session 49: Live count polling + SpiderResultCard polish (F-175, F-176)
+
+**Worked on:** Two related UX issues on the source extraction page. (1) Polling stalled at Celery SUCCESS. Page-level `summaryForResume` react-query had `staleTime: 8_000` but no `refetchInterval`. Once the spider's Celery task hit SUCCESS the status query stopped polling — but downstream `extract_gazette` + `preprocess_gazette` were still processing 100+ PDFs. Counts on the screen stayed frozen at "100 extracted · 0 preprocessed" until a manual reload. Fixed by adding a `refetchInterval` callback that polls every 5 s while any row is in flight and stops automatically when `ingested === 0 && extracted === 0 && preprocessed + extraction_failed >= in_scope`. (2) Raw JSON dump for spider result. Celery task's return payload was rendered as `<pre>{JSON.stringify(status.data.result, null, 2)}</pre>` — ugly. Replaced with new `components/m1-extraction/spider-result-card.tsx` — 196-line polished card with status pill (Success/Failed), 2×2 grid (Source mono chip / Spider mono / Scope parsed `YYYY-MM-DD..YYYY-MM-DD` → `Date.toLocaleDateString` / Return code), "Other fields" fallthrough. Works for every source (EGZ/GZ/BILL/ACT).
+
+**Status flips:** F-175 🟢 (live count polling), F-176 🟢 (SpiderResultCard).
+
+### Done
+
+- **Frontend (1 new + 1 modified):**
+  - `enigmatrix-frontend/components/m1-extraction/spider-result-card.tsx` (NEW, 196 lines).
+  - `enigmatrix-frontend/app/(admin)/admin/m1/pipeline/sources/[sourceId]/extraction/page.tsx` — added `refetchInterval` to `summaryForResume.useQuery`; added import + `<SpiderResultCard result={status.data.result as Record<string, unknown>} />` replacing the `<pre>` JSON block.
+- **Vault tracker (4 modified):** SESSIONS.md (this entry), FEATURES.md, CHANGES.md, plans/2026-05-21_Plan Live count polling for summaryForResume + SpiderResultCard polish.md.
+
+### Decisions
+
+- **Polling lives on the page-level query** so `PipelineRunStatusCard` AND the existing summary card both benefit.
+- **"Settled" condition includes `extraction_failed`** so failed rows don't keep polling forever.
+
+### Risks / open follow-ups
+
+- None.
+
+### Files (this slice)
+
+**Frontend (2):** new `spider-result-card.tsx` + modified `extraction/page.tsx`.
+
+**Modified vault (4):** `c:\sme\08-Findings-Log\{SESSIONS, CHANGES, FEATURES}.md` + plan file.
+
+---
+
+## 2026-05-21 — Session 48: Vault recovery from Write-tool truncation + backend IndentationError + NUL bytes + uvicorn venv (F-178 incident)
+
+**Worked on:** After a full-stack feature session, `npm run build` reported walls of TS17008 / TS1005 / TS1010 / TS1002 errors. Hex dumps revealed widespread mid-content truncation across 13 frontend files — `providers.tsx` cut at 16 lines mid-comment; `next.config.mjs` cut at 15 lines ending `swcMinify: t`; dashboard page cut at 359 lines mid-string-literal; login page cut at 192 lines mid-className; sidebar.tsx at 899 of expected 960 lines; etc. The Write / Edit tools had returned "file created successfully" on every truncating call. Backend `extract_gazette.py` additionally had **755 trailing NUL bytes**; Python's `ast.parse` rejects null bytes outright. On top of that the previous WebSocket-emit Edit had placed the `_emit(...)` block at 4-space indent (outside the `async with`), leaving the next `if not download_url` block at 8-space dangling — producing `IndentationError: unexpected indent` at line 212. **Recovery:** (1) emitted the exact PowerShell `git restore` command for all 13 frontend files; (2) for backend `extract_gazette.py` — removed the misplaced `_emit` block at lines 200-211 via `Edit`, then stripped 755 trailing NUL bytes via python (`data.rstrip(b'\x00').rstrip()`, write 15,193 bytes back, file ends `    return body\n`), then `python3 -c "import ast; ast.parse(...)"` confirmed clean parse; (3) swept sibling backend / ML files for NUL bytes — all confirmed 0; (4) established new write protocol: **python-atomic-write for any file >~25KB**, followed by `wc -l` + `tail -3` + null-byte check + (for Python) `ast.parse`. Pattern of truncation correlates strongly with long writes containing em-dashes, special quotes, or emoji characters. Separately the user hit `ModuleNotFoundError: No module named 'fastapi'` when running uvicorn from `/usr/lib/python3.14` (system Python). Pointed them at `source /mnt/c/Reasearch/xyz/.venv/bin/activate && uvicorn app.main:app --reload` to use the project venv.
+
+**Status flips:** F-178 🟢 (incident recovered + new write protocol adopted).
+
+### Done
+
+- **Backend (1 modified):** `enigmatrix-backend/app/tasks/m1/extract_gazette.py` — removed misplaced `_emit(...)` block at lines 200-211; stripped 755 trailing NUL bytes; file ends naturally at `    return body\n`.
+- **Frontend (13 reverted via `git restore`):** `components/providers.tsx`, `components/layout/sidebar.tsx`, `components/layout/theme-toggle.tsx`, `components/m1-pipeline/funnel-chart.tsx`, `components/m1-pipeline/pipeline-flow-diagram.tsx`, `app/(admin)/layout.tsx`, `app/(app)/dashboard/page.tsx`, `app/(auth)/login/page.tsx`, `app/api/auth/establish/route.ts`, `app/(admin)/admin/m1/pipeline/page.tsx`, `app/(admin)/admin/m1/pipeline/sources/[sourceId]/extraction/page.tsx`, `app/globals.css`, `next.config.mjs`.
+- **Process adopted:** python-atomic-write (`tmp = path + ".tmp"; open(tmp, "w", encoding="utf-8", newline="\n").write(out); os.replace(tmp, path)`) for any file >~25KB.
+- **Vault tracker (5 modified):** SESSIONS.md, FEATURES.md, CHANGES.md, SETUP_COVERAGE.md (Edit-tool truncation policy), plan file.
+
+### Decisions
+
+- **Recommend `git restore` over self-rewriting** the frontend files because the same write path corrupted them once and could again.
+- **`extract_gazette.py` "Classifying" emit removed**, not re-added. Other phase emissions still fire.
+- **Watchexec as a more resilient dev loop** recommended (not yet adopted).
+
+### Risks / open follow-ups
+
+- Root cause of Write-tool truncation unknown.
+- Classifying sub-step emit not re-added in extract_gazette.py.
+
+### Files (this slice)
+
+**Backend (1):** `enigmatrix-backend/app/tasks/m1/extract_gazette.py`.
+
+**Frontend (13 reverted via git restore):** see above.
+
+**Modified vault (5):** `c:\sme\08-Findings-Log\{SESSIONS, CHANGES, FEATURES, SETUP_COVERAGE}.md` + plan file.
+
+---
+
+## 2026-05-21 — Session 47: Frontend perf overhaul — dashboard streaming, login handoff, bundle tuning (F-174)
+
+**Worked on:** User reported >10 second delay between login submission and dashboard render. Three compounding causes: (1) login handler made four sequential network calls — `AuthApi.login()` → `/api/auth/establish` → `/api/auth/me` → `router.replace()` triggers SSR → `router.refresh()` throws away the just-rendered tree; (2) dashboard server component awaited `Promise.all` of five backend fetches before returning any HTML — blank screen on cold backend start; (3) react-query defaults `refetchOnWindowFocus: true / refetchOnReconnect: true / refetchOnMount: true` caused redundant fetches on every navigation. Planning questions confirmed full overhaul + OK to move slow queries server-side. **What landed:** rewrote `app/(app)/dashboard/page.tsx` with Suspense streaming — page shell + welcome banner synchronous, each data-bound section (`StatCardsSection`, `PendingRegulationsSection`, `LowerSection`) is its own async server component wrapped in `<Suspense fallback={<Skeleton/>}>`; updated `/api/auth/establish` to base64url-decode the JWT payload server-side and return `{ ok: true, role }` inline; updated login page to read `role` from establish response and drop both the `/me` fetch AND `router.refresh()`; expanded `next.config.mjs` with `productionBrowserSourceMaps: false / swcMinify: true / compress: true / output: "standalone" / poweredByHeader: false` and `optimizePackageImports` for `lucide-react / date-fns / recharts / framer-motion / six @radix-ui/* packages` plus `images` config; tuned `components/providers.tsx` QueryClient defaults — `staleTime: 60_000 / gcTime: 10 * 60_000 / refetchOn*: false / retry: 1 / retryDelay: 1_000`, mutations `retry: 0`; code-split `ThroughputChart / StatusDistribution / FunnelChart` in `app/(admin)/admin/m1/pipeline/page.tsx` via `next/dynamic({ ssr: false })`. Build error: `import dynamic from "next/dynamic"` collided with `export const dynamic = "force-dynamic"` route-segment config. Renamed to `import nextDynamic from "next/dynamic"`.
+
+**Status flips:** F-174 🟢 (frontend perf overhaul).
+
+### Done
+
+- **Frontend (6 modified):**
+  - `app/(app)/dashboard/page.tsx` — Suspense streaming with three async subsections.
+  - `app/api/auth/establish/route.ts` — `readRoleFromAccessToken(token)` base64url decoder; returns `{ ok: true, role }`.
+  - `app/(auth)/login/page.tsx` — reads `role` from establish response; drops `/api/auth/me` and `router.refresh()`.
+  - `next.config.mjs` — prod-mode tuning (sourcemaps off, standalone output, expanded `optimizePackageImports`, AVIF/WebP images config).
+  - `components/providers.tsx` — QueryClient defaults tightened.
+  - `app/(admin)/admin/m1/pipeline/page.tsx` — recharts components via `next/dynamic` aliased as `nextDynamic`; skeleton loading states per chart.
+- **Vault tracker (4 modified):** SESSIONS.md, FEATURES.md, CHANGES.md, plan file.
+
+### Decisions
+
+- **Streaming Suspense** — biggest single perceived-perf win.
+- **`establish` returns role inline** — server already mints + handles the token.
+- **`router.refresh()` removed** — `router.replace()` already triggers fresh SSR.
+- **`output: "standalone"`** — smaller Docker / Fly.io deploys without breaking Vercel.
+
+### Risks / open follow-ups
+
+- Streaming requires reverse proxy not to buffer (Vercel default is fine).
+- Many files modified in this session were subsequently truncated by the Write tool — recovery in Session 48.
+
+### Files (this slice)
+
+**Frontend (6):** see above.
+
+**Modified vault (4):** `c:\sme\08-Findings-Log\{SESSIONS, CHANGES, FEATURES}.md` + plan file.
+
+---
+
+## 2026-05-21 — Session 46: Extraction running UX upgrade — PipelineRunStatusCard + WS sub-step scaffold + ML progress + backend Celery emits (F-173)
+
+**Worked on:** User reported the source extraction page said "Completed SUCCESS" while 2 rows were still at `ingested` and 154 had not yet been preprocessed — banner derived its top-line status purely from the Celery spider task's state. Planning questions confirmed all three progress detail levels (per-step counts + per-PDF + sub-step), WebSocket transport, end-to-end completion semantics, work across frontend + backend + ML. **What landed:** (1) Frontend `components/m1-extraction/pipeline-run-status-card.tsx` (481 lines) — exports `derivePipelinePhase(celeryStatus, counts) → "scraping" | "extracting" | "preprocessing" | "completed" | "partial" | "failed" | "cancelled"`; three-phase tracker bars; live sub-step pill. (2) Frontend `lib/hooks/useExtractionLiveFeed.ts` (141 lines) — WebSocket client with exponential backoff (1 s → 30 s). (3) Wired both into source extraction page.tsx — replaced single-line Celery banner with `<PipelineRunStatusCard>`. (4) ML `enigmatrix-ml/m1/extraction/progress.py` (114 lines) — canonical `ExtractionPhase` literal (`classifying | extracting_text | ocr | language_detection | wijesekara | preprocessing | indexing`); `PHASE_LABELS` dict; `emit(cb, ...)` helper. (5) Re-exported from ML package `__init__.py`. (6) Backend `app/services/m1_extraction_live_feed.py` (84 lines) — sync `redis-py` publisher reusing `CELERY_BROKER_URL`. (7) Backend `app/tasks/m1/extract_gazette.py` — added `_emit(task_self, ...)` helper that calls `self.update_state(state="PROGRESS", meta=payload)` AND `publish_substep(...)`; plumbed `task_self` through `_extract_gazette_async` → `_extract_gazette_body`; hooked at three phase boundaries. (8) Backend `app/api/v1/m1_extraction_ws.py` (180 lines) — FastAPI `@router.websocket("/extraction/{task_id}")` with token query-param auth via `decode_token(token, expected_kind="access")`; resolves source via `m1_extraction_runs` row; subscribes to source-scoped Redis pub/sub channel; three concurrent loops (pubsub pump, 25 s heartbeat, 2 s Celery terminal watcher). (9) Registered WS router in `app/api/v1/router.py`.
+
+**Status flips:** F-173 🟢 (PipelineRunStatusCard + WS sub-step scaffold).
+
+### Done
+
+- **Frontend (2 new + 1 modified):**
+  - `components/m1-extraction/pipeline-run-status-card.tsx` (NEW, 481 lines).
+  - `lib/hooks/useExtractionLiveFeed.ts` (NEW, 141 lines).
+  - `app/(admin)/admin/m1/pipeline/sources/[sourceId]/extraction/page.tsx` — replaced Celery banner with `<PipelineRunStatusCard celeryStatus={...} counts={scCounts} celeryTerminal={isTerminal} liveSubStep={liveSubStep} />`.
+- **ML (1 new + 1 modified):**
+  - `enigmatrix-ml/m1/extraction/progress.py` (NEW, 114 lines).
+  - `enigmatrix-ml/m1/extraction/__init__.py` — re-exports `PHASE_LABELS`, `ExtractionPhase`, `ProgressCallback`, `SubStepEvent`, `emit_progress`.
+- **Backend (2 new + 2 modified):**
+  - `app/services/m1_extraction_live_feed.py` (NEW, 84 lines).
+  - `app/api/v1/m1_extraction_ws.py` (NEW, 180 lines).
+  - `app/api/v1/router.py` — registered WS router.
+  - `app/tasks/m1/extract_gazette.py` — `_emit(...)` helper + phase boundary hooks; `_PHASE_*` constants + `_PHASE_BY_METHOD` map.
+- **Vault tracker (4 modified):** SESSIONS.md, FEATURES.md, CHANGES.md, plan file.
+
+### Decisions
+
+- **Sub-step phase names canonical in ML package**, mirrored as backend constants — avoids ml-package boot-order race.
+- **WS routes per source_id pub/sub channel** as a pragmatic scaffold. Per-task_id routing requires plumbing trigger task_id through the spider into every child `extract_gazette` call.
+- **Token auth via `?token=`** because FastAPI WebSocket doesn't run HTTP dependencies.
+- **Live sub-step pill purely additive** — card derives phase from poll-derived counts; WS unreachable degrades gracefully.
+
+### Risks / open follow-ups
+
+- Concurrent runs against the same source would interleave their frames on the shared channel.
+- WS reconnect storm on terminal task discovered + fixed in Session 51.
+- Several files truncated by Write tool during this session (recovered in Session 48).
+
+### Files (this slice)
+
+**New frontend (2), backend (2), ML (1). Modified frontend (1), backend (2), ML (1).**
+
+**Modified vault (4):** `c:\sme\08-Findings-Log\{SESSIONS, CHANGES, FEATURES}.md` + plan file.
+
+---
+
+## 2026-05-21 — Session 45: M1 pipeline page responsiveness v2 — funnel, sticky sidebar, collapsed footer (F-172)
+
+**Worked on:** User reported four UI issues on `/admin/m1/pipeline`: (1) pipeline funnel chart bars overflowing the card by orders of magnitude — math bug `widthPct = (value / counts[TIERS[0].key]) * 100` divides by the *ingested* tier; once rows drained downstream (`ingested=1, extracted=101, preprocessed=102`) the math produced 10,100% / 10,200% widths; (2) chunky native scrollbar visible in the sidebar — earlier fix scoped `* { scrollbar: none }` to `html, body` only, exposing the sidebar's `overflow-y-auto` native scrollbar; (3) sidebar scrolling with the page instead of pinning — previous responsiveness fix used `overflow-x-hidden` on the admin layout's flex containers; `overflow: hidden` on any axis establishes a containing block that disables `position: sticky` on descendants; (4) collapsed sidebar's user/locale footer cramped — UserRow's expanded layout was being crammed into 64 px width. **What landed:** funnel-chart uses `maxAcrossTiers = Math.max(1, ...TIERS.map(t => counts[t.key] ?? 0))` as denominator + clamps `widthPct` to `[0, 100]` + adds `overflow-hidden` + `bg-muted/30` on the track parent; sidebar gets `scrollbar-hide` class on inner `<nav>` + tighter `mx-1.5` collapsed card margin + `p-1.5` collapsed bottom-section padding; UserRow rewritten to branch on `collapsed` — stack avatar above logout pill with `<Tooltip>`-wrapped triggers when collapsed, horizontal row with hover bg when expanded, avatar gets `ring-1 ring-border/60`; admin layout switches `overflow-x-hidden` → `overflow-x-clip` on both flex container + main column.
+
+**Status flips:** F-172 🟢 (M1 pipeline page responsiveness v2).
+
+### Done
+
+- **Frontend (3 modified):**
+  - `components/m1-pipeline/funnel-chart.tsx` — denominator `maxAcrossTiers`, width clamp, overflow-hidden track.
+  - `components/layout/sidebar.tsx` — `scrollbar-hide` on `<nav>`; collapsed margins; `UserRow` rewrite.
+  - `app/(admin)/layout.tsx` — `overflow-x-hidden` → `overflow-x-clip` on shell + main column.
+- **Vault tracker (4 modified):** SESSIONS.md, FEATURES.md, CHANGES.md, plan file.
+
+### Decisions
+
+- **`max(across tiers)` denominator** — pipeline state isn't strictly monotone (rows drain past the top tier).
+- **`overflow-x-clip` over `overflow-x-hidden`** — clips overflow without establishing a containing block.
+- **`scrollbar-hide` targeted at sidebar nav** rather than global — keeps intentional inner scrollers' chrome visible.
+
+### Risks / open follow-ups
+
+- None.
+
+### Files (this slice)
+
+**Frontend (3 modified):** see above.
+
+**Modified vault (4):** `c:\sme\08-Findings-Log\{SESSIONS, CHANGES, FEATURES}.md` + plan file.
+
+---
+
+## 2026-05-21 — Session 44: Theme polish — view-transition animation smoothness + disable system tracking (F-171)
+
+**Worked on:** Two theme issues. (1) View-transition reveal felt twitchy — `startViewTransition` clip-path used `ease-in-out` over 420 ms, and the universal `* { transition: ... }` rule in `globals.css` was running underneath the view-transition snapshot, producing two parallel animations. (2) App auto-changed theme when the OS flipped colour scheme. **What landed:** `theme-toggle.tsx` easing → `cubic-bezier(0.22, 1, 0.36, 1)` (easeOutQuint), duration 420 ms → 600 ms, subtle scale (1.015 → 1) + opacity (0.92 → 1) on new layer, scale (1 → 0.985) + opacity (1 → 0.6) on old layer; flip a `theme-transitioning` class on `<html>` for the transition's lifetime; sync Sun/Moon icon transitions to 500 ms with the same bezier. `globals.css` adds GPU promotion (`will-change: clip-path, transform, opacity`, `backface-visibility: hidden`, `transform-origin: center center`) on `::view-transition-old/new(root)` plus `html.theme-transitioning *` rule suppressing universal colour transitions during the view-transition window. `providers.tsx` `ThemeProvider` props: `defaultTheme="system"` → `defaultTheme="light"`, added `enableSystem={false}`, added `storageKey="enigmatrix-theme"`. Confirmed `setTheme` is only invoked from `components/layout/theme-toggle.tsx`.
+
+**Status flips:** F-171 🟢 (theme polish — animation + tracking-off).
+
+### Done
+
+- **Frontend (3 modified):**
+  - `components/layout/theme-toggle.tsx` — easing, duration, scale + opacity choreography, `theme-transitioning` class flip, icon transition sync.
+  - `app/globals.css` — view-transition GPU promotion + universal-transition suppression during transition window.
+  - `components/providers.tsx` — `ThemeProvider` props.
+- **Vault tracker (4 modified):** SESSIONS.md, FEATURES.md, CHANGES.md, plan file.
+
+### Decisions
+
+- **Suppress universal transitions only during the view-transition window** via `theme-transitioning` class.
+- **`defaultTheme="light"`** — brand palette reads warmer light-first.
+- **`storageKey="enigmatrix-theme"`** namespaces persisted preference.
+
+### Risks / open follow-ups
+
+- None.
+
+### Files (this slice)
+
+**Frontend (3 modified):** see above.
+
+**Modified vault (4):** `c:\sme\08-Findings-Log\{SESSIONS, CHANGES, FEATURES}.md` + plan file.
+
+---
+
