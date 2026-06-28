@@ -1,0 +1,656 @@
+regulation_short_code,gazette_number,pdf_filename,page_count,size_kb,status,extraction_method,extracted_at,notes
+2468_44,2468/44,2468_44.pdf,3,753,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_18,2469/18,2469_18.pdf,3,139,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_19,2469/19,2469_19.pdf,1,203,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_20,2469/20,2469_20.pdf,26,923,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2469_21,2469/21,2469_21.pdf,5,207,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2469_22,2469/22,2469_22.pdf,8,781,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2469_23,2469/23,2469_23.pdf,8,725,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2469_24,2469/24,2469_24.pdf,2,191,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_25,2469/25,2469_25.pdf,11,744,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2469_26,2469/26,2469_26.pdf,2,197,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_27,2469/27,2469_27.pdf,2,189,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_28,2469/28,2469_28.pdf,2,255,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_30,2469/30,2469_30.pdf,11,802,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2469_31,2469/31,2469_31.pdf,5,765,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2469_32,2469/32,2469_32.pdf,24,910,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2469_33,2469/33,2469_33.pdf,2,639,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_34,2469/34,2469_34.pdf,8,697,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2469_35,2469/35,2469_35.pdf,5,740,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2469_36,2469/36,2469_36.pdf,1,251,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_37,2469/37,2469_37.pdf,2,244,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_38,2469/38,2469_38.pdf,10,261,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2469_39,2469/39,2469_39.pdf,4,196,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2469_40,2469/40,2469_40.pdf,5,766,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2470_01,2470/01,2470_01.pdf,3,122,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_02,2470/02,2470_02.pdf,2,670,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_04,2470/04,2470_04.pdf,1,176,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_05,2470/05,2470_05.pdf,1,175,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_06,2470/06,2470_06.pdf,3,186,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_08,2470/08,2470_08.pdf,2,663,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_09,2470/09,2470_09.pdf,7,688,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2470_10,2470/10,2470_10.pdf,4,198,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_11,2470/11,2470_11.pdf,9,717,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2470_12,2470/12,2470_12.pdf,5,241,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2470_13,2470/13,2470_13.pdf,1,239,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_14,2470/14,2470_14.pdf,2,203,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_15,2470/15,2470_15.pdf,1,162,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_16,2470/16,2470_16.pdf,2,194,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_17,2470/17,2470_17.pdf,2,192,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_18,2470/18,2470_18.pdf,2,324,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_19,2470/19,2470_19.pdf,25,624,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2470_20,2470/20,2470_20.pdf,1,302,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_21,2470/21,2470_21.pdf,1,92,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_22,2470/22,2470_22.pdf,1,172,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_23,2470/23,2470_23.pdf,1,183,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_24,2470/24,2470_24.pdf,9,307,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2470_25,2470/25,2470_25.pdf,4,218,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_26,2470/26,2470_26.pdf,2,187,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_27,2470/27,2470_27.pdf,7,215,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2470_28,2470/28,2470_28.pdf,4,187,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_29,2470/29,2470_29.pdf,2,179,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_30,2470/30,2470_30.pdf,3,190,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_31,2470/31,2470_31.pdf,1,168,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_32,2470/32,2470_32.pdf,2,179,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_33,2470/33,2470_33.pdf,3,199,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_34,2470/34,2470_34.pdf,2,177,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_35,2470/35,2470_35.pdf,2,181,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_36,2470/36,2470_36.pdf,3,277,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_37,2470/37,2470_37.pdf,2,197,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_38,2470/38,2470_38.pdf,1,193,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_39,2470/39,2470_39.pdf,7,549,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2470_40,2470/40,2470_40.pdf,27,913,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2470_41,2470/41,2470_41.pdf,7,779,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2470_42,2470/42,2470_42.pdf,4,204,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_43,2470/43,2470_43.pdf,10,730,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2470_45,2470/45,2470_45.pdf,2,658,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_46,2470/46,2470_46.pdf,20,555,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2470_47,2470/47,2470_47.pdf,6,796,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2470_48,2470/48,2470_48.pdf,3,694,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_49,2470/49,2470_49.pdf,8,190,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2470_50,2470/50,2470_50.pdf,9,831,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2470_51,2470/51,2470_51.pdf,5,686,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2470_52,2470/52,2470_52.pdf,6,893,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2470_53,2470/53,2470_53.pdf,2,668,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_54,2470/54,2470_54.pdf,1,174,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_55,2470/55,2470_55.pdf,2,660,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_56,2470/56,2470_56.pdf,1,235,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_57,2470/57,2470_57.pdf,19,858,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2470_58,2470/58,2470_58.pdf,2,245,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_59,2470/59,2470_59.pdf,3,747,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_60,2470/60,2470_60.pdf,2,736,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_61,2470/61,2470_61.pdf,4,744,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_62,2470/62,2470_62.pdf,9,248,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_01,2471/01,2471_01.pdf,3,121,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_03,2471/03,2471_03.pdf,2,197,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_04,2471/04,2471_04.pdf,2,254,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_05,2471/05,2471_05.pdf,2,167,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_06,2471/06,2471_06.pdf,3,267,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_07,2471/07,2471_07.pdf,2,262,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_08,2471/08,2471_08.pdf,7,206,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2471_09,2471/09,2471_09.pdf,2,175,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_10,2471/10,2471_10.pdf,1,241,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_11,2471/11,2471_11.pdf,6,219,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_13,2471/13,2471_13.pdf,7,205,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2471_14,2471/14,2471_14.pdf,1,720,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_15,2471/15,2471_15.pdf,86,1407,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_16,2471/16,2471_16.pdf,1,173,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_17,2471/17,2471_17.pdf,10,797,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_18,2471/18,2471_18.pdf,14,715,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_19,2471/19,2471_19.pdf,2,556,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_20,2471/20,2471_20.pdf,9,793,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_21,2471/21,2471_21.pdf,7,220,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2471_22,2471/22,2471_22.pdf,7,215,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2471_23,2471/23,2471_23.pdf,1,258,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_24,2471/24,2471_24.pdf,5,1507,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_25,2471/25,2471_25.pdf,4,692,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_26,2471/26,2471_26.pdf,4,196,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_27,2471/27,2471_27.pdf,6,350,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_28,2471/28,2471_28.pdf,6,232,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_29,2471/29,2471_29.pdf,11,433,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_30,2471/30,2471_30.pdf,15,298,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_31,2471/31,2471_31.pdf,6,767,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_32,2471/32,2471_32.pdf,6,690,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_33,2471/33,2471_33.pdf,3,165,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_34,2471/34,2471_34.pdf,1,232,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_35,2471/35,2471_35.pdf,6,215,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_36,2471/36,2471_36.pdf,2,639,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_37,2471/37,2471_37.pdf,2,638,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_38,2471/38,2471_38.pdf,9,792,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_39,2471/39,2471_39.pdf,2,863,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_40,2471/40,2471_40.pdf,5,693,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_41,2471/41,2471_41.pdf,15,832,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_42,2471/42,2471_42.pdf,4,752,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_43,2471/43,2471_43.pdf,5,682,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_44,2471/44,2471_44.pdf,35,726,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_45,2471/45,2471_45.pdf,2,738,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_46,2471/46,2471_46.pdf,5,699,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_47,2471/47,2471_47.pdf,11,593,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_48,2471/48,2471_48.pdf,5,230,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_49,2471/49,2471_49.pdf,4,587,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_50,2471/50,2471_50.pdf,11,221,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_51,2471/51,2471_51.pdf,15,494,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_52,2471/52,2471_52.pdf,1,257,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_53,2471/53,2471_53.pdf,1,258,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_54,2471/54,2471_54.pdf,1,304,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_55,2471/55,2471_55.pdf,1,258,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_56,2471/56,2471_56.pdf,7,216,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2471_57,2471/57,2471_57.pdf,21,320,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_58,2471/58,2471_58.pdf,1,193,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_59,2471/59,2471_59.pdf,6,234,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_60,2471/60,2471_60.pdf,7,681,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2471_61,2471/61,2471_61.pdf,5,676,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_62,2471/62,2471_62.pdf,21,829,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_63,2471/63,2471_63.pdf,5,759,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_64,2471/64,2471_64.pdf,11,902,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_65,2471/65,2471_65.pdf,18,289,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_67,2471/67,2471_67.pdf,2,201,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_68,2471/68,2471_68.pdf,18,470,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_69,2471/69,2471_69.pdf,24,286,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2471_70,2471/70,2471_70.pdf,1,206,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_71,2471/71,2471_71.pdf,2,692,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_72,2471/72,2471_72.pdf,11,275,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_73,2471/73,2471_73.pdf,2,182,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_74,2471/74,2471_74.pdf,9,713,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2471_75,2471/75,2471_75.pdf,6,693,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_76,2471/76,2471_76.pdf,4,674,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_77,2471/77,2471_77.pdf,5,569,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_78,2471/78,2471_78.pdf,4,410,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_79,2471/79,2471_79.pdf,4,663,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_80,2471/80,2471_80.pdf,5,688,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2471_81,2471/81,2471_81.pdf,2,737,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2471_83,2471/83,2471_83.pdf,4,222,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_01,2472/01,2472_01.pdf,3,226,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_02,2472/02,2472_02.pdf,4,344,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_03,2472/03,2472_03.pdf,1,196,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_04,2472/04,2472_04.pdf,1,184,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_05,2472/05,2472_05.pdf,8,216,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_06,2472/06,2472_06.pdf,6,199,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_07,2472/07,2472_07.pdf,1,239,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_08,2472/08,2472_08.pdf,3,646,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_09,2472/09,2472_09.pdf,8,224,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_10,2472/10,2472_10.pdf,6,800,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_11,2472/11,2472_11.pdf,9,246,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_12,2472/12,2472_12.pdf,13,276,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_13,2472/13,2472_13.pdf,1,239,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_14,2472/14,2472_14.pdf,2,189,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_15,2472/15,2472_15.pdf,2,742,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_16,2472/16,2472_16.pdf,1,163,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_17,2472/17,2472_17.pdf,2,199,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_18,2472/18,2472_18.pdf,1,607,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_19,2472/19,2472_19.pdf,1,257,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_20,2472/20,2472_20.pdf,2,561,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_21,2472/21,2472_21.pdf,17,332,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2472_22,2472/22,2472_22.pdf,1,237,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_23,2472/23,2472_23.pdf,3,634,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_24,2472/24,2472_24.pdf,10,344,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_25,2472/25,2472_25.pdf,3,193,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_26,2472/26,2472_26.pdf,9,814,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_27,2472/27,2472_27.pdf,5,362,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_28,2472/28,2472_28.pdf,8,812,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_29,2472/29,2472_29.pdf,3,745,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_30,2472/30,2472_30.pdf,8,692,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_31,2472/31,2472_31.pdf,2,243,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_32,2472/32,2472_32.pdf,6,561,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_33,2472/33,2472_33.pdf,4,676,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_34,2472/34,2472_34.pdf,5,514,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_35,2472/35,2472_35.pdf,5,605,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_36,2472/36,2472_36.pdf,5,555,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_37,2472/37,2472_37.pdf,6,690,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_38,2472/38,2472_38.pdf,8,231,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_39,2472/39,2472_39.pdf,10,414,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_40,2472/40,2472_40.pdf,8,255,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_41,2472/41,2472_41.pdf,5,517,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_42,2472/42,2472_42.pdf,7,239,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_43,2472/43,2472_43.pdf,9,727,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_44,2472/44,2472_44.pdf,7,712,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_45,2472/45,2472_45.pdf,1,186,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_47,2472/47,2472_47.pdf,1,184,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_49,2472/49,2472_49.pdf,2,703,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_50,2472/50,2472_50.pdf,2,679,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_51,2472/51,2472_51.pdf,1,131,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_52,2472/52,2472_52.pdf,2,250,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_53,2472/53,2472_53.pdf,1,207,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_54,2472/54,2472_54.pdf,3,653,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_55,2472/55,2472_55.pdf,7,202,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_56,2472/56,2472_56.pdf,6,201,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_57,2472/57,2472_57.pdf,7,686,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_58,2472/58,2472_58.pdf,4,503,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_59,2472/59,2472_59.pdf,6,361,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_60,2472/60,2472_60.pdf,19,516,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2472_61,2472/61,2472_61.pdf,1,183,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_63,2472/63,2472_63.pdf,2,730,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2472_64,2472/64,2472_64.pdf,9,278,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_65,2472/65,2472_65.pdf,9,249,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_66,2472/66,2472_66.pdf,11,830,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2472_67,2472/67,2472_67.pdf,6,680,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2472_68,2472/68,2472_68.pdf,8,814,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2472_69,2472/69,2472_69.pdf,1,246,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_01,2473/01,2473_01.pdf,3,122,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_02,2473/02,2473_02.pdf,77,935,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2473_04,2473/04,2473_04.pdf,5,245,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2473_05,2473/05,2473_05.pdf,2,263,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_06,2473/06,2473_06.pdf,2,178,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_07,2473/07,2473_07.pdf,3,683,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_08,2473/08,2473_08.pdf,2,238,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_09,2473/09,2473_09.pdf,1,192,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_10,2473/10,2473_10.pdf,1,242,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_12,2473/12,2473_12.pdf,2,265,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_13,2473/13,2473_13.pdf,2,223,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_14,2473/14,2473_14.pdf,1,202,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_15,2473/15,2473_15.pdf,1,175,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_16,2473/16,2473_16.pdf,12,281,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2473_17,2473/17,2473_17.pdf,2,292,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_18,2473/18,2473_18.pdf,5,661,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2473_19,2473/19,2473_19.pdf,88,724,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2473_21,2473/21,2473_21.pdf,3,648,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_22,2473/22,2473_22.pdf,1,238,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_23,2473/23,2473_23.pdf,2,227,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_24,2473/24,2473_24.pdf,1,250,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_25,2473/25,2473_25.pdf,1,173,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_26,2473/26,2473_26.pdf,6,247,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2473_27,2473/27,2473_27.pdf,1,172,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_28,2473/28,2473_28.pdf,1,249,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_29,2473/29,2473_29.pdf,1,249,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_30,2473/30,2473_30.pdf,1,239,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_31,2473/31,2473_31.pdf,35,475,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2473_32,2473/32,2473_32.pdf,5,283,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2473_33,2473/33,2473_33.pdf,2,290,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2473_34,2473/34,2473_34.pdf,1,241,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_01,2474/01,2474_01.pdf,3,122,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_02,2474/02,2474_02.pdf,4,1055,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2474_03,2474/03,2474_03.pdf,4,670,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_04,2474/04,2474_04.pdf,41,383,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2474_05,2474/05,2474_05.pdf,1,188,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_06,2474/06,2474_06.pdf,10,257,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_07,2474/07,2474_07.pdf,2,655,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_08,2474/08,2474_08.pdf,2,740,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_09,2474/09,2474_09.pdf,2,519,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_10,2474/10,2474_10.pdf,2,189,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_11,2474/11,2474_11.pdf,8,271,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2474_12,2474/12,2474_12.pdf,25,918,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2474_13,2474/13,2474_13.pdf,9,249,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_14,2474/14,2474_14.pdf,6,216,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2474_15,2474/15,2474_15.pdf,9,805,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_16,2474/16,2474_16.pdf,1,171,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_17,2474/17,2474_17.pdf,3,240,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_18,2474/18,2474_18.pdf,44,571,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2474_19,2474/19,2474_19.pdf,32,420,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2474_20,2474/20,2474_20.pdf,2,181,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_22,2474/22,2474_22.pdf,2,269,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_23,2474/23,2474_23.pdf,1,177,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_24,2474/24,2474_24.pdf,2,183,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_25,2474/25,2474_25.pdf,1,235,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_26,2474/26,2474_26.pdf,2,493,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_27,2474/27,2474_27.pdf,12,964,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_28,2474/28,2474_28.pdf,17,791,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2474_29,2474/29,2474_29.pdf,2,639,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_30,2474/30,2474_30.pdf,8,790,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2474_31,2474/31,2474_31.pdf,2,702,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_32,2474/32,2474_32.pdf,4,304,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_33,2474/33,2474_33.pdf,29,425,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2474_34,2474/34,2474_34.pdf,11,739,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_35,2474/35,2474_35.pdf,13,277,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_36,2474/36,2474_36.pdf,19,531,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2474_37,2474/37,2474_37.pdf,29,874,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2474_38,2474/38,2474_38.pdf,5,262,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2474_39,2474/39,2474_39.pdf,6,608,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2474_40,2474/40,2474_40.pdf,12,745,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_41,2474/41,2474_41.pdf,9,716,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_42,2474/42,2474_42.pdf,9,244,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_43,2474/43,2474_43.pdf,2,739,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_44,2474/44,2474_44.pdf,2,258,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_45,2474/45,2474_45.pdf,11,241,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_46,2474/46,2474_46.pdf,5,126,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2474_47,2474/47,2474_47.pdf,1,178,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_48,2474/48,2474_48.pdf,2,185,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_49,2474/49,2474_49.pdf,1,163,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_50,2474/50,2474_50.pdf,2,245,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_51,2474/51,2474_51.pdf,7,264,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2474_52,2474/52,2474_52.pdf,6,593,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2474_53,2474/53,2474_53.pdf,11,577,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_54,2474/54,2474_54.pdf,9,665,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_55,2474/55,2474_55.pdf,2,500,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_56,2474/56,2474_56.pdf,2,496,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_57,2474/57,2474_57.pdf,2,872,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_58,2474/58,2474_58.pdf,2,223,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_59,2474/59,2474_59.pdf,4,167,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_60,2474/60,2474_60.pdf,11,827,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2474_61,2474/61,2474_61.pdf,5,511,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2474_62,2474/62,2474_62.pdf,2,639,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_63,2474/63,2474_63.pdf,4,751,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_64,2474/64,2474_64.pdf,3,743,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_65,2474/65,2474_65.pdf,2,221,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2474_66,2474/66,2474_66.pdf,2,305,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_01,2475/01,2475_01.pdf,3,122,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_03,2475/03,2475_03.pdf,2,196,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_04,2475/04,2475_04.pdf,1,177,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_05,2475/05,2475_05.pdf,1,171,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_06,2475/06,2475_06.pdf,3,196,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_07,2475/07,2475_07.pdf,2,177,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_08,2475/08,2475_08.pdf,3,682,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_09,2475/09,2475_09.pdf,2,329,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_10,2475/10,2475_10.pdf,2,269,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_11,2475/11,2475_11.pdf,1,234,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_12,2475/12,2475_12.pdf,47,1070,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2475_13,2475/13,2475_13.pdf,22,798,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2475_14,2475/14,2475_14.pdf,40,967,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2475_15,2475/15,2475_15.pdf,10,805,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2475_16,2475/16,2475_16.pdf,1,263,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_17,2475/17,2475_17.pdf,42,953,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2475_18,2475/18,2475_18.pdf,2,184,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_19,2475/19,2475_19.pdf,2,640,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_20,2475/20,2475_20.pdf,9,724,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2475_21,2475/21,2475_21.pdf,17,516,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2475_22,2475/22,2475_22.pdf,5,690,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2475_23,2475/23,2475_23.pdf,10,717,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2475_24,2475/24,2475_24.pdf,2,673,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_25,2475/25,2475_25.pdf,6,700,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2475_26,2475/26,2475_26.pdf,2,703,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_27,2475/27,2475_27.pdf,1,177,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_28,2475/28,2475_28.pdf,2,267,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_29,2475/29,2475_29.pdf,2,178,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_31,2475/31,2475_31.pdf,1,173,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_32,2475/32,2475_32.pdf,7,386,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2475_33,2475/33,2475_33.pdf,2,702,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_34,2475/34,2475_34.pdf,2,272,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_35,2475/35,2475_35.pdf,1,188,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_36,2475/36,2475_36.pdf,6,539,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2475_37,2475/37,2475_37.pdf,4,666,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_38,2475/38,2475_38.pdf,8,235,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2475_39,2475/39,2475_39.pdf,2,479,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2475_41,2475/41,2475_41.pdf,13,843,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2475_43,2475/43,2475_43.pdf,7,236,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2475_44,2475/44,2475_44.pdf,11,747,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2475_45,2475/45,2475_45.pdf,8,724,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2475_47,2475/47,2475_47.pdf,6,221,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_01,2476/01,2476_01.pdf,3,122,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_02,2476/02,2476_02.pdf,2,179,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_03,2476/03,2476_03.pdf,2,249,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_04,2476/04,2476_04.pdf,2,481,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_05,2476/05,2476_05.pdf,2,182,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_06,2476/06,2476_06.pdf,3,200,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_07,2476/07,2476_07.pdf,1,180,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_08,2476/08,2476_08.pdf,1,254,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_09,2476/09,2476_09.pdf,2,278,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_10,2476/10,2476_10.pdf,2,670,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_11,2476/11,2476_11.pdf,2,181,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_12,2476/12,2476_12.pdf,6,675,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_13,2476/13,2476_13.pdf,7,693,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_14,2476/14,2476_14.pdf,7,249,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_15,2476/15,2476_15.pdf,6,207,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_16,2476/16,2476_16.pdf,2,190,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_17,2476/17,2476_17.pdf,2,499,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_18,2476/18,2476_18.pdf,17,371,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2476_19,2476/19,2476_19.pdf,1,173,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_20,2476/20,2476_20.pdf,1,173,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_21,2476/21,2476_21.pdf,1,171,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_22,2476/22,2476_22.pdf,1,182,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_23,2476/23,2476_23.pdf,1,171,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_24,2476/24,2476_24.pdf,1,229,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_25,2476/25,2476_25.pdf,2,280,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_26,2476/26,2476_26.pdf,3,196,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_27,2476/27,2476_27.pdf,2,734,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_28,2476/28,2476_28.pdf,4,661,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_29,2476/29,2476_29.pdf,2,500,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_30,2476/30,2476_30.pdf,14,745,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2476_31,2476/31,2476_31.pdf,21,736,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2476_32,2476/32,2476_32.pdf,7,895,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_33,2476/33,2476_33.pdf,2,255,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_34,2476/34,2476_34.pdf,8,714,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_35,2476/35,2476_35.pdf,9,720,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2476_36,2476/36,2476_36.pdf,7,563,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_37,2476/37,2476_37.pdf,7,716,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2476_38,2476/38,2476_38.pdf,4,195,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_39,2476/39,2476_39.pdf,3,642,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_41,2476/41,2476_41.pdf,1,192,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_42,2476/42,2476_42.pdf,2,260,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2476_44,2476/44,2476_44.pdf,11,289,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2476_45,2476/45,2476_45.pdf,14,961,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2477_01,2477/01,2477_01.pdf,3,141,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_03,2477/03,2477_03.pdf,54,477,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2477_04,2477/04,2477_04.pdf,1,406,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_05,2477/05,2477_05.pdf,1,189,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_06,2477/06,2477_06.pdf,2,181,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_07,2477/07,2477_07.pdf,5,221,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2477_08,2477/08,2477_08.pdf,2,571,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_09,2477/09,2477_09.pdf,2,486,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_10,2477/10,2477_10.pdf,2,201,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_11,2477/11,2477_11.pdf,6,706,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2477_12,2477/12,2477_12.pdf,8,730,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2477_13,2477/13,2477_13.pdf,4,209,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_14,2477/14,2477_14.pdf,2,197,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_15,2477/15,2477_15.pdf,2,168,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_17,2477/17,2477_17.pdf,12,444,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2477_19,2477/19,2477_19.pdf,2,335,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_20,2477/20,2477_20.pdf,20,801,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2477_21,2477/21,2477_21.pdf,1,260,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_22,2477/22,2477_22.pdf,1,270,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_23,2477/23,2477_23.pdf,1,201,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_24,2477/24,2477_24.pdf,9,638,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2477_25,2477/25,2477_25.pdf,4,225,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_26,2477/26,2477_26.pdf,9,916,extracted,pdfplumber+claude_classify,2026-05-18T08:51:34+05:30,in m1_regulations_next50_batch3.csv (batch 3)
+2477_27,2477/27,2477_27.pdf,6,597,extracted,pdfplumber+claude_classify,2026-05-18T08:27:41+05:30,in m1_regulations_next50_batch2.csv (batch 2)
+2477_28,2477/28,2477_28.pdf,3,735,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_29,2477/29,2477_29.pdf,22,349,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2477_30,2477/30,2477_30.pdf,1,190,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_31,2477/31,2477_31.pdf,1,190,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_32,2477/32,2477_32.pdf,1,239,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_33,2477/33,2477_33.pdf,1,190,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_34,2477/34,2477_34.pdf,2,286,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_35,2477/35,2477_35.pdf,5,553,extracted,pdfplumber+claude_classify,2026-05-18T08:21:33+05:30,in m1_regulations_next50.csv (batch 1)
+2477_36,2477/36,2477_36.pdf,2,217,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_37,2477/37,2477_37.pdf,2,488,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_38,2477/38,2477_38.pdf,1,174,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_39,2477/39,2477_39.pdf,1,256,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_40,2477/40,2477_40.pdf,2,223,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_41,2477/41,2477_41.pdf,2,237,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_42,2477/42,2477_42.pdf,1,189,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_43,2477/43,2477_43.pdf,2,206,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_44,2477/44,2477_44.pdf,29,4993,extracted,pdfplumber+claude_classify,2026-05-18T09:14:10+05:30,in m1_regulations_next50_batch4.csv (batch 4)
+2477_45,2477/45,2477_45.pdf,1,232,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_46,2477/46,2477_46.pdf,1,195,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2477_47,2477/47,2477_47.pdf,2,233,extracted,claude_code_visual_read,2026-05-18T06:30:00+05:30,in m1_regulations_v6.csv
+2470_44,2470/44,2470_44.pdf,3,758,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2478_01,2478/01,2478_01.pdf,3,226,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2478_02,2478/02,2478_02.pdf,1,240,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_04,2478/04,2478_04.pdf,10,268,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_05,2478/05,2478_05.pdf,5,371,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_06,2478/06,2478_06.pdf,2,294,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_07,2478/07,2478_07.pdf,1,261,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_08,2478/08,2478_08.pdf,1,183,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_09,2478/09,2478_09.pdf,1,194,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_10,2478/10,2478_10.pdf,18,642,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_11,2478/11,2478_11.pdf,7,773,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_12,2478/12,2478_12.pdf,2,674,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_13,2478/13,2478_13.pdf,7,386,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_14,2478/14,2478_14.pdf,2,742,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_15,2478/15,2478_15.pdf,14,293,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_16,2478/16,2478_16.pdf,1,194,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_17,2478/17,2478_17.pdf,5,232,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_18,2478/18,2478_18.pdf,5,700,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_19,2478/19,2478_19.pdf,4,637,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_20,2478/20,2478_20.pdf,7,538,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_21,2478/21,2478_21.pdf,1,239,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_22,2478/22,2478_22.pdf,22,704,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_23,2478/23,2478_23.pdf,1,173,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_24,2478/24,2478_24.pdf,2,171,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_25,2478/25,2478_25.pdf,15,549,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_26,2478/26,2478_26.pdf,1,192,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_27,2478/27,2478_27.pdf,7,719,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_28,2478/28,2478_28.pdf,3,532,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2478_29,2478/29,2478_29.pdf,3,748,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2478_30,2478/30,2478_30.pdf,2,522,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_31,2478/31,2478_31.pdf,2,223,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_32,2478/32,2478_32.pdf,2,739,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_33,2478/33,2478_33.pdf,5,553,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_35,2478/35,2478_35.pdf,26,831,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_36,2478/36,2478_36.pdf,12,345,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_37,2478/37,2478_37.pdf,8,616,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_39,2478/39,2478_39.pdf,46,1078,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_40,2478/40,2478_40.pdf,13,286,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_41,2478/41,2478_41.pdf,2,200,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_43,2478/43,2478_43.pdf,2,251,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_44,2478/44,2478_44.pdf,1,174,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2478_45,2478/45,2478_45.pdf,3,720,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2478_46,2478/46,2478_46.pdf,8,780,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_47,2478/47,2478_47.pdf,11,305,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_48,2478/48,2478_48.pdf,6,889,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_49,2478/49,2478_49.pdf,6,267,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_50,2478/50,2478_50.pdf,6,289,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_51,2478/51,2478_51.pdf,7,214,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2478_52,2478/52,2478_52.pdf,3,682,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2478_53,2478/53,2478_53.pdf,5,736,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2478_54,2478/54,2478_54.pdf,3,247,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2478_55,2478/55,2478_55.pdf,6,304,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_01,2479/01,2479_01.pdf,3,140,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2479_02,2479/02,2479_02.pdf,6,696,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_03,2479/03,2479_03.pdf,9,734,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_04,2479/04,2479_04.pdf,4,234,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_05,2479/05,2479_05.pdf,9,640,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_06,2479/06,2479_06.pdf,5,242,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_07,2479/07,2479_07.pdf,6,568,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_08,2479/08,2479_08.pdf,2,740,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_09,2479/09,2479_09.pdf,7,716,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_10,2479/10,2479_10.pdf,12,752,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_12,2479/12,2479_12.pdf,10,571,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_13,2479/13,2479_13.pdf,46,1037,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_14,2479/14,2479_14.pdf,6,664,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_15,2479/15,2479_15.pdf,2,875,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_16,2479/16,2479_16.pdf,3,895,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2479_17,2479/17,2479_17.pdf,27,326,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_18,2479/18,2479_18.pdf,7,700,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_20,2479/20,2479_20.pdf,5,507,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_21,2479/21,2479_21.pdf,6,295,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_22,2479/22,2479_22.pdf,2,255,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_23,2479/23,2479_23.pdf,2,248,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_24,2479/24,2479_24.pdf,2,820,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_25,2479/25,2479_25.pdf,8,260,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_26,2479/26,2479_26.pdf,5,701,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_27,2479/27,2479_27.pdf,1,201,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_28,2479/28,2479_28.pdf,6,704,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_29,2479/29,2479_29.pdf,6,202,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_31,2479/31,2479_31.pdf,8,204,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_32,2479/32,2479_32.pdf,12,242,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_34,2479/34,2479_34.pdf,2,499,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_35,2479/35,2479_35.pdf,8,565,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_36,2479/36,2479_36.pdf,127,1802,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_37,2479/37,2479_37.pdf,1,208,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_39,2479/39,2479_39.pdf,10,698,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_40,2479/40,2479_40.pdf,19,783,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_41,2479/41,2479_41.pdf,10,260,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_43,2479/43,2479_43.pdf,5,521,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_44,2479/44,2479_44.pdf,13,841,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_45,2479/45,2479_45.pdf,7,700,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_46,2479/46,2479_46.pdf,16,781,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_47,2479/47,2479_47.pdf,1,191,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_48,2479/48,2479_48.pdf,12,729,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_49,2479/49,2479_49.pdf,2,624,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_50,2479/50,2479_50.pdf,9,822,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2479_51,2479/51,2479_51.pdf,6,891,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_53,2479/53,2479_53.pdf,1,172,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_54,2479/54,2479_54.pdf,3,286,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2479_55,2479/55,2479_55.pdf,1,198,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2479_56,2479/56,2479_56.pdf,4,284,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2479_57,2479/57,2479_57.pdf,1,177,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_01,2480/01,2480_01.pdf,3,139,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_02,2480/02,2480_02.pdf,4,371,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_03,2480/03,2480_03.pdf,1,177,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_04,2480/04,2480_04.pdf,6,200,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_05,2480/05,2480_05.pdf,4,156,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_06,2480/06,2480_06.pdf,3,159,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_07,2480/07,2480_07.pdf,3,151,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_08,2480/08,2480_08.pdf,1,190,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_09,2480/09,2480_09.pdf,4,174,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_10,2480/10,2480_10.pdf,5,693,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_11,2480/11,2480_11.pdf,2,662,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_12,2480/12,2480_12.pdf,3,294,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_13,2480/13,2480_13.pdf,1,199,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_14,2480/14,2480_14.pdf,3,198,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_15,2480/15,2480_15.pdf,3,207,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_16,2480/16,2480_16.pdf,1,192,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_17,2480/17,2480_17.pdf,2,374,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_18,2480/18,2480_18.pdf,2,667,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_19,2480/19,2480_19.pdf,1,191,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_21,2480/21,2480_21.pdf,6,766,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_22,2480/22,2480_22.pdf,2,219,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_23,2480/23,2480_23.pdf,1,157,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_24,2480/24,2480_24.pdf,2,256,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_25,2480/25,2480_25.pdf,2,257,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_26,2480/26,2480_26.pdf,1,266,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_28,2480/28,2480_28.pdf,13,257,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2480_29,2480/29,2480_29.pdf,5,678,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_30,2480/30,2480_30.pdf,5,666,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_31,2480/31,2480_31.pdf,4,370,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_32,2480/32,2480_32.pdf,5,512,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_34,2480/34,2480_34.pdf,8,691,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2480_35,2480/35,2480_35.pdf,13,815,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2480_36,2480/36,2480_36.pdf,4,688,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_38,2480/38,2480_38.pdf,2,642,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_39,2480/39,2480_39.pdf,2,495,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_40,2480/40,2480_40.pdf,5,212,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_41,2480/41,2480_41.pdf,5,685,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2480_42,2480/42,2480_42.pdf,2,352,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_43,2480/43,2480_43.pdf,2,271,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_44,2480/44,2480_44.pdf,1,138,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_46,2480/46,2480_46.pdf,2,273,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2480_47,2480/47,2480_47.pdf,1,134,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2480_48,2480/48,2480_48.pdf,15,267,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2480_49,2480/49,2480_49.pdf,1,204,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2481_01,2481/01,2481_01.pdf,3,139,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_02,2481/02,2481_02.pdf,2,281,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_03,2481/03,2481_03.pdf,21,352,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_04,2481/04,2481_04.pdf,17,3437,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_05,2481/05,2481_05.pdf,19,272,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_06,2481/06,2481_06.pdf,2,387,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_07,2481/07,2481_07.pdf,1,175,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2481_08,2481/08,2481_08.pdf,1,208,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2481_09,2481/09,2481_09.pdf,4,293,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_10,2481/10,2481_10.pdf,45,528,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_11,2481/11,2481_11.pdf,3,257,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_13,2481/13,2481_13.pdf,2,726,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_14,2481/14,2481_14.pdf,2,212,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_15,2481/15,2481_15.pdf,17,3437,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_16,2481/16,2481_16.pdf,2,183,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_17,2481/17,2481_17.pdf,5,357,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_18,2481/18,2481_18.pdf,2,208,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_19,2481/19,2481_19.pdf,2,249,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_20,2481/20,2481_20.pdf,1,260,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2481_21,2481/21,2481_21.pdf,1,252,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2481_22,2481/22,2481_22.pdf,4,479,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_23,2481/23,2481_23.pdf,2,676,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_24,2481/24,2481_24.pdf,2,582,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_25,2481/25,2481_25.pdf,2,678,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_26,2481/26,2481_26.pdf,4,686,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_27,2481/27,2481_27.pdf,2,275,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_28,2481/28,2481_28.pdf,12,242,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_29,2481/29,2481_29.pdf,1,204,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2481_30,2481/30,2481_30.pdf,2,218,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_31,2481/31,2481_31.pdf,5,581,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_33,2481/33,2481_33.pdf,6,709,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_34,2481/34,2481_34.pdf,2,226,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_35,2481/35,2481_35.pdf,2,877,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_36,2481/36,2481_36.pdf,7,219,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_37,2481/37,2481_37.pdf,2,641,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_38,2481/38,2481_38.pdf,2,730,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_40,2481/40,2481_40.pdf,4,661,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_41,2481/41,2481_41.pdf,2,620,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_43,2481/43,2481_43.pdf,3,680,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_44,2481/44,2481_44.pdf,4,196,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_45,2481/45,2481_45.pdf,3,196,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_47,2481/47,2481_47.pdf,3,572,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_48,2481/48,2481_48.pdf,11,635,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_49,2481/49,2481_49.pdf,7,717,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2481_50,2481/50,2481_50.pdf,5,392,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2481_51,2481/51,2481_51.pdf,2,189,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_53,2481/53,2481_53.pdf,2,656,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv
+2481_54,2481/54,2481_54.pdf,6,207,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2482_01,2482/01,2482_01.pdf,3,226,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2482_02,2482/02,2482_02.pdf,20,791,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2482_03,2482/03,2482_03.pdf,20,386,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2482_04,2482/04,2482_04.pdf,1,190,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2482_05,2482/05,2482_05.pdf,1,240,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch5.csv
+2482_06,2482/06,2482_06.pdf,65,350,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2482_07,2482/07,2482_07.pdf,8,947,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch8.csv
+2482_08,2482/08,2482_08.pdf,5,305,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch7.csv
+2482_09,2482/09,2482_09.pdf,2,280,extracted,pdfplumber+claude_classify,2026-05-18T13:30:00Z,Classified in m1_regulations_next50_batch6.csv

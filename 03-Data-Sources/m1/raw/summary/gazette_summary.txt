@@ -1,0 +1,14 @@
+Gazette download status — summary
+=================================
+Listed gazette entries     : 465
+  -> Downloaded             : 450
+  -> Missing                : 15
+  -> Could not parse ID     : 0
+
+PDFs found on disk         : 452
+PDFs not in user's list    : 2
+
+Outputs:
+  /sessions/upbeat-great-knuth/mnt/pdf/gazette_download_status.csv
+  /sessions/upbeat-great-knuth/mnt/pdf/gazette_missing.csv
+  /sessions/upbeat-great-knuth/mnt/pdf/gazette_extra_pdfs.csv
