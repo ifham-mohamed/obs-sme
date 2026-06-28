@@ -1,0 +1,4182 @@
+{
+  "C:\\sme\\00-Meta\\BUILD_Master_Index.md": {
+    "mtime": 1778867646.8611488,
+    "hash": "6834658d14a7d13099fdbf838063765b"
+  },
+  "C:\\sme\\00-Meta\\MOC-Root.md": {
+    "mtime": 1778867634.4628024,
+    "hash": "a617ec11be86b8858899b3a2ac21f611"
+  },
+  "C:\\sme\\00-Meta\\README.md": {
+    "mtime": 1778867533.8960586,
+    "hash": "f6d2a6733a4f048a3076880de20fd4ce"
+  },
+  "C:\\sme\\00-Meta\\Research_Master_Index.md": {
+    "mtime": 1778867651.705933,
+    "hash": "1142fe07e9d1a5f9478ea43ef5973e99"
+  },
+  "C:\\sme\\00-Meta\\SETUP_Master_Index.md": {
+    "mtime": 1778867654.5511956,
+    "hash": "849123d0d3d3ab77f79abb793fc74c51"
+  },
+  "C:\\sme\\00-Meta\\Tag-Index.md": {
+    "mtime": 1778867750.9138567,
+    "hash": "7b224bf001613eba111ceef80a5d2a6e"
+  },
+  "C:\\sme\\01-Project-Overview\\Core-Problem.md": {
+    "mtime": 1778867779.3417447,
+    "hash": "b4baf6429f526b38c3a82d04fc5bd796"
+  },
+  "C:\\sme\\01-Project-Overview\\Enigmatrix_Research_Proposal_Upgraded.md": {
+    "mtime": 1778238969.9710338,
+    "hash": "ab8e2c9655ddfecce1050aad265ead5d"
+  },
+  "C:\\sme\\01-Project-Overview\\Project-Atlas.md": {
+    "mtime": 1779136645.98867,
+    "hash": "2bea65c5eb543be40cbc348fd701961d"
+  },
+  "C:\\sme\\01-Project-Overview\\Project-Overview.md": {
+    "mtime": 1778867837.633218,
+    "hash": "d87f40e98f08903f4a98de55b834e044"
+  },
+  "C:\\sme\\01-Project-Overview\\Research-Question.md": {
+    "mtime": 1778867808.0294213,
+    "hash": "6a6b86aad4547b30b94681630cf7b61a"
+  },
+  "C:\\sme\\01-Project-Overview\\SME_Research_Proposal_Enigmatrix.md": {
+    "mtime": 1778177293.910288,
+    "hash": "462e42863ff33a4f122bdb75c83f5b05"
+  },
+  "C:\\sme\\01-Project-Overview\\Unified-Platform.md": {
+    "mtime": 1778867878.437243,
+    "hash": "3c5a48cf6c60280c89af8522f8fa7b53"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\00_INDEX.md": {
+    "mtime": 1779476556.2159085,
+    "hash": "41cb8e1cb5f8df85ea060d855f05b6df"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\01_M1_1_Research_Motivation_Evidence.md": {
+    "mtime": 1778773786.6354861,
+    "hash": "2ca4134f09d6876930e1017a7a3762ba"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\01_M1_Research_Problem.md": {
+    "mtime": 1779114349.580364,
+    "hash": "ba457743ef6cc05ce0713de217b87e07"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\02_M1_1_Data_Sources_Catalogue.md": {
+    "mtime": 1779114350.8468392,
+    "hash": "48c89ad2251e0619e2419a98fa175e40"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\02_M1_2_Database_Schema_Validation.md": {
+    "mtime": 1779114352.5613868,
+    "hash": "abd9ad480785b8bc0dfd9c26e5ac5bd8"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\02_M1_3_Data_Governance_Retention.md": {
+    "mtime": 1779114355.2252603,
+    "hash": "055d0a9be202d393f4f4b66e23d1c108"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\02_M1_4_Worked_Examples_All_Tables.md": {
+    "mtime": 1778773786.6375463,
+    "hash": "f012c53b1035801d6d1b98faf7fbe23f"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\02_M1_Data_Requirements.md": {
+    "mtime": 1779476786.812917,
+    "hash": "bf7216afa26a1ce2527d31c0382f9e09"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\03_M1_1_PDF_Extraction_Chain.md": {
+    "mtime": 1779000825.0791845,
+    "hash": "82bc19ebc10c014ad849e180da6a1879"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\03_M1_2_Gazette_Segmentation.md": {
+    "mtime": 1779003449.643929,
+    "hash": "ba66179651ebfd0768325a84592d3cf6"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\03_M1_3_Secondary_Source_Integration.md": {
+    "mtime": 1778773786.639546,
+    "hash": "a624bfdf3add0e70f2f2f0761206d70e"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\03_M1_Data_Collection.md": {
+    "mtime": 1779476977.1185317,
+    "hash": "39a5762d90bf6a61a259ea16544fd7b8"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\04_M1_1_Gazette_Noise_Removal.md": {
+    "mtime": 1779001039.1889899,
+    "hash": "614ea907a3b3c4a964c2b39809d2aa2e"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\04_M1_2_Metadata_Extraction_Patterns.md": {
+    "mtime": 1779000955.7024522,
+    "hash": "b50060096504a17cfb3a23fbbeb13ecb"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\04_M1_3_Text_Chunking_Strategy.md": {
+    "mtime": 1779000955.7024522,
+    "hash": "c07f457505b95362d5e06af0752cfcd6"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\04_M1_Preprocessing_Pipeline.md": {
+    "mtime": 1779001039.1889899,
+    "hash": "83186c79df537042453e9c01768ff84d"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\05_M1_1_Sampling_Strategy.md": {
+    "mtime": 1778773786.6425471,
+    "hash": "fd3fced00b0bbeb79ba3e62b59750e5d"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\05_M1_2_Architecture_Comparison_Deep_Dive.md": {
+    "mtime": 1778773786.6425471,
+    "hash": "13ac6b7551bbdfd7206755637eedd938"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\05_M1_3_LoRA_Hyperparameter_Justification.md": {
+    "mtime": 1778773786.6435466,
+    "hash": "cc27c93c3ca95921d8f52936d306d2be"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\05_M1_Model_Architecture.md": {
+    "mtime": 1778773786.644548,
+    "hash": "6d248f4100fcda69f35841301a2a6589"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\06_M1_1_Data_Augmentation_Strategy.md": {
+    "mtime": 1778773786.644548,
+    "hash": "e3307f38203656ead3d80da2bf2d702f"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\06_M1_2_Slice_Analysis_Framework.md": {
+    "mtime": 1778773786.644548,
+    "hash": "b5605a78d8d6c2e9ef9e8b0cd157c447"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\06_M1_Training_Evaluation.md": {
+    "mtime": 1778773786.6455474,
+    "hash": "0412abdfe1dc28335be883cc5ffd3d5a"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\07_M1_1_ONNX_Export_Quantization.md": {
+    "mtime": 1778773786.6455474,
+    "hash": "f0df09968aaae4f5721cdcfcfbca3007"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\07_M1_2_Fly_io_Deployment_Operations.md": {
+    "mtime": 1778773786.646548,
+    "hash": "71b85519a737533acec6557fb43c898a"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\07_M1_Deployment_Integration.md": {
+    "mtime": 1778862984.2969618,
+    "hash": "7ddf9874784c300a2e4c7870e251ecd8"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\08_M1_1_Research_Findings_Extraction.md": {
+    "mtime": 1778773786.647548,
+    "hash": "beb40439a72de286f7a9719f12ff3250"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\08_M1_2_Edge_Cases_Failure_Modes.md": {
+    "mtime": 1778773786.647548,
+    "hash": "133f014c7159a9c78c980fa5201b2ca6"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\08_M1_Full_System_Architecture.md": {
+    "mtime": 1778862984.2984722,
+    "hash": "4a1651521d7d2feb2a0e7306f4156c9f"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\09_M1_1_Category_Taxonomy_Examples.md": {
+    "mtime": 1778773786.649546,
+    "hash": "b6afdd680b4778f0472816ec4cdcad21"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\09_M1_2_Annotation_Workflow_IAA_Protocol.md": {
+    "mtime": 1778773786.649546,
+    "hash": "3854027587d19d2b6711f080d150273f"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\09_M1_3_SME_Survey_Instrument.md": {
+    "mtime": 1778773786.6504252,
+    "hash": "231fbba66c9cdccf25ebc0cb4eeb5d47"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\09_M1_Annotation_Guidelines.md": {
+    "mtime": 1778773786.6504252,
+    "hash": "9746b039ed3cbe8a6a8bdb86ffc1d6d2"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\10_M1_1_Language_Detection_Routing.md": {
+    "mtime": 1779000955.703451,
+    "hash": "87c6ffec95b03454027aec10e8025537"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\10_M1_2_OCR_Wijesekara_Conversion.md": {
+    "mtime": 1779000955.703451,
+    "hash": "80afbf400ed05519bd7e4fef00e0d882"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\10_M1_Sinhala_Tamil_NLP.md": {
+    "mtime": 1778773786.6531577,
+    "hash": "cd23ea9d773ae99ed844334cad3e127c"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\11_M1_1_API_Authentication_Authorization.md": {
+    "mtime": 1778773786.6531577,
+    "hash": "f086b1b2d31f42c36f2d73ace5a57a6e"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\11_M1_2_API_Integration_Examples.md": {
+    "mtime": 1778773786.6531577,
+    "hash": "7afd956cb95d73e5b7692622a5a7ee1e"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\11_M1_API_Reference.md": {
+    "mtime": 1778862984.2984722,
+    "hash": "efd1ff9d2583d404e7f68b9bfe8ee6dd"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\12_M1_1_Performance_Monitoring_Alerting.md": {
+    "mtime": 1778773786.6541579,
+    "hash": "799645144473487e04556c58738df295"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\12_M1_2_Retraining_Deployment_Rollback.md": {
+    "mtime": 1778773786.6551573,
+    "hash": "7736f9d40262b103801c2cfe5c743783"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\12_M1_Monitoring_Maintenance.md": {
+    "mtime": 1778862984.3005,
+    "hash": "9925fadfac5bf405f6c52400c8e29059"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\13_M1_Folder_Structure_and_Implementation_Flow.md": {
+    "mtime": 1778773786.6561577,
+    "hash": "8cf9f3d3d2e7012e6126f1c092bca093"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_1_Admin_Pipeline_State_Tracking.md": {
+    "mtime": 1778773786.6571572,
+    "hash": "bce20edeff3b6154d935acaf1bed7b71"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_2_Admin_Review_Queue_Triage.md": {
+    "mtime": 1778773786.6571572,
+    "hash": "46650f7a029c1cde9a0df527804a2791"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_3_Admin_Expert_Verification.md": {
+    "mtime": 1778773786.6571572,
+    "hash": "78fb0339c0b9669633e1660b76d8b860"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_4_Admin_Lag_Analytics.md": {
+    "mtime": 1778773786.658156,
+    "hash": "05aea882f82aba5bd80d3085decb08cb"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_5_SME_Regulation_Discovery.md": {
+    "mtime": 1778773786.658156,
+    "hash": "661b7575e0552e4ec24673eeb074e6c3"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_6_SME_Awareness_Survey.md": {
+    "mtime": 1778773786.658156,
+    "hash": "e335be20d7897df06a313cbe001fa7bc"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_7_SME_Compliance_Action_Tracking.md": {
+    "mtime": 1778773786.6591558,
+    "hash": "017db15cdcd496e8cbf205f98e8ab190"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_8_SME_Deadline_Alert_History.md": {
+    "mtime": 1778773786.6591558,
+    "hash": "d7ede665df2b42537afc149004eb5378"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_9_Category_Sector_Workflows.md": {
+    "mtime": 1778773786.6591558,
+    "hash": "965bd26f444ca4c08ea57399dbda684f"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\14_M1_Tracking_Workflows.md": {
+    "mtime": 1778773786.6601562,
+    "hash": "2e7ae1d990f6abb610eacbb40b59b240"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\15_M1_1_ML_Folder_Guide.md": {
+    "mtime": 1778773786.6601562,
+    "hash": "d311a6ceb642ae68b76674bf57246ec7"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\15_M1_2_Backend_Folder_Guide.md": {
+    "mtime": 1778862984.3127263,
+    "hash": "17f5e1f85c11d86e962c1e851b297f5d"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\15_M1_3_Scraper_Folder_Guide.md": {
+    "mtime": 1778773786.6611562,
+    "hash": "589f3e84b2ae17d1d9b85466926c1f54"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\15_M1_4_Research_Folder_Guide.md": {
+    "mtime": 1778773786.6611562,
+    "hash": "1e766bfafe743f53c8d7d5562e651131"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\15_M1_5_Storage_Folder_Guide.md": {
+    "mtime": 1778773786.6611562,
+    "hash": "b7b81c517f58336259d52c15126c95f4"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\15_M1_6_Docs_Folder_Guide.md": {
+    "mtime": 1778862984.315243,
+    "hash": "1a6c5fdfe0c6ff6d84460c4b68564f22"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\15_M1_Folder_Reference.md": {
+    "mtime": 1778773786.662156,
+    "hash": "58d4de233ee1b15f9d1a4b8ae07f2a37"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\16_M1_Development_Roadmap.md": {
+    "mtime": 1779001161.9269896,
+    "hash": "642ae10ee58cf6e2aa30eb36d5e98f9a"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05 Step 2a \u2014 Scrapy gazette spider (M1 Phase 2 \u2014 Ingest + extraction, MVP slice).md": {
+    "mtime": 1778992388.1662056,
+    "hash": "c7113bdfb78bada59d73b2639342f5c6"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05 Step 2b - Celery task wiring + Stage-B extraction (M1 Phase 2).md": {
+    "mtime": 1778997728.1178129,
+    "hash": "2efbc4c0e512492559097ddd74179475"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05 Step 2c - canonical ml-m1-extraction chain (PDF classifier + extractors + OCR).md": {
+    "mtime": 1778997736.469787,
+    "hash": "ff99fb7c78e6caeeca770d9b13236812"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05-17-m1-admin-gazette-extraction.md": {
+    "mtime": 1779034640.1471543,
+    "hash": "750de2d62cde3428854186d668d7264b"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05-17-m1-extraction-ux-enrichments.md": {
+    "mtime": 1779043518.0611012,
+    "hash": "db74e264ff259da24742934dd4663ad9"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05-17-m1-phase2-cleanup-segmenter-penalty-subdocs.md": {
+    "mtime": 1779003827.7138102,
+    "hash": "1bebcfe8394abd7344a8cbcc5ce1415e"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05-17-m1-portal-data-consolidation.md": {
+    "mtime": 1778965510.3459678,
+    "hash": "3277e1f2923c98ee2262b9b7f50fbce0"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05-17-m1-step2d-lang-detect-wijesekara.md": {
+    "mtime": 1778993031.387244,
+    "hash": "f70403ec31ebf51cde6b245cf246276c"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05-17-m1-step2e-preprocessing-pipeline.md": {
+    "mtime": 1778996104.3253336,
+    "hash": "4dfc2da552e39babe11ae2240af0bcb9"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\findings\\2026-05-17-m1-step2f-preprocess-wiring.md": {
+    "mtime": 1778998653.7817295,
+    "hash": "720b82f7a6e4249fd3d7b7ea283af0cd"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\00_INDEX.md": {
+    "mtime": 1779005335.4186108,
+    "hash": "da9f3d5ba8697e5976440181fbd7ac73"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\phase2_admin_gazette_extraction.md": {
+    "mtime": 1779049648.0697286,
+    "hash": "a7572cd4aac47ec250d85edfe5e8b901"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\phase2_session34_cleanup.md": {
+    "mtime": 1779028281.6002145,
+    "hash": "bdebaff4e48bfb7d1bae71d651df70ed"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\phase2_step2a_scrapy_spider.md": {
+    "mtime": 1779030675.6435876,
+    "hash": "0b7ab2b0c78dedd855e45f1473ffb7b2"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\phase2_step2b_celery_extract.md": {
+    "mtime": 1779052506.051344,
+    "hash": "7ed80271afb7d080f84eb3067b495fe8"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\phase2_step2c_extraction_chain.md": {
+    "mtime": 1779028345.2310696,
+    "hash": "9c43dfe86727c42de434f13b7b4d0c19"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\phase2_step2d_language_wijesekara.md": {
+    "mtime": 1779023677.7480645,
+    "hash": "132ad3dc6d0eb936da1abbc31d42e309"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\phase2_step2e_preprocessing.md": {
+    "mtime": 1779028391.3802314,
+    "hash": "0c40519b9db1f6ba0a5383c2cdd7e8d0"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\local-dev\\phase2_step2f_celery_wiring.md": {
+    "mtime": 1779028885.358385,
+    "hash": "b4ca970b984a4120b5fa3f4613d479a5"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\planned-for-development\\1_response.md": {
+    "mtime": 1778992353.6369152,
+    "hash": "884df54f1c67f1d0401a24626fd17cea"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\planned-for-development\\1_setup.md": {
+    "mtime": 1778997728.0625606,
+    "hash": "ac89f73c409ab782f2852757b59299e9"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\planned-for-development\\2_setup.md": {
+    "mtime": 1778997736.4667852,
+    "hash": "922ae153ff890ae81f95cf3fa0567e2f"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\planned-for-development\\3_setup.md": {
+    "mtime": 1778997744.5313988,
+    "hash": "842cdabe9618f495cf98e56714563621"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\planned-for-development\\4_setup.md": {
+    "mtime": 1779028966.0065744,
+    "hash": "1378649ef3e2ee1f72e271ebfcaf77f6"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\planned-for-development\\5_setup.md": {
+    "mtime": 1779028731.978591,
+    "hash": "48066bbe812da28d24d2c812b7a6f503"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\planned-for-development\\6_setup.md": {
+    "mtime": 1779028905.190956,
+    "hash": "6362b4472ff44e99cc6644e2b99bda3b"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\00_README_Master_Index.md": {
+    "mtime": 1778166578.0,
+    "hash": "0bba5743c6ab6de6fcebbd1b7379545b"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\01_AI_ML_Workflow_Complete.md": {
+    "mtime": 1778966811.0608077,
+    "hash": "c3f6a8d1c7ba26e8e5a23b36b16935c3"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\02_Research_Paper_Structure.md": {
+    "mtime": 1778670119.509688,
+    "hash": "fbba9a88de3d38141a5e37e7c5b8345f"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\03_Technology_Justification.md": {
+    "mtime": 1778670119.5140457,
+    "hash": "1c3736460134256cfb1c75e0110fbcc1"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\04_Data_Management_System.md": {
+    "mtime": 1778670119.5446146,
+    "hash": "0c5a655043a66528e371d5a45134f8f3"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\06_Fine_Tuning_Guide.md": {
+    "mtime": 1778166578.0,
+    "hash": "13bd97e83d600b8286a548756bc4bb08"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\07_System_Architecture.md": {
+    "mtime": 1778670119.5658226,
+    "hash": "5aa2a24e66697247a362a7cbb4f6ad57"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\08_AI_ML_Fundamentals.md": {
+    "mtime": 1778670119.215807,
+    "hash": "49ae904926f5c0792c12df11697443db"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\09_SME_Questionnaire_Design.md": {
+    "mtime": 1778670119.5791986,
+    "hash": "232b979187f63a1245e51124678da7dd"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\10_Unified_Survey_Architecture.md": {
+    "mtime": 1778670119.5936077,
+    "hash": "9978ad2c50cabcec23620254b53efb36"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\13_Module2_Knowledge_Architecture.md": {
+    "mtime": 1778670119.249452,
+    "hash": "c07b2a560f83e5dd84a325b19bfce734"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\BUILD_Module2_Knowledge.md": {
+    "mtime": 1778670118.7867427,
+    "hash": "f69a3debd105def45140698617ec663d"
+  },
+  "C:\\sme\\02-Research-Modules\\3 Module-3-Risk\\00_INDEX.md": {
+    "mtime": 1778867913.189743,
+    "hash": "6a8cd515923bded76f45ffa329f809ca"
+  },
+  "C:\\sme\\02-Research-Modules\\3 Module-3-Risk\\01_Module3_Risk_Architecture.md": {
+    "mtime": 1778670119.2617402,
+    "hash": "e9b670a0cba7b0e4c3183e5a8d217551"
+  },
+  "C:\\sme\\02-Research-Modules\\3 Module-3-Risk\\02_BUILD_Module3_Risk.md": {
+    "mtime": 1778670118.8044274,
+    "hash": "cfd762591e0afb09ece69d1b7e5dfb30"
+  },
+  "C:\\sme\\02-Research-Modules\\3 Module-3-Risk\\03_Data_Architecture_M2_M3.md": {
+    "mtime": 1778670118.9451892,
+    "hash": "007138ffbd943d6479115aac2b5f02f3"
+  },
+  "C:\\sme\\02-Research-Modules\\4 Module-4-Misinformation\\00_INDEX.md": {
+    "mtime": 1778867934.3200698,
+    "hash": "adbc86ad56e4f8b593f1967e21170856"
+  },
+  "C:\\sme\\02-Research-Modules\\4 Module-4-Misinformation\\01_Module4_Misinformation_Architecture.md": {
+    "mtime": 1778670119.2882235,
+    "hash": "db6db19dbcbd5d22c9ec4a355b563220"
+  },
+  "C:\\sme\\02-Research-Modules\\4 Module-4-Misinformation\\02_BUILD_Module4_Misinformation.md": {
+    "mtime": 1778670118.8074434,
+    "hash": "544b658838adbf6ad460c28a712989d0"
+  },
+  "C:\\sme\\02-Research-Modules\\4 Module-4-Misinformation\\03_Module4_Data_Collection.md": {
+    "mtime": 1778670119.3023095,
+    "hash": "519f8d903b5a708878b7748dcc27839a"
+  },
+  "C:\\sme\\02-Research-Modules\\4 Module-4-Misinformation\\04_Module4_SriLankan_Sources.md": {
+    "mtime": 1778670119.331756,
+    "hash": "c3ea5bb95f15e009a9d85199e75baf54"
+  },
+  "C:\\sme\\02-Research-Modules\\4 Module-4-Misinformation\\05_Module4_Perplexity_Prompt.md": {
+    "mtime": 1778670119.3116841,
+    "hash": "59fd55ef64f9520fe1107b764990047f"
+  },
+  "C:\\sme\\02-Research-Modules\\4 Module-4-Misinformation\\06_Data_Architecture_M1_M4.md": {
+    "mtime": 1778670118.9292943,
+    "hash": "01b765ac605cb790a7e8c94185a6c7cf"
+  },
+  "C:\\sme\\03-Data-Sources\\format\\module_1_and_4_data_architecture.md": {
+    "mtime": 1778912817.8423834,
+    "hash": "80351772be39b43d17bba0550c94f559"
+  },
+  "C:\\sme\\03-Data-Sources\\format\\module_2_and_3_data_architecture.md": {
+    "mtime": 1778670118.9451892,
+    "hash": "007138ffbd943d6479115aac2b5f02f3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\csv\\test_write.txt": {
+    "mtime": 1779058668.0336702,
+    "hash": "d8e8fca2dc0f896fd7cb4cb0031ba249"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\summary\\gazette_summary.txt": {
+    "mtime": 1779103404.402684,
+    "hash": "df4fde0f7704935967086b73afce0b5a"
+  },
+  "C:\\sme\\04-Technology-Stack\\00_INDEX.md": {
+    "mtime": 1779215989.339852,
+    "hash": "75f9284cde5f52364372c3c3cfc6e0ac"
+  },
+  "C:\\sme\\04-Technology-Stack\\00_LOCAL_DEV_HANDBOOK.md": {
+    "mtime": 1779027934.6266088,
+    "hash": "b01123d32de84a4b65e11c4aa9322009"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\00_Backend_Overview.md": {
+    "mtime": 1778670118.8339036,
+    "hash": "bca4156e1accc3dd0a6ebd005ccbdc00"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\BUILD\\BUILD_03_Backend_API.md": {
+    "mtime": 1778670118.7344694,
+    "hash": "900d7c5b8976b754843154348448f55b"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\BUILD\\BUILD_06_Auth_and_Users.md": {
+    "mtime": 1778670118.7451816,
+    "hash": "3d518f44326414a958d9c43b134f986a"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\BUILD\\BUILD_07_Module1_Awareness.md": {
+    "mtime": 1778670118.7659166,
+    "hash": "ce4484ef17e6946d7eeed29c472ed8c9"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\BUILD\\BUILD_08_Module2_Knowledge.md": {
+    "mtime": 1778670118.7867427,
+    "hash": "f69a3debd105def45140698617ec663d"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\BUILD\\BUILD_09_Module3_Risk.md": {
+    "mtime": 1778670118.8044274,
+    "hash": "cfd762591e0afb09ece69d1b7e5dfb30"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\BUILD\\BUILD_10_Module4_Misinformation.md": {
+    "mtime": 1778670118.8074434,
+    "hash": "544b658838adbf6ad460c28a712989d0"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\BUILD\\BUILD_12_Data_Ingestion_and_Scheduling.md": {
+    "mtime": 1778670118.8178458,
+    "hash": "a9b8ff1b765832e9e7155d17d291b1d9"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\SETUP\\00_LOCAL_DEV_WSL.md": {
+    "mtime": 1779028931.653067,
+    "hash": "f857055daeba0bb74078c1459334fc08"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\SETUP\\04_Backend_Development.md": {
+    "mtime": 1778670118.8500094,
+    "hash": "2c3ad6f99bccd379e97719ed3f3e32b2"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\SETUP\\06_Database_and_Migrations.md": {
+    "mtime": 1778862984.2896392,
+    "hash": "10cb22fe7a32849b0c849efec08961f8"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\SETUP\\07_Auth_and_Roles.md": {
+    "mtime": 1778670118.866046,
+    "hash": "8f2867422773943511baa5f9813bb6be"
+  },
+  "C:\\sme\\04-Technology-Stack\\backend\\SETUP\\11_Survey_System.md": {
+    "mtime": 1778670118.8818147,
+    "hash": "394f41115a35cfe66adbe6e83e17f5aa"
+  },
+  "C:\\sme\\04-Technology-Stack\\frontend\\00_Frontend_Overview.md": {
+    "mtime": 1778773786.550389,
+    "hash": "71767d13f53e00c7218f03922aa1ce3a"
+  },
+  "C:\\sme\\04-Technology-Stack\\frontend\\APP_GUIDE.md": {
+    "mtime": 1778773786.548648,
+    "hash": "bea65bb4c1097c7c4bbf15bf74f698b6"
+  },
+  "C:\\sme\\04-Technology-Stack\\frontend\\BUILD\\BUILD_05_Frontend_App.md": {
+    "mtime": 1778670118.9663546,
+    "hash": "85aa9d1672958bce890f6b26d17fc7a5"
+  },
+  "C:\\sme\\04-Technology-Stack\\frontend\\BUILD\\BUILD_13_Admin_and_Annotation.md": {
+    "mtime": 1778773786.54963,
+    "hash": "e12b1eeca4b2ecb2da6d676cefff6a2c"
+  },
+  "C:\\sme\\04-Technology-Stack\\frontend\\SETUP\\00_LOCAL_DEV_POWERSHELL.md": {
+    "mtime": 1779005199.326514,
+    "hash": "5ed7dffdc0211069b6a98bd8c8f11cd6"
+  },
+  "C:\\sme\\04-Technology-Stack\\frontend\\SETUP\\05_Frontend_Development.md": {
+    "mtime": 1778670118.9922974,
+    "hash": "b8d0beaf51991333bfba22b3bef548c4"
+  },
+  "C:\\sme\\04-Technology-Stack\\frontend\\SETUP\\12_UI_Screens_and_Loading.md": {
+    "mtime": 1778773786.5519598,
+    "hash": "b883c5acebd98fe04ebc4c1cd3092740"
+  },
+  "C:\\sme\\04-Technology-Stack\\frontend\\SETUP\\13_Unified_Survey_Configuration.md": {
+    "mtime": 1778670119.042163,
+    "hash": "08da1c8a4da2f0500fde1277bb4d6492"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\00_Infra_Overview.md": {
+    "mtime": 1779215659.8774524,
+    "hash": "637013b7f9b4fb90050f806ea3f3fa76"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\Railway-Deployment-Plan.md": {
+    "mtime": 1779214946.118067,
+    "hash": "41dbfece15e5cb34138a624f7b8aee68"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\Render-Migration-Plan.md": {
+    "mtime": 1779216808.18458,
+    "hash": "3426e9cb052376363db6f8eda04043a8"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\BUILD\\BUILD_01_Project_Initialization.md": {
+    "mtime": 1778670119.0558307,
+    "hash": "0b6a2277d5ecde0b39762124264b8fca"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\BUILD\\BUILD_02_Folder_Structure.md": {
+    "mtime": 1778670119.0715108,
+    "hash": "fc6dbb19de66d6b5b1b574e3bb81c2d4"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\BUILD\\BUILD_04_Database_and_Storage.md": {
+    "mtime": 1778670119.0715108,
+    "hash": "0f82f85b14c9f8ca13386dca648f12ee"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\BUILD\\BUILD_14_Deployment_Cloud.md": {
+    "mtime": 1779216758.171314,
+    "hash": "e45f15a11bd29104d9efd25489606fd1"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\BUILD\\BUILD_15_Observability_Testing.md": {
+    "mtime": 1778670119.105786,
+    "hash": "924cf8452035ec13c07558695a9817f3"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\SETUP\\01_Prerequisites.md": {
+    "mtime": 1778670119.1188877,
+    "hash": "48d5191614c1e67b87ce92bb71eebf80"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\SETUP\\02_Quickstart.md": {
+    "mtime": 1778670119.145782,
+    "hash": "9c63b4a9b0dafa88ee0c9bedff48a6ae"
+  },
+  "C:\\sme\\04-Technology-Stack\\infra\\SETUP\\09_Troubleshooting.md": {
+    "mtime": 1778670119.1582549,
+    "hash": "a9890d061e6b7124ab65f2c1aa70accf"
+  },
+  "C:\\sme\\04-Technology-Stack\\ml\\00_ML_Overview.md": {
+    "mtime": 1778912826.6975067,
+    "hash": "b26db145f8695b0204460551080196c2"
+  },
+  "C:\\sme\\04-Technology-Stack\\ml\\BUILD\\BUILD_11_ML_Training_Pipeline.md": {
+    "mtime": 1778670119.184755,
+    "hash": "dfdd593964becfe3125621ebefb24a9f"
+  },
+  "C:\\sme\\04-Technology-Stack\\ml\\SETUP\\00_LOCAL_DEV_WSL.md": {
+    "mtime": 1779028785.230075,
+    "hash": "b229952323e6cdeaf92cfda37000d95e"
+  },
+  "C:\\sme\\04-Technology-Stack\\shared\\03_Architecture.md": {
+    "mtime": 1778670119.4307246,
+    "hash": "490234aee265e8ffd2b870c43bfca2f6"
+  },
+  "C:\\sme\\04-Technology-Stack\\shared\\08_Testing.md": {
+    "mtime": 1778670119.4474802,
+    "hash": "e6742d6b352e222b3550d6fc5938ca58"
+  },
+  "C:\\sme\\04-Technology-Stack\\shared\\10_Next_Steps.md": {
+    "mtime": 1778670119.4623768,
+    "hash": "a67c969d5c7777ee7fdd9e0252aecb7c"
+  },
+  "C:\\sme\\05-Build-Status\\Backend_ML_Technical_Documentation.md": {
+    "mtime": 1779300415.4340048,
+    "hash": "9cbfcba55b79a08915376c7e1af76fba"
+  },
+  "C:\\sme\\05-Build-Status\\Frontend_Pages_Feature_Map.md": {
+    "mtime": 1779300895.5175567,
+    "hash": "c17b6b10d70a7f0dc81d02699e32016f"
+  },
+  "C:\\sme\\06-Timeline\\00_Timeline_Overview.md": {
+    "mtime": 1778966733.148411,
+    "hash": "e9d16d27de20136ca30a5e716ee3d01a"
+  },
+  "C:\\sme\\06-Timeline\\01_Engineering_Layers_Timeline.md": {
+    "mtime": 1778966752.4460793,
+    "hash": "6834658d14a7d13099fdbf838063765b"
+  },
+  "C:\\sme\\06-Timeline\\02_Module1_Roadmap.md": {
+    "mtime": 1778773786.662156,
+    "hash": "695d1bd5d4bb17e9e0177515584a0d1c"
+  },
+  "C:\\sme\\06-Timeline\\03_Progress_Tracker_Template.md": {
+    "mtime": 1778670119.3868227,
+    "hash": "a478191378e3661a43fcd92ae0bd4861"
+  },
+  "C:\\sme\\07-Team\\00_Team_Index.md": {
+    "mtime": 1778867992.501905,
+    "hash": "43c7112b596f7a9f1a4f23c37b64b7bb"
+  },
+  "C:\\sme\\07-Team\\Team-Roles.md": {
+    "mtime": 1778868030.4901803,
+    "hash": "b9f4e7b793f0f8575304aaba8f8c599e"
+  },
+  "C:\\sme\\08-Findings-Log\\00_Findings_Index.md": {
+    "mtime": 1779432501.3923032,
+    "hash": "31a4b476825a0559c13261291b2d938b"
+  },
+  "C:\\sme\\08-Findings-Log\\BUILD_PLAN_COVERAGE.md": {
+    "mtime": 1779432557.1619604,
+    "hash": "d33e5f4b7cdad59586b123cbc2979519"
+  },
+  "C:\\sme\\08-Findings-Log\\CHANGES.md": {
+    "mtime": 1779556034.0885649,
+    "hash": "0cb6fa8f1b425a52ac12753343db48c3"
+  },
+  "C:\\sme\\08-Findings-Log\\ENIGMATRIX_MASTER_CONTEXT.md": {
+    "mtime": 1779431672.6063285,
+    "hash": "03595786ec3f79901fbfa918cf3d1a50"
+  },
+  "C:\\sme\\08-Findings-Log\\FEATURES.md": {
+    "mtime": 1779555966.9141312,
+    "hash": "bfadc8cb1dd45fc8c4d2de0c6a4c7fa8"
+  },
+  "C:\\sme\\08-Findings-Log\\RESEARCH_BUILD_TRACKER.md": {
+    "mtime": 1779432487.3774993,
+    "hash": "213ff3c9fb675cf2c00d5ef49e349320"
+  },
+  "C:\\sme\\08-Findings-Log\\RESEARCH_IDEAS.md": {
+    "mtime": 1779432527.4305706,
+    "hash": "ab76aa1d4c4d91f076fd214272bc6efc"
+  },
+  "C:\\sme\\08-Findings-Log\\SESSIONS.md": {
+    "mtime": 1779556091.9553864,
+    "hash": "9351d0e2568cc8655014b12069b5ee7e"
+  },
+  "C:\\sme\\08-Findings-Log\\SETUP_COVERAGE.md": {
+    "mtime": 1779427423.7976441,
+    "hash": "d9fd11feb109888eb4fd7e80b0c2217b"
+  },
+  "C:\\sme\\08-Findings-Log\\_Tracker_Conventions.md": {
+    "mtime": 1778588424.5361602,
+    "hash": "7bc9ec863ab4f83a3861ad61d3b4cbe2"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-18_c-reasearch-xyz-enigmatrix-backend-stora-snappy-scott.md": {
+    "mtime": 1779104566.9191122,
+    "hash": "665b4522f5fb75eb7de2fbc9f779bffd"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-18_Plan Multi-source documents.gov.lk extraction (Acts + Bills + Weekly Gazettes) \u2014 Sources hub UI.md": {
+    "mtime": 1779120359.3698444,
+    "hash": "dbdf61ac8e740beffa480447b8a9f72c"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-18_Plan register the new M1 Celery tasks with the worker.md": {
+    "mtime": 1779122056.9262533,
+    "hash": "78c14fe4f23ec2d3b2ae0b7ca5f2ec5d"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-21_Plan Completeness check + re-fetch + spider EN-SI-TA fallback.md": {
+    "mtime": 1779404705.6288676,
+    "hash": "16bd752172bd0540a8f2bf0206c7213b"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-21_Plan Completeness verify endpoint hardening \u2014 timeout, CORS, WS URL, state reset.md": {
+    "mtime": 1779404705.6700578,
+    "hash": "1f09980562c0cd0de4feb81de5db007b"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-21_Plan Extraction running UX upgrade \u2014 PipelineRunStatusCard + WS scaffold + ML progress.md": {
+    "mtime": 1779404705.502072,
+    "hash": "35f29000e11f9b5efb57683d6c3e2103"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-21_Plan Frontend perf overhaul \u2014 dashboard streaming, login handoff, bundle tuning.md": {
+    "mtime": 1779404705.5400767,
+    "hash": "0076af58a6f9c78b50fa97557788079d"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-21_Plan Live count polling for summaryForResume + SpiderResultCard polish.md": {
+    "mtime": 1779404705.6010609,
+    "hash": "27a9a09ca3e360f18588b6db6a1bf660"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-21_Plan M1 pipeline page responsiveness v2 \u2014 funnel, sticky sidebar, collapsed footer.md": {
+    "mtime": 1779404705.4759305,
+    "hash": "fe86f76fd479d85e8020833608e6d6d6"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-21_Plan Theme polish \u2014 view-transition animation + disable system tracking.md": {
+    "mtime": 1779406203.2271526,
+    "hash": "b24bfa58f22b50263be7405c081832b1"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-21_Plan Vault recovery from Write-tool truncation (incident).md": {
+    "mtime": 1779404705.5679698,
+    "hash": "09f52cea3132e5a4292db9d79bb37119"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan AnimatedList + FuzzyText UI component suite.md": {
+    "mtime": 1779405921.3635652,
+    "hash": "457f1eb50c13109ad2e7b8737d4ebf9c"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan Cross-repo code quality audit \u2014 Stage 4.md": {
+    "mtime": 1779429924.3449254,
+    "hash": "c05a31fce3c768c39f747e44be4db63e"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan M1 cancel + rollback endpoint and frontend button.md": {
+    "mtime": 1779429740.6602573,
+    "hash": "eefbbd4a52d8cad32e994efb6abeff4b"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan M1 extraction page UX improvements \u2014 sticky sidebar resume restart history auto-scroll.md": {
+    "mtime": 1779428741.2799942,
+    "hash": "38cd4ba5d5546bf12aed50689551b692"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan M1 extraction run history \u2014 server-side persistence and pool fix.md": {
+    "mtime": 1779428802.8116524,
+    "hash": "ce845e2d596ed97cf3b2f211a858094e"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan M1 pipeline admin UX audit \u2014 14 findings report.md": {
+    "mtime": 1779427313.3831978,
+    "hash": "1a7b6d8fb2d70ab470251863534b7a4a"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan M1 raw PDF bulk extraction and classification \u2014 800 PDFs across 11 batches.md": {
+    "mtime": 1779432262.3001673,
+    "hash": "8390ef309df0105cce898dc49d22d0d2"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan PDF Records browse-all admin page.md": {
+    "mtime": 1779429856.8879893,
+    "hash": "46388e49026d2fb48b9f8ea15dabe276"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan Per-PDF metadata schema and population.md": {
+    "mtime": 1779429797.0303063,
+    "hash": "b33b6ca3b494ba59ad0ff765f1349342"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-22_Plan Railway production deployment \u2014 backend deploy chain and PAT leak.md": {
+    "mtime": 1779429687.2748094,
+    "hash": "e301d0f245f75e9f86ee996a21de30d4"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\00_INDEX.md": {
+    "mtime": 1779521801.393751,
+    "hash": "e3bf33c1779dd58f32b5e1138519b876"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\01_Alignment_Audit.md": {
+    "mtime": 1779520758.4696486,
+    "hash": "a0e44bd4fb3a89a9904a6f9c42c7d60b"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\02_Slice1_Measurement_Scaffolding.md": {
+    "mtime": 1779520838.4050324,
+    "hash": "df89b54a10625b6caed5ab03990d5d08"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\03_Slice2_RawText_Golden_Set.md": {
+    "mtime": 1779520912.441743,
+    "hash": "9a72f27729b4c07d11b020f096b1c652"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\04_Slice3_Dataset_Registry_and_Upload.md": {
+    "mtime": 1779521021.615322,
+    "hash": "b80382c66ae429b3babf8fbcb4c35a40"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\05_Slice4_Extraction_Profile_Registry.md": {
+    "mtime": 1779521128.5666916,
+    "hash": "72476becdbd5fc4cd06bc605f19587f8"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\06_Slice5_Measurement_Engine.md": {
+    "mtime": 1779521205.5928004,
+    "hash": "9b682f41211264dc03cb90867956613d"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\07_Slice6_Comparison_UI.md": {
+    "mtime": 1779521289.2139812,
+    "hash": "e5912a3055772e50d81ac1ba8b53c881"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\08_Slice7_New_Extraction_Profiles.md": {
+    "mtime": 1779521386.0269313,
+    "hash": "a6312189726029c72ff985972a544c23"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\09_Slice8_Backfill_Polish_Thesis.md": {
+    "mtime": 1779521448.502566,
+    "hash": "534ccf0b5b2703250ea8e022156a88e3"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\10_Upgrades_Over_Original.md": {
+    "mtime": 1779521513.2790728,
+    "hash": "cc2b4006ede606343078024656d0069e"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\11_Risks_Register.md": {
+    "mtime": 1779521565.601014,
+    "hash": "3d7d2b42f2bfca6c1ca71a905991c662"
+  },
+  "C:\\sme\\08-Findings-Log\\plans\\2026-05-23_M1_Phase2_Upgrade_Plan\\12_Open_Questions.md": {
+    "mtime": 1779521781.1242304,
+    "hash": "9370f01d93e15b66c0dd79e22dbb5c9c"
+  },
+  "C:\\sme\\09-Prompts\\00_Prompts_Index.md": {
+    "mtime": 1778868074.1164722,
+    "hash": "a27d4276ca0411c1d2c064a620764436"
+  },
+  "C:\\sme\\09-Prompts\\01_Claude_Prompts_Library.md": {
+    "mtime": 1778966708.6615648,
+    "hash": "88e085ff91a683f327c3b5e594865ea3"
+  },
+  "C:\\sme\\09-Prompts\\02_Module4_Perplexity_Prompt.md": {
+    "mtime": 1778670119.3116841,
+    "hash": "59fd55ef64f9520fe1107b764990047f"
+  },
+  "C:\\sme\\09-Prompts\\claude-chats\\Enigmatrix research project documentation and implementation structure.md": {
+    "mtime": 1778966694.7764711,
+    "hash": "d353cded99f58e1bacfe4fd6ca8913d9"
+  },
+  "C:\\sme\\10-Highlights\\report\\report guidlines.md": {
+    "mtime": 1778178496.0796888,
+    "hash": "cc150c4ea0fcf0e02e68369c1a785313"
+  },
+  "C:\\sme\\Interim\\report\\SMEs Interim.md": {
+    "mtime": 1778177129.1901245,
+    "hash": "c546eb2014a73862280f81375b61f7cd"
+  },
+  "C:\\sme\\graphify-out\\converted\\structured_v1_54031723.md": {
+    "mtime": 1779556231.688018,
+    "hash": "930114c2fb0d01d68822f522ecb45928"
+  },
+  "C:\\sme\\_Templates\\BUILD-Template.md": {
+    "mtime": 1778868154.8545103,
+    "hash": "26d6b7cb2e6542a67546bf92cb7e8c81"
+  },
+  "C:\\sme\\_Templates\\Companion-Doc-Template.md": {
+    "mtime": 1778868111.6506252,
+    "hash": "59439d909fbe8a16685aae9603ad82ab"
+  },
+  "C:\\sme\\_Templates\\Findings-Entry-Template.md": {
+    "mtime": 1778868193.4448972,
+    "hash": "0c5c4015a835226833f051736c37fd27"
+  },
+  "C:\\sme\\_Templates\\Module-Doc-Template.md": {
+    "mtime": 1778868091.1149216,
+    "hash": "ce35ae750afda01488164afeb47b7b2a"
+  },
+  "C:\\sme\\_Templates\\SETUP-Template.md": {
+    "mtime": 1778868169.482229,
+    "hash": "d53143a94765dc9ff84cf8cfa2a7b24d"
+  },
+  "C:\\sme\\01-Project-Overview\\SME_Research_Proposal_Enigmatrix.pdf": {
+    "mtime": 1778176586.0,
+    "hash": "12f73384ca6bc8ec8bb55c7f0ea99f3b"
+  },
+  "C:\\sme\\02-Research-Modules\\1 Module-1-Awareness-Gap\\Module_1_Regulatory_Change_Awareness_Gap.md.pdf": {
+    "mtime": 1778176586.0,
+    "hash": "5e54e8287492686c3f21067deae3127d"
+  },
+  "C:\\sme\\02-Research-Modules\\2 Module-2-Knowledge-Hub\\05_Literature_Review_Guide.md": {
+    "mtime": 1778670119.5300913,
+    "hash": "5ee01e7322179c02e2f7334e36547efe"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2468_44.pdf": {
+    "mtime": 1779036498.591962,
+    "hash": "d4ff16201b5ce39b83ce0c4540aa7ce1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_18.pdf": {
+    "mtime": 1779039907.2686923,
+    "hash": "a45c6abeb14eef81c2b58024bd6cfab4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_19.pdf": {
+    "mtime": 1779039912.6427722,
+    "hash": "34096710df2705b036743227741fa39c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_20.pdf": {
+    "mtime": 1779039935.4617302,
+    "hash": "17b81cd505e93a774d03263762382999"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_21.pdf": {
+    "mtime": 1779039927.5463579,
+    "hash": "e9c6a2f55a3dde2a28f0727b71141961"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_22.pdf": {
+    "mtime": 1779039969.0180447,
+    "hash": "e44cbcdb6c5e91cad9e7648edffe310c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_23.pdf": {
+    "mtime": 1779039971.3992515,
+    "hash": "34e2a74e30cd8c25ac6b0c60181caebd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_24.pdf": {
+    "mtime": 1779039968.8607914,
+    "hash": "f191aefbedf2dca08bb3eab59a16551a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_25.pdf": {
+    "mtime": 1779039997.8512332,
+    "hash": "abfd6e18784ad0ebedbd0f3a610b3dba"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_26.pdf": {
+    "mtime": 1779039985.2879198,
+    "hash": "3b19fd40aa2c36d310e2c37efb761fbc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_27.pdf": {
+    "mtime": 1779040001.5052338,
+    "hash": "4810ad0c35a602f176c13340b52fa59a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_28.pdf": {
+    "mtime": 1779040004.209471,
+    "hash": "74021d1dc3246f11463bdce8bc712880"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_30.pdf": {
+    "mtime": 1779039865.1809592,
+    "hash": "058e633b2996570c46a5f2d46bd89a43"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_31.pdf": {
+    "mtime": 1779039874.123824,
+    "hash": "d45c62c201a3cace77f7f8efda796e90"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_32.pdf": {
+    "mtime": 1779039886.163165,
+    "hash": "71478d34e79780334bb0dc74f94630a1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_33.pdf": {
+    "mtime": 1779039899.3128715,
+    "hash": "dc2c48f2c2d30452215acac381141ea7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_34.pdf": {
+    "mtime": 1779039906.645242,
+    "hash": "764c6c97640ec74c257197c84f1486fa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_35.pdf": {
+    "mtime": 1779039917.9706628,
+    "hash": "87bc8d6bf60d77e981bb6498c0ae84c0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_36.pdf": {
+    "mtime": 1779039789.188765,
+    "hash": "90cac0ca37999b41f53f5a869565dce7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_37.pdf": {
+    "mtime": 1779039792.841122,
+    "hash": "097b6fa96ee427bd492ee2762169c55f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_38.pdf": {
+    "mtime": 1779039807.7289603,
+    "hash": "b8689cd90dcd3ca44dccaf85eb7d78a6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_39.pdf": {
+    "mtime": 1779039922.3606694,
+    "hash": "38331831f6d2f40ff9d3559f5f2b7346"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2469_40.pdf": {
+    "mtime": 1779039838.4935894,
+    "hash": "79d46d5502c7c1f836b188621352d63f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_01.pdf": {
+    "mtime": 1779039620.199896,
+    "hash": "dcae6c22abb688b0b99cc89f2ccb8fc6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_02.pdf": {
+    "mtime": 1779039644.6861408,
+    "hash": "9409dcf72652f9fba99953c3eac92644"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_04.pdf": {
+    "mtime": 1779039633.2131293,
+    "hash": "1a204da9ae5796937d2943faf79ac2c0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_05.pdf": {
+    "mtime": 1779039643.2956586,
+    "hash": "9e4ead50d99f700248a5530ceae6f1c2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_06.pdf": {
+    "mtime": 1779039650.0139577,
+    "hash": "2558827deb82052e1b8e8b86d619ee75"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_08.pdf": {
+    "mtime": 1779039697.6909103,
+    "hash": "533ae73c9e0ddb1f6e12c726075a3e80"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_09.pdf": {
+    "mtime": 1779039724.7960677,
+    "hash": "8a999de049dd13436bc7555812f010ae"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_10.pdf": {
+    "mtime": 1779039711.3308265,
+    "hash": "6703aa4b444f08ddcd8a42d58c060745"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_11.pdf": {
+    "mtime": 1779039743.9069839,
+    "hash": "09c70080fe9866252e61e8c475ebca4a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_12.pdf": {
+    "mtime": 1779039734.8305137,
+    "hash": "9038ccb28a374b96129d6b68fc6cb707"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_13.pdf": {
+    "mtime": 1779039742.1729782,
+    "hash": "fb1eccbca1cd4c7f94c56e72c0249f37"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_14.pdf": {
+    "mtime": 1779039747.1954618,
+    "hash": "51ab2a9029f5c410fc59c4ab34b52a6d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_15.pdf": {
+    "mtime": 1779039753.4311903,
+    "hash": "b109806a2a8a9cc0ef4b1c8f2bb450e2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_16.pdf": {
+    "mtime": 1779039763.287042,
+    "hash": "cbbfb7ee641b41b925634516f704fc16"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_17.pdf": {
+    "mtime": 1779039770.4226642,
+    "hash": "24ab5feef9a034393d15ef552e0fb536"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_18.pdf": {
+    "mtime": 1779039781.0332448,
+    "hash": "a1a7014204e5e68c370bacae5518c07b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_19.pdf": {
+    "mtime": 1779039618.4251437,
+    "hash": "8d7a5ec11b9059fc8ecc831ecf6774bc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_20.pdf": {
+    "mtime": 1779039617.6576202,
+    "hash": "a12f53bce812bbbaed54db60c1457402"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_21.pdf": {
+    "mtime": 1779039611.0612907,
+    "hash": "328793f2f02404f230a7e6076743c7d9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_22.pdf": {
+    "mtime": 1779039537.9185078,
+    "hash": "6f78cb2b02fb5c69453a38e9d58c09a6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_23.pdf": {
+    "mtime": 1779039552.604935,
+    "hash": "398007b80dd82f53ec6c3e5988f07325"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_24.pdf": {
+    "mtime": 1779039566.1137984,
+    "hash": "f3daa6b1c9d2ebd79c39989c83ed8d4f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_25.pdf": {
+    "mtime": 1779039572.2757907,
+    "hash": "2f4535f3e2bd05ea33154284786f4e19"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_26.pdf": {
+    "mtime": 1779039576.1422255,
+    "hash": "76e4ab1338b47adeac34961b39f46ba7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_27.pdf": {
+    "mtime": 1779039579.2002444,
+    "hash": "ecc923f9250b8f4e5564543f7b2c10b3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_28.pdf": {
+    "mtime": 1779039581.577556,
+    "hash": "d3a671a0ed9c2e8f1f517e4fa402db15"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_29.pdf": {
+    "mtime": 1779039590.6357648,
+    "hash": "228ab30eabe381f4d14196b07d595251"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_30.pdf": {
+    "mtime": 1779039596.1638908,
+    "hash": "8f460145a71eecfc552106e6b0f0de0b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_31.pdf": {
+    "mtime": 1779039383.6656265,
+    "hash": "31b8796b958ce72971e9318d11763942"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_32.pdf": {
+    "mtime": 1779039393.4446263,
+    "hash": "228ab30eabe381f4d14196b07d595251"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_33.pdf": {
+    "mtime": 1779039398.355074,
+    "hash": "432c9784d72cb6b9b4bb535314a4f86d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_34.pdf": {
+    "mtime": 1779039402.9873023,
+    "hash": "580e6e52a53c507efc039015ea14de38"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_35.pdf": {
+    "mtime": 1779039409.5276515,
+    "hash": "973e0fe94eef121c30c21be887b71448"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_36.pdf": {
+    "mtime": 1779039420.9007847,
+    "hash": "6d0f8c5dadaffd9579d8ca2fdde9ce84"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_37.pdf": {
+    "mtime": 1779039426.869949,
+    "hash": "9afb3112da90e586836175d9e74e149c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_38.pdf": {
+    "mtime": 1779039432.7730632,
+    "hash": "651a66b88eec8eb5652ef4213cd319f1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_39.pdf": {
+    "mtime": 1779039460.0828059,
+    "hash": "79956cd71a8f28d25815a68d9d500bc7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_40.pdf": {
+    "mtime": 1779039474.8556254,
+    "hash": "ec7bd63bbbb7640578ba9b8fad4f62a6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_41.pdf": {
+    "mtime": 1779039471.162768,
+    "hash": "b57cc8e4e837d4b3721285129e9e3664"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_42.pdf": {
+    "mtime": 1779039461.5861413,
+    "hash": "e6d1daade975fa5c2e9a16f43d7d0e33"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_43.pdf": {
+    "mtime": 1779039483.6354463,
+    "hash": "1e6d5a5746c4f49fc3079b026e45b702"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_44.pdf": {
+    "mtime": 1779105299.4779382,
+    "hash": "74c8a051aeac363f2311a7a2aaeaa9d1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_45.pdf": {
+    "mtime": 1779039489.3704264,
+    "hash": "ba6588c1272f246a289bacef8be27c52"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_46.pdf": {
+    "mtime": 1779039491.2086575,
+    "hash": "9789ea3eb9456810f418cce48d5f9c80"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_47.pdf": {
+    "mtime": 1779039506.334187,
+    "hash": "4e3a483cab454d1c506fba7669b47736"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_48.pdf": {
+    "mtime": 1779039511.2691505,
+    "hash": "55ee1687107c42c0d690b2d5244d0e59"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_49.pdf": {
+    "mtime": 1779039497.5275843,
+    "hash": "e0509c8e974b723ef7401ea6acab54ce"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_50.pdf": {
+    "mtime": 1779039524.0184014,
+    "hash": "3b58795842c85066d90830f715b53681"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_51.pdf": {
+    "mtime": 1779039528.1669078,
+    "hash": "567bed88ba1b45f9e41c587bccf74a17"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_52.pdf": {
+    "mtime": 1779039535.2012472,
+    "hash": "3ace793d972cab6d92fb1239311125d3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_53.pdf": {
+    "mtime": 1779039540.960269,
+    "hash": "d8be70b9c46736d44a888ad980659fae"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_54.pdf": {
+    "mtime": 1779039352.7531953,
+    "hash": "869f908d563b60d0ad2dbaa5189d639e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_55.pdf": {
+    "mtime": 1779039367.0147088,
+    "hash": "6ec621b38615b5b9e48caa9cfac89492"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_56.pdf": {
+    "mtime": 1779039369.5226166,
+    "hash": "057406dd867fe49cf3c74b3e6444b37a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_57.pdf": {
+    "mtime": 1779039394.9492369,
+    "hash": "a92ccaf6d5c418a229c5c9b64736105e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_58.pdf": {
+    "mtime": 1779039320.1188333,
+    "hash": "9cf0346ad5d039bc7841c7a2101bbebd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_59.pdf": {
+    "mtime": 1779039334.7407498,
+    "hash": "f50ccba1f124d02d4caecd37e33104e5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_60.pdf": {
+    "mtime": 1779039342.3095493,
+    "hash": "ee11a0f3049707b2da3cc4a9ede3bf94"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_61.pdf": {
+    "mtime": 1779039348.3339016,
+    "hash": "0b5b1bbe5a251a72e8db5cb99f72cf54"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2470_62.pdf": {
+    "mtime": 1779039345.7135696,
+    "hash": "d393b6d1690c38fe6892e946ddf554de"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_01.pdf": {
+    "mtime": 1779039237.9258163,
+    "hash": "dac9fa2ea3fcba9e507edeed60d1592d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_03.pdf": {
+    "mtime": 1779039256.5588903,
+    "hash": "4c921f1e09f5e239ed65ea2c7ba73487"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_04.pdf": {
+    "mtime": 1779039258.6767008,
+    "hash": "47ea9e1f95e6859dab349062558cacb7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_05.pdf": {
+    "mtime": 1779039259.9794164,
+    "hash": "78ba96e8a314e3e72da0c6f9391c7412"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_06.pdf": {
+    "mtime": 1779039272.4765978,
+    "hash": "c84ecac54d5354df311a5eaace44cceb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_07.pdf": {
+    "mtime": 1779039279.3723166,
+    "hash": "51c01ba7ec727b9bca9f84ad59e370eb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_08.pdf": {
+    "mtime": 1779039283.7962735,
+    "hash": "91f178d34d22ae6dda8c432901c45823"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_09.pdf": {
+    "mtime": 1779039292.7037246,
+    "hash": "f499278f9b32b980dc39cc394731ced3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_10.pdf": {
+    "mtime": 1779039300.8887599,
+    "hash": "3ee473bd26b39515bc81354a42cb15b1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_11.pdf": {
+    "mtime": 1779039306.5289824,
+    "hash": "956ad2c526759579b473a21c062886a0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_13.pdf": {
+    "mtime": 1779039038.6062586,
+    "hash": "39e0c91c7b3a3b439470abac60d6adff"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_14.pdf": {
+    "mtime": 1779039065.8227634,
+    "hash": "2830e4c0d1edf24cfdbcd396f82919e6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_15.pdf": {
+    "mtime": 1779039096.1587737,
+    "hash": "9dd62fb9324cbcae2f2d944b2240e7f4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_16.pdf": {
+    "mtime": 1779039058.3749435,
+    "hash": "d4836ef5f196141b176ca40f2769ee53"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_17.pdf": {
+    "mtime": 1779039091.0565493,
+    "hash": "24708b25f7a5bdca62856dc35ad9ec8c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_18.pdf": {
+    "mtime": 1779039096.1757638,
+    "hash": "eee22f18700a5b1b6ee7d7f7601a8803"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_19.pdf": {
+    "mtime": 1779039092.9430335,
+    "hash": "735797cc20d45d6839ed6097b54e2758"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_20.pdf": {
+    "mtime": 1779039112.5433283,
+    "hash": "01117b0682783dbd2c393a39f2f939ea"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_21.pdf": {
+    "mtime": 1779039098.1729703,
+    "hash": "e60c401619884bfa27cd88374fba00ed"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_22.pdf": {
+    "mtime": 1779039110.6123161,
+    "hash": "4305edebff6973b5c5b52434ed49339e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_23.pdf": {
+    "mtime": 1779039112.7568245,
+    "hash": "c89e0e99f0d15348ed9b11090afca399"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_24.pdf": {
+    "mtime": 1779039169.6408205,
+    "hash": "8f95013c82e9fe4349157c00ef17183c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_25.pdf": {
+    "mtime": 1779039166.274431,
+    "hash": "85c6f9e518506944ece0baa89081a4d0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_26.pdf": {
+    "mtime": 1779039164.7241175,
+    "hash": "1bfd510c41d4f71a6818367ad3570c79"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_27.pdf": {
+    "mtime": 1779039178.7667997,
+    "hash": "b9c13607cc56761d964edcd4d0627551"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_28.pdf": {
+    "mtime": 1779039176.9412105,
+    "hash": "abd35aed27328a1ef0a9531ef6ee2f28"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_29.pdf": {
+    "mtime": 1779039190.6578197,
+    "hash": "4f3a08bb7586da0070a9e7c4536c0fc9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_30.pdf": {
+    "mtime": 1779039195.3592317,
+    "hash": "7d5c719462dfcfa2bbcfe3c1f6b2ba1a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_31.pdf": {
+    "mtime": 1779039230.4089682,
+    "hash": "80733cc5e077b551e8f45726cd87aa8b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_32.pdf": {
+    "mtime": 1779039241.7422035,
+    "hash": "21588854d4ed109ea4c4466b8a06bf4f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_33.pdf": {
+    "mtime": 1779039224.0083256,
+    "hash": "560650104927de2cf67ca0e10ce7beec"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_34.pdf": {
+    "mtime": 1779038905.7034965,
+    "hash": "c84085a99622abbebc7fe173c995e564"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_35.pdf": {
+    "mtime": 1779038910.3533056,
+    "hash": "133553f1a514dcf0ac66d8bb7acb8a73"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_36.pdf": {
+    "mtime": 1779038936.0746584,
+    "hash": "ec3ab52db86d64de60bdbd8746474e23"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_37.pdf": {
+    "mtime": 1779038938.5704117,
+    "hash": "ac7eb17299a938fe7885927b11f048be"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_38.pdf": {
+    "mtime": 1779038959.5041118,
+    "hash": "687161e602deffbcadd2a86cd29df9f1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_39.pdf": {
+    "mtime": 1779038958.0044303,
+    "hash": "1a758307ce7b6952dd74894e59a43808"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_40.pdf": {
+    "mtime": 1779038967.7623436,
+    "hash": "b84c9fc2ce6515e0ac8cc0e927d48e37"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_41.pdf": {
+    "mtime": 1779038984.2338336,
+    "hash": "20c2143797f2fd19caa15c4a137362c0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_42.pdf": {
+    "mtime": 1779038988.3546534,
+    "hash": "e703feee65a60c43a52351a4fa620a2f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_43.pdf": {
+    "mtime": 1779038990.8212626,
+    "hash": "8b256e402801f0db062b141f28ae3f98"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_44.pdf": {
+    "mtime": 1779039006.6548495,
+    "hash": "7c596cffcceaecfe433c739e8fb108c3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_45.pdf": {
+    "mtime": 1779039018.271714,
+    "hash": "99e379cc70cb6856966a0d09ce3dd1b4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_46.pdf": {
+    "mtime": 1779039015.8887012,
+    "hash": "d3c6c707082e683ab9d922afdb73b2ae"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_47.pdf": {
+    "mtime": 1779039035.6603384,
+    "hash": "d05398e56d55b5962fa5be636edf3333"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_48.pdf": {
+    "mtime": 1779039022.0050912,
+    "hash": "d0048cdd2ed83393abd742a3ef1a64e2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_49.pdf": {
+    "mtime": 1779039044.251643,
+    "hash": "8b4f38e4c2591541bc20ae63fd706312"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_50.pdf": {
+    "mtime": 1779039034.6767764,
+    "hash": "8dab1263729185fac48c7d0a0b2aebf1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_51.pdf": {
+    "mtime": 1779038771.93645,
+    "hash": "5d62bca40d258f826ac58bf84d4299ef"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_52.pdf": {
+    "mtime": 1779038776.8280976,
+    "hash": "bbd28086ae761b98fed0fd480f3dd09c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_53.pdf": {
+    "mtime": 1779038783.1540916,
+    "hash": "01c8a11139c856ef030ffb733441d5c4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_54.pdf": {
+    "mtime": 1779038793.2395525,
+    "hash": "9dada73b194d9d0236e18be14c99d132"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_55.pdf": {
+    "mtime": 1779038799.8014662,
+    "hash": "a584ecd3298d7e683d9bd7955792e46d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_56.pdf": {
+    "mtime": 1779038801.7015262,
+    "hash": "2e0b536553a7b62e9c74a9b6747ed214"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_57.pdf": {
+    "mtime": 1779038810.8520892,
+    "hash": "b28d9b3677f8a999007b9c23040ef126"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_58.pdf": {
+    "mtime": 1779038815.0184002,
+    "hash": "7c829143f46ebfeb9a51bdc4fc88befb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_59.pdf": {
+    "mtime": 1779038819.7184663,
+    "hash": "0eff513f72f3d032c89ec27abe561579"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_60.pdf": {
+    "mtime": 1779038866.292639,
+    "hash": "74328571edd0b207063b8c607eaaa1ff"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_61.pdf": {
+    "mtime": 1779038859.7324276,
+    "hash": "d87fdbc83c8cd533a5bbb8f3262dc76a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_62.pdf": {
+    "mtime": 1779038884.591233,
+    "hash": "d568a68363fc8d24c388e5df00d2b028"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_63.pdf": {
+    "mtime": 1779038887.7695913,
+    "hash": "30d1d2802a590ce5159feabcfa2b50fe"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_64.pdf": {
+    "mtime": 1779038891.5867088,
+    "hash": "4ee82ce97b8a03b95ec892fd513f9865"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_65.pdf": {
+    "mtime": 1779038884.5708015,
+    "hash": "1a5149bcdd4b00cf62e290b2ce40f05f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_67.pdf": {
+    "mtime": 1779038893.6197073,
+    "hash": "348e2a6bf9ef4660496625d241535233"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_68.pdf": {
+    "mtime": 1779038633.6166852,
+    "hash": "cbedb9e932510b5ba1f31d33a5fea6c0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_69.pdf": {
+    "mtime": 1779038637.6395845,
+    "hash": "425887787c95c1ee28b6861a405bf7b8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_70.pdf": {
+    "mtime": 1779038640.1827064,
+    "hash": "89b9e36006aa59df29c695086785e245"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_71.pdf": {
+    "mtime": 1779038657.9160256,
+    "hash": "34cd6bb23db6e81d20529b3e184983ac"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_72.pdf": {
+    "mtime": 1779038657.839935,
+    "hash": "0888bdddfa978c8a929aeed5b560436f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_73.pdf": {
+    "mtime": 1779038669.6282237,
+    "hash": "4730b577482643a7db5345008317620d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_74.pdf": {
+    "mtime": 1779038692.99916,
+    "hash": "d883024734f55d130f691e37dba376d7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_75.pdf": {
+    "mtime": 1779038703.9997487,
+    "hash": "5e0d771b37648ab5fd15095f86e26251"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_76.pdf": {
+    "mtime": 1779038703.1178315,
+    "hash": "2c97f027b7cff191568dfb8dc07e0c18"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_77.pdf": {
+    "mtime": 1779038723.0411897,
+    "hash": "c4f12c5d7441dfecaf903cea61579ae5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_78.pdf": {
+    "mtime": 1779038724.534257,
+    "hash": "c85123988ada905745aef87af857633f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_79.pdf": {
+    "mtime": 1779038744.9176538,
+    "hash": "b82c32ebdf01665953fa98cff4f710e0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_80.pdf": {
+    "mtime": 1779038748.8778095,
+    "hash": "6555e0d2034c61ea0aeae137ef8365df"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_81.pdf": {
+    "mtime": 1779038772.318283,
+    "hash": "96fd36ce854fb278e315ac1499ffe721"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2471_83.pdf": {
+    "mtime": 1779038761.9842234,
+    "hash": "712facc4f4ec26cfbdd89cfb9ae908a8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_01.pdf": {
+    "mtime": 1779038612.2785778,
+    "hash": "59c8f232a79b309a90c4ab3155309356"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_02.pdf": {
+    "mtime": 1779038625.6067538,
+    "hash": "02e5ae2a2d10643e35d1a83df7948c84"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_03.pdf": {
+    "mtime": 1779038506.341716,
+    "hash": "f7e7f9a31e52910d720e9d6823d5b6b2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_04.pdf": {
+    "mtime": 1779038515.670044,
+    "hash": "42a5bd13d7e394bf5c7f2dde9a2da2c1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_05.pdf": {
+    "mtime": 1779038519.35392,
+    "hash": "cddf69bb44477bb1ab67b6339333f2a7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_06.pdf": {
+    "mtime": 1779038519.4773147,
+    "hash": "37da92c477a6e05232ba7cac870ed68b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_07.pdf": {
+    "mtime": 1779038530.718774,
+    "hash": "4dff05ae1381f16397c6f3f182e0a152"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_08.pdf": {
+    "mtime": 1779038542.8982399,
+    "hash": "f471192a5ef386182ff140f6ae9c811d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_09.pdf": {
+    "mtime": 1779038542.5356567,
+    "hash": "e19839eb295be0c99da1c1918e5013d7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_10.pdf": {
+    "mtime": 1779038575.4310713,
+    "hash": "fff434cb786fccb3b0ac27040047147c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_11.pdf": {
+    "mtime": 1779038552.9040399,
+    "hash": "a1f8f8c6532111692adba2281be3f238"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_12.pdf": {
+    "mtime": 1779038565.0867307,
+    "hash": "c9deff5c26ddebb7778df89f45f10826"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_13.pdf": {
+    "mtime": 1779038571.9896944,
+    "hash": "604837c1b57acf72f85dbffd5e6f8b19"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_14.pdf": {
+    "mtime": 1779038572.748941,
+    "hash": "c15184a3e61e10e6c62a13fcc363f525"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_15.pdf": {
+    "mtime": 1779038609.168075,
+    "hash": "e235880ff6e964032f0de5f44c4fd4b4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_16.pdf": {
+    "mtime": 1779038592.195184,
+    "hash": "29062177701d8a49c2f0abd077a09205"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_17.pdf": {
+    "mtime": 1779038599.6988218,
+    "hash": "715868859aa433fa8e688fab49fbedae"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_18.pdf": {
+    "mtime": 1779038618.635468,
+    "hash": "962dd9c68264796c147592b54b07068c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_19.pdf": {
+    "mtime": 1779038399.6115265,
+    "hash": "44d87434d4ca00c92347ae3b1f793e61"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_20.pdf": {
+    "mtime": 1779038423.112673,
+    "hash": "f582c9435574bb4cb34ccce3cfbe59a0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_21.pdf": {
+    "mtime": 1779038424.4520392,
+    "hash": "e3b4127996a2625a26b6ebfa8afc8288"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_22.pdf": {
+    "mtime": 1779038427.2849283,
+    "hash": "8fa1769f03f4195a3e8afb7d76cdaabf"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_23.pdf": {
+    "mtime": 1779038439.0069718,
+    "hash": "9c97f4fe5d5bb0a46b7e6c6b7cb3e907"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_24.pdf": {
+    "mtime": 1779038449.0839932,
+    "hash": "a3a813c5223edbb4169b02343befaa3a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_25.pdf": {
+    "mtime": 1779038450.862975,
+    "hash": "a07a3fba6aab30feeee677993cb8969e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_26.pdf": {
+    "mtime": 1779038476.2989326,
+    "hash": "82bf129a71f6fb8baf5ab09d7b46ee49"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_27.pdf": {
+    "mtime": 1779038469.0704618,
+    "hash": "86f2b57367156ae15f30810ca8a455bc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_28.pdf": {
+    "mtime": 1779038499.463692,
+    "hash": "9446ac1cff05c6be7d5e70a2499160a0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_29.pdf": {
+    "mtime": 1779038508.2105403,
+    "hash": "afb94b5e599fae340924bfe2e5a754e9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_30.pdf": {
+    "mtime": 1779038512.658223,
+    "hash": "0aa2e22c6c1aafab2ec7414dc932bb63"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_31.pdf": {
+    "mtime": 1779038254.4679656,
+    "hash": "aa112063aa064d9de6b77f91c5c7cbd5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_32.pdf": {
+    "mtime": 1779038274.8880188,
+    "hash": "d79886478265ed15870e6324ed86f84b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_33.pdf": {
+    "mtime": 1779038285.2078981,
+    "hash": "08de129f09d186ce0abe17a1f4491b44"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_34.pdf": {
+    "mtime": 1779038288.0481298,
+    "hash": "130396591f1bf0b5b8fe0b41bdc487a0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_35.pdf": {
+    "mtime": 1779038308.2698908,
+    "hash": "bc7fb608922847b0268b8cda9f02928a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_36.pdf": {
+    "mtime": 1779038317.0718238,
+    "hash": "a53367abce3234117c78d24829db4527"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_37.pdf": {
+    "mtime": 1779038339.037831,
+    "hash": "41c5cd5b049ea85a5314a1372d796c57"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_38.pdf": {
+    "mtime": 1779038326.0103273,
+    "hash": "6d091d6f4c3152d44e4dc860b2384dab"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_39.pdf": {
+    "mtime": 1779038339.3501806,
+    "hash": "0855d3c68da93fa3f50f42fa8d4b01d5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_40.pdf": {
+    "mtime": 1779038346.531115,
+    "hash": "7d037d116d6371c19ca227736f1f09e8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_41.pdf": {
+    "mtime": 1779038371.0278015,
+    "hash": "c24869ba8756cc469fd4266ee2e141fe"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_42.pdf": {
+    "mtime": 1779038352.97878,
+    "hash": "af493dd68902d94321858f072b6adde9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_43.pdf": {
+    "mtime": 1779038379.673669,
+    "hash": "96a5a4b8b765324f8f5e7383d3cb8332"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_44.pdf": {
+    "mtime": 1779038396.6262789,
+    "hash": "f014318289a94fcd58b791e14fc16516"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_45.pdf": {
+    "mtime": 1779038379.0810292,
+    "hash": "7c7f6576471cb6cdbf1a83b355917ea0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_47.pdf": {
+    "mtime": 1779038388.6257167,
+    "hash": "39a26d5239c5735990c1b8d98dad5c2d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_49.pdf": {
+    "mtime": 1779038166.0099628,
+    "hash": "1f4e7df863ac48265a675c14f0a12f43"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_50.pdf": {
+    "mtime": 1779038162.5445764,
+    "hash": "8584369aaed882addebbfdcce59e04f8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_51.pdf": {
+    "mtime": 1779038158.730007,
+    "hash": "3df41fbe631a82ef2d0d5cea78954063"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_52.pdf": {
+    "mtime": 1779038168.567649,
+    "hash": "763882b61bf0bdf76f6a482e351fee30"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_53.pdf": {
+    "mtime": 1779038173.7842066,
+    "hash": "40199ecafd2ea4d055187fea8ac77120"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_54.pdf": {
+    "mtime": 1779038198.909194,
+    "hash": "2b4d5de2ae315fdfb51e83f54a255ff0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_55.pdf": {
+    "mtime": 1779038191.5127175,
+    "hash": "b1159e11d4dbeca763c1564e40a94d2d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_56.pdf": {
+    "mtime": 1779038198.909194,
+    "hash": "392d273bba6c60bacc61657aede5bd54"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_57.pdf": {
+    "mtime": 1779038222.6363404,
+    "hash": "71301cffe0287bee529464aafbdb4573"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_58.pdf": {
+    "mtime": 1779038223.0937781,
+    "hash": "578daa3398bf2e2388d5ba50f11150d2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_59.pdf": {
+    "mtime": 1779038231.4391768,
+    "hash": "79b72e8d663133a50f11ea2345e2379d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_60.pdf": {
+    "mtime": 1779038237.4053714,
+    "hash": "f3f3daac9958b60c08fdec7490b7c881"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_61.pdf": {
+    "mtime": 1779038234.2767258,
+    "hash": "5dc744b3c22ee421b2746166316acae2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_63.pdf": {
+    "mtime": 1779038102.7672603,
+    "hash": "3499e3ea046f8bc3b55305de6d3d8506"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_64.pdf": {
+    "mtime": 1779038098.451019,
+    "hash": "6574b35dfa166ee2b0c66a2542b05981"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_65.pdf": {
+    "mtime": 1779038103.3395946,
+    "hash": "e5f6439b6e9176d4eb7a56ffabdce3b1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_66.pdf": {
+    "mtime": 1779038140.7349122,
+    "hash": "6e33355bcaab9353e858f9ba3e2d0e79"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_67.pdf": {
+    "mtime": 1779038143.7109659,
+    "hash": "950810283c7f79a3a5cf2bb6ca0dfba9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_68.pdf": {
+    "mtime": 1779038149.19323,
+    "hash": "65e9811710f6e3307aacf80be9480dc3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2472_69.pdf": {
+    "mtime": 1779038143.5839832,
+    "hash": "56fde2f79652311d3a14e35c305253c9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_01.pdf": {
+    "mtime": 1779038035.0039606,
+    "hash": "bb006559d2e186d2d2f39adf18a8ad1d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_02.pdf": {
+    "mtime": 1779038065.316799,
+    "hash": "3b787a0b1642279f7a578afafe6d41e2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_04.pdf": {
+    "mtime": 1779038053.3157322,
+    "hash": "75e201d2aee926e8ddbd3d94f443df9d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_05.pdf": {
+    "mtime": 1779038060.9671364,
+    "hash": "eaaf9c9c7209e7d342c0515e5ac9190b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_06.pdf": {
+    "mtime": 1779038053.5247343,
+    "hash": "e12471226b701b506a493bbe8392e76d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_07.pdf": {
+    "mtime": 1779038078.8962758,
+    "hash": "d7a6f7139d7bfc4840a858b5722f9dae"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_08.pdf": {
+    "mtime": 1779038071.7371933,
+    "hash": "671aea56b7fd01f077990088cc3196fd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_09.pdf": {
+    "mtime": 1779038077.2683873,
+    "hash": "1de97cd09fd4d6f69a598daa5220986e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_10.pdf": {
+    "mtime": 1779038083.355139,
+    "hash": "365b05408def52acb4c527712e43694e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_12.pdf": {
+    "mtime": 1779038034.2076526,
+    "hash": "b163bb3e180eed9211f30f2b1dd461bf"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_13.pdf": {
+    "mtime": 1779038003.4595964,
+    "hash": "c39cf548eb0e607adffb6fcf36ae5250"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_14.pdf": {
+    "mtime": 1779038005.4430995,
+    "hash": "81172649d1ef7606c85c421f7bf9c29e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_15.pdf": {
+    "mtime": 1779038010.94561,
+    "hash": "778ed71a6f90a9b14bc2153337585214"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_16.pdf": {
+    "mtime": 1779038023.2927058,
+    "hash": "bd0a23d21326b242990730612499cdea"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_17.pdf": {
+    "mtime": 1779037952.4423902,
+    "hash": "663d85bcb69299fdae95f317b3250772"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_18.pdf": {
+    "mtime": 1779037977.2195015,
+    "hash": "c454561a67911a04d0450e25a24346b4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_19.pdf": {
+    "mtime": 1779037979.4214613,
+    "hash": "ef140d6afd2081d181c09a9cc54c7f7e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_21.pdf": {
+    "mtime": 1779037987.2453082,
+    "hash": "8e2a86549db08e3d40f3d10da4cf2913"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_22.pdf": {
+    "mtime": 1779037979.3115416,
+    "hash": "7942f6a83915fd3e3f497f9023da4d15"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_23.pdf": {
+    "mtime": 1779037987.3056269,
+    "hash": "6ad2b656f269e56f9ad70e1d5a53c77f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_24.pdf": {
+    "mtime": 1779037998.68027,
+    "hash": "cf700ed6a6f262da92d2f6ff5ff464f7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_25.pdf": {
+    "mtime": 1779037907.4948766,
+    "hash": "6db69b650c40e865e8a0aff9ceb4c94b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_26.pdf": {
+    "mtime": 1779037919.0282032,
+    "hash": "9b4228ad1858d7938e1af71a15480f74"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_27.pdf": {
+    "mtime": 1779037922.2080057,
+    "hash": "c87cb702621c49cc34826749a7108f92"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_28.pdf": {
+    "mtime": 1779037925.3764057,
+    "hash": "3064cbf2a9e00d75e9e386fc823d15aa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_29.pdf": {
+    "mtime": 1779037931.1234326,
+    "hash": "b4b991524d1954093ab4038713bc4549"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_30.pdf": {
+    "mtime": 1779037937.617492,
+    "hash": "be843b78dba0b545ea5cbb55d1a1b7b4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_31.pdf": {
+    "mtime": 1779037905.7045891,
+    "hash": "99f8b499c2a186087db064306903e0cc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_32.pdf": {
+    "mtime": 1779037876.4328954,
+    "hash": "db4bae4e8f0340721dd506476c9d5241"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_33.pdf": {
+    "mtime": 1779037877.1554174,
+    "hash": "b12ba621997381dccdab734d5ebb692c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2473_34.pdf": {
+    "mtime": 1779037883.577108,
+    "hash": "6695fdf5877fe7133eba3a82703ed27d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_01.pdf": {
+    "mtime": 1779037715.1100094,
+    "hash": "b24581e5a24169d0f4de68a685785ec0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_02.pdf": {
+    "mtime": 1779037745.6576385,
+    "hash": "fc3a8f095ed49ef312afd1db6a2d020f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_03.pdf": {
+    "mtime": 1779037745.5939155,
+    "hash": "741418d805b61879cfac5fb67d71409a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_04.pdf": {
+    "mtime": 1779037747.806973,
+    "hash": "84e90d2f666de6f6ed5af9dee195776c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_05.pdf": {
+    "mtime": 1779037746.8789442,
+    "hash": "f52739bd34ade5d55e5bb71ff0136aab"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_06.pdf": {
+    "mtime": 1779037751.6337907,
+    "hash": "70c474063e75c0db27b47bdb4a0b8d0d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_07.pdf": {
+    "mtime": 1779037772.8877,
+    "hash": "9a90864f81e9e07a06443704a3078e42"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_08.pdf": {
+    "mtime": 1779037814.942787,
+    "hash": "7fc9569a55a91c12bbc2743fc0ae73bc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_09.pdf": {
+    "mtime": 1779037804.339315,
+    "hash": "f600e719a992e057bcaaf9d8adf28b06"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_10.pdf": {
+    "mtime": 1779037792.3592024,
+    "hash": "805d39a7134e1fd3006a4a5608723fc0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_11.pdf": {
+    "mtime": 1779037819.2672873,
+    "hash": "1ef4cddc983c22eba0608b747ec2b69d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_12.pdf": {
+    "mtime": 1779037849.1872125,
+    "hash": "2bc6e16ec422b438213de0a2907925db"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_13.pdf": {
+    "mtime": 1779037820.404833,
+    "hash": "98bb9cdd6df2300f862c0f2fd02d412f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_14.pdf": {
+    "mtime": 1779037837.6657085,
+    "hash": "78260ae368546806a66755375eef4fd6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_15.pdf": {
+    "mtime": 1779037859.9103177,
+    "hash": "128c9159e2d33a1fdc151699cd313980"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_16.pdf": {
+    "mtime": 1779037845.1376622,
+    "hash": "4c2d4969bdc43cecded1fec1d4fc1fef"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_17.pdf": {
+    "mtime": 1779037850.0601928,
+    "hash": "3fc46e1e7e608c5118fb376b8670967a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_18.pdf": {
+    "mtime": 1779037862.6660895,
+    "hash": "37e6f0871cb1c0d18edf606f3a3cf30d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_19.pdf": {
+    "mtime": 1779037873.093436,
+    "hash": "546f1187fe72dbab0bbc0fec6542e933"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_20.pdf": {
+    "mtime": 1779037644.6991844,
+    "hash": "5115f3fef515bb067332b555e57a6812"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_22.pdf": {
+    "mtime": 1779037659.1618059,
+    "hash": "343978710cff47865d9843ceccef15fb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_23.pdf": {
+    "mtime": 1779037660.2022257,
+    "hash": "3e5ab785ea191c7c7384f4b848cca957"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_24.pdf": {
+    "mtime": 1779037668.388479,
+    "hash": "3e9d2299943fc8f1c06775a2c3670770"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_25.pdf": {
+    "mtime": 1779037676.8736575,
+    "hash": "4928aed61fc5e112d434d9adc8126ca2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_26.pdf": {
+    "mtime": 1779037695.9417658,
+    "hash": "8f7a6ba07d37e49126fc1837688aa235"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_27.pdf": {
+    "mtime": 1779037703.6510465,
+    "hash": "82a95cd6a0ebbd37a0e2da2b09e93f88"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_28.pdf": {
+    "mtime": 1779037711.2689428,
+    "hash": "015d62b70d5c9512eb549a0a77f4852c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_29.pdf": {
+    "mtime": 1779037708.7934804,
+    "hash": "c718467c83cdcefae19dabec0f0be58a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_30.pdf": {
+    "mtime": 1779037722.9024656,
+    "hash": "6550393049b263357197f29ebea16804"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_31.pdf": {
+    "mtime": 1779037563.9988656,
+    "hash": "8c0d5b4a7035549490fa1fbefbed417d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_32.pdf": {
+    "mtime": 1779037567.0465405,
+    "hash": "f15340d4b4fc649bf44dc3c2e70a3ebd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_33.pdf": {
+    "mtime": 1779037574.8491423,
+    "hash": "8a9212d1df9fa7b52446918f3177a27e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_34.pdf": {
+    "mtime": 1779037597.8838086,
+    "hash": "d44ba65c90b34cf721c4cc787c39e79b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_35.pdf": {
+    "mtime": 1779037590.8452961,
+    "hash": "9e28187baa8da737930a53e2dda89575"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_36.pdf": {
+    "mtime": 1779037601.4397166,
+    "hash": "a5aab723196b7d46375ba448db88f365"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_37.pdf": {
+    "mtime": 1779037621.4971042,
+    "hash": "3843c603341acbd2e5afeee73d0df47b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_38.pdf": {
+    "mtime": 1779037604.570722,
+    "hash": "ea32b3b11dd774eea837be32b7058abe"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_39.pdf": {
+    "mtime": 1779037621.0593703,
+    "hash": "0201f5772773464608d08eb4791e4142"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_40.pdf": {
+    "mtime": 1779037636.8121388,
+    "hash": "05bed9d77e9a8bb0c4b45b209064510e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_41.pdf": {
+    "mtime": 1779037641.0250523,
+    "hash": "ab1000654f119805c3a1ab380f4d1763"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_42.pdf": {
+    "mtime": 1779037632.3770797,
+    "hash": "1bccb6d3a07e38c2a9ecccaa39398aa0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_43.pdf": {
+    "mtime": 1779037650.3687997,
+    "hash": "66910ef1a837cc0b592629b45524a62b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_44.pdf": {
+    "mtime": 1779037443.032128,
+    "hash": "b1abd22da514ef57a5109ee028077280"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_45.pdf": {
+    "mtime": 1779037449.08858,
+    "hash": "6adbbe0fc5d43dc150144010a4010db8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_46.pdf": {
+    "mtime": 1779037458.3452835,
+    "hash": "cad64142140f62213ff5fdd0b1d58ce0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_47.pdf": {
+    "mtime": 1779037464.967383,
+    "hash": "6c20647d63e8216fc69114a1be6acbd5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_48.pdf": {
+    "mtime": 1779037472.8798556,
+    "hash": "cc347a48379110056ab80df5831ebb16"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_49.pdf": {
+    "mtime": 1779037482.8842478,
+    "hash": "400507f019b3fcfcb31ce0a87ad5e4b2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_50.pdf": {
+    "mtime": 1779037486.7339756,
+    "hash": "5b7727489151662bd1b1df40b7193773"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_51.pdf": {
+    "mtime": 1779037492.7446952,
+    "hash": "61808d04dd02d5b401a9ad8bbdebfc9c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_52.pdf": {
+    "mtime": 1779037515.099412,
+    "hash": "cd2e7af16b1f1278ff9c420bfff7c18c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_53.pdf": {
+    "mtime": 1779037536.1006832,
+    "hash": "39fbbba0844f0257e1ce500f80ef4bfb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_54.pdf": {
+    "mtime": 1779037543.118188,
+    "hash": "dba46e1d38b766371b309f19ee06a10c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_55.pdf": {
+    "mtime": 1779037540.323512,
+    "hash": "c82aa7c702663e37af292f4e4557fc5f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_56.pdf": {
+    "mtime": 1779037541.3127973,
+    "hash": "1f8b126bd7226d3812b791767c0793ea"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_57.pdf": {
+    "mtime": 1779037556.043136,
+    "hash": "37584c840fd2b759885934c3be7abe08"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_58.pdf": {
+    "mtime": 1779037548.5702763,
+    "hash": "35ff934aa5d74dab467cd9cdb21362db"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_59.pdf": {
+    "mtime": 1779037388.1886547,
+    "hash": "1b9c9075c18f440d97ce62ec397840fa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_60.pdf": {
+    "mtime": 1779037408.9627068,
+    "hash": "26cc90de5ff75da1dceb967c6cf42b58"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_61.pdf": {
+    "mtime": 1779037408.1511493,
+    "hash": "2072f4bc708990c45f3d016e86a2ca09"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_62.pdf": {
+    "mtime": 1779037423.8405073,
+    "hash": "b81e3c402c93d737820402de13e09904"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_63.pdf": {
+    "mtime": 1779037430.7511976,
+    "hash": "fbbc4d016e8ff00cb3c132363fd4eeaf"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_64.pdf": {
+    "mtime": 1779037437.176319,
+    "hash": "b189f47d6fb468bc4bc07b147e5ca000"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_65.pdf": {
+    "mtime": 1779037430.6552856,
+    "hash": "eb51c001ef1ebc7f91aa9d5dc41ea23f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2474_66.pdf": {
+    "mtime": 1779037386.360118,
+    "hash": "04ba49f2bbdb087d818dbd875f2d24fa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_01.pdf": {
+    "mtime": 1779037357.7598867,
+    "hash": "5bd5cb53f03969ed800ad307ce7721b5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_03.pdf": {
+    "mtime": 1779037359.9701607,
+    "hash": "16e9598ab9a5b6463df13f8c4c8fb1e5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_04.pdf": {
+    "mtime": 1779037366.7502618,
+    "hash": "537dbbed684783ba6d8a7410f64683a3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_05.pdf": {
+    "mtime": 1779037373.6427631,
+    "hash": "595eb1c706fe666182b3b283ac3a281e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_06.pdf": {
+    "mtime": 1779037326.6704445,
+    "hash": "d7522a9c5acc95a3f72d3c6bbf7510d3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_07.pdf": {
+    "mtime": 1779037330.699246,
+    "hash": "933011e49ba7687938526fd2931febb8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_08.pdf": {
+    "mtime": 1779037354.3772929,
+    "hash": "82a684f75d5fe239cd72c20a21b339ee"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_09.pdf": {
+    "mtime": 1779037352.5281062,
+    "hash": "456b29d6d4a286cfdbad525ce1c66724"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_10.pdf": {
+    "mtime": 1779037888.3072088,
+    "hash": "8d90a85fe3dc02b9aae0f32b11786726"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_11.pdf": {
+    "mtime": 1779037353.0691817,
+    "hash": "32b642489c6e9ab9c974288c5965a782"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_12.pdf": {
+    "mtime": 1779037256.5029423,
+    "hash": "a4f79d87ef09f2bab10ba03390cf66d5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_13.pdf": {
+    "mtime": 1779037244.974179,
+    "hash": "ef11100a74a13473556d9ec6f7d1e60b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_14.pdf": {
+    "mtime": 1779037267.6337714,
+    "hash": "fab7e8161e218c5807cd11c7cfedc852"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_15.pdf": {
+    "mtime": 1779037256.897346,
+    "hash": "00a180aa80168c9ed3de98d156bc0fd3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_16.pdf": {
+    "mtime": 1779037248.9021635,
+    "hash": "dfb7895075be3f5e236101e4a0efd319"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_17.pdf": {
+    "mtime": 1779037283.8933458,
+    "hash": "7e8e9ccf3bf2095be43103ae3c2af87d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_18.pdf": {
+    "mtime": 1779037258.384951,
+    "hash": "ebf80932aee3a909f0b13dff32140444"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_19.pdf": {
+    "mtime": 1779037284.4882007,
+    "hash": "8103f140ab859bc78efe000fccb496b2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_20.pdf": {
+    "mtime": 1779037297.78389,
+    "hash": "7b5108440a680403f690ca5a7f7fc262"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_21.pdf": {
+    "mtime": 1779037296.5568726,
+    "hash": "da6c12eb733172553bffa32a95946679"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_22.pdf": {
+    "mtime": 1779037314.5651934,
+    "hash": "0929403498d20604e65714007036ecc3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_23.pdf": {
+    "mtime": 1779037320.266271,
+    "hash": "fa0748087f35fbd60c34998f61ad33bb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_24.pdf": {
+    "mtime": 1779037318.9509487,
+    "hash": "c7232cd82a263a860bed39db236b7792"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_25.pdf": {
+    "mtime": 1779037327.304781,
+    "hash": "788c3f6180f7140a296ae5d253b3bcc5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_26.pdf": {
+    "mtime": 1779037327.9975078,
+    "hash": "77bbf63ffd2b8dfb5eae58100a47ee68"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_27.pdf": {
+    "mtime": 1779037208.0833278,
+    "hash": "e932d2a73e2d265f778fec5db76d73b3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_28.pdf": {
+    "mtime": 1779037164.57191,
+    "hash": "7ab53846218b65f7299e8522e45db5ae"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_29.pdf": {
+    "mtime": 1779037165.675055,
+    "hash": "e97be7bdfb5e7020005197f40886952a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_31.pdf": {
+    "mtime": 1779037177.495503,
+    "hash": "e50ede2aa18b5a05b1f183915d1a9cf3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_32.pdf": {
+    "mtime": 1779037181.4446235,
+    "hash": "11d548ccfc7239f2c986aa4292f01737"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_33.pdf": {
+    "mtime": 1779037200.7818363,
+    "hash": "1353008c2aca61e32720583b8ed03352"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_34.pdf": {
+    "mtime": 1779037195.1296983,
+    "hash": "efc5e5448e58c32cd1fcd13dfeb3d033"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_35.pdf": {
+    "mtime": 1779037205.9914477,
+    "hash": "42cb0f17355777aaf4ff369408140278"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_36.pdf": {
+    "mtime": 1779037107.5046096,
+    "hash": "a0cc5b1d62d8eeda652d8875da697652"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_37.pdf": {
+    "mtime": 1779037117.7333982,
+    "hash": "f30a7fc355d77254b0cd995e8847d0a6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_38.pdf": {
+    "mtime": 1779037111.6482189,
+    "hash": "02f33f1c56ba00c9fff02223e578f54b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_39.pdf": {
+    "mtime": 1779037120.358657,
+    "hash": "a1be3334e89a19df353b706a468eb426"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_41.pdf": {
+    "mtime": 1779037138.9130526,
+    "hash": "3fa5382f8f5181902abe874b05efc8ea"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_43.pdf": {
+    "mtime": 1779037131.3125236,
+    "hash": "5c20f46ca25815243ae5049f5e23ead8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_44.pdf": {
+    "mtime": 1779037157.1987486,
+    "hash": "32652a822109f67eb909aa9d8682fc6a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_45.pdf": {
+    "mtime": 1779037164.9820585,
+    "hash": "10dd4bdc3ac7a408827ae593555b4c97"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2475_47.pdf": {
+    "mtime": 1779037150.4597495,
+    "hash": "567318ab1403e06fbee27d1c2e740555"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_01.pdf": {
+    "mtime": 1779037057.588454,
+    "hash": "a54109c365adea6985d8348e2e1f1883"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_02.pdf": {
+    "mtime": 1779037066.497625,
+    "hash": "661086e27295b66a2457927e5ce4803d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_03.pdf": {
+    "mtime": 1779037076.8813636,
+    "hash": "9aa43e75177cc436fb5d42135d4d65f7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_04.pdf": {
+    "mtime": 1779037085.7233903,
+    "hash": "4c861dd18ca5bf236883d6ae35727fa9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_05.pdf": {
+    "mtime": 1779037083.5532086,
+    "hash": "bb7ed8f631b7271622e8f10f3f9cec5e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_06.pdf": {
+    "mtime": 1779037091.5954206,
+    "hash": "1aea25a0153fc7fc219832de0b0f536f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_07.pdf": {
+    "mtime": 1779037030.4409342,
+    "hash": "e16ee372134444e430ac8f036d198c29"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_08.pdf": {
+    "mtime": 1779037042.2526615,
+    "hash": "5030aed008e0a13fa128b2ebd0fea80a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_09.pdf": {
+    "mtime": 1779037049.9368055,
+    "hash": "12b00dade5949b93fa70ed1089458e4e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_10.pdf": {
+    "mtime": 1779037449.9501445,
+    "hash": "258224d13243756c74241b6df8da17e1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_11.pdf": {
+    "mtime": 1779037055.8971663,
+    "hash": "351a59ecbfc401b44c1a9ab3f627fb0e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_12.pdf": {
+    "mtime": 1779036954.7272675,
+    "hash": "c3a4e66d4c94cb04bbe3875f50b96bb9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_13.pdf": {
+    "mtime": 1779036957.4655075,
+    "hash": "ecef4b21b28a8c8b7743b6a8403b309c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_14.pdf": {
+    "mtime": 1779036953.6728587,
+    "hash": "4d2adda51a9557bb906edc1536c5f412"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_15.pdf": {
+    "mtime": 1779036955.3446908,
+    "hash": "823d9fd9cffec11f61a9188946f81029"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_16.pdf": {
+    "mtime": 1779036963.969128,
+    "hash": "072bf320195e74e073313fb0e0615db7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_17.pdf": {
+    "mtime": 1779036973.6267555,
+    "hash": "17347012e11c313fba99debaad17654e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_18.pdf": {
+    "mtime": 1779036982.549074,
+    "hash": "c2f57bc8fa8b11950279376f1a51898a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_19.pdf": {
+    "mtime": 1779036983.8153481,
+    "hash": "fcc63102d4a3b2bccdef1d9bd326762d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_20.pdf": {
+    "mtime": 1779036989.6647472,
+    "hash": "1714617ce5df86abcae853b0e3070775"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_21.pdf": {
+    "mtime": 1779036993.784237,
+    "hash": "d7e10b3f250cbbf7921ba4963fc28050"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_22.pdf": {
+    "mtime": 1779037005.2973006,
+    "hash": "83737b8818c2d0b55a384dd71a7eeda7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_23.pdf": {
+    "mtime": 1779037012.44523,
+    "hash": "09fe1ed2f917c7902f4a476bfd2f2b58"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_24.pdf": {
+    "mtime": 1779037021.656946,
+    "hash": "c59865be5c6cc2bdce296ced2f4f7b2e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_25.pdf": {
+    "mtime": 1779037027.8675334,
+    "hash": "2d383e988438e2700f2cc3d59a5627dd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_26.pdf": {
+    "mtime": 1779036845.0223808,
+    "hash": "443911bac118f0f480ff081e21a3db60"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_27.pdf": {
+    "mtime": 1779036863.4802496,
+    "hash": "8196b83296c6bbc8667d1d9326d35cdd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_28.pdf": {
+    "mtime": 1779036872.8994746,
+    "hash": "e809e3b6d491dc086e588f5cd237f2b8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_29.pdf": {
+    "mtime": 1779036874.359273,
+    "hash": "fbc309ee1445df04022e9bc1bb72d619"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_30.pdf": {
+    "mtime": 1779036882.9628115,
+    "hash": "108bfa7795666ee057d7abe8c4243f55"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_31.pdf": {
+    "mtime": 1779036893.327535,
+    "hash": "2182c29a1609a247496c9648c9298d9f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_32.pdf": {
+    "mtime": 1779036911.2974653,
+    "hash": "4311a112e2c26cb187cea76c69917605"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_33.pdf": {
+    "mtime": 1779036896.5772088,
+    "hash": "aaca2f5fc27892325b6d1eeef19b39a2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_34.pdf": {
+    "mtime": 1779036918.9625492,
+    "hash": "6263d171ab0d631dac8e45e139bcad93"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_35.pdf": {
+    "mtime": 1779036930.3594573,
+    "hash": "fcec61f1802d65a0e72ad58709e94e39"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_36.pdf": {
+    "mtime": 1779036927.522383,
+    "hash": "cb4a8e61f0e3ec4acbac3d5de2dd6903"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_37.pdf": {
+    "mtime": 1779036941.144346,
+    "hash": "4bd5095ee32cda98c89aa2524033c856"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_38.pdf": {
+    "mtime": 1779036926.9738688,
+    "hash": "0edd62f459fb7460c63fdd4c29bd5667"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_39.pdf": {
+    "mtime": 1779036947.2385354,
+    "hash": "419fbe377f3e71f62b38b8aa415f9a4c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_41.pdf": {
+    "mtime": 1779036816.1604407,
+    "hash": "f964d13de0a2ec2fade543dfa94fe959"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_42.pdf": {
+    "mtime": 1779036825.115039,
+    "hash": "8be4374f210e66cb378e9413eaea8009"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_44.pdf": {
+    "mtime": 1779036846.6609013,
+    "hash": "a0e15978295ec037f471789d88026656"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2476_45.pdf": {
+    "mtime": 1779036839.101236,
+    "hash": "9907b77ecce1a7653410c941045c6fd8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_01.pdf": {
+    "mtime": 1779036678.7361374,
+    "hash": "78466b46d3f65d1fbe63a9e882711eb9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_03.pdf": {
+    "mtime": 1779036698.656108,
+    "hash": "c7dba64dae4b2d10a8d7ae9272e823a9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_04.pdf": {
+    "mtime": 1779036708.5805187,
+    "hash": "ff515e4d48424f8fb830ceda3d15dd89"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_05.pdf": {
+    "mtime": 1779036704.124309,
+    "hash": "d842b58df9068d69dbbe24ed5607e6a5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_06.pdf": {
+    "mtime": 1779036711.4032745,
+    "hash": "052eca5c84b277582ab48ddec4d406c3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_07.pdf": {
+    "mtime": 1779036715.8531065,
+    "hash": "cdbdeb549e652733a03a5c423a43ac5b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_08.pdf": {
+    "mtime": 1779036732.2645261,
+    "hash": "493e9e525e46555cd323b68d578c8dcc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_09.pdf": {
+    "mtime": 1779036743.6228166,
+    "hash": "f7e4d7c437be72171806a7771005f2ce"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_10.pdf": {
+    "mtime": 1779036732.2919548,
+    "hash": "a77d9b7e0c67a128cce5f693aef5aae9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_11.pdf": {
+    "mtime": 1779036760.7717478,
+    "hash": "44be407d20b3c334fbfe58537e3a6e38"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_12.pdf": {
+    "mtime": 1779036765.0856123,
+    "hash": "3c3620549a2a9349d8cd7c008690488a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_13.pdf": {
+    "mtime": 1779036759.4738796,
+    "hash": "65f608494381a4078748e1088b0d5a8b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_14.pdf": {
+    "mtime": 1779036764.2717402,
+    "hash": "b8082ce3ce756fcfd26e8b25094e53ad"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_15.pdf": {
+    "mtime": 1779036767.8789382,
+    "hash": "f86c42475f90f09182a8576713847f24"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_17.pdf": {
+    "mtime": 1779036800.2350109,
+    "hash": "b9dc7aef581e7371a76370bd86baa4b9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_19.pdf": {
+    "mtime": 1779036820.017008,
+    "hash": "3d58f510f27e92b2ee76e98c5eaebd9c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_20.pdf": {
+    "mtime": 1779036815.2406187,
+    "hash": "e167a0c12519622565c05c69376b655e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_21.pdf": {
+    "mtime": 1779036596.6190176,
+    "hash": "178c5bb1843f1364795a474a4e57eb45"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_22.pdf": {
+    "mtime": 1779036602.9214592,
+    "hash": "66ad3cf79e0c757d7dcdaafa7a48090d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_23.pdf": {
+    "mtime": 1779036608.3090498,
+    "hash": "87b3289790e9a5aa1fe005220c140ca2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_24.pdf": {
+    "mtime": 1779036640.793342,
+    "hash": "0edfd06336474b194377ba81bafc91c5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_25.pdf": {
+    "mtime": 1779036623.1599085,
+    "hash": "7014f81c64a0fae9595c7ae9cf8ea8dd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_26.pdf": {
+    "mtime": 1779036651.9970105,
+    "hash": "4cf74758bdc496f40016bfd7bc0fc9d8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_27.pdf": {
+    "mtime": 1779036647.593184,
+    "hash": "06bcf3e567e2435844339a59f344697f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_28.pdf": {
+    "mtime": 1779036665.1496706,
+    "hash": "033e2026e0621901c513c32d8cbe32e7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_29.pdf": {
+    "mtime": 1779036661.3191934,
+    "hash": "0e8edb2383b691f55468c6cca05f32b4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_30.pdf": {
+    "mtime": 1779036664.5826783,
+    "hash": "bffbc67a5735d4737f323eb565b8473c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_31.pdf": {
+    "mtime": 1779036672.3626716,
+    "hash": "284e000605a1fd7e0819b40a65d834bc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_32.pdf": {
+    "mtime": 1779036562.1711438,
+    "hash": "b9e98edd1045bb61dfe5100f0cb544e9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_33.pdf": {
+    "mtime": 1779036571.6740296,
+    "hash": "6df2b22a9b13890dd1f0efb1bbd39871"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_34.pdf": {
+    "mtime": 1779036581.084653,
+    "hash": "f4719914d07f9f80e2a90447c311f6a6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_35.pdf": {
+    "mtime": 1779036592.334183,
+    "hash": "853956268b7d2499933f342a0522ceb1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_36.pdf": {
+    "mtime": 1779036532.9591367,
+    "hash": "51a44467ac879d2dfc07b684e10234a1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_37.pdf": {
+    "mtime": 1779036547.6649942,
+    "hash": "9d45dd69b2116f47c08df0ff646d883a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_38.pdf": {
+    "mtime": 1779036546.9143507,
+    "hash": "0d48033bab674081efd5519c419ff349"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_39.pdf": {
+    "mtime": 1779036559.3058202,
+    "hash": "45f5b138328b19a9b3ac9d8e83033994"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_40.pdf": {
+    "mtime": 1779036492.0752318,
+    "hash": "dd5facb920792603505f04f25b4244f3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_41.pdf": {
+    "mtime": 1779036500.1030996,
+    "hash": "fdb92a78db7910b5d635dfc0f66d6d00"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_42.pdf": {
+    "mtime": 1779036509.4344094,
+    "hash": "32cc254eb54787a84c275a86f8040b50"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_43.pdf": {
+    "mtime": 1779036521.023345,
+    "hash": "735845991387bb2b7cdd20e48be6570a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_44.pdf": {
+    "mtime": 1779036687.426567,
+    "hash": "8d809877012a7e35d4f9210453766b00"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_45.pdf": {
+    "mtime": 1779036463.9819453,
+    "hash": "fc5418a7138f562e8252ddd8738ec627"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_46.pdf": {
+    "mtime": 1779036473.9911678,
+    "hash": "35d1cc6114c576df2bb9eed5de31d131"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2477_47.pdf": {
+    "mtime": 1779036485.76309,
+    "hash": "37047b581f1e268e88717af58ec42f26"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_01.pdf": {
+    "mtime": 1779105729.0300908,
+    "hash": "f63d4407be6872c0359c876373f5bbe1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_02.pdf": {
+    "mtime": 1779105621.7185159,
+    "hash": "992e6db61cc8a347444ac91f10f5f3eb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_04.pdf": {
+    "mtime": 1779105630.1977823,
+    "hash": "eebde23dee5aaaa8478eee4fe6a03a34"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_05.pdf": {
+    "mtime": 1779105643.6877675,
+    "hash": "7f6333e023515a3db4831665b1727259"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_06.pdf": {
+    "mtime": 1779105649.2297826,
+    "hash": "cc8784cdf07baee1b3584f904d25e1d4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_07.pdf": {
+    "mtime": 1779105654.1845236,
+    "hash": "57c81bd28ee3bf79cfad05ba8248d017"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_08.pdf": {
+    "mtime": 1779105657.0785031,
+    "hash": "c136aef7051d04ecf579e281eed9fd0f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_09.pdf": {
+    "mtime": 1779105666.0627394,
+    "hash": "ec20cd93c5bed6938ca1310d9da84965"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_10.pdf": {
+    "mtime": 1779105725.3980043,
+    "hash": "57f76722c173c8c40a2c703b2cb79d4c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_11.pdf": {
+    "mtime": 1779105721.2466147,
+    "hash": "55ac0a4e32148ecf28298f0c9fd799e4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_12.pdf": {
+    "mtime": 1779105736.7307694,
+    "hash": "364d5952416387a194c1def99307142b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_13.pdf": {
+    "mtime": 1779105709.3047397,
+    "hash": "6aecb68fc3b2cdd6ab771869d6573f93"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_14.pdf": {
+    "mtime": 1779105755.3648438,
+    "hash": "f71acc1cd87c9fd12b7365991e478ca6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_15.pdf": {
+    "mtime": 1779105733.448071,
+    "hash": "922a76af6e949cff3a18ec714e5e9191"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_16.pdf": {
+    "mtime": 1779105539.8483627,
+    "hash": "e034ab06f2c51253d5603fc7077326a4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_17.pdf": {
+    "mtime": 1779105550.387614,
+    "hash": "e12f6ecb7598b0552a90fa240125da25"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_18.pdf": {
+    "mtime": 1779105594.0872962,
+    "hash": "0d88f036039f7d42921a4454f0b252aa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_19.pdf": {
+    "mtime": 1779105614.8466718,
+    "hash": "49da40ca3d1193bdd9e5228ff3b4f0fe"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_20.pdf": {
+    "mtime": 1779105587.613355,
+    "hash": "d09c29499aea8366a82afb3008441962"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_21.pdf": {
+    "mtime": 1779105581.2928298,
+    "hash": "6894cdc181d7dab5a5cec8b6dcc59e15"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_22.pdf": {
+    "mtime": 1779105625.017455,
+    "hash": "b472a9dce2b4a6239185743ab4ad193a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_23.pdf": {
+    "mtime": 1779105603.412055,
+    "hash": "4cb4fa4bbb559a8b3ebf8133d61d8138"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_24.pdf": {
+    "mtime": 1779105616.1949914,
+    "hash": "aacdb61a6374f45d9d825c11e87240a8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_25.pdf": {
+    "mtime": 1779105619.6144872,
+    "hash": "8802626c0227b6543057c4d83fec15d6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_26.pdf": {
+    "mtime": 1779105353.832457,
+    "hash": "81d27d678c53effc49f71a169e61975c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_27.pdf": {
+    "mtime": 1779105381.1424363,
+    "hash": "985ae498c89c43ea4484f876d7f39e6c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_28.pdf": {
+    "mtime": 1779105389.1106446,
+    "hash": "4531b956d83d6d3189559c0de632ce87"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_29.pdf": {
+    "mtime": 1779105404.2324195,
+    "hash": "36e0b15df545091568649de357c6afcf"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_30.pdf": {
+    "mtime": 1779105402.6830728,
+    "hash": "fe7228b53c25fa3f6cc2d6bce5cde991"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_31.pdf": {
+    "mtime": 1779105399.223491,
+    "hash": "d1424b63720c7e9e163145a2d28d708b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_32.pdf": {
+    "mtime": 1779105433.045632,
+    "hash": "c546abe466b6622c6ee2f997595d3354"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_33.pdf": {
+    "mtime": 1779105438.4993348,
+    "hash": "c2b2c9adf9c4b89aa626d373ebb1d221"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_35.pdf": {
+    "mtime": 1779105473.9801254,
+    "hash": "b576cfaf35500fc90150b097d72d2e11"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_36.pdf": {
+    "mtime": 1779105456.6946445,
+    "hash": "d46a9723104c26da613f6e3a66161b41"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_37.pdf": {
+    "mtime": 1779105479.029457,
+    "hash": "2cf5e2e2ef52584682efa4c5aeb3c3b9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_39.pdf": {
+    "mtime": 1779105498.2228363,
+    "hash": "cfe64f0fcb7de6c8c0e15caba23a3aca"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_40.pdf": {
+    "mtime": 1779105486.3522263,
+    "hash": "4b4aeea96023123698e00ef5f7cd9f4c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_41.pdf": {
+    "mtime": 1779105489.5896626,
+    "hash": "25c29b24b5b6fe50c30d397368abf19f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_43.pdf": {
+    "mtime": 1779105494.2066956,
+    "hash": "69e5fed319844c369f3d0c62a843d071"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_44.pdf": {
+    "mtime": 1779105499.0983968,
+    "hash": "68c4b9832354288c853ec2b18d85aa5e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_45.pdf": {
+    "mtime": 1779105540.226535,
+    "hash": "edb7897e1fae129c30ae9fa029736d2d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_46.pdf": {
+    "mtime": 1779105536.4930987,
+    "hash": "02518cd0517835a2f577da604a4b4ff6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_47.pdf": {
+    "mtime": 1779105528.0019479,
+    "hash": "6aaff153f5d13f9ce4cb49fea8470bd4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_48.pdf": {
+    "mtime": 1779105547.9435995,
+    "hash": "4c4179ecf6aa607d8a6a9d75e98d035b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_49.pdf": {
+    "mtime": 1779105292.6196928,
+    "hash": "ec72255e7e8e1931652ab1b27fec7bd6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_50.pdf": {
+    "mtime": 1779105304.612004,
+    "hash": "52e891278e151c6348fdd2303a4ed4c0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_51.pdf": {
+    "mtime": 1779105312.8294873,
+    "hash": "41a6a1d672f1060a36c43cdd51cf4d54"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_52.pdf": {
+    "mtime": 1779105332.7563019,
+    "hash": "759899a19c6e86c988b97c6119be3366"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_53.pdf": {
+    "mtime": 1779105343.7053087,
+    "hash": "f35c056882066f035e58566a7e15dad5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_54.pdf": {
+    "mtime": 1779105343.1997552,
+    "hash": "29cf98fb31c1baa76fdf6e69f8ef9af4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2478_55.pdf": {
+    "mtime": 1779105350.8928854,
+    "hash": "9e2fd8da456c5d1438a39b06d58d999d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_01.pdf": {
+    "mtime": 1779105033.088292,
+    "hash": "6c7234a0180215707fdcc69e410e0634"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_02.pdf": {
+    "mtime": 1779105062.5748909,
+    "hash": "8ec69264e4bf45226a5f6b486972b297"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_03.pdf": {
+    "mtime": 1779105086.3014383,
+    "hash": "d39bbc79d5fe74d4106c666c09b390a3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_04.pdf": {
+    "mtime": 1779105061.3661983,
+    "hash": "1bf2c75ee90452a9fa1ce4b80adbdc2c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_05.pdf": {
+    "mtime": 1779105090.8573546,
+    "hash": "2ed9eeb5b062829aa6a6d1d9c44635df"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_06.pdf": {
+    "mtime": 1779105067.6974833,
+    "hash": "bdf399dcefb01bc8fccb32d291a5900f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_07.pdf": {
+    "mtime": 1779105093.1745436,
+    "hash": "f05683df70ed7e84152ebc74b16504f2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_08.pdf": {
+    "mtime": 1779105112.7304437,
+    "hash": "9253be26e55c10cdbc7212737cb5e927"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_09.pdf": {
+    "mtime": 1779105122.4816394,
+    "hash": "22c6efe01d7acdf8caa424cc4c6de001"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_10.pdf": {
+    "mtime": 1779105147.8106189,
+    "hash": "42df591897b6c22030fc9c48b599d6e5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_12.pdf": {
+    "mtime": 1779105138.1048164,
+    "hash": "a7c79a519602231f7990d14e9b13930f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_13.pdf": {
+    "mtime": 1779105171.4422023,
+    "hash": "a5603d2bb2a50e69f56086a814b6bb12"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_14.pdf": {
+    "mtime": 1779105160.9515219,
+    "hash": "0913cf650cae9b22c2127a7a9e3e4b6f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_15.pdf": {
+    "mtime": 1779105178.5542064,
+    "hash": "f3cc2dec67acb3fbd3d0d08238340854"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_16.pdf": {
+    "mtime": 1779105187.6183496,
+    "hash": "f63b9c44ad1f2cae6392a83e4986d6c2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_17.pdf": {
+    "mtime": 1779105180.1415796,
+    "hash": "df08c171df596f762840fc907887d9ee"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_18.pdf": {
+    "mtime": 1779105205.0719357,
+    "hash": "1e6dd2db3d05c93e55a0c872d04a1016"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_20.pdf": {
+    "mtime": 1779105202.8052735,
+    "hash": "978d09e24fa1e79d50486c4f58a2103d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_21.pdf": {
+    "mtime": 1779105201.1060808,
+    "hash": "d4cdf9499784b9035b42be2985a14e51"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_22.pdf": {
+    "mtime": 1779105206.6244855,
+    "hash": "dc3739018f219adc05b728040b25a127"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_23.pdf": {
+    "mtime": 1779105215.0703392,
+    "hash": "fb1f557daad2698307cc54aab6d3602f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_24.pdf": {
+    "mtime": 1779105245.857077,
+    "hash": "7d5e91783e3fc12554a7bb95a7a24bfe"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_25.pdf": {
+    "mtime": 1779105230.4079597,
+    "hash": "dc0ca78cf68f3d6ea504dbf119c5a9a4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_26.pdf": {
+    "mtime": 1779105250.6471372,
+    "hash": "09828a8b79070d5f68ac77799a6a2d13"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_27.pdf": {
+    "mtime": 1779105240.3395214,
+    "hash": "9a526f2e44b7453c9cfe8d01ace984f4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_28.pdf": {
+    "mtime": 1779105265.533595,
+    "hash": "dc26223ae99ebafe2845407786aca8c0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_29.pdf": {
+    "mtime": 1779105258.1477485,
+    "hash": "5acb87248ecf038e2172f51319fbe384"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_31.pdf": {
+    "mtime": 1779105260.1633737,
+    "hash": "5f115e6b46a58b335bc42c7418b3ceee"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_32.pdf": {
+    "mtime": 1779105267.1084354,
+    "hash": "dd3038d08df01b1e82cf0840ef28e06f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_34.pdf": {
+    "mtime": 1779105277.6291432,
+    "hash": "b6660797110b08757675457ec14ee979"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_35.pdf": {
+    "mtime": 1779105289.1143162,
+    "hash": "aaaff70c0a4183ed6064a08495d2373e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_36.pdf": {
+    "mtime": 1779104962.7548616,
+    "hash": "fa59e58dd307c864509f37e4259a5b05"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_37.pdf": {
+    "mtime": 1779104906.5566466,
+    "hash": "b3237ba788a691da46368b794ea76a51"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_39.pdf": {
+    "mtime": 1779104957.138032,
+    "hash": "a2137002561f9a046b14f333e62bc153"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_40.pdf": {
+    "mtime": 1779104979.1672547,
+    "hash": "453b8dbf5be4c70c4bfc107a0b335749"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_41.pdf": {
+    "mtime": 1779104975.601405,
+    "hash": "e044d5fc24a0b9d12675731807216150"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_43.pdf": {
+    "mtime": 1779105002.0103462,
+    "hash": "8f0d259f22069a9f68e1098655ce4833"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_44.pdf": {
+    "mtime": 1779105019.6505227,
+    "hash": "2b05d31128d79a4f6ca44f68cfbdeb0b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_45.pdf": {
+    "mtime": 1779105041.4110343,
+    "hash": "4a9db33ffee720010efc81689eedca7d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_46.pdf": {
+    "mtime": 1779105051.019663,
+    "hash": "4f32e8b66556770c6bef2944b9406b89"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_47.pdf": {
+    "mtime": 1779105031.0484362,
+    "hash": "5ebd9855e015b302f4764c0ccec79e6b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_48.pdf": {
+    "mtime": 1779104831.1187062,
+    "hash": "c973821f092dac9b0ad3341da9055c99"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_49.pdf": {
+    "mtime": 1779104838.1913075,
+    "hash": "c957092c03720442558bcab44f760a6f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_50.pdf": {
+    "mtime": 1779104858.6169405,
+    "hash": "7074d5c093a8e00efc90d7c19f37df14"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_51.pdf": {
+    "mtime": 1779104878.0333278,
+    "hash": "6abec8a2c77eaa6e0d875ff56d4d7f05"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_53.pdf": {
+    "mtime": 1779104856.1989858,
+    "hash": "a4ae498e3055f56192c942041239c9c0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_54.pdf": {
+    "mtime": 1779104770.943694,
+    "hash": "75838126c7f35bb08fefcb0da07051dd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_55.pdf": {
+    "mtime": 1779104780.0056262,
+    "hash": "0ab9d2c9772736970c1d9711d67d79e3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_56.pdf": {
+    "mtime": 1779104794.6279843,
+    "hash": "59f34cfd484d2b86fb83211367ceb4a9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2479_57.pdf": {
+    "mtime": 1779104795.6678796,
+    "hash": "928b034f8d5e49ed1c5e4fe7da4b9205"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_01.pdf": {
+    "mtime": 1779104706.825121,
+    "hash": "6ee77c353f3b14507c979088d99c127f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_02.pdf": {
+    "mtime": 1779104723.64492,
+    "hash": "cd0dfb976ea23ca7c33e3cf936496653"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_03.pdf": {
+    "mtime": 1779104728.2147214,
+    "hash": "1a041da102461a4a788b28b0649ac62d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_04.pdf": {
+    "mtime": 1779104725.0840132,
+    "hash": "8045daa86082a80bf31b815c01be1ee3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_05.pdf": {
+    "mtime": 1779104730.8388455,
+    "hash": "7f065d4a14ed6a2f6f79a72bc334cc4a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_06.pdf": {
+    "mtime": 1779104738.6507368,
+    "hash": "c0eda8a292712d1e7ce9bc4e41b246eb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_07.pdf": {
+    "mtime": 1779104744.2511814,
+    "hash": "14ae036ad7b79681cd3ed570a4b22f10"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_08.pdf": {
+    "mtime": 1779104748.2669032,
+    "hash": "8750c34a47cc3967fcaee8749c7f712d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_09.pdf": {
+    "mtime": 1779104753.8818536,
+    "hash": "77986935a2cf37606089bfacec229335"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_10.pdf": {
+    "mtime": 1779104785.5027118,
+    "hash": "472ce8e49f8e82c110e25801152b41aa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_11.pdf": {
+    "mtime": 1779104712.5647998,
+    "hash": "2fa4684cc0b0a5e064564d9098273250"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_12.pdf": {
+    "mtime": 1779104619.4417918,
+    "hash": "6b551b71bbaa2806082e6134dd16dc40"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_13.pdf": {
+    "mtime": 1779104620.064815,
+    "hash": "a68fd323e7426dde2daec56dbe4eb934"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_14.pdf": {
+    "mtime": 1779104622.9529665,
+    "hash": "8d995e6a0432afcff18ba7895856a957"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_15.pdf": {
+    "mtime": 1779104634.6336648,
+    "hash": "181e59ecab02eb5e5ddb42f3a9da2012"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_16.pdf": {
+    "mtime": 1779104638.6102462,
+    "hash": "26a3c0fad0d6f587741768f76e87164f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_17.pdf": {
+    "mtime": 1779104650.832026,
+    "hash": "d4da32ac1b23704c55c421bb653732c3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_18.pdf": {
+    "mtime": 1779104672.2184787,
+    "hash": "1f1f5e4b5eddd8f0063897162b16f2d2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_19.pdf": {
+    "mtime": 1779104657.5542407,
+    "hash": "1d564e434dc730ad95d564426487f135"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_21.pdf": {
+    "mtime": 1779104686.5761404,
+    "hash": "dc7dcbfbc7dc46df38010f181dd2711e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_22.pdf": {
+    "mtime": 1779104676.5262034,
+    "hash": "2bd1718b43d56ebc29abdb323fb30a47"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_23.pdf": {
+    "mtime": 1779104678.6507778,
+    "hash": "e78cff6ef7fb2b43e91fce0b3f1ed43f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_24.pdf": {
+    "mtime": 1779104688.1810594,
+    "hash": "aff170f841cabd4f5cde7bf491b827e5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_25.pdf": {
+    "mtime": 1779104695.8327472,
+    "hash": "60620fb2f41800833d8ce711797d0e8b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_26.pdf": {
+    "mtime": 1779104448.9327881,
+    "hash": "6ebd910858bb463ac4ff0ef5f4da7d2f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_28.pdf": {
+    "mtime": 1779104450.4936328,
+    "hash": "ad74140d5becb9ab3d0daef010b699c7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_29.pdf": {
+    "mtime": 1779104496.5118523,
+    "hash": "425e8b67f40517aa9267a15aa3b3eaf0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_30.pdf": {
+    "mtime": 1779104496.8133867,
+    "hash": "68260ad7db0bb859bc04f73aa641e7b6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_31.pdf": {
+    "mtime": 1779104490.860781,
+    "hash": "481caaa4d94b800e8c6c548ae5dd9a11"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_32.pdf": {
+    "mtime": 1779104520.3033874,
+    "hash": "d2bf040fea774bd16180f7bb300291fa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_34.pdf": {
+    "mtime": 1779104534.663978,
+    "hash": "7425ad6036709f7be75ce45ad73a2ba7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_35.pdf": {
+    "mtime": 1779104552.837037,
+    "hash": "3e6e95814287a63bf66f38211b6b433a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_36.pdf": {
+    "mtime": 1779104558.8406334,
+    "hash": "f6b6a60525c12740071d55752452a305"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_38.pdf": {
+    "mtime": 1779104554.414019,
+    "hash": "7fc84b09e6d1dca8a3c81b702e32475a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_39.pdf": {
+    "mtime": 1779104564.6664577,
+    "hash": "d2f803e96fdb1b37cb20219bf994be07"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_40.pdf": {
+    "mtime": 1779104567.678477,
+    "hash": "ab14505084f0db1ca9e079b23fa6d5ba"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_41.pdf": {
+    "mtime": 1779104603.0197797,
+    "hash": "177e1677a1beb2e6a51c8bef95b616d1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_42.pdf": {
+    "mtime": 1779104587.951424,
+    "hash": "2ec8029c99d28f1dae2ba6f1e54b9887"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_43.pdf": {
+    "mtime": 1779104589.4133153,
+    "hash": "7d2e6970f74085ff50b7f64d236809b0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_44.pdf": {
+    "mtime": 1779104586.3319662,
+    "hash": "64f1c5b20e4fd2b0928f7ad0be670c36"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_46.pdf": {
+    "mtime": 1779104601.883338,
+    "hash": "75c9bbc2b74856e6e7d2a58a58a35d8c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_47.pdf": {
+    "mtime": 1779104422.418801,
+    "hash": "c067d8f3f1cdc522f728ba37dca4e69e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_48.pdf": {
+    "mtime": 1779104438.560017,
+    "hash": "70a55ebfcdf2a649218b5c998876324b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2480_49.pdf": {
+    "mtime": 1779104434.655438,
+    "hash": "3d535a21969bfbcb5444f3461287b6e7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_01.pdf": {
+    "mtime": 1779104398.2138546,
+    "hash": "09beedda98315b0b124194c9cee47c67"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_02.pdf": {
+    "mtime": 1779104409.023661,
+    "hash": "ced84dc57479ae1f05d6cdc6573ccdac"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_03.pdf": {
+    "mtime": 1779104410.8439374,
+    "hash": "10c2561509e88dcd2e15cde80cf040a6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_04.pdf": {
+    "mtime": 1779105441.4358027,
+    "hash": "7fc535cb5bf448e0af936fbb289244a9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_05.pdf": {
+    "mtime": 1779104424.1684668,
+    "hash": "d4702afc9a468b9b9762322423171387"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_06.pdf": {
+    "mtime": 1779104385.4770007,
+    "hash": "0a2304842a4997a41ab0ba8afed363f7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_07.pdf": {
+    "mtime": 1779104388.0426052,
+    "hash": "b4348a0626c3e34c82da45d766dec07f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_08.pdf": {
+    "mtime": 1779104390.921199,
+    "hash": "6bbeffdf0c7c630cbda951892dd81f25"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_09.pdf": {
+    "mtime": 1779104400.1395257,
+    "hash": "5f02867b3bb308891fd8146b1332aad0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_10.pdf": {
+    "mtime": 1779104328.6093843,
+    "hash": "251174ab298ecfa8aecb8a1fc79a3846"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_11.pdf": {
+    "mtime": 1779104320.174829,
+    "hash": "9c14a6f9c658057cc5f83c9c424222b0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_13.pdf": {
+    "mtime": 1779104629.9444273,
+    "hash": "4cf0a9ac6ecfa3699edb2a7aaa10bb9e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_14.pdf": {
+    "mtime": 1779104333.0429988,
+    "hash": "3e4f9c2f4fa1aff2e7726b331bda9d5e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_15.pdf": {
+    "mtime": 1779104923.7633827,
+    "hash": "7fc535cb5bf448e0af936fbb289244a9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_16.pdf": {
+    "mtime": 1779104341.177341,
+    "hash": "4c8a6da1862e246499802a0f2d7c2d0e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_17.pdf": {
+    "mtime": 1779104350.1710181,
+    "hash": "bc6804c70bd9f472b015323aab969ae5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_18.pdf": {
+    "mtime": 1779104352.1769598,
+    "hash": "3109014700b748ddf4cfe91d859a2b5f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_19.pdf": {
+    "mtime": 1779104237.0741184,
+    "hash": "02bf21066b84ce904a093eb43b55f8d7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_20.pdf": {
+    "mtime": 1779104247.2290275,
+    "hash": "aeb7c702c2b452b0458ce0832df7d68d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_21.pdf": {
+    "mtime": 1779104250.2853384,
+    "hash": "5fb32449283421f2073f2346b2724874"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_22.pdf": {
+    "mtime": 1779104265.7579844,
+    "hash": "5e4d9b16786ccfdecea7e859fdbae4ea"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_23.pdf": {
+    "mtime": 1779104285.514358,
+    "hash": "65c4c8d8b1687755d83467ef1cb467e6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_24.pdf": {
+    "mtime": 1779104290.4257576,
+    "hash": "730644dbc92dd98bb10190830c009c08"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_25.pdf": {
+    "mtime": 1779104314.5086472,
+    "hash": "faf50a08e1d92e90a6eda137f0988945"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_26.pdf": {
+    "mtime": 1779104325.9449334,
+    "hash": "48dd481a90cd5d42e214a5dfd619bc10"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_27.pdf": {
+    "mtime": 1779104300.0341594,
+    "hash": "ce0c8317c5f184e74b39726f7cd919e6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_28.pdf": {
+    "mtime": 1779104318.5255594,
+    "hash": "7e2bb540b18937e2aa4a95b40bed0cb0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_29.pdf": {
+    "mtime": 1779104090.4853585,
+    "hash": "ca40d34c2d12a95152bb855d7de26410"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_30.pdf": {
+    "mtime": 1779104097.69938,
+    "hash": "cb4e0da725ae96fd119053e291814933"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_31.pdf": {
+    "mtime": 1779104110.5995665,
+    "hash": "5eb659cedd99752efd551090321f1ce6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_33.pdf": {
+    "mtime": 1779104126.93202,
+    "hash": "aec1fc146e1566c5c4296343cd165d8d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_34.pdf": {
+    "mtime": 1779104108.13056,
+    "hash": "909eb007d78118e6af278be30ebfe2df"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_35.pdf": {
+    "mtime": 1779104157.2893255,
+    "hash": "55fc71be1cb8ede5481eb15624d6c8c8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_36.pdf": {
+    "mtime": 1779104127.359576,
+    "hash": "35befdbea2eea06bc5d590fab5c29068"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_37.pdf": {
+    "mtime": 1779104161.3321915,
+    "hash": "d4e11b8e2001999afa5ae0a753f3d022"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_38.pdf": {
+    "mtime": 1779104172.716617,
+    "hash": "9a7aa48058a91983e7b7749cce8bfd98"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_40.pdf": {
+    "mtime": 1779104179.8392892,
+    "hash": "d09cd9fa4cfe893ea62b8cb2e5f8b169"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_41.pdf": {
+    "mtime": 1779104182.5683413,
+    "hash": "d808f300f366f8d2a3c55b2657099688"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_43.pdf": {
+    "mtime": 1779104196.273005,
+    "hash": "6bc201145864812e4b0cead475e08bae"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_44.pdf": {
+    "mtime": 1779104175.8422296,
+    "hash": "39057723ec66d750095d2164a92d6b27"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_45.pdf": {
+    "mtime": 1779104185.3739269,
+    "hash": "f5daca471dae7e838bc3f4bbd587372d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_47.pdf": {
+    "mtime": 1779104206.2407515,
+    "hash": "36ef2a57f8b914c18c11a5787bd8ce68"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_48.pdf": {
+    "mtime": 1779104211.0564494,
+    "hash": "3c5086bff6967b6ec7f7067a0861dfa1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_49.pdf": {
+    "mtime": 1779104231.4497046,
+    "hash": "2b38ff76b0c8267246277ddfd8f2bedc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_50.pdf": {
+    "mtime": 1779104218.1630363,
+    "hash": "bef4749c740793b2c8fbda97a0dfeef3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_51.pdf": {
+    "mtime": 1779104219.9129121,
+    "hash": "637ba0e104ee648cace5506b982213fd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_53.pdf": {
+    "mtime": 1779104249.4259093,
+    "hash": "0913c087d30e6c892776266199d9352f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2481_54.pdf": {
+    "mtime": 1779104228.9464512,
+    "hash": "8a3857184f15ac1038682274bc00ba3a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_01.pdf": {
+    "mtime": 1779104038.9985006,
+    "hash": "21dbc029f97eb07dfb12438c77a1e86f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_02.pdf": {
+    "mtime": 1779104092.8903923,
+    "hash": "2f0317310e1f4b4d063593efd478bc75"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_03.pdf": {
+    "mtime": 1779104068.204265,
+    "hash": "652202c793fedc222882cd591887b897"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_04.pdf": {
+    "mtime": 1779104073.2824948,
+    "hash": "5feb4b5227e3b0dcd67f0c7d6d8dd896"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_05.pdf": {
+    "mtime": 1779104004.589285,
+    "hash": "1a966de377b81f00205d3e70265a718e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_06.pdf": {
+    "mtime": 1779104012.461975,
+    "hash": "122e84f2d2a2eb6e0008f0b88ed81eea"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_07.pdf": {
+    "mtime": 1779104070.712927,
+    "hash": "804d83015436e1c5c87a46e6dacf3f93"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_08.pdf": {
+    "mtime": 1779104028.8127985,
+    "hash": "6955ec7a39864a837b20eed952cf8f39"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_09.pdf": {
+    "mtime": 1779104039.7010665,
+    "hash": "c05e7b4d608a42aedb4f47fd408ca55f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_10.pdf": {
+    "mtime": 1779115398.9482908,
+    "hash": "9e04762056e497f63f2e06a73050281a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_11.pdf": {
+    "mtime": 1779115413.6938734,
+    "hash": "335a08e7fab23d6c97e78baaac2bfa58"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_12.pdf": {
+    "mtime": 1779115410.5205233,
+    "hash": "15a905fbc5aa55efd74f5cbccfea4c49"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_18.pdf": {
+    "mtime": 1779115447.3570707,
+    "hash": "76d7391f7c1eb2e97bc867d38d5b22ed"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_26.pdf": {
+    "mtime": 1779115454.0010815,
+    "hash": "292eb7eb553b075654f6408927e65363"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_29.pdf": {
+    "mtime": 1779115468.8712814,
+    "hash": "d5874b986157505110e6eb28406bd1b1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_33.pdf": {
+    "mtime": 1779115437.5891526,
+    "hash": "872e0b7318288bc38790ed3eae57ea88"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_37.pdf": {
+    "mtime": 1779115470.4505165,
+    "hash": "8fcb817995ed556973853aa4b03e006c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2482_42.pdf": {
+    "mtime": 1779115472.4712873,
+    "hash": "ef98a427bebe8621cf5d9ee8a5684419"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_01.pdf": {
+    "mtime": 1779115392.9046555,
+    "hash": "917b35ef2c184084c6a39ecdd687d935"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_02.pdf": {
+    "mtime": 1779115361.5315328,
+    "hash": "b6b0f2b9a77f5512b0f6b49d281746b6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_03.pdf": {
+    "mtime": 1779115362.3136752,
+    "hash": "edd798c6eaf26ffced8d0760120d4042"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_04.pdf": {
+    "mtime": 1779115372.2230933,
+    "hash": "f94a4426151b6fb4df0d2b4f25916f5a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_05.pdf": {
+    "mtime": 1779115379.948289,
+    "hash": "ecfdb10da45d8d8c76a62b78518f82ff"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_06.pdf": {
+    "mtime": 1779115402.434284,
+    "hash": "93f5bb60723c95c7b835856298517560"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_07.pdf": {
+    "mtime": 1779115391.264482,
+    "hash": "d6fe9faa4e5c4dd6086a4079ee3704ee"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_12.pdf": {
+    "mtime": 1779115353.3277404,
+    "hash": "0951c75110ccb89953f2fa3ca0a72c21"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_13.pdf": {
+    "mtime": 1779114816.5636933,
+    "hash": "6e0be99cbaa388689e9590a4b0193639"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_14.pdf": {
+    "mtime": 1779114826.3925683,
+    "hash": "2310e934d3c90fa690d5cf5ab347f08c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_15.pdf": {
+    "mtime": 1779114839.217871,
+    "hash": "4150df9893172939d80ef302f7ee844e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_16.pdf": {
+    "mtime": 1779114840.512818,
+    "hash": "8875f97585004cfd9566d3e2a292d9e3"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_17.pdf": {
+    "mtime": 1779114864.432134,
+    "hash": "d0026b77fa0aab9ed133343e4ab96559"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_18.pdf": {
+    "mtime": 1779114865.5983646,
+    "hash": "8f574c9f95a373d41b88dd2d00a200a7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_19.pdf": {
+    "mtime": 1779114871.5977073,
+    "hash": "c0c752bbdb748e21456556617538787f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_20.pdf": {
+    "mtime": 1779114876.6703231,
+    "hash": "f62d81fc998e29a01afb2e63aae304cd"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_21.pdf": {
+    "mtime": 1779114891.9347084,
+    "hash": "eaab2d2d39f75f3178d3392465ac8a1e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_22.pdf": {
+    "mtime": 1779114900.220805,
+    "hash": "9205da4f3ea889ce90993775c5407f52"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_23.pdf": {
+    "mtime": 1779114913.9695992,
+    "hash": "977f147cc4819c7b7f03957827e1d9e5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_24.pdf": {
+    "mtime": 1779114909.1811295,
+    "hash": "f5f6313491fb959468ba553610d0799d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_25.pdf": {
+    "mtime": 1779114921.1063201,
+    "hash": "cab3dc82d059f56d071ce394eef6d1e2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_26.pdf": {
+    "mtime": 1779114922.1243174,
+    "hash": "05e91c70285b7173f62326a14038647c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_27.pdf": {
+    "mtime": 1779114937.688103,
+    "hash": "3ef39a3e8de277dd38a376b35814ddf9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_28.pdf": {
+    "mtime": 1779114951.4271965,
+    "hash": "ea5563576bd6a2f77eec90006c66d6d9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_29.pdf": {
+    "mtime": 1779114959.6791806,
+    "hash": "4ac7e971ea60dca3983a0b440900a1ef"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_30.pdf": {
+    "mtime": 1779114962.9227414,
+    "hash": "bba77f223485927d680f79490c840cb5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_31.pdf": {
+    "mtime": 1779114973.1796699,
+    "hash": "19265d050828119880e1d449a3e8a0ef"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_32.pdf": {
+    "mtime": 1779114980.747865,
+    "hash": "4cc223eacd99e2209434587e59f0cb91"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_33.pdf": {
+    "mtime": 1779114984.7066488,
+    "hash": "92ef7f68f6d49936999ad95ff7b07dfe"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_34.pdf": {
+    "mtime": 1779114985.0626557,
+    "hash": "76e653e7354b007e2f083568e745e0ec"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_35.pdf": {
+    "mtime": 1779114988.3794942,
+    "hash": "66e46cde9c62c9ad2c5ca3bea07d1de6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_36.pdf": {
+    "mtime": 1779115006.615378,
+    "hash": "8e51ef7d29cc2f15f194ad5596acfba9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_37.pdf": {
+    "mtime": 1779115013.2402213,
+    "hash": "da74a86d093c7c80ece3c29edc8f5fb6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_38.pdf": {
+    "mtime": 1779115015.4251235,
+    "hash": "d7ec303add4e94a18bdea7e90470970e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_39.pdf": {
+    "mtime": 1779115025.9978788,
+    "hash": "0e7011e3f04589a1028a1f5c0be1a32f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_40.pdf": {
+    "mtime": 1779115048.2735827,
+    "hash": "a082dc6d916f3acdc4759e6698de84f1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_41.pdf": {
+    "mtime": 1779115060.530272,
+    "hash": "5b960854efa052a789aff20568e28690"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_42.pdf": {
+    "mtime": 1779115068.8401234,
+    "hash": "36644559b08509d9cbadd835165c6f18"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_43.pdf": {
+    "mtime": 1779115075.929382,
+    "hash": "b8b3ee81293c4a0dee0f12dcec51b512"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_44.pdf": {
+    "mtime": 1779115078.4817214,
+    "hash": "8570cdeef6e5c26fcfa6d6480d6b1aea"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_45.pdf": {
+    "mtime": 1779115090.8757932,
+    "hash": "70c76d9ab0a5756da102e786d00b32b0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_46.pdf": {
+    "mtime": 1779115102.4380288,
+    "hash": "0349634f3bffb1ee5bc71e83ea947e7a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_47.pdf": {
+    "mtime": 1779115118.627827,
+    "hash": "c1b88e4ed1b631e7f9b663450bec8f66"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_48.pdf": {
+    "mtime": 1779115111.9006984,
+    "hash": "d50cf7fe66d2ad0d16a9e9b03d2193b6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_49.pdf": {
+    "mtime": 1779115123.4714348,
+    "hash": "1f58d3b9ae0287a7baea4e46fada9c21"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_50.pdf": {
+    "mtime": 1779115142.1298983,
+    "hash": "e7e850234f5db5a3b769c374d2d58df9"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_52.pdf": {
+    "mtime": 1779115139.368678,
+    "hash": "7732e259d53d33abbfde56b305822f0b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_53.pdf": {
+    "mtime": 1779115154.7083478,
+    "hash": "1d99fb47be8947aa004331c5a5fc9ba7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_54.pdf": {
+    "mtime": 1779115160.3197894,
+    "hash": "f5c71562dfae091455cbb83314d6b0d4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_55.pdf": {
+    "mtime": 1779115163.2703576,
+    "hash": "d9c45bbe8cd19880a3073af95674eb6a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_56.pdf": {
+    "mtime": 1779115169.737307,
+    "hash": "7796f5c1721ef36736b87ac9885ef5e5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_57.pdf": {
+    "mtime": 1779115180.0035887,
+    "hash": "2f8a4bdb59c6df7626406edd919c3bee"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_58.pdf": {
+    "mtime": 1779115187.0629435,
+    "hash": "cc8cadacf620b81a5dde9d94bfcf702a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_59.pdf": {
+    "mtime": 1779115196.8738406,
+    "hash": "47c3cd099129dc395d2ee040d47029e8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_60.pdf": {
+    "mtime": 1779115202.021571,
+    "hash": "275d38681319755babd6c13ca32eb4f4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_61.pdf": {
+    "mtime": 1779115218.7073333,
+    "hash": "9049db7daf6d422703f905af847d950b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_62.pdf": {
+    "mtime": 1779115221.4376152,
+    "hash": "f24ad2c9a1a063b53ada39c8d78c8a9a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_63.pdf": {
+    "mtime": 1779115226.1814065,
+    "hash": "730f11042a68d04014241b61d92c67b1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_64.pdf": {
+    "mtime": 1779115233.5377097,
+    "hash": "74500896e1dba2d4b38fc1cd75e33cfb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_65.pdf": {
+    "mtime": 1779115247.1361754,
+    "hash": "c8d46681929a215ea602a65c0c373959"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_66.pdf": {
+    "mtime": 1779115255.0528803,
+    "hash": "2942d2a9fe97b942c892a4b4c8f57c0c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_67.pdf": {
+    "mtime": 1779115238.0228016,
+    "hash": "6242daba9308f50b45cdcf063e7968fc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_68.pdf": {
+    "mtime": 1779115255.062899,
+    "hash": "229959e56905f0eae0f408987b332419"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_69.pdf": {
+    "mtime": 1779115253.6391861,
+    "hash": "11e23dab21a2eb10ab82225986eabdf4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_70.pdf": {
+    "mtime": 1779115270.2557232,
+    "hash": "537557d4b641ddc195e431e62d3ced92"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_71.pdf": {
+    "mtime": 1779115262.0917823,
+    "hash": "0fbfa92f19cc727650c0bbf9e77708c5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_72.pdf": {
+    "mtime": 1779115273.122968,
+    "hash": "206c8aca460708dcc09b9e63a15256a6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_73.pdf": {
+    "mtime": 1779115291.892482,
+    "hash": "9efe77c525265db7cc14bf8d62110af0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_74.pdf": {
+    "mtime": 1779115283.224033,
+    "hash": "25fda3772e6580e26c40630210d76633"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_76.pdf": {
+    "mtime": 1779115284.3603213,
+    "hash": "bc32412ada23fbd4d569048b21d64d54"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_77.pdf": {
+    "mtime": 1779115295.7799718,
+    "hash": "4f08b57e1586276e1ae90203ebbc1d0b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_78.pdf": {
+    "mtime": 1779115296.793286,
+    "hash": "a91235813eea8230ed327b6a02c39a12"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_79.pdf": {
+    "mtime": 1779115305.1583643,
+    "hash": "376340b60101e9e5981cb0fae62c5753"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_80.pdf": {
+    "mtime": 1779115309.8575916,
+    "hash": "68bb854962371a72fe0ea2167b5ddd86"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_81.pdf": {
+    "mtime": 1779115314.8119771,
+    "hash": "1cf55abc0b2d7d334b29e12f951dd244"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_82.pdf": {
+    "mtime": 1779115323.2665439,
+    "hash": "973caee63b1f04796a47678519c0feaa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_83.pdf": {
+    "mtime": 1779115329.7892447,
+    "hash": "dd949e2adfcd1349293a83617884a117"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_84.pdf": {
+    "mtime": 1779115342.4250798,
+    "hash": "7d52f08c3d9a753055440aa83fb5a9a7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2483_85.pdf": {
+    "mtime": 1779115338.5327957,
+    "hash": "9bd6504cd33ce73c844f0ab5f68a4709"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_01.pdf": {
+    "mtime": 1779114808.8216777,
+    "hash": "6a53dc6d4f2bab37383c294fde48c49a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_02.pdf": {
+    "mtime": 1779114811.857297,
+    "hash": "55a9b4b0182cee013efa3ba122dec363"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_03.pdf": {
+    "mtime": 1779114769.9486766,
+    "hash": "b3fdddb67e3a6334b226dd13eb896e27"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_04.pdf": {
+    "mtime": 1779114774.5010555,
+    "hash": "455389da6b5f0565a22ca734a3223406"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_05.pdf": {
+    "mtime": 1779114778.268116,
+    "hash": "f0668e44318a04d3de399f1d92595580"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_06.pdf": {
+    "mtime": 1779114785.1703074,
+    "hash": "169e7a74027dce610379a6253daaa945"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_07.pdf": {
+    "mtime": 1779114843.0853837,
+    "hash": "b7f2ce2e4b44248b2e967c12178d38be"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_08.pdf": {
+    "mtime": 1779114648.0963254,
+    "hash": "cc3bcff7b9f303fa6b0a7209338732b7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_15.pdf": {
+    "mtime": 1779115017.710469,
+    "hash": "5730d8afcc953735d84aba458e5f783c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_20.pdf": {
+    "mtime": 1779115046.6487825,
+    "hash": "9f157c7e74b928a57c4f90652d0bcbfe"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_22.pdf": {
+    "mtime": 1779115074.5643034,
+    "hash": "83781af12045cbbb688f88cee6b848ad"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_23.pdf": {
+    "mtime": 1779115155.816318,
+    "hash": "f8ff57de6f7dbbcb85f527db23752ce5"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_25.pdf": {
+    "mtime": 1779115148.0731232,
+    "hash": "d949162edde1635ca91c086144df66c7"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_28.pdf": {
+    "mtime": 1779114753.9357252,
+    "hash": "e403f946f398cba2098351074e23cfd8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_30.pdf": {
+    "mtime": 1779115002.4106305,
+    "hash": "03ed81b9aa4ead80e13cd4b9738c249b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_31.pdf": {
+    "mtime": 1779114454.930137,
+    "hash": "45aa2977278de4dbe55924ca2cfaa5a1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_36.pdf": {
+    "mtime": 1779115012.8439157,
+    "hash": "2e6ea2227015abc9c78af2a0ab3405a8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_41.pdf": {
+    "mtime": 1779114354.3790703,
+    "hash": "3387d8c5d8552c094f511e34ff05b3ff"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_49.pdf": {
+    "mtime": 1779114493.4822683,
+    "hash": "bfe4121bb1a12fbff4034d8005e9ac56"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2484_50.pdf": {
+    "mtime": 1779115029.7496395,
+    "hash": "f1ce831343ce20c602a977d67a41e92d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_01.pdf": {
+    "mtime": 1779114245.18602,
+    "hash": "35f5c91c15279bec54d0a723b007285b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_03.pdf": {
+    "mtime": 1779114271.3585267,
+    "hash": "0a1e6eae272a6fcc1bd2794997054118"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_13.pdf": {
+    "mtime": 1779114159.9312456,
+    "hash": "def16a676246f9fffb10414228b8e8d6"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_14.pdf": {
+    "mtime": 1779114193.144701,
+    "hash": "df98b7533ff1630f3aa31c3324bcb09c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_15.pdf": {
+    "mtime": 1779114201.8876479,
+    "hash": "4f292333bf0abcadb2c7703229bf1aa0"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_16.pdf": {
+    "mtime": 1779114204.2946112,
+    "hash": "21e746ab16519c5213988f97adae2f26"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_22.pdf": {
+    "mtime": 1779114130.8036532,
+    "hash": "63e8a494785ecb2f9c6820415cb8346c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_26.pdf": {
+    "mtime": 1779114212.8639276,
+    "hash": "fe3f03968639683d63d58437990e5c94"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_29.pdf": {
+    "mtime": 1779114244.8229172,
+    "hash": "1ef940eaa0296e85287d1cdaf8f7c95c"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_36.pdf": {
+    "mtime": 1779114129.2875943,
+    "hash": "c1c1914b0563aab7821a2cf5c6b0fa29"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_38.pdf": {
+    "mtime": 1779114143.4798832,
+    "hash": "e2224961c72d38ba902cab5491b9446f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_44.pdf": {
+    "mtime": 1779114110.277594,
+    "hash": "c1332b2007fe5067ce90d7a7297980a1"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_47.pdf": {
+    "mtime": 1779114146.8728485,
+    "hash": "811b9678ca3278e58992d07b22d7251d"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_48.pdf": {
+    "mtime": 1779114131.686167,
+    "hash": "ef79748b59bdd1ec69cc729a2db277fb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_51.pdf": {
+    "mtime": 1779114208.0043597,
+    "hash": "46b3f78cc2b317ff5cb1fa774ff5ca6b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_53.pdf": {
+    "mtime": 1779114214.771625,
+    "hash": "d7c2b73b89e08620918b5a5ea8c9f2bb"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_57.pdf": {
+    "mtime": 1779114046.4505167,
+    "hash": "68648e238524f9df787c7e0950d92ccc"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_58.pdf": {
+    "mtime": 1779114099.4065835,
+    "hash": "658fd97aa1dd8b14aa077f35c0970a6e"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_60.pdf": {
+    "mtime": 1779114032.9184327,
+    "hash": "7685c91cc1868923316d416d4bcae7c4"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_61.pdf": {
+    "mtime": 1779114036.991403,
+    "hash": "a9a70c9aad9cce0d5d694f0d6270407b"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2485_62.pdf": {
+    "mtime": 1779114039.3092601,
+    "hash": "74bc4db590ee3b1daad6afd380127970"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_01.pdf": {
+    "mtime": 1779114006.8720975,
+    "hash": "85ff686ce7ce99096a2f0c053bb1c22f"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_02.pdf": {
+    "mtime": 1779114008.8507686,
+    "hash": "fc60f3db0234f8c2ab722bf1602d8f80"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_03.pdf": {
+    "mtime": 1779114010.1465535,
+    "hash": "92fca197e64666f21a286d26bd0ef9d2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_04.pdf": {
+    "mtime": 1779114008.5207596,
+    "hash": "59665c79b093c2e449792cd0905ed5c2"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_05.pdf": {
+    "mtime": 1779114026.053297,
+    "hash": "18481ccaf8a373bd53bf2f9b384326c8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_06.pdf": {
+    "mtime": 1779114023.614658,
+    "hash": "d01cc7e5a8677684d86fb706fa904788"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_07.pdf": {
+    "mtime": 1779114028.4636266,
+    "hash": "8aba3a01b1d430964193cc34f744b828"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_09.pdf": {
+    "mtime": 1779113952.991074,
+    "hash": "a62b1522f28d55d2e014fe16ed1ccbca"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_10.pdf": {
+    "mtime": 1779113962.8417418,
+    "hash": "4212b9f9bc2190887850403a51591320"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_12.pdf": {
+    "mtime": 1779113976.8159373,
+    "hash": "9cc32504b47949a2593ff1f12662cc62"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_13.pdf": {
+    "mtime": 1779113970.4239337,
+    "hash": "b7477250aa5b1c08c41e4f14bc2647c8"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_14.pdf": {
+    "mtime": 1779113978.7752345,
+    "hash": "2e074c27da6ec3ebcd6a5d6b88ec7850"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_15.pdf": {
+    "mtime": 1779113985.7568655,
+    "hash": "5bc1e69eb2fc4130726d7f79c14f7f91"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_16.pdf": {
+    "mtime": 1779113939.8328218,
+    "hash": "010aa046195356a4b6b4a0a6c7aca9aa"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_17.pdf": {
+    "mtime": 1779113971.0816877,
+    "hash": "224015496a658bd13e0de1f4911ea66a"
+  },
+  "C:\\sme\\03-Data-Sources\\m1\\raw\\pdf\\2486_19.pdf": {
+    "mtime": 1779113931.6404352,
+    "hash": "61a0cf5d134e22b1b14ad2d49f895eb1"
+  },
+  "C:\\sme\\Interim\\report\\B21 Guidelines - Interim-Report (2026).pdf": {
+    "mtime": 1778178307.1333146,
+    "hash": "c6f89688cd6d8761782c56cfcd7d76b7"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim 1.jpeg": {
+    "mtime": 1778177129.0748632,
+    "hash": "73ddf7c162308c6948b505cb081c6f82"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim 2.jpeg": {
+    "mtime": 1778177129.0787034,
+    "hash": "128e0947b51b8543fa936696235ff434"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim 3.jpeg": {
+    "mtime": 1778177129.083321,
+    "hash": "81eccf1ed3bf5de679fc8fd123a8f283"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim 4.jpeg": {
+    "mtime": 1778177129.0950458,
+    "hash": "918cb5ef7e22ebdc95028ffc82414bae"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim 5.jpeg": {
+    "mtime": 1778177129.104368,
+    "hash": "2ef973f8dd97d083c09751a2ee32a503"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim 6.jpeg": {
+    "mtime": 1778177129.110469,
+    "hash": "e56b63a7b18c43db38a0d7a1c4ff604b"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim 7.jpeg": {
+    "mtime": 1778177129.1145904,
+    "hash": "fb7860dd08461f2bcc4f2f3e47c77f08"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim 8.jpeg": {
+    "mtime": 1778177129.1186252,
+    "hash": "e117aff4608cfc1445007f84edc564c7"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim.jpeg": {
+    "mtime": 1778177129.0705478,
+    "hash": "37c41a3073d5538a5e365724ad2d88c8"
+  },
+  "C:\\sme\\Interim\\report\\Attachments\\SMEs Interim.png": {
+    "mtime": 1778177129.066113,
+    "hash": "8d7353d8e6fc48313c5a10b28341aff6"
+  }
+}
