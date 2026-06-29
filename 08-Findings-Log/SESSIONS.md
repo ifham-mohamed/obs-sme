@@ -4,6 +4,68 @@ One entry per work session. Newest first.
 
 ---
 
+## 2026-06-30 — Session 61: Phase 3a+3b — Label Studio config, calibration set, samplers.py, batch_01.csv (F-216–F-220)
+
+**Worked on:** Phase 3 (Annotation + Classification) Steps 3a and 3b. Obsidian vault backfill for Session 60 (Slice 8) done first.
+
+**Status flips:** F-216 🟢 · F-217 🟢 · F-218 🟢 · F-219 🟢 · F-220 🟢
+
+### Done
+
+- **Obsidian vault sync (Session 60 backfill):** Slice 8 plan doc → 🟢 done; Session 60 diary entry added; F-209–F-215 feature rows added; 7 CHANGES rows; RESEARCH_BUILD_TRACKER updated (Phase-2 complete, CI 🟢, session log rows 55–60).
+- **F-216 — `research/data/label_studio_config.xml`**: Label Studio project XML; 12-choice single-label `change_category` with decision hints, 10-choice multi-label `affected_sectors`, `is_sme_relevant` binary, star confidence rating, `annotator_notes`. Metadata strip per task. See [plan](plans/2026-05-23_M1_Phase2_Upgrade_Plan/) §Phase 3a.
+- **F-217 — `research/data/calibration_set_v1.csv`**: 20 calibration docs; all 12 categories covered; EN/SI/TA; 4 edge cases (multi_penalty_type ×2, no_sme_impact, gazette_with_tables, repeal_gazette). Expert labels locked.
+- **F-218 — `enigmatrix-ml/m1/data/samplers.py`**: Full sampling library — `stratified_sample`, `kmeans_diversity_sample` (k=20 from silhouette pilot), `find_minority_candidates`, `select_uncertainty_batch` (margin-based AL), `sample_for_labeling` (three-step entry). `ALBaseline`/`ProductionBaseline` classes, `compute_silhouette_curve`.
+- **F-219 — `scripts/sample_for_labeling.py`**: CLI script — DB load (async) or `--demo`, three-step sampler (150+40+10=200 docs), writes `research/data/labeling/batch_<N>.csv` + provenance JSON, overwrite guard, `--dry-run`.
+- **F-220 — `research/data/labeling/batch_01.csv` (demo) + Makefile targets**: `make labeling-batch` / `make labeling-batch-demo` added. Demo batch written: 200 rows, EN=103 / SI=50 / TA=47, 150 stratified + 40 k-means + 10 handpick. Replace with real data via `make labeling-batch` against prod DB.
+
+### Open follow-ups
+
+- Recruit annotators; run calibration test; target κ ≥ 0.80 first attempt.
+- `make labeling-batch` against prod DB → real `batch_01.csv` from actual gazette extractions.
+- Upload to Label Studio; annotators complete; return annotated CSV.
+- After 300 labels: fit `ALBaseline(v1)` → `batch_02.csv` via `select_uncertainty_batch`.
+- Iterate to 800 labels (Phase 3c) → XLM-R + LoRA training (Phase 3d).
+
+---
+
+## 2026-06-29 — Session 60: M1 Phase-2 Slice 8 complete — Backfill, Polish, Thesis Artefacts (F-209–F-215)
+
+**Worked on:** Implemented all 7 sub-tasks of Slice 8 (the final slice of the M1 Phase-2 Upgrade Plan), completing Phase 2 in full. All 9 slices are now shipped.
+
+**Status flips:** F-209 🟢 · F-210 🟢 · F-211 🟢 · F-212 🟢 · F-213 🟢 · F-214 🟢 · F-215 🟢
+
+### Done
+
+- **F-209 — `backfill_legacy_baseline.py` (Task 8.1).** Idempotent async script (`enigmatrix-backend/scripts/backfill_legacy_baseline.py`) that materialises all `m1_regulations` rows at `status IN ('preprocessed','extracted')` and `archived_at IS NULL` into a new `M1Dataset` (kind=`extraction_run`) + `M1DatasetVersion` (source=`backfill`, immediately frozen) + batched `M1DatasetRow` inserts (chunk=200). Computes content SHA-256, writes `m1.dataset.version.backfill` audit row. `--dry-run` flag for preflight count-only preview. Idempotency guard: aborts if the dataset name already exists.
+
+- **F-210 — Data quality suites + `validate_dataset_version` Celery task (Task 8.2).** Four GE-style JSON expectation suites in `enigmatrix-backend/data_quality/expectations/`: `m1_dataset_rows.json` (5 expectations: regulation_key regex, non-empty fields, raw_text null-or-non-empty, raw_text present when method set, gazette_date parseable), `m1_extraction_profiles.json` (3: name_unique, entrypoint_non_empty, exactly_one_active_legacy), `m1_measurement_scores.json` (4: status_enum, score_range 0–1, metric_version_present, regulation_key_format), `m1_regulations.json` (4: status_enum, raw_text_non_empty_when_extracted, gazette_number_format, severity_range). Checkpoint in `data_quality/checkpoints/post_extraction_check.yaml`. New Celery task `validate_dataset_version` (`app/tasks/m1/validate_dataset_version.py`) fire-and-forget post-seal; writes violations into `m1_dataset_versions.validation_warnings`. Wired into `run_extraction.py` (try/except best-effort dispatch). Mode = report (never blocks extraction).
+
+- **F-211 — `regenerate_thesis_tables.py` + `make thesis-artifacts` (Task 8.3).** Script at `scripts/regenerate_thesis_tables.py` reads latest complete measurement runs from DB and emits 6 artefacts to `data/thesis/`: `table_4_1_per_field_accuracy.csv`, `table_4_2_per_stratum_cer.csv`, `table_4_3_profile_comparison.csv`, `figure_4_1_calibration.svg`, `figure_4_2_status_distribution.svg`, `RUN_PROVENANCE.md`. Supports `--demo` (no DB) and `--runs <uuid1>,<uuid2>`. Makefile target `thesis-artifacts` added to `.PHONY` + `cd enigmatrix-backend && uv run python ../scripts/regenerate_thesis_tables.py`.
+
+- **F-212 — `retire_old_versions.py` + Beat schedule (Task 8.4).** Nightly Celery task (`enigmatrix-backend/app/tasks/m1/retire_old_versions.py`) runs at 20:30 UTC (02:00 LKT). `RETENTION_DAYS = 30`. Protects: `current_version_id` of every dataset, second-most-recent sealed version per dataset, versions with `keep: true` in notes. Sets `retired_at = NOW()`. Wired into `celery_config.py` `beat_schedule` + `include` list.
+
+- **F-213 — `phase3_dataset_card.md` (Task 8.5).** Full Phase-3 handoff document at `enigmatrix-docs/phase3_dataset_card.md`: training dataset selection (is_ground_truth=TRUE + version SHA pinning), 12-category + 10-sector label schema, temporal 70/15/15 split by gazette publication year, augmentation policy table, `model_registry.json` schema, Phase-3 acceptance criteria (macro-F1 ≥ 0.92, EN ≥ 0.93, SI ≥ 0.88, TA ≥ 0.86, slice cliff < 8 pp, INT8 within 1.5 pp, p95 latency ≤ 2 s), cross-references to all spec docs.
+
+- **F-214 — UX polish (Task 8.6).** Measurements list page (`app/(admin)/admin/datasets/m1/measurements/page.tsx`): sortable by date/score (asc/desc), keyboard shortcuts (`n` → New run, `?` → help modal), Sparkline mini bar chart (last 8 completed runs), `ShortcutHelpModal` sub-component, `SortButton` sub-component. Recent-runs table (`components/m1-pipeline/recent-runs-table.tsx`): Session-53 audit bug closed — `extraction_failed` chevron now always-visible in `text-destructive` colour (was `opacity-0 group-hover:opacity-100` for all statuses).
+
+- **F-215 — CI workflow + Docker image pins (Task 8.7).** `.github/workflows/ci-m1-phase2.yml`: three jobs — `backend` (pytest fast + alembic linearity check, postgres/redis services), `ml` (pytest fast), `frontend` (pnpm lint + typecheck + playwright @phase2). Triggers: push to main/initiate/feature/**/slice/**, PR to main/initiate. `infra/docker-image-pin.txt`: placeholder digest entries for enigmatrix-backend, enigmatrix-ml, postgres:16, redis:7-alpine with fill instructions.
+
+### Open follow-ups
+
+- Run `uv run python scripts/backfill_legacy_baseline.py --dry-run` to preview row count, then execute without `--dry-run`.
+- Apply git tag `m1-phase2-complete` after verifying all Phase-2 gates pass.
+- Fill real Docker image digests in `infra/docker-image-pin.txt` via `docker inspect`.
+- Translate new SI/TA i18n keys for the keyboard shortcut help modal strings.
+- Populate `data/thesis/table_4_2_per_stratum_cer.csv` once slice-2 gold set ships.
+- **Phase 3 (Annotation + Classification) is the next major phase.** Next session starts with Step 3a (Label Studio XML config) + Step 3b (`scripts/sample_for_labeling.py`).
+
+### No CHANGES/FEATURES entries in the repo tracker
+
+Changes are logged in the Obsidian vault only; the repo-side tracker (`enigmatrix-docs/tracker/SESSIONS.md` and `AI_WORK_LOG.md`) was updated inline during the session.
+
+---
+
 ## 2026-05-24 — Session 59: phantom-ui adoption attempt — FAILED, fully reverted
 
 **Worked on:** User asked for a wholesale migration of the entire `enigmatrix-frontend` skeleton/loading system to `@aejkatappaja/phantom-ui` — a Lit-based Web Component that does runtime DOM measurement + shimmer overlay. Approach was staged: Phase A = install + wrapper + pilot on `/admin/datasets/m1` to validate Next 14.2 compatibility; Phase B = mass-migrate all ~80-90 sites if pilot was green. **Phase A broke the build. Phase B never started. All changes reverted; frontend is byte-identical to its pre-Session-59 state.**

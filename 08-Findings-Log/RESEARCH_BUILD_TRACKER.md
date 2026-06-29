@@ -2,7 +2,7 @@
 
 Status legend: 🟢 Done · 🟡 In progress · 🔲 Not started · 🔴 Blocked · ⚪ Dropped / out of scope
 
-Last updated: 2026-05-22 (Session 56 — M1 raw PDF bulk extraction + classification: 800 PDFs across 11 batches, full corpus coverage)
+Last updated: 2026-06-30 (Session 61 — Phase 3a: Label Studio config + calibration set; Phase 3b: samplers.py + sample_for_labeling.py + batch_01.csv (200-row demo); F-216–F-220)
 
 ---
 
@@ -153,9 +153,12 @@ Last updated: 2026-05-22 (Session 56 — M1 raw PDF bulk extraction + classifica
 | Structured logging (structlog) | 🟢 | `logging_config.py` |
 | Audit log | 🟢 | Session 14 — full coverage |
 | Cloud deployment (GCP/AWS) | 🔲 | BUILD_14 |
-| CI / CD (GitHub Actions) | 🔲 | BUILD_15 §2 |
-| E2E tests (Playwright) | 🔲 | BUILD_15 §3 |
+| CI / CD (GitHub Actions) | 🟢 | `.github/workflows/ci-m1-phase2.yml` — backend pytest (fast) + alembic linearity + ml pytest + frontend lint/typecheck/playwright @phase2. See CHANGES.md F-215. |
+| E2E tests (Playwright) | 🟡 | `admin_m1_datasets.spec.ts` compiles; full run gated on dev-server + seeded admin. `@phase2` tag wired to CI. See CHANGES.md F-205, F-208. |
 | Backend integration tests | 🟡 | Some passing; blocked by CORS env issue in conftest |
+| **M1 Phase-2 Upgrade Plan (all 9 slices) — COMPLETE (Session 60)** | 🟢 | Slice 1: measurement scaffolding; Slice 2: raw-text golden set; Slice 3: dataset registry + upload (XLSX parser, fixtures, integration tests, frontend pages); Slice 4: extraction profile registry; Slice 5: measurement engine (M1MeasurementRun/Score); Slice 6: comparison UI; Slice 7: new extraction profiles (Surya OCR); Slice 8: backfill + polish + thesis artefacts + CI; Slice 9: datasets hub IA restructure. See CHANGES.md F-200–F-215 and [plans/2026-05-23_M1_Phase2_Upgrade_Plan/](plans/2026-05-23_M1_Phase2_Upgrade_Plan/). |
+| **Phase 3 — Annotation + Classification (Steps 3a+3b shipped — Session 61)** | 🟡 | **3a (done):** `research/data/label_studio_config.xml` (Label Studio XML, 12-category + 10-sector + confidence + notes); `research/data/calibration_set_v1.csv` (20 reference docs, all 12 cats, EN/SI/TA, 4 edge cases). **3b (done):** `enigmatrix-ml/m1/data/samplers.py` (stratified + k-means + AL library, k=20, `ALBaseline`/`ProductionBaseline`); `scripts/sample_for_labeling.py` (CLI, 150+40+10=200 docs); `research/data/labeling/batch_01.csv` (200-row demo batch, 3 langs); `make labeling-batch` / `make labeling-batch-demo`. **3c pending:** recruit annotators → run calibration test (κ ≥ 0.80) → `make labeling-batch` against prod DB → Label Studio → 800 labels. **3d pending:** XLM-R + LoRA training. See CHANGES.md F-216–F-220. |
+| Docker image pins | 🟡 | `infra/docker-image-pin.txt` created with placeholder digests. Fill via `docker inspect` (pending manual step). See CHANGES.md F-215. |
 
 ---
 
@@ -163,6 +166,13 @@ Last updated: 2026-05-22 (Session 56 — M1 raw PDF bulk extraction + classifica
 
 | Session | Date | Key deliverables | F-IDs |
 |---------|------|-----------------|-------|
+| 61 | 2026-06-30 | Phase 3a+3b — `research/data/label_studio_config.xml` (Label Studio XML); `research/data/calibration_set_v1.csv` (20 calibration docs, all 12 cats, 4 edge cases); `enigmatrix-ml/m1/data/samplers.py` (stratified + k-means + AL sampling library, k=20); `scripts/sample_for_labeling.py` (CLI, 200-doc batch); `research/data/labeling/batch_01.csv` (200-row demo); `make labeling-batch` / `make labeling-batch-demo` Makefile targets. Obsidian vault full sync for Sessions 60+61. | F-216–F-220 |
+| 60 | 2026-06-29 | M1 Phase-2 Slice 8 — backfill_legacy_baseline.py (idempotent backfill of m1_regulations into m1_dataset_rows); 4 GE-style JSON expectation suites + post_extraction_check.yaml checkpoint + validate_dataset_version Celery task; regenerate_thesis_tables.py + make thesis-artifacts (6 artefacts to data/thesis/); retire_old_versions.py nightly Beat task (20:30 UTC, 30-day retention); phase3_dataset_card.md handoff doc; measurements page UX polish (sort/keyboard shortcuts/sparkline) + recent-runs chevron fix; CI workflow ci-m1-phase2.yml + docker-image-pin.txt | F-209–F-215 |
+| 59 | 2026-05-24 | phantom-ui adoption attempt — FAILED, fully reverted. No net code change. See SESSIONS.md Session 59. | — |
+| 58 | 2026-05-23 | Datasets hub IA restructure: i18n m1Datasets→datasets.m1 + new datasets.hub namespace; 5 M1 dataset pages moved to /admin/datasets/m1/*; new hub at /admin/datasets with M1/M2/M3 cards; sidebar Datasets collapsible group; Playwright spec URL refresh | F-206–F-208 |
+| 57 | 2026-05-23 | Slice 3 — XLSX parser wrapper + ML handle close; 5-row fixture + builder script; 9 parser unit tests; 5 upload integration tests; /admin/m1/datasets/new create page + form; Playwright E2E spec | F-200–F-205 |
+| 56 | 2026-05-22 | 800-PDF corpus extraction + classification (batches 5–11); tracker addenda v11 (203 rows) + v12 (145 rows); classifier extensions (6 new statute blocks + PREFIX_FALLBACK for 2483–2486) | F-199 |
+| 55 | 2026-05-22 | Cancel+rollback endpoint + frontend button; PDF Records admin page + GET /pdf-records endpoint; per-PDF metadata (4 columns + migration 202605280001 + pdf_metadata.py helper + extract task wiring); Stage 4 code quality audit + 3 HIGH inline fixes | F-193–F-198 |
 | 54 | 2026-05-22 | Sticky sidebar fix; resume/restart extraction card; full history table (replaces pill strip); auto-scroll; `m1_extraction_runs` DB table + migration `202605210002`; trigger INSERT + status/cancel UPDATE + `GET /runs` endpoint; frontend API-backed history (localStorage write-through); QueuePool fix (`pool_size=3`, `max_overflow=5`) | F-185–F-192 |
 | 53 | 2026-05-22 | M1 pipeline admin UX audit — 14 findings (1 Critical, 4 High, 6 Medium, 3 Low); Word report `M1_Pipeline_UX_Audit.docx` delivered | F-184 |
 | 52 | 2026-05-22 | AnimatedList + FuzzyText component suite (scroll-triggered entrance, canvas fuzz/glitch, theme-aware); sticky table headers (13 tables); theme toggle: dropdown → circular-reveal toggle button (View Transitions API) | F-179–F-183 |

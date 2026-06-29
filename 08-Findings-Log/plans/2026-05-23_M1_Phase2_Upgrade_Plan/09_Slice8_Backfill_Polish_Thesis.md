@@ -1,7 +1,8 @@
 ---
 tags: [m1, phase-2, slice-8, backfill, polish, thesis, ci]
 date: 2026-05-23
-status: 🔲 not started
+status: 🟢 done
+completed: 2026-06-29
 estimated-effort: 1 week
 prerequisites: slices 1–7 shipped
 ---
