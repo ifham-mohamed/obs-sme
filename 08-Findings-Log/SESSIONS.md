@@ -4,6 +4,98 @@ One entry per work session. Newest first.
 
 ---
 
+## 2026-06-30 — Session 65: M1 Phase 3f — inference wiring (ONNX export + `classify_gazette`) (Cowork)
+
+**Worked on:** Built the Stage-D inference loop so a preprocessed gazette auto-classifies into its concept (category + sectors). Advances F-225. **Phase 3 is now code-complete except human annotation (3c) + the GPU training run.**
+
+**Status flips:** F-228 🟢 (3f wiring). F-225 (3f) 🔲 → 🟡 (code complete; pending a trained model + migration run + deploy).
+
+### Done
+
+- **ML (`enigmatrix-ml`):** `m1/model/export_onnx.py` (torch→ONNX, merges LoRA, optional INT8 dynamic quant) + `m1/model/inference.py` (`GazetteInference` — ONNX Runtime CPU → `{category, confidence, sectors, sector_probs}`). New `serving` pyproject extra (onnxruntime).
+- **Backend (`enigmatrix-backend`):** `app/services/m1_classifier_service.py` (cached engine loader, `M1_CLASSIFIER_MIN_CONFIDENCE=0.55` review threshold) + `app/tasks/m1/classify_gazette.py` (Celery task, `preprocessed→classified`, writes `change_category` + `classifier_confidence` + `classified_at`, respects `expert_verified`) + migration `202606300001` (2 columns, down-rev `202605310002`) + matching ORM columns.
+- **Wiring:** `preprocess_gazette` now chains `classify_gazette_task.delay()` (best-effort); task registered in `celery_config.include`.
+
+### Verified (sandbox, Python 3.10)
+
+- ML files compile; `import m1.model.inference` works **without onnxruntime** (lazy). The 3 new backend files (classifier_service, classify_gazette, migration) compile.
+- **Could NOT sandbox-verify** `regulation.py` / `preprocess_gazette.py` / `celery_config.py` — the working copies carry pre-existing 3.11/3.12-only syntax the 3.10 sandbox can't parse (committed versions parse clean; my inserts are trivial balanced `Mapped[...]` / list-entry lines, proven independent of the failure). Confirm with `uv run ruff check` / `py_compile` in the 3.11+ env.
+
+### Pending (needs your machine)
+
+- `alembic upgrade head` (applies 202606300001); `uv sync --extra serving` on the backend host. After 3d training → `python -m m1.model.export_onnx --int8` → set `M1_MODEL_ONNX_DIR`. Then a fresh gazette flows scrape→extract→preprocess→**classify** automatically.
+
+---
+
+## 2026-06-30 — Session 64: M1 Phase 3e — evaluation + baselines (`m1/model/eval.py`, `baselines.py`) (Cowork)
+
+**Worked on:** Added the evaluation machinery that proves RQ1 — per-slice macro-F1 + the baseline comparison. Advances F-224.
+
+**Status flips:** F-227 🟢 (eval + baselines + arch tests). F-224 (3e) 🔲 → 🟡.
+
+### Done
+
+- `m1/model/eval.py` — loads a checkpoint + test parquet → overall macro-F1 + per-slice (language / year-quarter / text-length) + **slice-cliff check (≤8pp)** + confidence + `error_analysis_topwrong.csv` + `metrics.json`; `python -m m1.model.eval` CLI. Pure helpers (`length_bucket`, `quarter`) unit-tested.
+- `m1/model/baselines.py` — TF-IDF + LogReg and TF-IDF + LinearSVC baselines on the same split → `baselines.json` (the RQ1 comparison, itself a finding).
+- Tests `tests/m1/model/test_eval_helpers.py` (pure, pass) + `test_architecture.py` (torch shape/loss, `slow`-marked, skips on CPU).
+
+### Verified (sandbox)
+
+- eval + baselines compile + import without sklearn/torch (lazy); eval-helper tests pass.
+
+### Pending (needs your machine, after 3c gold + 3d train)
+
+- `python -m m1.model.eval --model … --test …` + `python -m m1.model.baselines --data …` on the trained checkpoint (needs the `training` extra).
+
+---
+
+## 2026-06-30 — Session 63: M1 Phase 3d — classifier model package scaffold (`enigmatrix-ml/m1/model/`) (Cowork)
+
+**Worked on:** Scaffolded the missing `enigmatrix-ml/m1/model/` package — the classifier that turns extracted gazette text into its concept (12-category change + 10-sector multi-label). Starts Phase 3d (F-223).
+
+**Status flips:** F-226 🟢 (model scaffold + light tests). F-223 (3d training) 🔲 → 🟡 (scaffold done; full 3-seed train pending gold labels + GPU).
+
+### Done
+
+- `m1/model/labels.py` — canonical 12 categories + 10 sectors + encode/decode + sector multi-hot (pure; unit-tested).
+- `m1/model/config.py` — `ModelConfig` (base model, LoRA r/α, lr, epochs, seeds).
+- `m1/model/data.py` — gold CSV/parquet loader → normalised `text/category/sectors/date` + **temporal** train/val/test split + `python -m m1.model.data` CLI (pure pandas; unit-tested, no date leakage).
+- `m1/model/architecture.py` — `GazetteClassifier` (XLM-R + LoRA dual head) + `compute_loss` (CE + BCE).
+- `m1/model/train_xlmr.py` — 3-seed temporal-split trainer CLI (AdamW, warmup, early-stop, FP16, `model_registry.json`, gate ≥0.92).
+- `m1/model/__init__.py` — lazy torch import so the package loads on CPU/dev. Tests `tests/m1/model/{test_labels,test_data}.py`. `pyproject.toml` new `training` extra (torch/peft/datasets/scikit-learn/accelerate).
+
+### Verified (sandbox)
+
+- All 6 modules compile; `import m1.model` works **without torch** (lazy); label + data tests pass (temporal split has no leakage).
+
+### Pending (needs your machine)
+
+- `uv sync --extra training`; then after Phase 3c gold labels land: `python -m m1.model.data` → `python -m m1.model.train_xlmr` on a GPU. Torch/architecture/trainer not runnable in this sandbox (no torch installed here).
+
+---
+
+## 2026-06-30 — Session 62: M1 Phase 3c–3f plan authored + cross-vault reconciliation (Cowork)
+
+**Worked on:** Authored the development plan for the remaining Phase 3 steps (3c–3f), continuing from Session 61's 3a/3b. Plan: `08-Findings-Log/plans/2026-06-30_Plan_M1_Phase3c-3f_Annotate_Train_Eval_Deploy.md`.
+
+**Status flips:** F-221 🟢 (plan authored) · F-222–F-225 🔲 reserved for 3c–3f.
+
+### Done
+
+- **Phase 3c–3f plan:** 3c annotate to ≥800 gold (κ≥0.75) using the existing Session-61 LS config + calibration set + samplers → `gold_standard.csv` + temporal split; 3d create `enigmatrix-ml/m1/model/` + XLM-R+LoRA 3-seed temporal training (macro-F1≥0.92); 3e eval/slices/baselines (no slice cliff >8pp); 3f ONNX export + `classify_gazette` wiring (`preprocessed→classified`) + deploy. Each step has commands + DoD.
+
+### Reconciliation / cleanup
+
+- **Canonical vault confirmed = `E:\Obsidian\sme`** (saved to memory). `C:\sme` is a separate copy that had fallen ~2 sessions behind; earlier this-session work was mistakenly done there. No E: trackers were overwritten.
+- **Neutralized pollution accidentally copied into E:** stubbed `plans/2026-06-28_M1_Phase3_Classifier_Plan/` (wrong date + colliding F-209–F-214) and a stale `STATUS_2026-06-28…` report, and flagged the stray `03-Data-Sources/m1/raw/labeling/` — **all three pending manual deletion** (delete tool can't reach E:).
+
+### Carry-forward flags
+
+- Re-extract clean SI/TA text (the `(cid:…)` glyph issue) before training (RQ2 risk).
+- Reconcile the F1 gate: BUILD_11 `≥0.80` vs RQ1 `≥0.92`.
+
+---
+
 ## 2026-06-30 — Session 61: Phase 3a+3b — Label Studio config, calibration set, samplers.py, batch_01.csv (F-216–F-220)
 
 **Worked on:** Phase 3 (Annotation + Classification) Steps 3a and 3b. Obsidian vault backfill for Session 60 (Slice 8) done first.

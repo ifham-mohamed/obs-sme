@@ -2,7 +2,7 @@
 
 Status legend: 🟢 Done · 🟡 In progress · 🔲 Not started · 🔴 Blocked · ⚪ Dropped / out of scope
 
-Last updated: 2026-06-30 (Session 61 — Phase 3a: Label Studio config + calibration set; Phase 3b: samplers.py + sample_for_labeling.py + batch_01.csv (200-row demo); F-216–F-220)
+Last updated: 2026-06-30 (Session 65 — Phase 3f inference wiring (ONNX export + `classify_gazette` Celery task + migration); F-228 done, F-225 in progress. Phase 3 code-complete except 3c annotation + GPU training)
 
 ---
 
@@ -166,6 +166,10 @@ Last updated: 2026-06-30 (Session 61 — Phase 3a: Label Studio config + calibra
 
 | Session | Date | Key deliverables | F-IDs |
 |---------|------|-----------------|-------|
+| 65 | 2026-06-30 | Phase 3f inference wiring — `m1/model/export_onnx.py` + `inference.py` (ONNX CPU) + backend `m1_classifier_service.py` + `classify_gazette` Celery task (`preprocessed→classified`) + migration `202606300001` + preprocess chaining + celery include + `serving` extra. ML verified; backend edits pending in-env compile. | F-228 (F-225 →🟡) |
+| 64 | 2026-06-30 | Phase 3e evaluation + baselines — `m1/model/eval.py` (per-slice macro-F1 + slice-cliff + error dump) + `baselines.py` (TF-IDF+LogReg/SVC) + tests. Verified: compiles, imports without sklearn/torch, eval-helper tests pass. | F-227 (F-224 →🟡) |
+| 63 | 2026-06-30 | Phase 3d classifier scaffold — `enigmatrix-ml/m1/model/` (labels 12-cat/10-sector, config, gold loader + temporal split, `GazetteClassifier` XLM-R+LoRA, 3-seed trainer, tests) + `training` pyproject extra. Verified: compiles, imports without torch, light tests pass. | F-226 (F-223 →🟡) |
+| 62 | 2026-06-30 | Phase 3c–3f development plan authored — annotate to ≥800 gold (κ≥0.75) · `enigmatrix-ml/m1/model/` XLM-R+LoRA training (macro-F1≥0.92) · eval/slices/baselines · ONNX export + `classify_gazette` wiring. Plan: `plans/2026-06-30_Plan_M1_Phase3c-3f_Annotate_Train_Eval_Deploy.md`. Cross-vault reconciliation: canonical = `E:\Obsidian\sme`. | F-221 (F-222–F-225 reserved) |
 | 61 | 2026-06-30 | Phase 3a+3b — `research/data/label_studio_config.xml` (Label Studio XML); `research/data/calibration_set_v1.csv` (20 calibration docs, all 12 cats, 4 edge cases); `enigmatrix-ml/m1/data/samplers.py` (stratified + k-means + AL sampling library, k=20); `scripts/sample_for_labeling.py` (CLI, 200-doc batch); `research/data/labeling/batch_01.csv` (200-row demo); `make labeling-batch` / `make labeling-batch-demo` Makefile targets. Obsidian vault full sync for Sessions 60+61. | F-216–F-220 |
 | 60 | 2026-06-29 | M1 Phase-2 Slice 8 — backfill_legacy_baseline.py (idempotent backfill of m1_regulations into m1_dataset_rows); 4 GE-style JSON expectation suites + post_extraction_check.yaml checkpoint + validate_dataset_version Celery task; regenerate_thesis_tables.py + make thesis-artifacts (6 artefacts to data/thesis/); retire_old_versions.py nightly Beat task (20:30 UTC, 30-day retention); phase3_dataset_card.md handoff doc; measurements page UX polish (sort/keyboard shortcuts/sparkline) + recent-runs chevron fix; CI workflow ci-m1-phase2.yml + docker-image-pin.txt | F-209–F-215 |
 | 59 | 2026-05-24 | phantom-ui adoption attempt — FAILED, fully reverted. No net code change. See SESSIONS.md Session 59. | — |
