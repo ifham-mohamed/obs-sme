@@ -4,6 +4,185 @@ One entry per work session. Newest first.
 
 ---
 
+## 2026-07-15 — Session 73: Full-project documentation sync + Perplexity export bundle + Member-1 report (Cowork)
+
+**Worked on:** Exhaustive re-analysis of `C:\Reasearch\xyz` (all submodules at 2026-07-03 commits) vs this vault; produced the external documentation bundle + Member-1 report; updated vault docs.
+
+**Status flips:** F-243 🟢.
+
+### Done
+
+- **Codebase↔vault diff:** confirmed sessions 62–72 (Phases 3d–5c) are fully tracked in FEATURES/CHANGES/SESSIONS; the stale surfaces were `05-Build-Status/*` (headers 2026-05-20), repo `ENIGMATRIX_FULL_CONTEXT_AND_M1_ANALYSIS.md` (2026-05-22, pre-Phase-3), repo `AI_WORK_LOG.md` (top entry Session 60), and the knowledge graph (built at `94ae62d0`). Verified the "modified everywhere" git status is CRLF noise (equal +/− across 242 files).
+- **Export bundle (Perplexity-ready)** in `C:\Users\Administrator\Documents\Claude\Projects\SME\`: `01_MASTER_PROJECT_OVERVIEW.md` (research idea + architecture + full build state), `02_MEMBER1_MODULE1_REPORT.md` (scope, completed by phase, prioritized pending, risks, estimates), `03_FEATURE_CHECKLIST.md` (master ✓/~/☐ checklist), `04_API_AND_PAGES_REFERENCE.md` (~130 routes + 90+ pages + Celery/Beat map), `05_MANUAL_TESTING_GUIDE.md`, `06_CLEANUP_REPORT.md` + `Enigmatrix_Master_Documentation.docx`.
+- **Vault additions:** `07-Team/Member-1_Report.md` (mirror of the Member-1 report) + `05-Build-Status/2026-07-15_Phase3-5_Build_Addendum.md` (brings the 2026-05-20 build-status docs current: classifier, alerts, propagation, drift, retraining, notebooks).
+- **Discovery:** `xyz/mydata/` contains a live Label Studio instance (sqlite + media) — the Phase-3c annotation environment is stood up (untracked; back up + gitignore).
+
+### Pending
+
+- Manual deletions from the cleanup report (Untitled/Interim, Session-62 pollution stubs, repo `readme/`, root `venv/`). Retarget the frontend vault sync from `C:\sme` to `E:\Obsidian\sme` (or sync E:→C:). `graphify update .`. Critical path unchanged: 3c annotation → train → deploy; migrations `202606300001–005` in prod; survey fieldwork.
+
+---
+
+## 2026-06-30 — Session 72: Extraction + Measurement UI audit + accuracy-report export (Cowork)
+
+**Worked on:** Audited the PDF-extraction + accuracy-measurement surface (verify + measure accuracy) and shipped an exportable accuracy report. Audit doc: `08-Findings-Log/2026-06-30_Extraction_Measurement_UI_Audit_and_Upgrades.md`.
+
+**Status flips:** F-242 🟢.
+
+### Done
+
+- **Accuracy-report export (thesis artifact):** pure `app/services/m1_measurement_report.py` (`build_markdown_report`, unit-tested) + `GET /api/v1/m1/measurements/{run_id}/report.md` (downloadable Markdown — overall + per-field mean/median + status breakdown + worst-N) + test.
+- **Audit:** confirmed the measurement surface is mature (funnel 7,700 % bug already fixed; comprehensive per-field/worst/calibration API; completeness "verify") + a prioritized 10-item upgrade list (CSV export, overview accuracy badge, empty states, a11y, SI/TA i18n, confidence surfacing…) with a ready-to-paste FE download button.
+
+### Verified (sandbox)
+
+- Report builder + test pass; endpoint compiles. (`m1_measurements.py` line-525 error is pre-existing 3.11/3.12 syntax, unrelated to the change.)
+
+### Pending
+
+- FE download-button wiring + CSV export + the other audit items (need your env).
+
+---
+
+## 2026-06-30 — Session 71: P0 hygiene — F1-gate reconcile + MASTER_CONTEXT refresh + deliverables regen (Cowork)
+
+**Worked on:** The machine-independent P0 hygiene items.
+
+**Status flips:** F-241 🟢.
+
+### Done
+
+- **F1-gate reconciled to 0.92** in `04-Technology-Stack/ml/BUILD/BUILD_11_ML_Training_Pipeline.md` (M1 macro-F1 gate 0.80 → 0.92; M4 stays 0.75). The code (`train_xlmr`/`eval`) already used 0.92.
+- **`ENIGMATRIX_MASTER_CONTEXT.md` refreshed** — header updated to Session 70 + a "Sessions 62–70 update" block (Phases 3–5 code-complete; migrations `202606300001–005`).
+- **HTML dossier + Excel regenerated** to Session-70 state (F-240): Phase 4 ≈ 50%, Phase 5 ≈ 50%, roadmap weighted ≈ 68%, 215 features.
+
+### Determined (not a code fix)
+
+- `/admin/m1/pipeline/recent` **503 is environmental** (Railway cold-start / DB pool), not a backend code defect — there is no 503 raised in code and the endpoint is a clean query. Already handled gracefully on the frontend (`error.tsx` + inline retry card). Durable fix = pool sizing (done S54) + warmup.
+
+### Pending (unchanged)
+
+- Human/data/GPU gates (3c annotation → training run, 5a survey fieldwork), apply migrations `202606300001–005`, run the live pipelines. `graphify update .` (CLI not in this environment).
+
+---
+
+## 2026-06-30 — Session 70: M1 Phase 5c — retraining + canary auto-rollback (Cowork)
+
+**Worked on:** Implemented Phase 5c (the last roadmap step) — quarterly + drift-triggered retraining with a canary promote/rollback rule. Plan: `08-Findings-Log/plans/2026-06-30_Plan_M1_Phase5c_Retraining_and_Rollback.md`. **The entire Module-1 roadmap (Phases 1–5) is now code-complete.**
+
+**Status flips:** F-239 🟢 (retraining table + canary decision) · F-240 🟡 (retrain.py + task + triggers).
+
+### Done
+
+- **Table/model:** `app/models/m1_retraining_run.py` + migration `202606300005` (`m1_retraining_runs`: trigger/status/candidate_f1/prod_f1/action/promoted/rolled_back). down-rev `202606300004`.
+- **Canary decision (pure, tested):** `enigmatrix-ml/m1/model/promotion.py` `decide()` — rollback if below the 0.92 gate or regresses vs prod beyond tol; else promote (hold if no candidate). Tests pass.
+- **retrain.py CLI:** `enigmatrix-ml/scripts/retrain.py` — train (`train_xlmr`) → eval → decide → `retrain_result.json`; `--dry-run` runs without a GPU (verified → promote).
+- **Task + triggers:** `app/tasks/m1/retraining.py` `run_retraining` records a run + subprocess retrain + applies the decision; registered in celery include + **quarterly Beat** (1st Jan/Apr/Jul/Oct 03:00) + **drift-triggered** from the 4c analytics task.
+
+### Verified (sandbox)
+
+- 6 files compile; promotion tests pass; `retrain.py --dry-run` runs end-to-end (action=promote); drift→retraining + celery wiring confirmed.
+
+### Pending (needs your machine)
+
+- `uv run alembic upgrade head` (202606300005); `pytest tests/m1/model/test_promotion.py`; real retraining needs the 3d/3e model + gold + GPU. The production-pointer flip lands with the 3d model registry.
+
+**Roadmap: Phases 1–5 code-complete.** Remaining gates are human/data — 3c annotation → training run, and 5a survey fieldwork.
+
+---
+
+## 2026-06-30 — Session 69: M1 Phase 5b — F1–F6 findings notebooks (Cowork)
+
+**Worked on:** Implemented Phase 5b — the four findings notebooks + shared helpers + preregistration that turn Phase-4 lag data, the survey, and the classifier metrics into the empirical findings F1–F6 (RQ1/RQ3/RQ4). Plan: `08-Findings-Log/plans/2026-06-30_Plan_M1_Phase5b_Findings_Notebooks.md`.
+
+**Status flips:** F-237 🟢 (findings_common + preregistration) · F-238 🟡 (4 notebooks).
+
+### Done
+
+- **`research/notebooks/findings_common.py`** — `bootstrap_median_ci` (pure numpy, unit-tested) + loaders (`load_lag_summary`, `load_channel_effectiveness`, `load_awareness`, `load_alerts_awareness`, `load_model_metrics`), each reading the production replica when `DATABASE_URL` is set else a reproducible synthetic demo.
+- **`research/preregistration.md`** — F1–F6 hypotheses + metrics + tests + decision rules (α=0.05, 95% bootstrap CI).
+- **4 notebooks:** `findings_lag_analysis.ipynb` (F1/F2/F3/F5 — median+CI, Mann-Whitney, Kruskal-Wallis), `findings_secondary_diffusion.ipynb` (F4 channel ranking), `findings_alert_effectiveness.ipynb` (F6 DiD + bootstrap CI), `findings_classifier_evaluation.ipynb` (RQ1/RQ2 from 3e `metrics.json`).
+- **`research` pyproject extra** (pandas/numpy/scipy/jupyter/matplotlib).
+
+### Verified (sandbox)
+
+- `findings_common` tests pass; all 4 notebooks are valid JSON; demo smoke computes every finding — F1 portal ≈6.8 d [6.5,7.1]; F2 news ≈21.8 d; F3 urban 38 vs rural 62; F6 DiD −19.9 d; F4 fastest=IRD.
+
+### Pending (needs real data)
+
+- `uv sync --extra research` → `pytest tests/research/test_findings_common.py` → Run-All each notebook. Real F1/F2/F4 need 4a propagation data; F3/F5/F6 need the 5a survey (≥100) + F6 alert-subscription; classifier eval needs the 3d/3e model. Preregister on supervisor sign-off before unblinding.
+
+---
+
+## 2026-06-30 — Session 68: M1 Phase 4c — nightly lag-view refresh + confidence drift (Cowork)
+
+**Worked on:** Implemented Phase 4c (the last Phase-4 step) — nightly refresh of the lag materialized views (built on 4a's propagation events) + a KL-divergence classifier-confidence drift check. Plan: `08-Findings-Log/plans/2026-06-30_Plan_M1_Phase4c_Lag_Views_and_Drift.md`. **Phase 4 is now code-complete (4a + 4b + 4c).**
+
+**Status flips:** F-235 🟢 (lag views + drift helper) · F-236 🟡 (nightly analytics task).
+
+### Done
+
+- **Materialized views:** migration `202606300004` — `v_m1_regulation_lag_summary` (per-reg portal/news `lag_days` + count) + `v_m1_channel_effectiveness` (per source/channel median lag = Finding F4), each with a unique index. down-rev `202606300003`.
+- **Drift (pure, tested):** `app/services/m1_drift.py` — `histogram` + `kl_divergence` (Laplace-smoothed) over `classifier_confidence`. Tests: KL≈0 identical, grows with divergence (22.66 on a synthetic drift).
+- **Nightly task:** `app/tasks/m1/analytics.py` `refresh_lag_analytics` — REFRESH both views + drift check (recent 30 d vs baseline; alert if KL > 0.15). Registered in celery include + Beat **21:00 UTC**.
+
+### Verified (sandbox)
+
+- 4 new files compile; drift tests pass (loaded standalone); migration chains; Beat entry confirmed.
+
+### Pending (needs your machine)
+
+- `uv run alembic upgrade head` (202606300004); `pytest app/tests/unit/test_m1_drift.py`; a manual `refresh_lag_analytics.apply()` (needs 4a propagation data + 3f classified regs for a meaningful drift signal). **Phase 4 done → next: Phase 5** (survey deployment, F1–F6 findings, retraining).
+
+---
+
+## 2026-06-30 — Session 67: M1 Phase 4b — Alert dispatch + in-app website alerts section (Cowork)
+
+**Worked on:** Implemented Phase 4b — sector-matched alerts (in-app / email / SMS) plus a **website alerts section** for logged-in SMEs (sector-matched) and non-logged-in visitors (public feed). Plan: `08-Findings-Log/plans/2026-06-30_Plan_M1_Phase4b_Alert_Dispatch_and_Website_Feed.md`.
+
+**Status flips:** F-232 🟢 (model + service + dispatch) · F-233 🟡 (SME + public API) · F-234 🟡 (website section).
+
+### Done
+
+- **Table/model/schema:** `app/models/m1_alert.py` + migration `202606300003` (`m1_alerts`; one per (regulation × recipient × channel); `sme_id=NULL`=public broadcast; unique `(regulation_id, sme_id, channel)`). down-rev `202606300002`. `app/schemas/m1_alert.py`.
+- **Content + providers (pure/guarded):** `m1_alert_content.py` (category-labelled title/body + `sector_matches`, unit-tested) + `m1_alert_providers.py` (SendGrid/Twilio via httpx; return `'skipped'` with no keys → dev-safe).
+- **Service + task:** `m1_alert_service.py` (public broadcast + sector-matched per-SME `in_app`+`email`, idempotent) + `app/tasks/m1/alert_dispatch.py` (create + send `pending` emails in batches of 50). Registered in celery include.
+- **API:** `app/api/v1/m1_alerts.py` — `GET /m1/alerts/public` (no auth) · `GET /m1/alerts` (SME auth) · `POST /m1/alerts/{id}/read`; registered in `router.py`. Settings: SendGrid/Twilio/`ALERT_EMAIL_FROM`.
+- **Website section (frontend scaffold):** `lib/api/m1-alerts.ts` + `app/alerts/page.tsx` — one `/alerts` page showing the public feed to everyone and the SME's sector-matched feed (unread + mark-read) when logged in.
+
+### Verified (sandbox)
+
+- 9 backend files compile; content/sector-match tests pass (loaded standalone); migration chains; router/settings/celery wiring confirmed.
+
+### Pending (needs your machine / follow-ups)
+
+- `uv run alembic upgrade head` (202606300003); `pytest app/tests/unit/test_m1_alert_content.py`. Set SendGrid/Twilio keys for real email/SMS (else in-app only). Add an SME phone field for SMS. Frontend: add `/alerts` to `middleware.ts` public routes + a nav link + align `lib/api/client.ts`. Wire `dispatch_regulation_alerts` to a verify/publish action or a daily Beat scan. Next: 4c nightly view refresh + drift.
+
+---
+
+## 2026-06-30 — Session 66: M1 Phase 4a — Portal + RSS watchers → propagation events (Cowork)
+
+**Worked on:** Implemented Phase 4a — the secondary-source watchers that timestamp each downstream appearance of a regulation (the raw material for the awareness-lag dataset, RQ3/RQ4). Plan: `08-Findings-Log/plans/2026-06-30_Plan_M1_Phase4a_Portal_RSS_Watchers.md`.
+
+**Status flips:** F-231 🟢 (propagation table + matcher) · F-229 🟡 (portal_watcher) · F-230 🟡 (rss_watcher). Phase 4 moves 0% → started.
+
+### Done
+
+- **Table/model:** `app/models/m1_propagation_event.py` + migration `202606300002` (`m1_propagation_events`; one row per regulation×source with `first_seen_at`; unique `(regulation_id, source_id)`; indexes). down-rev `202606300001`.
+- **Matcher (pure, unit-tested):** `app/services/m1_propagation_matching.py` — 2-step per `03_M1_3`: exact gazette-number (conf 1.0) → difflib fuzzy title/act (≥0.78). Tests pass (exact / fuzzy / none / normalize / extract).
+- **Registry + service:** `m1_secondary_sources.py` (4 portals IRD/EPF/ETF/eROC + 5 news RSS; URLs to confirm) + `m1_propagation_service.py` (load active regs → match → idempotent upsert on (reg, source)).
+- **Tasks:** `app/tasks/m1/portal_watcher.py` (httpx fetch → tag-strip → match) + `rss_watcher.py` (feedparser → match; entry.published as first_seen_at). Registered in celery `include` + Beat **every 2 h**; `feedparser` added to pyproject.
+
+### Verified (sandbox)
+
+- All 8 new files compile; matcher unit tests pass (module loaded standalone).
+
+### Pending (needs your machine / network)
+
+- `uv sync` (feedparser) → `uv run alembic upgrade head` (202606300002) → `pytest app/tests/unit/test_m1_propagation_matching.py`. Confirm the source URLs; a live `run_rss_watcher.apply()` writes `m1_propagation_events` rows. Next: 4b alert dispatch, 4c nightly view refresh + drift.
+
+---
+
 ## 2026-06-30 — Session 65: M1 Phase 3f — inference wiring (ONNX export + `classify_gazette`) (Cowork)
 
 **Worked on:** Built the Stage-D inference loop so a preprocessed gazette auto-classifies into its concept (category + sectors). Advances F-225. **Phase 3 is now code-complete except human annotation (3c) + the GPU training run.**

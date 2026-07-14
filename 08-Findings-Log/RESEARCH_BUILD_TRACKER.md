@@ -2,7 +2,7 @@
 
 Status legend: 🟢 Done · 🟡 In progress · 🔲 Not started · 🔴 Blocked · ⚪ Dropped / out of scope
 
-Last updated: 2026-06-30 (Session 65 — Phase 3f inference wiring (ONNX export + `classify_gazette` Celery task + migration); F-228 done, F-225 in progress. Phase 3 code-complete except 3c annotation + GPU training)
+Last updated: 2026-07-15 (Session 73 — full-project documentation sync + Perplexity export bundle + Member-1 report; F-243 done. **Module-1 roadmap Phases 1–5 code-complete**; remaining gates human/data: 3c annotation, prod migrations 202606300001–005, 5a survey)
 
 ---
 
@@ -166,6 +166,14 @@ Last updated: 2026-06-30 (Session 65 — Phase 3f inference wiring (ONNX export 
 
 | Session | Date | Key deliverables | F-IDs |
 |---------|------|-----------------|-------|
+| 73 | 2026-07-15 | Documentation sync — code↔vault diff (62–72 confirmed tracked); Perplexity export bundle (6 MD + DOCX in `Projects\SME\`); vault Member-1 report + Phase-3–5 build-status addendum; cleanup report; `mydata/` Label Studio env flagged. | F-243 🟢 |
+| 72 | 2026-06-30 | Extraction+measurement audit — accuracy-report export (`m1_measurement_report.py` + `GET /m1/measurements/{id}/report.md`, unit-tested) + audit doc (funnel bug already fixed; 10 prioritized upgrades + FE button). | F-242 🟢 |
+| 71 | 2026-06-30 | P0 hygiene — F1-gate M1 macro-F1 0.80→0.92 (BUILD_11); MASTER_CONTEXT refreshed (Sessions 62–70 block); HTML dossier + Excel regenerated to F-240. `/recent` 503 = environmental (frontend already handles). | F-241 🟢 |
+| 70 | 2026-06-30 | Phase 5c retraining — `m1_retraining_runs` + migration 202606300005 + pure canary `promotion.decide` (unit-tested) + `retrain.py` (`--dry-run`) + `run_retraining` task (quarterly Beat + drift trigger). Roadmap Phases 1–5 code-complete. Real run pending model+GPU. | F-239 🟢, F-240 🟡 |
+| 69 | 2026-06-30 | Phase 5b findings — `findings_common.py` (bootstrap CI + DB/demo loaders, unit-tested) + `preregistration.md` + 4 `findings_*.ipynb` (F1–F6: median+CI, Mann-Whitney, Kruskal-Wallis, DiD) + `research` extra. Demo smoke OK; real-data run pending survey/propagation/model. | F-237 🟢, F-238 🟡 |
+| 68 | 2026-06-30 | Phase 4c analytics — materialized views `v_m1_regulation_lag_summary` + `v_m1_channel_effectiveness` (migration 202606300004) + pure KL-divergence drift helper (unit-tested) + `refresh_lag_analytics` nightly task (Beat 21:00 UTC). Phase 4 code-complete. Live run pending migration+data. | F-235 🟢, F-236 🟡 |
+| 67 | 2026-06-30 | Phase 4b alerts — `m1_alerts` table + migration 202606300003 + content/sector-match helpers (unit-tested) + SendGrid/Twilio providers (graceful) + alert service (public + sector-matched, idempotent) + `dispatch_regulation_alerts` task + SME/public API (`/m1/alerts`) + `/alerts` website page (scaffold). Live run + frontend wiring pending. | F-232 🟢, F-233/F-234 🟡 |
+| 66 | 2026-06-30 | Phase 4a watchers — `m1_propagation_events` table + migration `202606300002` + pure 2-step matcher (exact gazette + difflib fuzzy ≥0.78, unit-tested) + secondary-source registry (4 portals + 5 RSS) + `portal_watcher`/`rss_watcher` Celery tasks on Beat (2 h) + `feedparser`. Live run pending migration + network. | F-231 🟢, F-229/F-230 🟡 |
 | 65 | 2026-06-30 | Phase 3f inference wiring — `m1/model/export_onnx.py` + `inference.py` (ONNX CPU) + backend `m1_classifier_service.py` + `classify_gazette` Celery task (`preprocessed→classified`) + migration `202606300001` + preprocess chaining + celery include + `serving` extra. ML verified; backend edits pending in-env compile. | F-228 (F-225 →🟡) |
 | 64 | 2026-06-30 | Phase 3e evaluation + baselines — `m1/model/eval.py` (per-slice macro-F1 + slice-cliff + error dump) + `baselines.py` (TF-IDF+LogReg/SVC) + tests. Verified: compiles, imports without sklearn/torch, eval-helper tests pass. | F-227 (F-224 →🟡) |
 | 63 | 2026-06-30 | Phase 3d classifier scaffold — `enigmatrix-ml/m1/model/` (labels 12-cat/10-sector, config, gold loader + temporal split, `GazetteClassifier` XLM-R+LoRA, 3-seed trainer, tests) + `training` pyproject extra. Verified: compiles, imports without torch, light tests pass. | F-226 (F-223 →🟡) |

@@ -411,7 +411,7 @@ The four gate thresholds are non-negotiable and live in code, not config — fai
 
 | Module | Metric | Threshold |
 |--------|--------|-----------|
-| M1 | macro-F1 | ≥ 0.80 |
+| M1 | macro-F1 | ≥ 0.92 (RQ1 target; reconciled 2026-06-30, was 0.80) |
 | M2 | RAGAS faithfulness | ≥ 0.85 |
 | M3 | ROC-AUC | ≥ 0.75 |
 | M4 | macro-F1 | ≥ 0.75 |
@@ -687,7 +687,7 @@ evaluator method returning {metric_name: value}. It must: log the metric;
 set MLflow tags gate_status=passed|failed, gate_metric, gate_threshold;
 log a derived metric f"{metric}_vs_threshold"; raise GateFailure when
 value < threshold. Hard-code a GATES dict for reference (so promotion code
-can read it) — M1 f1_macro >= 0.80, M3 roc_auc >= 0.75, M4 f1_macro >= 0.75,
+can read it) — M1 f1_macro >= 0.92 (RQ1), M3 roc_auc >= 0.75, M4 f1_macro >= 0.75,
 M2 ragas_faithfulness >= 0.85 — but the threshold actually applied must come
 from the decorator argument. Include unit tests covering pass, fail, and
 missing-metric cases.

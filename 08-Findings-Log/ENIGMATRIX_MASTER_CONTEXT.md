@@ -1,8 +1,20 @@
 # Enigmatrix — Master Reference Document
 
 > **Generated:** 2026-05-20 from Obsidian research vault at `C:\sme\`
-> **Vault last updated:** Session 55 / F-193–F-198 (2026-05-22)
+> **Vault last updated:** Session 70 / F-238–F-240 (2026-06-30) — Module-1 roadmap Phases 3–5 code-complete. (Prior freeze: Session 55.)
 > **Primary researcher (Module 1):** Mohamed M.R.I — 215075J
+
+---
+
+## 0.0 — Sessions 62–70 update (2026-06-30): Module-1 roadmap Phases 3–5 code-complete
+
+Since Session 55, Module 1 advanced from ingest/extract-only to **all roadmap phases code-complete** (see SESSIONS 62–70 · FEATURES F-221–F-240). The Session-43/55 build-status tables further below are historical.
+
+- **Phase 3 (classifier) — code-complete.** `enigmatrix-ml/m1/model/` (labels · config · data · architecture · train_xlmr · eval · baselines · export_onnx · inference) + backend `m1_classifier_service` + `classify_gazette` Celery task + migration `202606300001`. Gate = **macro-F1 ≥ 0.92** (reconciled from 0.80). Pending: 3c annotation (≥ 800 gold) + a GPU training run.
+- **Phase 4 — code-complete.** 4a watchers → `m1_propagation_events` (migration `202606300002`); 4b sector-matched alerts (in-app / email / SMS) + public + SME `/alerts` website feed (migration `202606300003`); 4c nightly lag materialized views + KL-divergence drift (migration `202606300004`). Pending: apply migrations + live run.
+- **Phase 5 — 5b + 5c built.** 5b F1–F6 findings notebooks + `preregistration.md`; 5c retraining + canary auto-rollback (`m1_retraining_runs`, migration `202606300005`, quarterly Beat + drift trigger). Pending: 5a survey fieldwork + real data.
+
+**Migrations to apply:** `202606300001–005`. **Latest session:** 70 / F-240. **F1 gate:** M1 macro-F1 ≥ 0.92 (M4 stays ≥ 0.75).
 
 ---
 
