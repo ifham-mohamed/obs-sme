@@ -1,6 +1,6 @@
 # Module 1 — Phase 4 Gap-Closure Plan (Schedulers + Alerts)
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE4_SCHEDULERS_ALERTS_ANALYSIS]]. **Session 71 (2026-07-21) implemented 4a (source registry) and 4b (SMS leg)**; 4c and the load-test DoD get step-by-step runbooks below — they need real data / a staging environment, not code.
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/20_PHASE4_SCHEDULERS_ALERTS_ANALYSIS]]. **Session 71 (2026-07-21) implemented 4a (source registry) and 4b (SMS leg)**; 4c and the load-test DoD get step-by-step runbooks below — they need real data / a staging environment, not code.
 
 ## Status
 
@@ -63,7 +63,7 @@ The code is right; it has nothing to chew on. Dependencies, in order:
 2. **Matching must be validated** — `propagation_matching.match()` assigns `match_method`/`match_confidence`, and nobody has ever eyeballed its output. Sample 30 events across methods; measure precision by hand. A false match inflates "awareness" and corrupts the headline lag finding, so this gate matters more than it looks. Record precision per `match_method` in the tracker.
 3. **`gazette_published_date` must be populated** — lag = `first_seen_at − gazette_published_date`; rows with a NULL publication date silently drop out of the views. Check coverage before believing any median.
 4. **Then refresh**: run `refresh_lag_analytics` manually → both matviews non-empty → sanity-check `v_m1_channel_effectiveness.median_lag_days` (expect portals faster than news; a negative lag means a date bug, not a fast portal).
-5. **Drift half stays dormant until Phase 3 ships a model** — `classifier_confidence` is NULL everywhere today, so the KL branch no-ops by design (`len(baseline) >= 20` guard). After the model lands, the *first* month's distribution is the baseline; don't act on drift alerts until ≥2 windows exist. Cross-ref [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_GAP_CLOSURE_PLAN]] Stage E.
+5. **Drift half stays dormant until Phase 3 ships a model** — `classifier_confidence` is NULL everywhere today, so the KL branch no-ops by design (`len(baseline) >= 20` guard). After the model lands, the *first* month's distribution is the baseline; don't act on drift alerts until ≥2 windows exist. Cross-ref [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]] Stage E.
 6. **Admin lag UI (14_M1_4)** stays deferred to BUILD_13 — data is query-ready; the SME feed already ships.
 
 ## §6.5 — Delivery guarantees / retry + DLQ for alerts (📋)
@@ -91,7 +91,7 @@ The research cites WhatsApp as the ~72% primary SME channel, yet `channel` ∈ {
 
 ## §6.3 — Phase-4 validation is gated on Phase 3
 
-Not a Phase-4 defect: alerts key off `change_category`/`affected_sectors`/confidence. Until [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_GAP_CLOSURE_PLAN]] Stage E drops the ONNX artifact, alerts can only fire on heuristic-seeded rows — which are now explicitly marked (`classification_source='heuristic'`, Session 70), so **when validating Phase 4, filter alert-triggering rows by source** or you'll be measuring the regex seed's behaviour, not the pipeline's.
+Not a Phase-4 defect: alerts key off `change_category`/`affected_sectors`/confidence. Until [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]] Stage E drops the ONNX artifact, alerts can only fire on heuristic-seeded rows — which are now explicitly marked (`classification_source='heuristic'`, Session 70), so **when validating Phase 4, filter alert-triggering rows by source** or you'll be measuring the regex seed's behaviour, not the pipeline's.
 
 ## Session 71 verification checklist (deferred to user)
 

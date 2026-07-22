@@ -1,6 +1,6 @@
 # Module 1 — Phase 2 §9.8: Trilingual Extraction Gaps — Font-Aware Auto-Chain + Rest
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION_ANALYSIS]] §9.8 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_GAP_CLOSURE_PLAN]] §9.8.1. **Status: §9.8.1 implemented (Session 69, 2026-07-21)** — the highest-impact Phase-2 gap. §9.8.5 was closed in Session 66 ([[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_RUNTIME_DEPS_PLAN]]). §9.8.2/3/4 planned below.
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_PHASE2_INGEST_EXTRACTION_ANALYSIS]] §9.8 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/12_PHASE2_GAP_CLOSURE_PLAN]] §9.8.1. **Status: §9.8.1 implemented (Session 69, 2026-07-21)** — the highest-impact Phase-2 gap. §9.8.5 was closed in Session 66 ([[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/16_PHASE2_RUNTIME_DEPS_PLAN]]). §9.8.2/3/4 planned below.
 
 ---
 
@@ -17,7 +17,7 @@ The Slice-7 font-aware Sinhala fix (`wijesekara_routing_v1`: per-span legacy-fon
 - **Any** profile failure (ml package missing, registry typo, fitz error) logs a warning and falls through to the untouched legacy `classify_pdf → pymupdf/pdfplumber/tesseract` block. The invariant: **the auto-chain can never be less reliable than pre-§9.8.1** — worst case is exactly the old behaviour.
 - `extraction_method` now records the profile name (migration `202607210004`: String(20)→String(40), CHECK enum widened to include the four profile names) — so profile-vs-legacy provenance is queryable per row.
 - The profile's quality evidence (`wijesekara_applied`, `cid_marker_count_before/after`) is logged per row and surfaced in the Celery task result.
-- **Watchdog**: the monthly quality probe ([[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_QUALITY_MONITORING_PLAN]]) gains `profile_share` — the fraction of window rows extracted via the default profile. A drift-down alert means the profile is silently falling back to the legacy chain (SI/TA regressing with zero task failures). Direction-aware in `_detect_degradation`.
+- **Watchdog**: the monthly quality probe ([[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/15_PHASE2_QUALITY_MONITORING_PLAN]]) gains `profile_share` — the fraction of window rows extracted via the default profile. A drift-down alert means the profile is silently falling back to the legacy chain (SI/TA regressing with zero task failures). Direction-aware in `_detect_degradation`.
 
 ### Notes / conscious trade-offs
 
@@ -57,4 +57,4 @@ The Wijesekara machinery is Sinhala-specific; Tamil relies on Unicode + Tesserac
 3. If legacy encodings appear: replicate `font_aware_wijesekara` with Tamil maps (`tamil_maps/`, `is_legacy_tamil_font`, per-font YAML) inside the same profile — the per-span routing loop is already font-generic.
 4. If not: close the gap as "not present in corpus", with the audit query + sample as evidence in this doc.
 
-## §9.8.5 — `lid.176.bin` ✅ closed Session 66 — see [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_RUNTIME_DEPS_PLAN]]
+## §9.8.5 — `lid.176.bin` ✅ closed Session 66 — see [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/16_PHASE2_RUNTIME_DEPS_PLAN]]

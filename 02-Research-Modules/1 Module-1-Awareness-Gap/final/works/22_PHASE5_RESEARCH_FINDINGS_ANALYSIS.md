@@ -20,7 +20,7 @@ The Phase 2–4 hardening (Sessions 64–71) didn't touch Phase-5 code, but it m
 2. **The F1/F2 lag findings are gated on the Phase-4 matching-precision audit (Session 71 plan §6.7).** A false secondary-source match dates "awareness" earlier than reality and biases the headline lag *downward*. The gap-closure plan makes a ≥ 0.90 precision hand-audit a **publish gate** before any lag number leaves the notebook — treat it as a Phase-5 prerequisite, not a Phase-4 nicety.
 3. **Lag inputs now span 15 sources, not 4 (Session 71).** The `m1_sources` registry seeded to 15 widens the diffusion dataset the notebooks read — but the seed URLs are best-known defaults needing triage, so channel-effectiveness comparisons should note which sources actually produced events.
 
-The drift-triggered retraining path (§5c) still stays dormant until Phase 3 ships a model (classifier confidence is NULL everywhere), consistent with [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE4_SCHEDULERS_ALERTS_ANALYSIS]] §4c.
+The drift-triggered retraining path (§5c) still stays dormant until Phase 3 ships a model (classifier confidence is NULL everywhere), consistent with [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/20_PHASE4_SCHEDULERS_ALERTS_ANALYSIS]] §4c.
 
 ---
 

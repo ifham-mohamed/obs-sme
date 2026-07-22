@@ -1,6 +1,6 @@
 # Module 1 — Phase 1 Gap-Closure Plan (Foundation: Auth / Session / Survey)
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE1_FOUNDATION_ANALYSIS]] §6. One entry per foundation-hardening gap. **Session 72 (2026-07-21) implemented the code-addressable auth/session/survey gaps (#2, #5, #6, #10) + tests (#11)**; #1 and #7 were found **already closed in code** (the analysis was stale); #3 (email verification) and #8/#9 are deferred by design. Code lives in `C:\Reasearch\xyz\enigmatrix-backend` (+ `enigmatrix-frontend/middleware.ts`).
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/09_PHASE1_FOUNDATION_ANALYSIS]] §6. One entry per foundation-hardening gap. **Session 72 (2026-07-21) implemented the code-addressable auth/session/survey gaps (#2, #5, #6, #10) + tests (#11)**; #1 and #7 were found **already closed in code** (the analysis was stale); #3 (email verification) and #8/#9 are deferred by design. Code lives in `C:\Reasearch\xyz\enigmatrix-backend` (+ `enigmatrix-frontend/middleware.ts`).
 
 ## Status summary
 

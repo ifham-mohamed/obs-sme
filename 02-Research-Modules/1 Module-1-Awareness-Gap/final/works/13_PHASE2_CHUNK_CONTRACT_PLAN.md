@@ -1,6 +1,6 @@
 # Module 1 — Phase 2 Gap #7: Chunk Contract — Verify, Freeze, Align
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION_ANALYSIS]] §6.7 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_GAP_CLOSURE_PLAN]] §6.7. **Status: implemented (Session 68, 2026-07-21).** The gap asked to "confirm the chunk contract matches what the classifier will expect, before Phase 3 locks in" — the audit found it already **didn't** match, so this session verified, froze, and aligned it.
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_PHASE2_INGEST_EXTRACTION_ANALYSIS]] §6.7 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/12_PHASE2_GAP_CLOSURE_PLAN]] §6.7. **Status: implemented (Session 68, 2026-07-21).** The gap asked to "confirm the chunk contract matches what the classifier will expect, before Phase 3 locks in" — the audit found it already **didn't** match, so this session verified, froze, and aligned it.
 
 ## What the audit found (worse than "unconsumed")
 

@@ -66,7 +66,7 @@ No new ML. The alert *content* uses the classifier's `change_category`/`affected
 - **Phase 4a/4b/4c** authored together with the DB scaffolding: `202606300002_m1_propagation_events`, `202606300003_m1_alerts`, `202606300004_m1_lag_views`; tasks registered in `celery_config.py` `include` + `beat_schedule` (2 h watchers, 21:00 analytics).
 - **F-232** — alert dispatch; **F-235** — lag materialized views; **F-236** — nightly analytics + drift (tracker marks these 🟡 "compiles + registered; live run pending migration + propagation/classified data").
 - `/alerts` public + SME feed shipped as the in-app channel.
-- **S71 (2026-07-21) — gap closure**: `m1_sources` registry + per-source health + admin API (4a); `sme_profiles.phone`/`alert_sms_opt_in` + SMS dispatch leg + SI/TA-safe SMS body (4b), migration `202607210006`; runbooks for the load test, lag-view activation, retry/DLQ, and matching-precision audit. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE4_GAP_CLOSURE_PLAN]].
+- **S71 (2026-07-21) — gap closure**: `m1_sources` registry + per-source health + admin API (4a); `sme_profiles.phone`/`alert_sms_opt_in` + SMS dispatch leg + SI/TA-safe SMS body (4b), migration `202607210006`; runbooks for the load test, lag-view activation, retry/DLQ, and matching-precision audit. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/21_PHASE4_GAP_CLOSURE_PLAN]].
 
 ---
 
@@ -90,7 +90,7 @@ No new ML. The alert *content* uses the classifier's `change_category`/`affected
 
 Items 3–7 are runbook/data work; the structural build gaps (1, 2) are closed. Once Phase 3 yields live predictions and the source URLs are triaged, Phase 4 can finally *run* and generate the diffusion dataset it exists to measure.
 
-> **Session 71 status (2026-07-21)** — from [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE4_GAP_CLOSURE_PLAN]]:
+> **Session 71 status (2026-07-21)** — from [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/21_PHASE4_GAP_CLOSURE_PLAN]]:
 >
 > | Step | Gap | Status |
 > |---|---|---|
@@ -109,10 +109,10 @@ Items 3–7 are runbook/data work; the structural build gaps (1, 2) are closed. 
 |---|---|---|---|
 | Portal watcher | `app/m1/tasks/portal_watcher.py`, `services/{secondary_sources,propagation_service,propagation_matching}.py` | `03_M1_3_Secondary_Source_Integration` | — |
 | RSS watcher | `app/m1/tasks/rss_watcher.py` (feedparser) | `03_M1_3` | — |
-| Source registry + health | `app/m1/models/source.py`, `services/secondary_sources.load_sources`, migration `202607210006`, `admin_pipeline.py` | [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE4_GAP_CLOSURE_PLAN]] 4a | S71 |
+| Source registry + health | `app/m1/models/source.py`, `services/secondary_sources.load_sources`, migration `202607210006`, `admin_pipeline.py` | [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/21_PHASE4_GAP_CLOSURE_PLAN]] 4a | S71 |
 | Propagation events | `app/m1/models/propagation_event.py`, migration `202606300002` | `02_M1_1_Data_Sources_Catalogue` | — |
 | Alert dispatch (email + SMS) | `app/m1/tasks/alert_dispatch.py`, `services/{alert_service,alert_content,alert_providers}.py` | `08_M1 §8.1` | F-232 |
-| SMS contact + opt-in | `app/models/sme_profile.py` (`phone`, `alert_sms_opt_in`), migration `202607210006` | [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE4_GAP_CLOSURE_PLAN]] 4b | S71 |
+| SMS contact + opt-in | `app/models/sme_profile.py` (`phone`, `alert_sms_opt_in`), migration `202607210006` | [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/21_PHASE4_GAP_CLOSURE_PLAN]] 4b | S71 |
 | Alerts model | `app/m1/models/alert.py`, migration `202606300003` | `14_M1_8` | F-232 |
 | Lag views | migration `202606300004_m1_lag_views.py` | `12_M1_Monitoring_Maintenance` | F-235 |
 | Nightly analytics + drift | `app/m1/tasks/analytics.py`, `services/drift.py` | `12_M1_1_Performance_Monitoring` | F-236 |

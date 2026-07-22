@@ -1,6 +1,6 @@
 # Module 1 — Phase 2 Gap #6: Metadata Confidence + Admin Review Queue
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION_ANALYSIS]] §6.6 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_GAP_CLOSURE_PLAN]] §6.6. **Status: implemented (Session 67, 2026-07-21).** Code in `C:\Reasearch\xyz\enigmatrix-backend`.
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_PHASE2_INGEST_EXTRACTION_ANALYSIS]] §6.6 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/12_PHASE2_GAP_CLOSURE_PLAN]] §6.6. **Status: implemented (Session 67, 2026-07-21).** Code in `C:\Reasearch\xyz\enigmatrix-backend`.
 
 ## Problem
 
@@ -49,5 +49,5 @@ Workflow: probe queue → open regulation → fix fields via existing PATCH (alr
 - **ml-side pattern-tier confidence** in `metadata_extractor.py` (return which tier matched; bump `ML_GIT_REF`) — merges into the same JSONB, replacing the 0.6 "can't check" cases with real signal.
 - Frontend queue tab in the pipeline portal (API is ready; mirror the existing recent-runs table).
 - Auto-clear the flag when an admin PATCHes a scored field (currently explicit resolve only — deliberate first, so sign-off stays conscious).
-- Feed `needs_metadata_review` count into the monthly quality probe ([[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_QUALITY_MONITORING_PLAN]]) as a trend metric.
+- Feed `needs_metadata_review` count into the monthly quality probe ([[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/15_PHASE2_QUALITY_MONITORING_PLAN]]) as a trend metric.
 - Threshold (0.7) + date window (−30d/+365d) tuning after the first real queue fills.

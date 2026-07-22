@@ -1,6 +1,6 @@
 # Module 1 — Phase 2 Gap #5: Heavy/Optional Dependencies — Assert, Don't Assume
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION_ANALYSIS]] §6.5 + §9.8.5 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_GAP_CLOSURE_PLAN]] §6.5. **Status: implemented (Session 66, 2026-07-21).** Code in `C:\Reasearch\xyz\enigmatrix-backend`.
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_PHASE2_INGEST_EXTRACTION_ANALYSIS]] §6.5 + §9.8.5 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/12_PHASE2_GAP_CLOSURE_PLAN]] §6.5. **Status: implemented (Session 66, 2026-07-21).** Code in `C:\Reasearch\xyz\enigmatrix-backend`.
 
 ## Problem
 

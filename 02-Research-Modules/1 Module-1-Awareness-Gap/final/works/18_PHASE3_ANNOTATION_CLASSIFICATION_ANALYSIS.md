@@ -48,7 +48,7 @@ The actual **training run**, quantization validation, and the review-queue *UI* 
 ## 3. Step-by-step: planned vs. built (with code files)
 
 ### 3a — Annotation infra (🟡)
-Label Studio project XML + `research/data/calibration_set_v1.csv` (20 reference docs across 12 categories × EN/SI/TA + edge cases). Annotation environment (`mydata/`) stood up but untracked (F-243). **Gap:** annotator recruitment + first-attempt κ ≥ 0.80 not recorded → [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_GAP_CLOSURE_PLAN]] Stage A gives the κ-gated runbook that records the matrix to `FEATURES.md`.
+Label Studio project XML + `research/data/calibration_set_v1.csv` (20 reference docs across 12 categories × EN/SI/TA + edge cases). Annotation environment (`mydata/`) stood up but untracked (F-243). **Gap:** annotator recruitment + first-attempt κ ≥ 0.80 not recorded → [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]] Stage A gives the κ-gated runbook that records the matrix to `FEATURES.md`.
 
 ### 3b — Sampling (🟢)
 `enigmatrix-ml/m1/data/samplers.py`: `stratified_sample` (year × language), `kmeans_diversity_sample` (TF-IDF + MiniBatchKMeans), `find_minority_candidates`, `select_uncertainty_batch` (margin AL), `sample_for_labeling` (200+40+10). Driven by `scripts/sample_for_labeling.py` (DB or `--demo`). `batch_01.csv` produced.
@@ -60,7 +60,7 @@ AL baseline in `m1/model/baselines.py` (`ALBaseline`/`ProductionBaseline`, TF-ID
 `m1/model/architecture.py` — `GazetteClassifier` (peft `get_peft_model` + `category_head` 12 + `sector_head` 10, `compute_loss`). `m1/model/train_xlmr.py` — real 3-seed loop: `_GazetteDS` DataLoader, `set_seed`, AdamW, `_macro_f1`, epochs/fp16, temporal split, writes model-registry hash. `data.py` (parquet splits), `config.py` (`ModelConfig`: LoRA r, lr, epochs), `labels.py` (taxonomy). **Never executed** — no gold data, no checkpoint.
 
 ### 3e — Eval + slices (🟡 unrun)
-`m1/model/eval.py` (122 lines) — per-language / per-quarter / per-length / per-extraction-method slices, confidence-bucket monotonicity. No results (no model). Stage D of the runbook adds two watch-items: SI/TA slice F1 (leaking Wijesekara-era text quality — cross-check the [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_TRILINGUAL_AUTOCHAIN_PLAN]] backfill) and the extraction_method slice (OCR CER as binding constraint).
+`m1/model/eval.py` (122 lines) — per-language / per-quarter / per-length / per-extraction-method slices, confidence-bucket monotonicity. No results (no model). Stage D of the runbook adds two watch-items: SI/TA slice F1 (leaking Wijesekara-era text quality — cross-check the [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/17_PHASE2_TRILINGUAL_AUTOCHAIN_PLAN]] backfill) and the extraction_method slice (OCR CER as binding constraint).
 
 ### 3f — ONNX export + serving (🟡 wired, no artifact)
 `m1/model/export_onnx.py` + `inference.py` (`GazetteInference` ONNX engine) + `promotion.py` (canary/promotion). Backend `app/m1/services/classifier_service.py` loads ONNX from `M1_MODEL_ONNX_DIR` (default `storage/models/m1/onnx/v1`) **in-process** — a **deliberate decision** (Session 70), not an accidental divergence. `app/m1/tasks/classify_gazette.py` writes `change_category` + `classifier_confidence` + `classification_source='model'`, `preprocessed → classified`, logs `latency_ms`, flags `< 0.55` for the review queue, and never overwrites `expert_verified` rows. **No ONNX file on disk yet**, so the engine can't load — a state `classifier_status()` reports as `no_model`.
@@ -73,7 +73,7 @@ AL baseline in `m1/model/baselines.py` (`ALBaseline`/`ProductionBaseline`, TF-ID
 - **S56 / F-199** — parallel Cowork data-population: 800 raw gazette PDFs extracted + heuristically classified (seed data, not the model path).
 - Model package (`architecture/train_xlmr/eval/export_onnx/inference/baselines/promotion`) authored and the backend `classify_gazette` + `classifier_service` + DB migration `202606300001_m1_classifier_confidence` wired — the *scaffolding* for 3d–3f.
 - **S73 / F-243** — doc sync flags the `mydata/` Label Studio env as stood up but untracked; higher-level status docs added (`2026-07-15_Phase3-5_Build_Addendum`).
-- **S70 (2026-07-21) — gap closure**: `classification_source` marker (`202607210005`), classifier readiness in health, backend classifier-review queue + override endpoint, in-process-ONNX decision + `latency_ms` logging; critical-path runbook authored. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_GAP_CLOSURE_PLAN]].
+- **S70 (2026-07-21) — gap closure**: `classification_source` marker (`202607210005`), classifier readiness in health, backend classifier-review queue + override endpoint, in-process-ONNX decision + `latency_ms` logging; critical-path runbook authored. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]].
 
 ---
 
@@ -93,11 +93,11 @@ AL baseline in `m1/model/baselines.py` (`ALBaseline`/`ProductionBaseline`, TF-ID
 4. **Serving diverges from the plan.** Local in-process ONNX in the Celery worker instead of a Fly.io service. → ✅ **Decided (Session 70):** amend the DoD to in-process ONNX (worker already ships the runtime; ~dozens/day never queues; a network hop only adds a failure mode). What was lost was the *measurement*, now restored via per-call `latency_ms` logging; deploy/rollback DoDs map to `onnx/vN` versioning + `promotion.py` canary. Revisit Fly only at 100× volume.
 5. **Silent-failure ergonomics.** Swallowing the missing-model error is right for resilience but hid that classification does nothing. → ✅ **Closed (Session 70):** `classifier_status()` → `no_model`|`ready`|`load_error`, wired into `app/m1/health.py`, surfaced at worker boot / `/admin/m1/pipeline/health` / container start.
 6. **Review-queue UI deferred.** → ✅ **Backend closed (Session 70):** `GET /admin/m1/pipeline/classifier-review` (paginated, lowest-confidence first, returns the threshold) + audited `POST …/{id}/override` (sets category, `classification_source='expert'`, `expert_verified=TRUE`). The triage UI (`14_M1_2`) remains a frontend slice, specced in the plan.
-7. **`training` extra is heavy + optional.** → 📋 pin the `training` extra (`uv lock`), write `TRAINING.md` (GPU reqs, `uv sync --extra training`, Stage C–E commands, artifact upload), optional `Dockerfile.train`; API image keeps excluding it. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_GAP_CLOSURE_PLAN]] gap #7.
+7. **`training` extra is heavy + optional.** → 📋 pin the `training` extra (`uv lock`), write `TRAINING.md` (GPU reqs, `uv sync --extra training`, Stage C–E commands, artifact upload), optional `Dockerfile.train`; API image keeps excluding it. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]] gap #7.
 
 Items 1–2 are the critical path; everything else is now either closed or downstream of having a trained model.
 
-> **Session 70 status table (2026-07-21)** — from [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_GAP_CLOSURE_PLAN]]:
+> **Session 70 status table (2026-07-21)** — from [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]]:
 >
 > | # | Gap | Status |
 > |---|---|---|
@@ -123,8 +123,8 @@ Items 1–2 are the critical path; everything else is now either closed or downs
 | Eval + slices | `m1/model/eval.py` | `06_M1_2_Slice_Analysis` | — |
 | ONNX export + inference | `m1/model/export_onnx.py`, `inference.py`, `promotion.py` | `07_M1_1_ONNX_Export` | — |
 | Backend classify wiring | `app/m1/tasks/classify_gazette.py`, `app/m1/services/classifier_service.py`, migration `202606300001` | `07_M1_Deployment_Integration` | — |
-| classification_source marker | `app/models/regulation.py`, migration `202607210005` | [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_GAP_CLOSURE_PLAN]] #3 | S70 |
-| Classifier readiness + review queue | `classifier_service.classifier_status`, `app/m1/health.py`, `admin_pipeline.py` | [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_GAP_CLOSURE_PLAN]] #5/#6 | S70 |
+| classification_source marker | `app/models/regulation.py`, migration `202607210005` | [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]] #3 | S70 |
+| Classifier readiness + review queue | `classifier_service.classifier_status`, `app/m1/health.py`, `admin_pipeline.py` | [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]] #5/#6 | S70 |
 | Interim heuristic corpus | `outputs/build_csv.py` (Cowork) | — | F-199 |
 
 ---

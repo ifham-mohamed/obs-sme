@@ -1,6 +1,6 @@
 # Module 1 — Phase 3 Gap-Closure Plan (Annotation + Classification)
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION_ANALYSIS]]. One entry per gap (#1–#7), each with status and step-by-step execution. **Session 70 (2026-07-21) implemented the code-addressable gaps (#3, #5, #6-backend, #4-measurement)**; #1–#2 are the human/GPU critical path and get the detailed runbook below — they cannot be closed by code alone.
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/18_PHASE3_ANNOTATION_CLASSIFICATION_ANALYSIS]]. One entry per gap (#1–#7), each with status and step-by-step execution. **Session 70 (2026-07-21) implemented the code-addressable gaps (#3, #5, #6-backend, #4-measurement)**; #1–#2 are the human/GPU critical path and get the detailed runbook below — they cannot be closed by code alone.
 
 ## Status summary
 
@@ -46,8 +46,8 @@ Everything else is downstream of this. Detailed runbook, in order; each stage na
 ### Stage D — Eval + slices (3e)
 
 1. `m1/model/eval.py` on the winning seed: per-language / per-quarter / per-length / per-extraction-method slices + confidence-bucket monotonicity.
-2. Watch specifically: **SI/TA slice F1** (if >5 pp below EN, the Wijesekara-era text quality is leaking into labels — cross-check rows extracted pre-Session-69 against the font-aware backfill in [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_TRILINGUAL_AUTOCHAIN_PLAN]]), and **extraction_method slice** (tesseract-extracted docs materially worse → OCR CER is the binding constraint, feeds the Surya decision).
-3. Also run the chunk-contract A/B from [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_CHUNK_CONTRACT_PLAN]] (cleaned_text-head vs classification_chunk) — decide the inference input on evidence before the artifact ships.
+2. Watch specifically: **SI/TA slice F1** (if >5 pp below EN, the Wijesekara-era text quality is leaking into labels — cross-check rows extracted pre-Session-69 against the font-aware backfill in [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/17_PHASE2_TRILINGUAL_AUTOCHAIN_PLAN]]), and **extraction_method slice** (tesseract-extracted docs materially worse → OCR CER is the binding constraint, feeds the Surya decision).
+3. Also run the chunk-contract A/B from [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/13_PHASE2_CHUNK_CONTRACT_PLAN]] (cleaned_text-head vs classification_chunk) — decide the inference input on evidence before the artifact ships.
 
 ### Stage E — Export + activate (3f gate: INT8 within 1.5 pp; p95 ≤ 2 s)
 
@@ -69,7 +69,7 @@ Migration `202607210005`: `classification_source` CHECK ('heuristic'|'model'|'ex
 
 ## Gap #5 — Classifier readiness signal ✅ IMPLEMENTED
 
-`classifier_service.classifier_status()` → `no_model` (empty/missing `$M1_MODEL_ONNX_DIR` — the *expected* state until Stage E, worded to say "change_category is NOT being model-populated") | `ready` | `load_error` (artifact present, engine broken — a deploy bug, not an expected state). Wired as a `classifier` component into `app/m1/health.py`, so it surfaces automatically at worker boot, `GET /admin/m1/pipeline/health`, and container start ([[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_RUNTIME_DEPS_PLAN]] surfaces). Informational — never fails overall `ok` (the extraction runtime is healthy without a model). Portal tile = the same small frontend slice as the Phase-2 health banner.
+`classifier_service.classifier_status()` → `no_model` (empty/missing `$M1_MODEL_ONNX_DIR` — the *expected* state until Stage E, worded to say "change_category is NOT being model-populated") | `ready` | `load_error` (artifact present, engine broken — a deploy bug, not an expected state). Wired as a `classifier` component into `app/m1/health.py`, so it surfaces automatically at worker boot, `GET /admin/m1/pipeline/health`, and container start ([[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/16_PHASE2_RUNTIME_DEPS_PLAN]] surfaces). Informational — never fails overall `ok` (the extraction runtime is healthy without a model). Portal tile = the same small frontend slice as the Phase-2 health banner.
 
 ## Gap #6 — Review queue ✅ BACKEND IMPLEMENTED, UI specced
 

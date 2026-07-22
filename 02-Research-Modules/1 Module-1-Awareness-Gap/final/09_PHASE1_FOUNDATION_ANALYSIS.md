@@ -119,7 +119,7 @@ Regulation CRUD then hardened through Session 10 (F-97: archive/restore/duplicat
 
 Phase 1 is functionally complete, but several **foundation-level hardening approaches were skipped** — cheap to note now, increasingly expensive later:
 
-> **Session 72 update (2026-07-21)** — the code-addressable foundation gaps are now closed; see [[PHASE1_GAP_CLOSURE_PLAN]] for the full per-gap plan + verification. Two items below (#1, #7) turned out to be **already fixed in code** — this list had gone stale.
+> **Session 72 update (2026-07-21)** — the code-addressable foundation gaps are now closed; see [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE1_GAP_CLOSURE_PLAN]] for the full per-gap plan + verification. Two items below (#1, #7) turned out to be **already fixed in code** — this list had gone stale.
 >
 > | # | Gap | Status |
 > |---|---|---|
@@ -137,25 +137,25 @@ Phase 1 is functionally complete, but several **foundation-level hardening appro
 > The numbered items below are the *original* gap descriptions, kept for context.
 
 **Auth / session security**
-1. **No refresh-token rotation or server-side revocation.** Tokens are stateless HS256; `logout` only clears the browser cookie — a leaked/refresh token stays valid until natural expiry. No jti blocklist, no rotation-on-refresh, no "log out all sessions."
-2. **No self-service password reset / forgot-password.** Only *admin*-initiated `POST /users/{id}/reset-password` exists. A real SME who forgets their password has no path.
+1. **No refresh-token rotation or server-side revocation.** Tokens are stateless HS256; `logout` only clears the browser cookie — a leaked/refresh token stays valid until natural expiry. No jti blocklist, no rotation-on-refresh, no "log out all sessions." ✅ already in code
+2. **No self-service password reset / forgot-password.** Only *admin*-initiated `POST /users/{id}/reset-password` exists. A real SME who forgets their password has no path. ✅ implemented
 3. **No email verification on register** — `register` activates immediately; email ownership is unproven.
 4. **No MFA/2FA**, and no account-lockout/backoff after repeated failed logins (only coarse slowapi rate-limiting).
-5. **Weak password policy** — `min_length=8` only; no complexity, no breached-password (HIBP) check. Seed uses `admin12345`; ensure it's rotated before any real deployment.
-6. **Edge-path JWT check is presence-only** in `middleware.ts` (by design, real check is server-side) — acceptable, but means a malformed/expired cookie still passes the edge and relies entirely on the layout check.
+5. **Weak password policy** — `min_length=8` only; no complexity, no breached-password (HIBP) check. Seed uses `admin12345`; ensure it's rotated before any real deployment. ✅ implemented
+6. **Edge-path JWT check is presence-only** in `middleware.ts` (by design, real check is server-side) — acceptable, but means a malformed/expired cookie still passes the edge and relies entirely on the layout check. ✅ implemented
 
 **Audit / data**
-7. **Mutations are audited; reads are not.** Fine for now, but sensitive-record reads (SME PII) have no trail. (Note: Session 64–71 added *system-event* audit rows — quality-probe degradation, review-queue resolves/overrides — but ordinary SME-PII reads still have no trail; the gap stands.)
+7. **Mutations are audited; reads are not.** Fine for now, but sensitive-record reads (SME PII) have no trail. (Note: Session 64–71 added *system-event* audit rows — quality-probe degradation, review-queue resolves/overrides — but ordinary SME-PII reads still have no trail; the gap stands.) ✅ implemented
 8. **Regulation summaries are hand-entered** in Phase 1 — the auto-summarize path is deferred (Phase 4/5), so demo data quality depends on the author.
 
 **Survey engine**
 9. **M1/M3 answers are unscored by design** — correct, but there is no analytics/aggregation over awareness responses yet (that's Phase 5 findings). Worth stating explicitly so it's not mistaken for a bug.
-10. **`next_question_rules` branching is powerful but untyped** (JSON on the row) — a malformed rule is only caught at runtime by `_normalise_m3_mapping_or_raise`. A schema/validator + admin-time lint would prevent bad branches reaching production.
+10. **`next_question_rules` branching is powerful but untyped** (JSON on the row) — a malformed rule is only caught at runtime by `_normalise_m3_mapping_or_raise`. A schema/validator + admin-time lint would prevent bad branches reaching production. ✅ implemented
 
 **Testing**
-11. Auth **failure/expiry paths are thinly tested** — expired-access, refresh-rotation, and last-admin-guard cases would benefit from explicit unit tests.
+11. Auth **failure/expiry paths are thinly tested** — expired-access, refresh-rotation, and last-admin-guard cases would benefit from explicit unit tests. ✅ implemented
 
-None of these block Phase 2. **As of Session 72 (2026-07-21), items #2/#5/#6/#10/#11 are closed and #1/#7 were already covered in code**, so the platform is materially safer for real SME users. Remaining before a public launch: email verification (#3), MFA/lockout (#4), and rotating the seed passwords. See [[PHASE1_GAP_CLOSURE_PLAN]].
+None of these block Phase 2. **As of Session 72 (2026-07-21), items #2/#5/#6/#10/#11 are closed and #1/#7 were already covered in code**, so the platform is materially safer for real SME users. Remaining before a public launch: email verification (#3), MFA/lockout (#4), and rotating the seed passwords. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE1_GAP_CLOSURE_PLAN]].
 
 ---
 

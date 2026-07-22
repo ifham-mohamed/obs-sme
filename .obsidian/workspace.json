@@ -4,137 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "3f5f753f5dfe4065",
+        "id": "b9eac531000e50c8",
         "type": "tabs",
         "children": [
           {
-            "id": "2fc309b27bc30828",
+            "id": "6de559bbd52d2445",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md",
+                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/final/01_MASTER_PROJECT_OVERVIEW.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "00_INDEX"
-            }
-          },
-          {
-            "id": "ce99aba966bdf54d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "03_M1_Data_Collection"
-            }
-          },
-          {
-            "id": "a361824220b3074d",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/02_M1_4_Worked_Examples_All_Tables.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "02_M1_4_Worked_Examples_All_Tables"
-            }
-          },
-          {
-            "id": "fd7716d2a31c40ea",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/02_M1_3_Data_Governance_Retention.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "02_M1_3_Data_Governance_Retention"
-            }
-          },
-          {
-            "id": "0f98dd94743774a5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/02_M1_2_Database_Schema_Validation.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "02_M1_2_Database_Schema_Validation"
-            }
-          },
-          {
-            "id": "a47f7abe151a415f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/02_M1_1_Data_Sources_Catalogue.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "02_M1_1_Data_Sources_Catalogue"
-            }
-          },
-          {
-            "id": "e269886a09ccaaed",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/02_M1_Data_Requirements.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "02_M1_Data_Requirements"
-            }
-          },
-          {
-            "id": "33d3792aeaa4fe54",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/01_M1_1_Research_Motivation_Evidence.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "01_M1_1_Research_Motivation_Evidence"
-            }
-          },
-          {
-            "id": "f6f456e60125748e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/final/09_PHASE1_FOUNDATION_ANALYSIS.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "09_PHASE1_FOUNDATION_ANALYSIS"
+              "title": "01_MASTER_PROJECT_OVERVIEW"
             }
           }
-        ],
-        "currentTab": 8
+        ]
       }
     ],
     "direction": "vertical"
@@ -297,44 +184,44 @@
       "obsidian-extract-pdf-highlights:PDF Highlights": false
     }
   },
-  "active": "f6f456e60125748e",
+  "active": "22d18590d71c8738",
   "lastOpenFiles": [
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/Enigmatrix_Master_Documentation.docx",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/09_PHASE1_FOUNDATION_ANALYSIS.md.tmp.15468.277f5b8bc1f3",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/09_PHASE1_FOUNDATION_ANALYSIS.md.tmp.15468.b8624c3c0c6f",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/PHASE1_FOUNDATION_ANALYSIS.md.tmp.15468.e2270526285d",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/PHASE1_FOUNDATION_ANALYSIS.md.tmp.15468.c1300e4eecb2",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/PHASE1_GAP_CLOSURE_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/PHASE1_GAP_CLOSURE_PLAN.md.tmp.15468.8b7a4fc1f0bd",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/10_PHASE2_INGEST_EXTRACTION_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/PHASE2_INGEST_EXTRACTION_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/PHASE2_METADATA_CONFIDENCE_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/09_PHASE1_FOUNDATION_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/08_M1_MODULE_REORG_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/13_PHASE5_RESEARCH_FINDINGS_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/12_PHASE4_SCHEDULERS_ALERTS_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/11_PHASE3_ANNOTATION_CLASSIFICATION_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/07_SETUP_AND_USER_MANUAL.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/06_CLEANUP_REPORT.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/05_MANUAL_TESTING_GUIDE.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/04_API_AND_PAGES_REFERENCE.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/03_FEATURE_CHECKLIST.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/02_MEMBER1_MODULE1_REPORT.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1/SCRAPER_CRAWL_EXIT1_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1/SCRAPER_CRAWL_EXIT1_ANALYSIS.md.tmp.5816.28a43e0da7d6",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/24_ACTIVITY_LOG_GAP_CLOSURE_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/23_ACTIVITY_LOG_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/22_PHASE5_RESEARCH_FINDINGS_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/21_PHASE4_GAP_CLOSURE_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/20_PHASE4_SCHEDULERS_ALERTS_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/18_PHASE3_ANNOTATION_CLASSIFICATION_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/17_PHASE2_TRILINGUAL_AUTOCHAIN_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/16_PHASE2_RUNTIME_DEPS_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/15_PHASE2_QUALITY_MONITORING_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/14_PHASE2_METADATA_CONFIDENCE_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/13_PHASE2_CHUNK_CONTRACT_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/12_PHASE2_GAP_CLOSURE_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_PHASE2_INGEST_EXTRACTION_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PHASE1_GAP_CLOSURE_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/09_PHASE1_FOUNDATION_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/_REORGANIZE_works.ps1.tmp.29260.bf11a913f691",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/_REORGANIZE_works.ps1.tmp.29260.f40874e27c2d",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/_REORGANIZE_works.ps1",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/_REORGANIZE_works.ps1.tmp.29260.ace30698cfa8",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/08_M1_MODULE_REORG_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/07_SETUP_AND_USER_MANUAL.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/06_CLEANUP_REPORT.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/05_MANUAL_TESTING_GUIDE.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/04_API_AND_PAGES_REFERENCE.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/02_MEMBER1_MODULE1_REPORT.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/01_MASTER_PROJECT_OVERVIEW.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/01_MASTER_PROJECT_OVERVIEW.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/01_M1_1_Research_Motivation_Evidence.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final",
-    "07-Team/00_Team_Index.md",
-    "07-Team/Team-Roles.md",
-    "03-Data-Sources/m1/raw/pdf/2469_18.pdf",
-    "03-Data-Sources/m1/raw/pdf/2468_44.pdf",
-    "note.md.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md",
-    "graphify-out/cache/ast/fcc047f82c7f59cbe0c7df777db5b8f17d35cbfd84b74b4e68662e74ae952459.json",
-    "graphify-out/cache/ast/08bea19a91ff4d82fbf82f73282b2a6b826c680859c84c1ccee32d48b78dc59c.json",
-    "graphify-out/converted/structured_v1_54031723.md",
-    "08-Findings-Log/plans/2026-05-23_M1_Phase2_Upgrade_Plan/12_Open_Questions.md",
-    "08-Findings-Log/plans/2026-05-23_M1_Phase2_Upgrade_Plan/11_Risks_Register.md",
-    "08-Findings-Log/plans/2026-05-23_M1_Phase2_Upgrade_Plan/10_Upgrades_Over_Original.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/15_ACTIVITY_LOG_GAP_CLOSURE_PLAN.md.tmp.19464.6bef1f0e950e",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/14_ACTIVITY_LOG_ANALYSIS.md.tmp.19464.d8657d40b4da",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works",
     "Interim/report/Attachments/SMEs Interim 1.jpeg",
     "Interim/report/Attachments/SMEs Interim.jpeg",
     "Interim/report/Attachments/SMEs Interim.png",

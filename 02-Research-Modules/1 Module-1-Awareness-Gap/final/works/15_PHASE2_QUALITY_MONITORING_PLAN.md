@@ -1,6 +1,6 @@
 # Module 1 — Phase 2 Gap #4: Continuous Extraction-Quality Monitoring
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION_ANALYSIS]] §6.4 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_GAP_CLOSURE_PLAN]] §6.4. **Status: implemented (Session 65, 2026-07-21)** — this doc records the design, why each metric was chosen, and what remains.
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_PHASE2_INGEST_EXTRACTION_ANALYSIS]] §6.4 and [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/12_PHASE2_GAP_CLOSURE_PLAN]] §6.4. **Status: implemented (Session 65, 2026-07-21)** — this doc records the design, why each metric was chosen, and what remains.
 
 ## Problem
 

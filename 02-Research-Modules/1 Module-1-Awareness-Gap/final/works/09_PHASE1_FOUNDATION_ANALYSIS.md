@@ -119,7 +119,7 @@ Regulation CRUD then hardened through Session 10 (F-97: archive/restore/duplicat
 
 Phase 1 is functionally complete, but several **foundation-level hardening approaches were skipped** — cheap to note now, increasingly expensive later:
 
-> **Session 72 update (2026-07-21)** — the code-addressable foundation gaps are now closed; see [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE1_GAP_CLOSURE_PLAN]] for the full per-gap plan + verification. Two items below (#1, #7) turned out to be **already fixed in code** — this list had gone stale.
+> **Session 72 update (2026-07-21)** — the code-addressable foundation gaps are now closed; see [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PHASE1_GAP_CLOSURE_PLAN]] for the full per-gap plan + verification. Two items below (#1, #7) turned out to be **already fixed in code** — this list had gone stale.
 >
 > | # | Gap | Status |
 > |---|---|---|
@@ -155,7 +155,7 @@ Phase 1 is functionally complete, but several **foundation-level hardening appro
 **Testing**
 11. Auth **failure/expiry paths are thinly tested** — expired-access, refresh-rotation, and last-admin-guard cases would benefit from explicit unit tests.
 
-None of these block Phase 2. **As of Session 72 (2026-07-21), items #2/#5/#6/#10/#11 are closed and #1/#7 were already covered in code**, so the platform is materially safer for real SME users. Remaining before a public launch: email verification (#3), MFA/lockout (#4), and rotating the seed passwords. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE1_GAP_CLOSURE_PLAN]].
+None of these block Phase 2. **As of Session 72 (2026-07-21), items #2/#5/#6/#10/#11 are closed and #1/#7 were already covered in code**, so the platform is materially safer for real SME users. Remaining before a public launch: email verification (#3), MFA/lockout (#4), and rotating the seed passwords. See [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PHASE1_GAP_CLOSURE_PLAN]].
 
 ---
 

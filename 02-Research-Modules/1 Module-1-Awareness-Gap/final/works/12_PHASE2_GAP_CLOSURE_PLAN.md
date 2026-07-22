@@ -1,6 +1,6 @@
 # Module 1 — Phase 2 Gap-Closure Plan
 
-> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION_ANALYSIS]] — one entry per residual gap (§6.1–7, §9.8.1–5), each with status and a concrete plan. Gap #3 (CI live-crawl coverage) is **implemented** as of Session 64 (2026-07-21); the rest are specified here in priority order. Code lives in `C:\Reasearch\xyz`.
+> Companion to [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_PHASE2_INGEST_EXTRACTION_ANALYSIS]] — one entry per residual gap (§6.1–7, §9.8.1–5), each with status and a concrete plan. Gap #3 (CI live-crawl coverage) is **implemented** as of Session 64 (2026-07-21); the rest are specified here in priority order. Code lives in `C:\Reasearch\xyz`.
 
 ---
 
