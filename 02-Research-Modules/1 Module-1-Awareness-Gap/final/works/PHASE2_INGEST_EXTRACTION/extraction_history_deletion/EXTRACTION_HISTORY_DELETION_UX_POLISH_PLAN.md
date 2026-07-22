@@ -48,6 +48,10 @@ make db-clean ARGS="--yes --seed"
 2. Backend: `python -m compileall app`. `make db-clean` → prompts for `CLEAN`; `--yes` skips it; with `APP_ENV=production` it refuses without `--force`; `--seed` leaves the seed admin present.
 3. `graphify update .`.
 
+## Build fix (2026-07-22)
+
+The toast wiring initially added a second `import { toast } from "@/components/ui/toast"` to the extraction page, which already imported `toast` (SWC: *"the name `toast` is defined multiple times"*). Removed the duplicate — the single existing import is used. No behaviour change.
+
 ## Follow-ups
 
 - If richer confirmation is wanted, add `@radix-ui/react-alert-dialog` + the shadcn `AlertDialog` and swap the `Dialog` (cosmetic; behaviour identical).
