@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "b9eac531000e50c8",
+        "id": "ba916927c8502b1c",
         "type": "tabs",
         "children": [
           {
-            "id": "6de559bbd52d2445",
+            "id": "30b1ee0e14cb586d",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/final/01_MASTER_PROJECT_OVERVIEW.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "01_MASTER_PROJECT_OVERVIEW"
+              "title": "New tab"
             }
           }
         ]
@@ -184,21 +180,30 @@
       "obsidian-extract-pdf-highlights:PDF Highlights": false
     }
   },
-  "active": "6de559bbd52d2445",
+  "active": "22d18590d71c8738",
   "lastOpenFiles": [
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_onnxruntime_missing/CLASSIFIER_ONNXRUNTIME_MISSING_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion/EXTRACTION_HISTORY_DELETION_HARD_DELETE_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion/EXTRACTION_HISTORY_DELETION_FRONTEND_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion/EXTRACTION_HISTORY_DELETION_ENHANCEMENT_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion/EXTRACTION_HISTORY_DELETION_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1/SCRAPER_CRAWL_EXIT1_FIX_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1/SCRAPER_CRAWL_EXIT1_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_stale_model_import/SCRAPER_STALE_MODEL_IMPORT_FIX_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_stale_model_import/SCRAPER_STALE_MODEL_IMPORT_ANALYSIS.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/01_MASTER_PROJECT_OVERVIEW.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion/EXTRACTION_HISTORY_DELETION_HARD_DELETE_PLAN.md.tmp.29636.67b3bee46159",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion/EXTRACTION_HISTORY_DELETION_FRONTEND_PLAN.md.tmp.14684.17be5f009367",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion/EXTRACTION_HISTORY_DELETION_ENHANCEMENT_PLAN.md.tmp.28444.ff4ae1776b15",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion/EXTRACTION_HISTORY_DELETION_ANALYSIS.md.tmp.28444.f1ea83735e76",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_history_deletion",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_stale_model_import/SCRAPER_STALE_MODEL_IMPORT_FIX_PLAN.md.tmp.14972.1958914b5fe1",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_stale_model_import/SCRAPER_STALE_MODEL_IMPORT_ANALYSIS.md.tmp.14972.008fb0701e7b",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_stale_model_import",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE1_FOUNDATION_ANALYSIS.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_onnxruntime_missing/CLASSIFIER_ONNXRUNTIME_MISSING_FIX_PLAN.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_onnxruntime_missing/CLASSIFIER_ONNXRUNTIME_MISSING_FIX_PLAN.md.tmp.19580.b28b6c2e4fef",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_onnxruntime_missing/CLASSIFIER_ONNXRUNTIME_MISSING_ANALYSIS.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_onnxruntime_missing/CLASSIFIER_ONNXRUNTIME_MISSING_ANALYSIS.md.tmp.19580.fb96e9e268b1",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_onnxruntime_missing",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1/SCRAPER_CRAWL_EXIT1_FIX_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1/SCRAPER_CRAWL_EXIT1_FIX_PLAN.md.tmp.5816.5f2541f0557a",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1/SCRAPER_CRAWL_EXIT1_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1/SCRAPER_CRAWL_EXIT1_ANALYSIS.md.tmp.5816.28a43e0da7d6",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/scraper_crawl_exit1",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/24_ACTIVITY_LOG_GAP_CLOSURE_PLAN.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/23_ACTIVITY_LOG_ANALYSIS.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/22_PHASE5_RESEARCH_FINDINGS_ANALYSIS.md",
@@ -213,15 +218,6 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/13_PHASE2_CHUNK_CONTRACT_PLAN.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/12_PHASE2_GAP_CLOSURE_PLAN.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_PHASE2_INGEST_EXTRACTION_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PHASE1_GAP_CLOSURE_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/09_PHASE1_FOUNDATION_ANALYSIS.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/_REORGANIZE_works.ps1.tmp.29260.bf11a913f691",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/_REORGANIZE_works.ps1.tmp.29260.f40874e27c2d",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/08_M1_MODULE_REORG_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/07_SETUP_AND_USER_MANUAL.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/06_CLEANUP_REPORT.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/05_MANUAL_TESTING_GUIDE.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/04_API_AND_PAGES_REFERENCE.md",
     "Interim/report/Attachments/SMEs Interim 1.jpeg",
     "Interim/report/Attachments/SMEs Interim.jpeg",
     "Interim/report/Attachments/SMEs Interim.png",
