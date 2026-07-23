@@ -14,17 +14,17 @@ The M1 backend docs (`enigmatrix-docs/m1/`) describe a regulation's life as a st
 
 ## The 8+1 tracking surfaces at a glance
 
-| # | Surface | Audience | Status | Detail in |
-|---|---|---|---|---|
-| A1 | Pipeline-state tracking (Stage A→F status machine) | Admin | 🟡 Partial | [14_M1_1_Admin_Pipeline_State_Tracking.md](14_M1_1_Admin_Pipeline_State_Tracking.md) |
-| A2 | Needs-review queue triage | Admin | 🔲 Deferred | [14_M1_2_Admin_Review_Queue_Triage.md](14_M1_2_Admin_Review_Queue_Triage.md) |
-| A3 | Expert-verification ledger | Admin | ✅ Shipped | [14_M1_3_Admin_Expert_Verification.md](14_M1_3_Admin_Expert_Verification.md) |
-| A4 | Lag analytics + propagation tracker | Admin | 🔲 Deferred | [14_M1_4_Admin_Lag_Analytics.md](14_M1_4_Admin_Lag_Analytics.md) |
-| S1 | Regulation discovery (sector + region filter) | SME | 🟡 Partial | [14_M1_5_SME_Regulation_Discovery.md](14_M1_5_SME_Regulation_Discovery.md) |
-| S2 | Awareness survey participation (Q1–Q8) | SME | ✅ Shipped | [14_M1_6_SME_Awareness_Survey.md](14_M1_6_SME_Awareness_Survey.md) |
-| S3 | Compliance / action-taken status per regulation | SME | 🟡 Partial | [14_M1_7_SME_Compliance_Action_Tracking.md](14_M1_7_SME_Compliance_Action_Tracking.md) |
-| S4 | Deadline + alert delivery history | SME | 🔲 Deferred | [14_M1_8_SME_Deadline_Alert_History.md](14_M1_8_SME_Deadline_Alert_History.md) |
-| X9 | Category × Sector workflows (cross-cutting reference) | Both | Reference | [14_M1_9_Category_Sector_Workflows.md](14_M1_9_Category_Sector_Workflows.md) |
+| #   | Surface                                               | Audience | Status      | Detail in                                                                              |
+| --- | ----------------------------------------------------- | -------- | ----------- | -------------------------------------------------------------------------------------- |
+| A1  | Pipeline-state tracking (Stage A→F status machine)    | Admin    | 🟡 Partial  | [14_M1_1_Admin_Pipeline_State_Tracking.md](14_M1_1_Admin_Pipeline_State_Tracking.md)   |
+| A2  | Needs-review queue triage                             | Admin    | 🔲 Deferred | [14_M1_2_Admin_Review_Queue_Triage.md](14_M1_2_Admin_Review_Queue_Triage.md)           |
+| A3  | Expert-verification ledger                            | Admin    | ✅ Shipped   | [14_M1_3_Admin_Expert_Verification.md](14_M1_3_Admin_Expert_Verification.md)           |
+| A4  | Lag analytics + propagation tracker                   | Admin    | 🔲 Deferred | [14_M1_4_Admin_Lag_Analytics.md](14_M1_4_Admin_Lag_Analytics.md)                       |
+| S1  | Regulation discovery (sector + region filter)         | SME      | 🟡 Partial  | [14_M1_5_SME_Regulation_Discovery.md](14_M1_5_SME_Regulation_Discovery.md)             |
+| S2  | Awareness survey participation (Q1–Q8)                | SME      | ✅ Shipped   | [14_M1_6_SME_Awareness_Survey.md](14_M1_6_SME_Awareness_Survey.md)                     |
+| S3  | Compliance / action-taken status per regulation       | SME      | 🟡 Partial  | [14_M1_7_SME_Compliance_Action_Tracking.md](14_M1_7_SME_Compliance_Action_Tracking.md) |
+| S4  | Deadline + alert delivery history                     | SME      | 🔲 Deferred | [14_M1_8_SME_Deadline_Alert_History.md](14_M1_8_SME_Deadline_Alert_History.md)         |
+| X9  | Category × Sector workflows (cross-cutting reference) | Both     | Reference   | [14_M1_9_Category_Sector_Workflows.md](14_M1_9_Category_Sector_Workflows.md)           |
 
 `✅` = the workflow runs end-to-end in the UI today. `🟡` = the data + some UI exists but a key surface is missing. `🔲` = backend-only today; the companion describes the *intended* UI for when BUILD_07/13 lands it.
 

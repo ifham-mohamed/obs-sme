@@ -18,20 +18,20 @@ Sri Lankan gazette portals serve static HTML with paginated listings. No JavaScr
 
 ### 1.1 Comparison Table
 
-| Criterion | Scrapy | BeautifulSoup + Requests | Playwright | Selenium |
-|---|---|---|---|---|
-| **Architecture** | Async, spider-based | Sync, library | Async, headless browser | Sync, headless browser |
-| **JavaScript rendering** | ❌ | ❌ | ✅ | ✅ |
-| **Built-in retry/backoff** | ✅ (middleware) | ❌ (manual) | ❌ (manual) | ❌ (manual) |
-| **Rate limiting** | ✅ (AutoThrottle) | ❌ (manual) | ⚠️ (manual) | ❌ (manual) |
-| **Celery integration** | ✅ (CrawlerRunner) | ✅ (trivial) | ⚠️ (complex) | ⚠️ (complex) |
-| **robots.txt compliance** | ✅ (built-in) | ❌ (manual) | ❌ | ❌ |
-| **Item pipelines** | ✅ (PDF store, DB) | ❌ | ❌ | ❌ |
-| **Resource footprint** | Low (async) | Very low | High (Chromium) | High (Chromium) |
-| **Sinhala URL handling** | ✅ (UTF-8 native) | ✅ | ✅ | ✅ |
-| **Learning curve** | Medium | Low | Medium | Low |
-| **Production maturity** | Very high | Medium | High | High |
-| **Why chosen** | ✅ **Selected** | Sync bottleneck | Overkill for static HTML | Deprecated pattern |
+| Criterion                  | Scrapy              | BeautifulSoup + Requests | Playwright               | Selenium               |
+| -------------------------- | ------------------- | ------------------------ | ------------------------ | ---------------------- |
+| **Architecture**           | Async, spider-based | Sync, library            | Async, headless browser  | Sync, headless browser |
+| **JavaScript rendering**   | ❌                   | ❌                        | ✅                        | ✅                      |
+| **Built-in retry/backoff** | ✅ (middleware)      | ❌ (manual)               | ❌ (manual)               | ❌ (manual)             |
+| **Rate limiting**          | ✅ (AutoThrottle)    | ❌ (manual)               | ⚠️ (manual)              | ❌ (manual)             |
+| **Celery integration**     | ✅ (CrawlerRunner)   | ✅ (trivial)              | ⚠️ (complex)             | ⚠️ (complex)           |
+| **robots.txt compliance**  | ✅ (built-in)        | ❌ (manual)               | ❌                        | ❌                      |
+| **Item pipelines**         | ✅ (PDF store, DB)   | ❌                        | ❌                        | ❌                      |
+| **Resource footprint**     | Low (async)         | Very low                 | High (Chromium)          | High (Chromium)        |
+| **Sinhala URL handling**   | ✅ (UTF-8 native)    | ✅                        | ✅                        | ✅                      |
+| **Learning curve**         | Medium              | Low                      | Medium                   | Low                    |
+| **Production maturity**    | Very high           | Medium                   | High                     | High                   |
+| **Why chosen**             | ✅ **Selected**      | Sync bottleneck          | Overkill for static HTML | Deprecated pattern     |
 
 ### 1.2 Justification for Scrapy
 
@@ -227,12 +227,12 @@ CHANNEL_MATCHERS = {
 
 ### 3.2 Three-Tier Match Resolution
 
-| Tier | Condition | Action | Precision |
-|---|---|---|---|
-| 1 — Exact | Gazette number regex found in page text | Auto-confirm → INSERT propagation_event | ~99% |
-| 2 — Embedding | Cosine similarity ≥ 0.78 (multilingual-e5-base) | Auto-confirm → INSERT propagation_event | ~88% |
-| 3 — Review | Cosine similarity 0.60–0.78 | Flag for admin confirmation in review queue | N/A (human) |
-| — | Cosine similarity < 0.60 | Discard | — |
+| Tier          | Condition                                       | Action                                      | Precision   |
+| ------------- | ----------------------------------------------- | ------------------------------------------- | ----------- |
+| 1 — Exact     | Gazette number regex found in page text         | Auto-confirm → INSERT propagation_event     | ~99%        |
+| 2 — Embedding | Cosine similarity ≥ 0.78 (multilingual-e5-base) | Auto-confirm → INSERT propagation_event     | ~88%        |
+| 3 — Review    | Cosine similarity 0.60–0.78                     | Flag for admin confirmation in review queue | N/A (human) |
+| —             | Cosine similarity < 0.60                        | Discard                                     | —           |
 
 ### 3.3 Gazette Segmentation Strategies
 

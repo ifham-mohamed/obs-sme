@@ -29,12 +29,12 @@ async def scan_portal(source_id: str):
 
 ### Step 2 — Three-tier matching
 
-| Tier | Condition | Action | Match method |
-|---|---|---|---|
-| 1 — Exact gazette number | `r"\d{4}/\d+"` found in title or body, lookup by `m1_regulations.gazette_number` | Auto-confirm, INSERT propagation_event | `exact_gazette_number` |
-| 2 — Embedding cosine ≥ 0.78 | High-similarity match against the past-90-days regulation pool | Auto-confirm, INSERT | `embedding_similarity` (confidence stored) |
-| 3 — Embedding cosine 0.60–0.78 | Plausible match | Flag for admin review (`match_method='pending_review'`) | `pending_review` (admin sets to `human_confirmed` or rejects) |
-| — | Cosine < 0.60 | Discard | — |
+| Tier                           | Condition                                                                        | Action                                                  | Match method                                                  |
+| ------------------------------ | -------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
+| 1 — Exact gazette number       | `r"\d{4}/\d+"` found in title or body, lookup by `m1_regulations.gazette_number` | Auto-confirm, INSERT propagation_event                  | `exact_gazette_number`                                        |
+| 2 — Embedding cosine ≥ 0.78    | High-similarity match against the past-90-days regulation pool                   | Auto-confirm, INSERT                                    | `embedding_similarity` (confidence stored)                    |
+| 3 — Embedding cosine 0.60–0.78 | Plausible match                                                                  | Flag for admin review (`match_method='pending_review'`) | `pending_review` (admin sets to `human_confirmed` or rejects) |
+| —                              | Cosine < 0.60                                                                    | Discard                                                 | —                                                             |
 
 ### Step 3 — Embedding model — `intfloat/multilingual-e5-base` choice
 

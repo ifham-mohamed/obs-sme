@@ -43,12 +43,12 @@ The root cause is structural: gazettes are published as PDF documents without pu
 
 ## 3. Research Questions
 
-| # | Question | Method | Success Criterion |
-|---|---|---|---|
-| RQ1 | Can NLP classify Sri Lankan gazettes into SME-relevant categories with F1 ≥ 0.92? | Fine-tuned XLM-R + LoRA on 800+ labeled examples | Macro F1 ≥ 0.92 on held-out test set |
-| RQ2 | Can multilingual models handle English/Sinhala/Tamil gazette text without per-language pipelines? | XLM-R vs mBERT vs IndicBERT ablation | F1 within 5% across all three languages |
-| RQ3 | What is the median information lag between gazette publication and SME awareness? | Propagation event timestamps + survey responses | Dataset of ≥ 200 regulations × ≥ 4 stages |
-| RQ4 | Which dissemination channels deliver regulatory information fastest? | Channel-stratified lag analysis | Ranked channel table with median lag in days |
+| #   | Question                                                                                          | Method                                           | Success Criterion                            |
+| --- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------- |
+| RQ1 | Can NLP classify Sri Lankan gazettes into SME-relevant categories with F1 ≥ 0.92?                 | Fine-tuned XLM-R + LoRA on 800+ labeled examples | Macro F1 ≥ 0.92 on held-out test set         |
+| RQ2 | Can multilingual models handle English/Sinhala/Tamil gazette text without per-language pipelines? | XLM-R vs mBERT vs IndicBERT ablation             | F1 within 5% across all three languages      |
+| RQ3 | What is the median information lag between gazette publication and SME awareness?                 | Propagation event timestamps + survey responses  | Dataset of ≥ 200 regulations × ≥ 4 stages    |
+| RQ4 | Which dissemination channels deliver regulatory information fastest?                              | Channel-stratified lag analysis                  | Ranked channel table with median lag in days |
 
 ---
 
@@ -71,17 +71,17 @@ The root cause is structural: gazettes are published as PDF documents without pu
 
 ## 5. Success Metrics
 
-| Metric | Target | Measurement Method |
-|---|---|---|
-| Category classification F1 (macro) | ≥ 0.92 | 15% held-out test set |
-| Sector assignment F1 (macro) | ≥ 0.88 | 15% held-out test set |
-| Ingestion latency | ≤ 6 hours from publication | Automated timestamp logging |
-| Alert delivery latency | ≤ 24 hours from publication | `m1_propagation_events` table |
-| System uptime | ≥ 99.9% | Uptime monitoring (UptimeRobot) |
-| Labeled training corpus | ≥ 800 examples (≥ 50/category) | Annotation tracker |
-| SME survey responses | ≥ 100 unique SMEs | `m1_sme_awareness_responses` table |
-| Propagation data points | ≥ 800 (200 regulations × 4 stages) | `m1_propagation_events` COUNT |
-| Admin verification rate (needs_review) | < 20% flagged for manual review | `needs_review` field ratio |
+| Metric                                 | Target                             | Measurement Method                 |
+| -------------------------------------- | ---------------------------------- | ---------------------------------- |
+| Category classification F1 (macro)     | ≥ 0.92                             | 15% held-out test set              |
+| Sector assignment F1 (macro)           | ≥ 0.88                             | 15% held-out test set              |
+| Ingestion latency                      | ≤ 6 hours from publication         | Automated timestamp logging        |
+| Alert delivery latency                 | ≤ 24 hours from publication        | `m1_propagation_events` table      |
+| System uptime                          | ≥ 99.9%                            | Uptime monitoring (UptimeRobot)    |
+| Labeled training corpus                | ≥ 800 examples (≥ 50/category)     | Annotation tracker                 |
+| SME survey responses                   | ≥ 100 unique SMEs                  | `m1_sme_awareness_responses` table |
+| Propagation data points                | ≥ 800 (200 regulations × 4 stages) | `m1_propagation_events` COUNT      |
+| Admin verification rate (needs_review) | < 20% flagged for manual review    | `needs_review` field ratio         |
 
 ---
 

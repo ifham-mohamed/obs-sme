@@ -34,11 +34,11 @@ Used when A returns < 2 sections on a > 5,000-char gazette. Detects notice bound
 
 **When B fails:**
 
-| Failure pattern | Cause | Mitigation |
-|---|---|---|
-| Tightly-packed multi-notice page | All notices on one page with < 30-pixel gap. | Lower `gap_threshold` to 15 — but watch for over-segmentation of paragraph breaks. |
+| Failure pattern                     | Cause                                                        | Mitigation                                                                                                    |
+| ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| Tightly-packed multi-notice page    | All notices on one page with < 30-pixel gap.                 | Lower `gap_threshold` to 15 — but watch for over-segmentation of paragraph breaks.                            |
 | Single long notice that spans pages | Each page break introduces a "gap" → false segment boundary. | Detect page-break artefacts by checking if the gap coincides with a `\f` form-feed char in the upstream text. |
-| Scanned gazette (no real blocks) | PyMuPDF blocks are unreliable when fed Tesseract output. | Fall through to C immediately. |
+| Scanned gazette (no real blocks)    | PyMuPDF blocks are unreliable when fed Tesseract output.     | Fall through to C immediately.                                                                                |
 
 ### Strategy C — LLM-assisted segmentation (last resort)
 
