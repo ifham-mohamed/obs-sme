@@ -1,7 +1,7 @@
 # 02_M1_2 — Database Schema Validation
 
 > Companion to [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) — full SQL constraints + Pydantic validators + nightly data-quality checks + `EXPLAIN ANALYZE` traces for the two hot analytical views.
-> **Implementation status:** 🔲 Deferred (BUILD_07 schema migrations + BUILD_12 nightly checks)
+> **Implementation status:** ✅ Shipped 2026-07-23 — all three layers built against the **real live schema** (the doc's idealized names differ; see Build note). Layer 1 = CHECK constraints in migration `202607230001` (added `NOT VALID` per the failure-mode guidance below). Layer 2 = Pydantic validators in `app/schemas/regulation.py` + reusable `app/m1/validation.py`. Layer 3 = nightly `app/m1/tasks/validate_pipeline.py` → `m1_pipeline_audits`, Beat 02:00 UTC. **Pending (operator):** `alembic upgrade head`, then `VALIDATE CONSTRAINT` after fixing any legacy offenders the nightly job flags.
 
 ## Purpose
 
@@ -160,6 +160,23 @@ Execution Time: 1825.778 ms
 ```
 
 Without the composite indexes from [02_M1_Data_Requirements.md §2.10](02_M1_Data_Requirements.md), the same plan falls back to `Seq Scan` + hash join with ~5 × the execution time. Re-run after every schema change; commit the trace in `research/sql/lag_summary_plan.txt` for the thesis.
+
+## Build note (2026-07-23) — as shipped
+
+The spec's idealized column names were **mapped to the real live schema** during implementation:
+
+| Doc name | Real column / rule |
+|---|---|
+| `confidence` | `classifier_confidence` **and** `sme_relevance_confidence` (both `Numeric(3,2)`, each range-checked 0–1) |
+| `primary_language IN ('en','si','ta','mixed')` | `language IN ('sin','tam','eng','unknown')` |
+| `status` set | real set includes `preprocessed`; full: ingested/extracted/preprocessed/classified/summarized/alerted/archived/extraction_failed |
+| `match_method` 4-value enum | real `m1_propagation_events.match_method IN ('exact_gazette','fuzzy_title')` |
+| `uq (regulation_id, channel)` | already enforced as `uq_m1_prop_reg_source (regulation_id, source_id)` — not re-added |
+| `needs_review` column | no such column; review queue is derived (`status='classified' AND classifier_confidence < 0.55 AND NOT expert_verified`) — the "classified ⇒ category" invariant is kept via `ck_m1_reg_category_when_classified` |
+
+Constraints added `NOT VALID` (enforced on new writes; legacy rows unscanned) so the migration can't fail on existing data. Also added: `ck_m1_reg_classification_source`, `ck_m1_reg_severity_level`, `ck_m1_regsector_impact_level`. Layer-3 checks shipped: `sinhala_share_30d`, `classified_without_category`, `classifier_confidence_out_of_range`, `metadata_review_backlog`, `effective_date_far_future`, `lag_summary_view_queryable`. Layer-2 also adds a stage-date ordering validator (bill ≤ gazette ≤ effective).
+
+**Files:** `alembic/versions/202607230001_m1_schema_validation_and_governance.py`, `app/m1/models/pipeline_audit.py`, `app/m1/validation.py`, `app/m1/tasks/validate_pipeline.py`, `app/schemas/regulation.py`, `app/celery_config.py`. Companion build docs: [[PHASE2_DATA_VALIDATION_GOVERNANCE_ANALYSIS]] + [[PHASE2_DATA_VALIDATION_GOVERNANCE_PLAN]].
 
 ## Cross-references
 

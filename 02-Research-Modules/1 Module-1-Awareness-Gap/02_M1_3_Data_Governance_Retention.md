@@ -1,7 +1,7 @@
 # 02_M1_3 — Data Governance & Retention
 
 > Companion to [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) — PDPA compliance checklist, audit-log retention, storage growth projections, S3 cold-archive YAML.
-> **Implementation status:** 🔲 Deferred (BUILD_07 retention jobs + BUILD_12 S3 archive policy). PDPA Sri Lanka compliance checklist is **applicable today** to the manual-CRUD admin slice.
+> **Implementation status:** 🟡 Framework shipped 2026-07-23 — retention jobs (`app/m1/tasks/retention.py`: survey anonymisation, pipeline-audit pruning, audit-log archive **reporting**), storage projection (`app/m1/services/storage_projection.py`), and the S3 lifecycle YAML (`infra/aws/s3_m1_lifecycle.yaml`), all Beat-scheduled. **Guarded by `M1_RETENTION_DRY_RUN` (default TRUE)** — jobs log would-change counts and write nothing until an operator flips it off. `audit_log` archival is **report-only** (INSERT-ONLY table per Session 14; actual move to `audit_log_archive`/S3 stays an operator step). Still deferred: the PDPA right-of-access/erasure endpoints (`/sme/me/data-export`, `DELETE /sme/me`) and the `audit_log_archive` table + partitioning.
 
 ## Purpose
 
@@ -117,6 +117,15 @@ The aggregate F4 (channel effectiveness) finding is unaffected — the user's 7 
 - **Lifecycle rule test.** AWS-side: `aws s3api get-bucket-lifecycle-configuration --bucket enigmatrix-m1-pdfs` matches `s3_m1_lifecycle.yaml` byte-for-byte (CI assertion).
 - **Storage projection accuracy.** Quarterly: actual storage usage compared to the Y1/Y3/Y5 projections; deviation > 30 % triggers a re-projection.
 - **Anonymisation idempotency.** Re-running `anonymise_aged_survey_responses.py` twice produces zero new updates (test: dry-run mode comparing pre/post row hashes).
+
+## Build note (2026-07-23) — as shipped
+
+- **Retention jobs** (`app/m1/tasks/retention.py`, Beat-scheduled): `anonymise_aged_survey_responses` (survey_responses > `M1_SURVEY_RETENTION_YEARS`: `answer_date` generalised day→month + `meta.anonymised=true`; idempotent, row-count assertion before commit), `prune_pipeline_audits` (`m1_pipeline_audits` > `M1_PIPELINE_AUDIT_RETENTION_DAYS`), `report_archivable_audit_logs` (counts only — never deletes the INSERT-ONLY `audit_log`). All obey `M1_RETENTION_DRY_RUN` (default TRUE).
+- **Storage projection** (`app/m1/services/storage_projection.py`): pure-Python reproduction of §3's Y1/Y3/Y5/Y10 model for the ops dashboard + quarterly actual-vs-projection governance check.
+- **S3 lifecycle** (`infra/aws/s3_m1_lifecycle.yaml`): Standard → Glacier (2 y) → Deep Archive (5 y) for `raw/`; 30-day expiry for `ocr_cache/`.
+- **Schema reality check:** consent already exists as `sme_profiles.consent_given` + `consent_text_version` (no `consent_acknowledged_at` timestamp); the awareness responses live in `survey_responses` (not `m1_sme_awareness_responses`) keyed by `sme_id` with `answer_date`/`submitted_at` — the anonymisation job targets those real columns.
+
+Settings added: `M1_RETENTION_DRY_RUN`, `M1_SURVEY_RETENTION_YEARS`, `M1_PIPELINE_AUDIT_RETENTION_DAYS`, `M1_AUDIT_LOG_RETENTION_YEARS`. Companion build docs: [[PHASE2_DATA_VALIDATION_GOVERNANCE_ANALYSIS]] + [[PHASE2_DATA_VALIDATION_GOVERNANCE_PLAN]].
 
 ## Cross-references
 

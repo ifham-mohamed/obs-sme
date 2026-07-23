@@ -19,8 +19,8 @@
 ## 02 · Data Requirements — [[02_M1_Data_Requirements]]
 *Why/what: the data contract — 15-source catalogue, full schema for all 9 `m1_*` tables, 2 analytical views, and an end-to-end worked example.*
 - [ ] [[02_M1_1_Data_Sources_Catalogue]] — per-source operations spec: scrape frequency, auth needs, URL patterns, failure modes, and fallback path for each of the 15 sources.
-- [ ] [[02_M1_2_Database_Schema_Validation]] — three-layer validation (SQL CHECK constraints → Pydantic validators → nightly data-quality job) + `EXPLAIN ANALYZE` traces for the two hot views.
-- [ ] [[02_M1_3_Data_Governance_Retention]] — PDPA (No. 9 of 2022) compliance checklist, audit-log purge cadence, S3 cold-archive lifecycle, storage-growth projections. *(PDPA checklist applies today to the admin slice.)*
+- [x] [[02_M1_2_Database_Schema_Validation]] — three-layer validation **shipped 2026-07-23**: Layer-1 CHECK constraints (migration `202607230001`, `NOT VALID`), Layer-2 Pydantic + `app/m1/validation.py`, Layer-3 nightly `validate_pipeline` → `m1_pipeline_audits`. Names mapped to real schema; `VALIDATE CONSTRAINT` pending an operator run.
+- [~] [[02_M1_3_Data_Governance_Retention]] — governance/retention **framework shipped 2026-07-23**: retention jobs + storage projection + S3 lifecycle YAML, Beat-scheduled, `M1_RETENTION_DRY_RUN` default on. PDPA data-export/erasure endpoints + `audit_log_archive` still deferred.
 - [ ] [[02_M1_4_Worked_Examples_All_Tables]] — three complete worked examples (multi-pin adapter, VAT amendment, EPF rate change) populating all 9 tables + both views.
 
 ## 03 · Data Collection — [[03_M1_Data_Collection]]
