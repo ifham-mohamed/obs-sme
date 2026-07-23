@@ -1,105 +1,121 @@
-# Enigmatrix — Master Feature Checklist
+# Module 1 — Documentation Feature Checklist
 
-**Generated:** 2026-07-15 · synced with vault `FEATURES.md` (F-01…F-242) and code at 2026-07-03 commits.
-Legend: `[✓]` shipped+verified · `[~]` code-complete, pending env/data gate · `[ ]` not started
+> A task-oriented map of the **whole M1 documentation set** (`1 Module-1-Awareness-Gap/`): every numbered doc (00–16) as a feature area linked to its parent file, with a one-line *why / what it does*, and each companion sub-doc as a sub-task carrying its own implementation status. Built by reading each file's Purpose + status badge.
+>
+> Reading order / "start here" is [[16_M1_Development_Roadmap]]; the annotated master map is [[00_INDEX]]. The raw code-feature ledger (F-01…F-242) lives in the vault `FEATURES.md`.
 
-## Platform Foundation
-- [✓] Monorepo + docker-compose dev infra + Makefile targets (F-01…F-04)
-- [✓] FastAPI app, settings, logging, exceptions, deps (F-05…F-09)
-- [✓] Auth: bcrypt + HS256 JWT access/refresh, register/login/refresh (F-10, F-11)
-- [✓] RBAC: sme / admin / annotator deps + route gating (F-12)
-- [✓] Rate limiting on auth endpoints (slowapi) (F-13)
-- [✓] Audit log on auth events + every admin mutation (F-16, Session 14)
-- [✓] Admin user management (create/patch/activate/deactivate/reset-password/delete)
-- [✓] Seeds: admin + annotator + sample SME + demo dashboards (F-18, Session 22)
+**Legend** — checkbox = implementation status of the feature the doc describes (the doc itself is written in all cases):
+`[x]` shipped + verified · `[~]` code-complete / partial, pending an env/data/GPU gate · `[ ]` deferred or not started.
 
-## Frontend Foundation
-- [✓] Next.js 14 App Router + shadcn-pattern UI + trust-blue/amber themes light+dark (F-19…F-22)
-- [✓] Trilingual: next-intl EN/SI/TA + Noto Sinhala/Tamil fonts + locale switcher (F-23, F-24)
-- [✓] API client + server-side requireUser()/requireRole() session guards (F-25, F-26)
-- [✓] App-shell redesign, breadcrumbs, empty states, animated UI suite, theme-transition polish (Sessions 8, 44, 52)
-- [✓] Dashboard streaming + perf overhaul (bundle tuning, recharts code-split) (F-174)
+---
 
-## Surveys (M0/M2/M3 instruments)
-- [✓] Unified survey wizard `/surveys` + regulation-scoped flows + history (Sessions 6, 12, 15)
-- [✓] Awareness survey 12 questions EN/SI/TA + admin responses view
-- [✓] Admin question bank: CRUD, verify, bulk-verify, translations, next-code, ordering
-- [✓] Survey sessions engine (start / next-question / answer / complete)
-- [✓] Admin-manageable survey limits (F-16x, Session 16)
-- [✓] M2 knowledge auto-scoring + admin scores UI
-- [✓] M3 compliance-history + behavioural signals + risk-signals snapshot
+## 00 · Index & Orientation
+- [x] [[00_INDEX]] — master map of the 61-file set: status table, per-doc contents, parent→companion table, pipeline stages A–G, DB entities, 4 research questions, tech choices. *Why: the single entry point that ties every M1 doc together.*
 
-## M1 — Ingest & Extraction (Phase 2)
-- [✓] Scrapy spiders: gazette, weekly, acts, bills; date-scoped; EN→SI→TA fallback (F-145+, F-170, F-177)
-- [✓] Completeness verify + re-fetch endpoints, hardened (timeout/CORS/WS) (F-177, F-178)
-- [✓] PDF classifier text/hybrid/scanned + calibration CLI (F-149)
-- [✓] Extractors: PyMuPDF, pdfplumber, pypdfium2 + per-page engines (F-149, Session 58-ml)
-- [✓] OCR: Tesseract eng+sin+tam @300dpi + per-page timeout + CER calculator (F-149)
-- [✓] Surya OCR fallback profile + page-routing + Wijesekara-routing profiles (ml 2026-06-02)
-- [✓] Font-aware Wijesekara→Unicode conversion + fastText language ID (F-153)
-- [✓] Preprocessing chain: cleaning, metadata, penalties (multi-penalty), chunking, sub-docs (F-154…F-157)
-- [✓] Celery pipeline ingested→extracted→preprocessed + WebSocket live progress (F-152, F-173)
-- [✓] Admin extraction portal: date-range picker, run history, cancel/rollback, PDF Records, trace (F-185…F-198)
-- [✓] 800 raw PDFs bulk-extracted, 11 batches (F-199)
-- [✓] Railway + Vercel + Aiven production deployment (F-193…F-198)
+## 01 · Research Problem — [[01_M1_Research_Problem]]
+*Why/what: frames the whole module — abstract, IRD/EPF awareness-gap statistics, the 4 formal research questions, scope, success metrics, and the T0–T9 regulatory-diffusion timeline (cabinet → enforcement).*
+- [~] [[01_M1_1_Research_Motivation_Evidence]] — full evidence base behind the "34 % of SME penalties came from amendments gazetted > 90 days prior" claim: IRD/EPF citations + a 40-respondent pre-pilot scan.
 
-## M1 — Extraction Accuracy Measurement
-- [✓] Dataset registry: datasets / immutable sealed versions / rows + SHA-256 (F-200…F-205)
-- [✓] Excel ground-truth upload + parser (F-203)
-- [✓] Extraction-profile registry + run dispatcher (F-160s / slice 4)
-- [✓] Measurement engine: per-field metrics, aggregates, strata, completeness (slice 5)
-- [✓] Dynamic date-range measurement + date-scope filter (Session 58, F-Slice9)
-- [✓] Re-extraction overlap alert + auto v1→v2 versioning (Session 58)
-- [✓] Measurement dashboard + drill-downs + worst-N + calibration + sparkline + shortcuts (Sessions 58–60)
-- [✓] Accuracy-report Markdown export `GET /m1/measurements/{run_id}/report.md` (F-242)
-- [✓] Data-quality expectation suites + post-seal validation task (F-210s)
-- [✓] Legacy-baseline backfill script + retention policy task (F-209, F-213)
-- [✓] Thesis artefact generator (tables 4_1–4_3, figures, provenance) (F-212)
-- [ ] FE report-download button + CSV export + audit upgrade list (Session-72 audit)
+## 02 · Data Requirements — [[02_M1_Data_Requirements]]
+*Why/what: the data contract — 15-source catalogue, full schema for all 9 `m1_*` tables, 2 analytical views, and an end-to-end worked example.*
+- [ ] [[02_M1_1_Data_Sources_Catalogue]] — per-source operations spec: scrape frequency, auth needs, URL patterns, failure modes, and fallback path for each of the 15 sources.
+- [ ] [[02_M1_2_Database_Schema_Validation]] — three-layer validation (SQL CHECK constraints → Pydantic validators → nightly data-quality job) + `EXPLAIN ANALYZE` traces for the two hot views.
+- [ ] [[02_M1_3_Data_Governance_Retention]] — PDPA (No. 9 of 2022) compliance checklist, audit-log purge cadence, S3 cold-archive lifecycle, storage-growth projections. *(PDPA checklist applies today to the admin slice.)*
+- [ ] [[02_M1_4_Worked_Examples_All_Tables]] — three complete worked examples (multi-pin adapter, VAT amendment, EPF rate change) populating all 9 tables + both views.
 
-## M1 — Annotation & Classification (Phase 3)
-- [✓] Label Studio config XML: 12 categories + 10 sectors + relevance + confidence (F-216)
-- [✓] Calibration set: 20 trilingual docs with expert labels + rationales (F-217)
-- [✓] Samplers: stratified + k-means + active-learning + `sample_for_labeling.py` → batch_01.csv (F-218…F-220)
-- [~] Label Studio instance stood up locally (`mydata/`) — labels not yet collected
-- [ ] Phase 3c: calibration test κ≥0.80 → 200-doc batch → AL batches → ≥800 gold (F-222)
-- [✓] Model package: labels/config/temporal data loader/XLM-R+LoRA architecture/trainer (F-226)
-- [~] 3-seed GPU training run @ macro-F1 ≥ 0.92 (F-223) — needs gold labels
-- [✓] Eval: per-slice F1 + slice-cliff check + error analysis + TF-IDF baselines (F-227)
-- [~] Real eval run on trained checkpoint (F-224)
-- [✓] ONNX export (+INT8) + GazetteInference runtime (F-228)
-- [~] `classify_gazette` live in prod (F-225) — needs model + migration `202606300001`
+## 03 · Data Collection — [[03_M1_Data_Collection]]
+*Why/what: the ingestion story — Scrapy scraper (4-way comparison), the PDF extraction chain, three segmentation strategies, the NOT_REGULATORY pre-filter, and 2-step secondary-source matching.*
+- [x] [[03_M1_1_PDF_Extraction_Chain]] — `classify_pdf()` deep-dive (text/hybrid/scanned routing), full Tesseract config, and how to recalibrate thresholds for new gazette typesetting.
+- [x] [[03_M1_2_Gazette_Segmentation]] — where each strategy (A heading-regex / B block-gap / C LLM-fallback) fails, plus boundary-detection troubleshooting; feeds per-notice classification.
+- [ ] [[03_M1_3_Secondary_Source_Integration]] — the portal-watcher + RSS-watcher de-duplication contract, 3-tier matching, and the `multilingual-e5-base` embedding choice.
 
-## M1 — Watchers, Alerts, Analytics (Phase 4, code-complete)
-- [✓] `m1_propagation_events` + 2-step matcher (exact → fuzzy ≥0.78), unit-tested (F-231)
-- [~] Portal watcher (IRD/EPF/ETF/eROC) — Beat 2 h; URLs to confirm + live run (F-229)
-- [~] RSS watcher (5 news feeds) — Beat 2 h; live run pending (F-230)
-- [✓] `m1_alerts` model + content builder + SendGrid/Twilio providers + idempotent dispatch (F-232)
-- [~] Alerts API public/SME/mark-read — live after migration `202606300003` (F-233)
-- [~] `/alerts` website page — needs middleware + nav wiring (F-234)
-- [✓] Lag materialized views + KL-divergence drift helper, unit-tested (F-235)
-- [~] Nightly `refresh_lag_analytics` Beat task — live run pending data (F-236)
+## 04 · Preprocessing Pipeline — [[04_M1_Preprocessing_Pipeline]]
+*Why/what: turning raw extracted text into classifier input — noise removal, tokenizer choice (XLM-R), the 5-step pipeline, and chunking.*
+- [x] [[04_M1_1_Gazette_Noise_Removal]] — 8 ordered noise classes with before/after snippets + a regex unit-test suite; two entry points (citation-faithful vs classifier-stripped).
+- [x] [[04_M1_2_Metadata_Extraction_Patterns]] — production regex for gazette#, effective date, penalty range, principal act + multi-penalty `finditer` and amendment-vs-repeal disambiguation.
+- [x] [[04_M1_3_Text_Chunking_Strategy]] — quantitative chunking comparison + the hybrid §-aware + sliding-window algorithm (`MAX_LEN=512`, `STRIDE=64`) with multilingual token implications.
 
-## M1 — Findings & Retraining (Phase 5, code-complete)
-- [✓] `findings_common.py` + preregistration F1–F6 (F-237)
-- [~] 4 findings notebooks — demo verified; real data pending survey + propagation + model (F-238)
-- [✓] `m1_retraining_runs` + canary promotion.decide() (F-239)
-- [~] `retrain.py` + quarterly/drift-triggered retraining task — real run needs model + GPU (F-240)
-- [ ] Phase 5a survey fieldwork ≥100 SMEs
+## 05 · Model Architecture — [[05_M1_Model_Architecture]]
+*Why/what: the classifier design — 3-step sampling, the 12-category + 10-sector task, a 4-way approach comparison (XLM-R + LoRA selected), and the dual-head architecture.*
+- [ ] [[05_M1_1_Sampling_Strategy]] — stratified-by-year-language → k-means (k=20, silhouette-justified) → active-learning selection, with sparse-cell handling.
+- [~] [[05_M1_2_Architecture_Comparison_Deep_Dive]] — train-from-scratch vs fine-tune-XLM-R vs zero-shot-GPT-4 vs rule-based, sourced with a 50-doc pilot and cost/failure analysis.
+- [ ] [[05_M1_3_LoRA_Hyperparameter_Justification]] — the `r × alpha` ablation plan, `target_modules` trade-off, `bias="none"` precedent, and memory budget.
 
-## Knowledge Portal
-- [✓] Vault-backed `/knowledge/*` (23 surfaces) + chokidar→SSE live sync + ⌘K palette (Session 57)
-- [✓] Sessions/features/changes/build-tracker/plans/modules/graph pages + obsidian:// links
-- [ ] Fuzzy search index, D3 force graph, kanban/gantt views (deferred)
+## 06 · Training & Evaluation — [[06_M1_Training_Evaluation]]
+*Why/what: how the model is trained and judged — temporal (not random) split, 3-seed reproducibility, baselines, slice analysis, error taxonomy, versioning, and a 13-item pre-viva checklist.*
+- [ ] [[06_M1_1_Data_Augmentation_Strategy]] — back-translation + paraphrase + synonym substitution with a diversity check and the 5× cap rationale + per-class F1 impact.
+- [ ] [[06_M1_2_Slice_Analysis_Framework]] — per-language / per-quarter / per-length / per-extraction-method slice computation + visualization templates + "cliff"-pattern detection.
 
-## Modules 2–4
-- [✓] M2 Knowledge Hub: sector question banks + scoring + verify + admin UI
-- [✓] M3 risk snapshot: compliance-history + behavioural + risk-signals endpoints + admin UI
-- [ ] M3 ML risk model
-- [ ] M4 misinformation verifier (`/verify/claim`, `/qa/ask` = 501 stubs)
+## 07 · Deployment & Integration — [[07_M1_Deployment_Integration]]
+*Why/what: serving the model — 4-way platform comparison (Fly.io), ONNX Runtime CPU serving, INT8 quantization, Redis inference cache, and the latency budget.*
+- [ ] [[07_M1_1_ONNX_Export_Quantization]] — `torch.onnx.export` config (opset 17, dynamic axes), the INT8 calibration pipeline, and float32-vs-INT8 accuracy validation.
+- [ ] [[07_M1_2_Fly_io_Deployment_Operations]] — `fly.toml` deep-dive, machine sizing, volume layout (current + previous model), canary traffic-split, and cost alerting.
 
-## Ops / Infra
-- [✓] CI workflow `ci-m1-phase2.yml` (pytest + lint + typecheck + playwright + alembic check) (F-214)
-- [~] Migrations `202606300001–005` applied in production
-- [ ] Docker digests pinned (placeholders); Railway PAT rotation; worker/beat split
-- [ ] `graphify update .` (graph stale since `94ae62d0`, 2026-05-23)
+## 08 · Full System Architecture — [[08_M1_Full_System_Architecture]]
+*Why/what: the whole picture — 6-layer architecture, all tables/routes, Celery task graph, end-to-end happy-path timeline, the 6 research findings, DoD, and M1→M2/M3/M4 links.*
+- [~] [[08_M1_1_Research_Findings_Extraction]] — for each of F1–F6: data source, sample-size requirement, statistical test, SQL, expected effect sizes, and notebook scaffold.
+- [~] [[08_M1_2_Edge_Cases_Failure_Modes]] — a 23-entry runbook extending the parent's 9 cases, each with a detection signal, resolution, and monitoring metric.
+
+## 09 · Annotation Guidelines — [[09_M1_Annotation_Guidelines]]
+*Why/what: how gold labels are made — Label Studio (4-way choice) + config XML, 12-category decision criteria, 10-sector rules, the IAA κ ≥ 0.75 protocol, and the SME survey.*
+- [~] [[09_M1_1_Category_Taxonomy_Examples]] — 5–8 worked examples per category plus contrastive examples for confusable pairs (template + seeded-regulation based).
+- [ ] [[09_M1_2_Annotation_Workflow_IAA_Protocol]] — the IAA computation, disagreement-resolution paths, calibration-test design, and per-annotator performance tracking.
+- [ ] [[09_M1_3_SME_Survey_Instrument]] — the operational side of the Q1–Q8 survey: per-sector tailoring SQL, delivery mechanism, response-tracking schema, and validity rules.
+
+## 10 · Sinhala / Tamil NLP — [[10_M1_Sinhala_Tamil_NLP]]
+*Why/what: the trilingual core — SI/TA linguistic properties, language detection (fastText), multilingual model choice (XLM-R), Tesseract OCR, and Wijesekara font conversion.*
+- [x] [[10_M1_1_Language_Detection_Routing]] — fastText `lid.176.bin` config, the 500-char window + 0.70 threshold, and the per-line Unicode-range router.
+- [x] [[10_M1_2_OCR_Wijesekara_Conversion]] — full Tesseract config + the 87-entry Wijesekara→Unicode mapping, detection heuristic, and greedy longest-match converter.
+
+## 11 · API Reference — [[11_M1_API_Reference]]
+*Why/what: the complete HTTP surface — CRUD, classification, verification, sectors, propagation events, SME survey, public endpoint, analytics, backfill, and model-version management.*
+- [~] [[11_M1_1_API_Authentication_Authorization]] — JWT payload structure, the role-permission matrix, token expiry/refresh, error codes, and request-id propagation.
+- [~] [[11_M1_2_API_Integration_Examples]] — cURL + Python + Postman examples per endpoint group with common-error troubleshooting.
+
+## 12 · Monitoring & Maintenance — [[12_M1_Monitoring_Maintenance]]
+*Why/what: keeping it healthy — SLA targets, pipeline health checks, confidence-drift (KL-divergence), Prometheus metrics, queue monitoring, retraining triggers, and DB maintenance.*
+- [ ] [[12_M1_1_Performance_Monitoring_Alerting]] — a confidence-drift worked example, SLA dashboard layout, escalation paths, and a per-severity runbook.
+- [ ] [[12_M1_2_Retraining_Deployment_Rollback]] — the full retraining workflow, A/B testing strategy, auto-rollback trigger, and backfill orchestration.
+
+## 13 · Folder Structure & Implementation Flow — [[13_M1_Folder_Structure_and_Implementation_Flow]]
+- [x] Single doc, no companions — where every M1 file lives + how M2/M3/M4 mirror the layout; 5 design principles, the full folder map, the Stage A–G implementation flow, and upgradability/scalability rules. *Why: the structural spec the folder build guides (doc 15) elaborate.*
+
+## 14 · Tracking Workflows (frontend) — [[14_M1_Tracking_Workflows]]
+*Why/what: the index of the 8 + 1 admin/SME tracking surfaces that expose the pipeline to users.*
+- [~] [[14_M1_1_Admin_Pipeline_State_Tracking]] — **A1** Stage A→F status machine per regulation (status field + list surface it; no dedicated stage dashboard yet).
+- [ ] [[14_M1_2_Admin_Review_Queue_Triage]] — **A2** needs-review queue for `confidence < 0.70` (backend flag exists; `?needs_review=true` filter is the workaround).
+- [x] [[14_M1_3_Admin_Expert_Verification]] — **A3** verification ledger: Verify button + `<VerificationBadge>` + bulk-verify + audit writes.
+- [ ] [[14_M1_4_Admin_Lag_Analytics]] — **A4** lag dashboard + propagation tracker (analytics endpoints exist; no UI consumes them).
+- [~] [[14_M1_5_SME_Regulation_Discovery]] — **S1** regulation discovery (list + "pending" widget shipped; sector-applicability filter deferred).
+- [x] [[14_M1_6_SME_Awareness_Survey]] — **S2** awareness survey participation (`/surveys/regulation/[id]`, `/surveys/awareness`, `/surveys/history`).
+- [~] [[14_M1_7_SME_Compliance_Action_Tracking]] — **S3** action-taken status captured by survey Q7; no dedicated "My Regulations" tracker yet.
+- [ ] [[14_M1_8_SME_Deadline_Alert_History]] — **S4** deadline countdown + alert-delivery history (backend writes events; no SME UI).
+- [x] [[14_M1_9_Category_Sector_Workflows]] — **X9** cross-cutting reference for how the 12 categories × 10 sectors flow through every surface (schema + badge conventions shipped).
+
+## 15 · Folder Reference (per-folder build guides) — [[15_M1_Folder_Reference]]
+*Why/what: the parent index of six "how to build this folder" guides, each with a file table (owner / status / primary doc / how-to-build), start steps, dependencies, and acceptance.*
+- [ ] [[15_M1_1_ML_Folder_Guide]] — `ml/` slice (~28 files, entirely deferred to BUILD_07 + BUILD_11).
+- [~] [[15_M1_2_Backend_Folder_Guide]] — `backend/app/` slice (~6 shipped: admin CRUD + audit + model + middleware; ~3 partial; ~16 deferred).
+- [ ] [[15_M1_3_Scraper_Folder_Guide]] — `scraper/` slice (5 files, deferred to BUILD_07).
+- [ ] [[15_M1_4_Research_Folder_Guide]] — `research/` slice (~8 notebooks, scaffold post-BUILD_07/11).
+- [~] [[15_M1_5_Storage_Folder_Guide]] — `storage/` conventions documented; directories populate as Phase 2/3 run.
+- [x] [[15_M1_6_Docs_Folder_Guide]] — the docs folder itself (61 docs shipped).
+
+## 16 · Development Roadmap — [[16_M1_Development_Roadmap]]
+- [x] Single doc, no companions — the sequenced "start here" guide: 5 phases (Foundation ✅ / Ingest + extract / Annotation + classification / Schedulers + alerts / Research findings) with "do this next" call-outs, DoDs, and linked detail docs. *Why: the developer's daily start screen.*
+
+---
+
+### Status roll-up
+
+| Group | Shipped `[x]` | Partial `[~]` | Deferred `[ ]` |
+|---|---|---|---|
+| Extraction & preprocessing (03, 04, 10) | 03_1, 03_2, 04_1, 04_2, 04_3, 10_1, 10_2 | — | 03_3 |
+| Model & training (05, 06, 07) | — | 05_2 | 05_1, 05_3, 06_1, 06_2, 07_1, 07_2 |
+| Data & schema (02) | — | — | 02_1, 02_2, 02_3, 02_4 |
+| Research framing (01, 08, 09) | — | 01_1, 08_1, 08_2, 09_1 | 09_2, 09_3 |
+| API & ops (11, 12) | — | 11_1, 11_2 | 12_1, 12_2 |
+| Frontend tracking (14) | 14_3, 14_6, 14_9 | 14_1, 14_5, 14_7 | 14_2, 14_4, 14_8 |
+| Structure & build (13, 15, 16) | 13, 15_6, 16 | 15_2, 15_5 | 15_1, 15_3, 15_4 |
+
+*Shipped items concentrate in the ingest/extraction/trilingual layer (Phase 2) and the admin-CRUD + verification slice; the model, findings, and ops layers are documented-but-deferred pending gold labels, GPU training, and data flow.*
