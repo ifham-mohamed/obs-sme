@@ -16,6 +16,8 @@
 *Why/what: frames the whole module — abstract, IRD/EPF awareness-gap statistics, the 4 formal research questions, scope, success metrics, and the T0–T9 regulatory-diffusion timeline (cabinet → enforcement).*
 - [~] [[01_M1_1_Research_Motivation_Evidence]] — full evidence base behind the "34 % of SME penalties came from amendments gazetted > 90 days prior" claim: IRD/EPF citations + a 40-respondent pre-pilot scan.
 
+> **Admin UI (2026-07-23):** the 02/03 data-ops backend is now surfaced under `/admin/m1/pipeline` — **Data Quality** (02_M1_2 audits), **Source Health** (02_M1_1), **Retention & Storage** (02_M1_3), and **Propagation Review** (03_M1_3, now persisted to `m1_propagation_reviews`). See [[DATA_OPS_ADMIN_UI_PLAN]].
+
 ## 02 · Data Requirements — [[02_M1_Data_Requirements]]
 *Why/what: the data contract — 15-source catalogue, full schema for all 9 `m1_*` tables, 2 analytical views, and an end-to-end worked example.*
 - [~] [[02_M1_1_Data_Sources_Catalogue]] — per-source ops spec **shipped 2026-07-23**: `source_catalogue.py` (cadence/auth/URL/failure/fallback + `due_after`/`in_backoff`) + nightly `source_health` report. Registry health contract already existed; spider-side Wayback/viewstate fallback still deferred.
