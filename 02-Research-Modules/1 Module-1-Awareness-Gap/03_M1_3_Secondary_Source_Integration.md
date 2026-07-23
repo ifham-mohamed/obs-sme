@@ -1,7 +1,7 @@
 # 03_M1_3 — Secondary Source Integration
 
 > Companion to [03_M1_Data_Collection.md](03_M1_Data_Collection.md) — portal-watcher + RSS-watcher de-duplication contract, 3-tier matching, `multilingual-e5-base` embedding choice with comparisons.
-> **Implementation status:** 🔲 Deferred (BUILD_07 + BUILD_12)
+> **Implementation status:** 🟡 Shipped 2026-07-23 — the 3-tier matcher is built (`propagation_matching.match_tiered`) with the semantic-embedding tier (`intfloat/multilingual-e5-base` via `app/m1/services/embeddings.py`) **opt-in** (`M1_PROP_EMBEDDING_ENABLED`, default OFF → falls back to the existing exact-gazette + difflib fuzzy tiers, zero regression). The de-duplication / earliest-wins contract already existed (`propagation_service.record_items`, idempotent on `(regulation_id, source_id)`). Tier-3 `pending_review` candidates are **counted, not persisted** (protects the lag views). Deferred: the dedicated review-queue table + `/admin/m1/propagation-review` UI (see Build note).
 
 ## Purpose
 
@@ -98,6 +98,20 @@ The F1 (gazette-to-news) and F2 (news lag) findings include this row; the 0.71 c
 - **Tier-2 precision.** ≥ 88 % at the 0.78 threshold (hand-validated 50 pairs per quarter).
 - **Review-queue latency.** P95 ≤ 48 h from queueing to admin disposition.
 - **Earliest-wins enforcement.** Re-running a watcher does not create duplicate rows (CI test: invoke watcher twice in succession on the same fixture; row count unchanged).
+
+## Build note (2026-07-23) — as shipped
+
+Grounded against the live matcher; several spec details map differently:
+
+| Doc | Reality as shipped |
+|---|---|
+| 3-tier from day one | matcher was **2-tier** (exact → difflib fuzzy ≥0.78); this build adds the embedding tier while keeping difflib as the no-model fallback |
+| `match_method='embedding_similarity' / 'pending_review' / 'human_confirmed'` | added — required **widening `ck_m1_prop_match_method`** (migration `202607230002`) which previously allowed only `exact_gazette`/`fuzzy_title` |
+| channels `portal_{id}` / `news_{id}` | real channels are `official_portal` / `news_rss` (constrained by `ck_m1_prop_channel`) |
+| unique index `uq_m1_prop_reg_channel` | real key is `uq_m1_prop_reg_source (regulation_id, source_id)` — earliest-wins already enforced there |
+| Tier-3 → separate `m1_propagation_events_review` table + admin UI | **not built** — Tier-3 candidates are counted + logged (returned as `pending_review` in the batch result) but NOT written to `m1_propagation_events`, so the lag / channel-effectiveness views stay free of unconfirmed rows. A dedicated review table + `/admin/m1/propagation-review` is the documented follow-up |
+
+**Embedding choice honoured:** `intfloat/multilingual-e5-base` with e5 `query:`/`passage:` prefixes + normalised vectors; thresholds `M1_PROP_EMBED_AUTO_THRESHOLD=0.78` / `_REVIEW_THRESHOLD=0.60`. It's opt-in because sentence-transformers + the ~280 MB model aren't in the base API image; `embeddings.get_embedder()` degrades to None (→ difflib) if the deps/model are absent. **Files:** `app/m1/services/embeddings.py`, `propagation_matching.py` (`match_tiered` + `cosine`), `propagation_service.py`, `settings.py`, `alembic/versions/202607230002_widen_prop_match_method.py`. Companion build docs: [[PHASE2_SECONDARY_MATCHING_ANALYSIS]] + [[PHASE2_SECONDARY_MATCHING_PLAN]].
 
 ## Cross-references
 

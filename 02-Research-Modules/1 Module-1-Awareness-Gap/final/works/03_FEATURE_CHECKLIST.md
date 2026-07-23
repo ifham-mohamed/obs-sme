@@ -27,7 +27,7 @@
 *Why/what: the ingestion story — Scrapy scraper (4-way comparison), the PDF extraction chain, three segmentation strategies, the NOT_REGULATORY pre-filter, and 2-step secondary-source matching.*
 - [x] [[03_M1_1_PDF_Extraction_Chain]] — `classify_pdf()` deep-dive (text/hybrid/scanned routing), full Tesseract config, and how to recalibrate thresholds for new gazette typesetting.
 - [x] [[03_M1_2_Gazette_Segmentation]] — where each strategy (A heading-regex / B block-gap / C LLM-fallback) fails, plus boundary-detection troubleshooting; feeds per-notice classification.
-- [ ] [[03_M1_3_Secondary_Source_Integration]] — the portal-watcher + RSS-watcher de-duplication contract, 3-tier matching, and the `multilingual-e5-base` embedding choice.
+- [~] [[03_M1_3_Secondary_Source_Integration]] — 3-tier matcher **shipped 2026-07-23** (`match_tiered`: exact → `multilingual-e5-base` embedding → difflib fallback), embedding tier opt-in (`M1_PROP_EMBEDDING_ENABLED`), `ck_m1_prop_match_method` widened (`202607230002`). De-dup/earliest-wins already existed; Tier-3 review-queue table + admin UI deferred.
 
 ## 04 · Preprocessing Pipeline — [[04_M1_Preprocessing_Pipeline]]
 *Why/what: turning raw extracted text into classifier input — noise removal, tokenizer choice (XLM-R), the 5-step pipeline, and chunking.*
@@ -108,14 +108,14 @@
 
 ### Status roll-up
 
-| Group | Shipped `[x]` | Partial `[~]` | Deferred `[ ]` |
-|---|---|---|---|
-| Extraction & preprocessing (03, 04, 10) | 03_1, 03_2, 04_1, 04_2, 04_3, 10_1, 10_2 | — | 03_3 |
-| Model & training (05, 06, 07) | — | 05_2 | 05_1, 05_3, 06_1, 06_2, 07_1, 07_2 |
-| Data & schema (02) | — | — | 02_1, 02_2, 02_3, 02_4 |
-| Research framing (01, 08, 09) | — | 01_1, 08_1, 08_2, 09_1 | 09_2, 09_3 |
-| API & ops (11, 12) | — | 11_1, 11_2 | 12_1, 12_2 |
-| Frontend tracking (14) | 14_3, 14_6, 14_9 | 14_1, 14_5, 14_7 | 14_2, 14_4, 14_8 |
-| Structure & build (13, 15, 16) | 13, 15_6, 16 | 15_2, 15_5 | 15_1, 15_3, 15_4 |
+| Group                                   | Shipped `[x]`                            | Partial `[~]`          | Deferred `[ ]`                     |
+| --------------------------------------- | ---------------------------------------- | ---------------------- | ---------------------------------- |
+| Extraction & preprocessing (03, 04, 10) | 03_1, 03_2, 04_1, 04_2, 04_3, 10_1, 10_2 | —                      | 03_3                               |
+| Model & training (05, 06, 07)           | —                                        | 05_2                   | 05_1, 05_3, 06_1, 06_2, 07_1, 07_2 |
+| Data & schema (02)                      | —                                        | —                      | 02_1, 02_2, 02_3, 02_4             |
+| Research framing (01, 08, 09)           | —                                        | 01_1, 08_1, 08_2, 09_1 | 09_2, 09_3                         |
+| API & ops (11, 12)                      | —                                        | 11_1, 11_2             | 12_1, 12_2                         |
+| Frontend tracking (14)                  | 14_3, 14_6, 14_9                         | 14_1, 14_5, 14_7       | 14_2, 14_4, 14_8                   |
+| Structure & build (13, 15, 16)          | 13, 15_6, 16                             | 15_2, 15_5             | 15_1, 15_3, 15_4                   |
 
 *Shipped items concentrate in the ingest/extraction/trilingual layer (Phase 2) and the admin-CRUD + verification slice; the model, findings, and ops layers are documented-but-deferred pending gold labels, GPU training, and data flow.*
