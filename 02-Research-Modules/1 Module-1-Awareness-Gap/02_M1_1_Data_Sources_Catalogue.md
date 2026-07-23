@@ -1,7 +1,7 @@
 # 02_M1_1 — Data Sources Catalogue (deep dive)
 
 > Companion to [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) — expands the 15-source registry with per-source scrape frequency, auth requirements, URL pattern, failure modes, and fallback strategy.
-> **Implementation status:** 🔲 Deferred (BUILD_07, BUILD_12)
+> **Implementation status:** 🟡 Shipped 2026-07-23 (registry + catalogue + monitoring). The `m1_sources` registry (Phase-4 4a) already carries identity + per-pass health (`mark_source_result`/`load_sources` in `secondary_sources.py`, wired into both watchers). This build adds the missing **operational catalogue** (`app/m1/services/source_catalogue.py`: per-source scrape cadence, auth, URL pattern, failure mode, fallback + `due_after`/`in_backoff` helpers) and a nightly **source-health report** (`app/m1/tasks/source_health.py`) that flags degraded sources into the Activity Log. Still deferred: the primary-gazette Wayback fallback + the viewstate/URL-override handling in the spiders themselves.
 
 ## Purpose
 
@@ -107,6 +107,13 @@ Sample produced row in `m1_regulations`:
 - **Discovery completeness.** Monthly audit (manually identify 50 known gazette publications and confirm they appear in `m1_regulations`); ≥ 98 % recall.
 - **De-duplication correctness.** Zero duplicate `gazette_number` rows in `m1_regulations` (enforced by UNIQUE index, audited weekly).
 - **Cross-language RSS coverage.** F5 measurement requires ≥ 30 cross-language story pairs; alert if monthly count falls below 5.
+
+## Build note (2026-07-23) — as shipped
+
+- **Real source ids differ** from the doc's `SRC_*` handles: the live `m1_sources` rows are `IRD, EPF, ETF, EROC, BOI, CBSL, CUSTOMS, LABOUR, SLSI, CAA` (portals) + `NEWS_DM, NEWS_ADERANA, NEWS_FT, NEWS_NEWSFIRST, NEWS_SUNTIMES` (rss). The catalogue is keyed by those; the primary gazette spiders (`documents.gov.lk`) are Scrapy spiders (not `m1_sources` rows) and are captured in `PRIMARY_GAZETTE_OPS` for reference.
+- **Health contract already existed** — `secondary_sources.mark_source_result()` records `last_checked_at`/`last_ok_at`/`consecutive_failures`/`last_error` on every watcher pass; `load_sources()` reads the registry with a static-tuple fallback. This build did **not** re-implement it.
+- **New:** `source_catalogue.py` (ops spec + `due_after` cadence gate + `in_backoff` exponential-backoff helper, cap 48 h); `source_health.py` (daily 05:00 UTC — flags sources with ≥3 consecutive failures / never-OK / stale >48 h, writes `m1.source_health.degraded` audit). Registered in `celery_config.py`.
+- `m1_sources` has no `override_url` / `uptime_30d_pct` columns yet (doc §"URL override table", §"per-source uptime"); the backoff/cadence helpers approximate the intent without new schema. Companion build docs: [[PHASE2_SOURCES_WORKED_EXAMPLES_ANALYSIS]] + [[PHASE2_SOURCES_WORKED_EXAMPLES_PLAN]].
 
 ## Cross-references
 

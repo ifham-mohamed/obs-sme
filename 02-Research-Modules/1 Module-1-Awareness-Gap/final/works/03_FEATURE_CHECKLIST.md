@@ -18,10 +18,10 @@
 
 ## 02 · Data Requirements — [[02_M1_Data_Requirements]]
 *Why/what: the data contract — 15-source catalogue, full schema for all 9 `m1_*` tables, 2 analytical views, and an end-to-end worked example.*
-- [ ] [[02_M1_1_Data_Sources_Catalogue]] — per-source operations spec: scrape frequency, auth needs, URL patterns, failure modes, and fallback path for each of the 15 sources.
+- [~] [[02_M1_1_Data_Sources_Catalogue]] — per-source ops spec **shipped 2026-07-23**: `source_catalogue.py` (cadence/auth/URL/failure/fallback + `due_after`/`in_backoff`) + nightly `source_health` report. Registry health contract already existed; spider-side Wayback/viewstate fallback still deferred.
 - [x] [[02_M1_2_Database_Schema_Validation]] — three-layer validation **shipped 2026-07-23**: Layer-1 CHECK constraints (migration `202607230001`, `NOT VALID`), Layer-2 Pydantic + `app/m1/validation.py`, Layer-3 nightly `validate_pipeline` → `m1_pipeline_audits`. Names mapped to real schema; `VALIDATE CONSTRAINT` pending an operator run.
 - [~] [[02_M1_3_Data_Governance_Retention]] — governance/retention **framework shipped 2026-07-23**: retention jobs + storage projection + S3 lifecycle YAML, Beat-scheduled, `M1_RETENTION_DRY_RUN` default on. PDPA data-export/erasure endpoints + `audit_log_archive` still deferred.
-- [ ] [[02_M1_4_Worked_Examples_All_Tables]] — three complete worked examples (multi-pin adapter, VAT amendment, EPF rate change) populating all 9 tables + both views.
+- [~] [[02_M1_4_Worked_Examples_All_Tables]] — idempotent seed **shipped 2026-07-23** (`seed_m1_worked_examples.py`) populating the 3 examples across the real tables (regulation→sectors→penalties→propagation→awareness) so the two views compute over real rows. Doc's non-existent tables (changes/court_cases) noted; view-assertion tests pending.
 
 ## 03 · Data Collection — [[03_M1_Data_Collection]]
 *Why/what: the ingestion story — Scrapy scraper (4-way comparison), the PDF extraction chain, three segmentation strategies, the NOT_REGULATORY pre-filter, and 2-step secondary-source matching.*

@@ -1,7 +1,7 @@
 # 02_M1_4 — Worked Examples Across All 9 Tables
 
 > Companion to [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) — three complete worked examples (multi-pin adapter, VAT amendment, EPF rate change), each showing rows in all 9 `m1_*` tables + the two analytical views.
-> **Implementation status:** 🔲 Deferred (BUILD_07 — data only exists in the manual-CRUD admin slice today, with 5 demo regulations).
+> **Implementation status:** 🟡 Shipped 2026-07-23 as an idempotent seed (`app/scripts/seed_m1_worked_examples.py`) that populates the three examples across the **real** tables end-to-end (regulation → sectors → penalties → propagation events → awareness responses), so the two analytical views compute over real rows. **Schema reality:** the doc's `m1_regulation_changes`, `m1_court_cases`, and `m1_real_world_examples` tables **do not exist** (clause changes were never tabled; the real-world example is a column) — the seed covers the shipped subset. The round-trip view-assertion tests remain to be written.
 
 ## Purpose
 
@@ -197,6 +197,12 @@ A reader who can write each of those nine inserts for a *new* regulation has ful
 - **Round-trip test.** For each of the three examples, a unit test in `tests/m1/test_worked_examples.py` inserts all rows, runs the two views, and asserts the expected lag values.
 - **Constraint coverage.** Each example exercises at least one `CHECK` constraint from [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md) (e.g. EPF example tests the `chk_category_when_classified` constraint).
 - **Sector coverage.** Across the three examples, all 10 sectors and all 12 categories are exercised at least once.
+
+## Build note (2026-07-23) — as shipped
+
+`app/scripts/seed_m1_worked_examples.py` seeds three `WEX_`-prefixed examples (multi-pin adapter, VAT 2024 amendment, EPF 2024 rate) — distinct short codes so they never clash with `seed_regulations.py`'s demo rows. Per example it inserts: an `m1_regulations` row (real enums — `change_category='new_obligation'|'rate_change'`, integer `severity_level`, `status='alerted'` with a category so the new `ck_m1_reg_category_when_classified` passes, `language='eng'`), `m1_regulation_penalties` (real `penalty_type`/`min_lkr`/`max_lkr`/`imprisonment_months`), `m1_propagation_events` (a portal + a news channel, real `channel`/`match_method` enums), and `survey_responses` awareness answers (Q7 action-taken).
+
+**Defensive by design** (sandbox down → unverifiable): idempotent on `regulation_short_code`; only links `sector_code`/`source_id`/`sme_id` values that already exist (queried up front) so a fresh DB missing lookups degrades to fewer linked rows instead of a FK error; per-example transaction. Companion build docs: [[PHASE2_SOURCES_WORKED_EXAMPLES_ANALYSIS]] + [[PHASE2_SOURCES_WORKED_EXAMPLES_PLAN]].
 
 ## Cross-references
 
