@@ -38,6 +38,14 @@
 5. Frontend: `pnpm typecheck && pnpm lint`; open each page → data renders, refresh works, confirm/reject fires a toast; landing page shows the 4 Operations tiles.
 6. `graphify update .`.
 
+## 4b. Fix (2026-07-23) — "No QueryClient set"
+
+The four new pages (and the pre-existing `steps/[stepId]`) threw `No QueryClient set, use QueryClientProvider to set one` at runtime, even though the root `app/layout.tsx` wraps everything in `<Providers>` (which includes `<ReactQueryProvider>`) **and** `pipeline/layout.tsx` re-wraps in `<ReactQueryProvider>`. `package.json` has a single `@tanstack/react-query@^5.55.4`, so the ancestor provider *should* reach these routes — the failure is the classic "provider present but not seen" edge (stale chunk / nested-provider/context mismatch on newly-added routes).
+
+**Fix:** each affected page now wraps its own body in `ReactQueryProvider` (imported from `@/components/providers`) — the default export renders `<ReactQueryProvider><…Body/></ReactQueryProvider>` and the hooks moved into `…Body`. Because the provider and the `useQuery`/`useQueryClient` consumers are now co-located in the same module graph, they resolve to the same react-query instance and a client is guaranteed regardless of ancestor state. Nested providers are safe (innermost wins); each page keeps its own cache, which is fine for standalone admin views. Files: `data-quality`, `source-health`, `retention`, `propagation-review`, and `steps/[stepId]` pages.
+
+**If it recurs on other pipeline pages** (overview/recent/trace): the true root cause is environmental — delete `.next` and restart `next dev` (new route files + a modified client layout often need a clean rebuild), and/or `npm ls @tanstack/react-query` to rule out a lockfile duplicate.
+
 ## 5. Follow-ups
 
 Filters/pagination controls on Data Quality history (trend over run_dates); a "run now" button wired to trigger the nightly job; source-health `active` toggle from the card (endpoint already exists — `PATCH /sources/{id}`); propagation-review cross-language threshold hint + stale-auto-reject surfacing. Sidebar entry (currently reachable via the pipeline landing tiles) if a top-level nav link is wanted.

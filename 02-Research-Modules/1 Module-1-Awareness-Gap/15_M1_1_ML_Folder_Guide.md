@@ -37,12 +37,12 @@
 
 ### `ml/m1/preprocessing/`
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `preprocessing/cleaning.py` | 8 noise classes + NFKD | 🔲 | [04_M1_1_Gazette_Noise_Removal.md](04_M1_1_Gazette_Noise_Removal.md) | Fixed-order regex chain; idempotent — `clean(clean(x)) == clean(x)` |
-| `preprocessing/metadata_extractor.py` | Gazette#, effective date, multi-penalty, principal act | 🔲 | [04_M1_2_Metadata_Extraction_Patterns.md](04_M1_2_Metadata_Extraction_Patterns.md) | `re.finditer` for multi-penalty; output stored in `m1_regulation_penalties` |
-| `preprocessing/chunking.py` | §-aware → 512-token sliding window (stride 64) | 🔲 | [04_M1_3_Text_Chunking_Strategy.md](04_M1_3_Text_Chunking_Strategy.md) | Detect sections via `NOTICE_BOUNDARY_RE`; emit `Chunk[]`; classifier consumes `[0]` |
-| `preprocessing/tokenization.py` | XLM-R SentencePiece wrapper | 🔲 | [05_M1_Model_Architecture.md §4.2](05_M1_Model_Architecture.md) | Wrap `AutoTokenizer.from_pretrained('facebook/xlm-roberta-base')` |
+| File                                  | Owns                                                   | Status | Primary doc                                                                        | How to build (1-liner)                                                              |
+| ------------------------------------- | ------------------------------------------------------ | ------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `preprocessing/cleaning.py`           | 8 noise classes + NFKD                                 | 🔲     | [04_M1_1_Gazette_Noise_Removal.md](04_M1_1_Gazette_Noise_Removal.md)               | Fixed-order regex chain; idempotent — `clean(clean(x)) == clean(x)`                 |
+| `preprocessing/metadata_extractor.py` | Gazette#, effective date, multi-penalty, principal act | 🔲     | [04_M1_2_Metadata_Extraction_Patterns.md](04_M1_2_Metadata_Extraction_Patterns.md) | `re.finditer` for multi-penalty; output stored in `m1_regulation_penalties`         |
+| `preprocessing/chunking.py`           | §-aware → 512-token sliding window (stride 64)         | 🔲     | [04_M1_3_Text_Chunking_Strategy.md](04_M1_3_Text_Chunking_Strategy.md)             | Detect sections via `NOTICE_BOUNDARY_RE`; emit `Chunk[]`; classifier consumes `[0]` |
+| `preprocessing/tokenization.py`       | XLM-R SentencePiece wrapper                            | 🔲     | [05_M1_Model_Architecture.md §4.2](05_M1_Model_Architecture.md)                    | Wrap `AutoTokenizer.from_pretrained('facebook/xlm-roberta-base')`                   |
 
 ### `ml/m1/model/`
 

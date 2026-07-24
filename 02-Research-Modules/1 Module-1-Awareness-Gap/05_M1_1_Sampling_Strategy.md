@@ -80,12 +80,12 @@ Margin-based uncertainty (`1 - max_prob`) is the simplest acquisition function; 
 
 ## Technology choices
 
-| Option | Trade-off | Decision | When to reconsider |
-|---|---|---|---|
-| Stratified + k-means + AL (chosen) | Three orthogonal coverage axes | ✅ Each step addresses a different bias (language imbalance, topical clustering, easy-vs-hard) | If labelling budget triples (then move to pool-based BALD acquisition). |
-| Random sampling alone | Cheapest | ❌ Biased toward majority language + topics | Never. |
-| Stratified only | Easy | ❌ Misses topical coverage (Tax dominates the corpus). | If topical diversity is somehow guaranteed by the source distribution. |
-| Active-learning only (no stratification) | Maximally informative | ❌ Starts cold — the first 300 labels need stratification to even produce a usable AL baseline. | After the first 300 labels are in. |
+| Option                                   | Trade-off                      | Decision                                                                                       | When to reconsider                                                      |
+| ---------------------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Stratified + k-means + AL (chosen)       | Three orthogonal coverage axes | ✅ Each step addresses a different bias (language imbalance, topical clustering, easy-vs-hard)  | If labelling budget triples (then move to pool-based BALD acquisition). |
+| Random sampling alone                    | Cheapest                       | ❌ Biased toward majority language + topics                                                     | Never.                                                                  |
+| Stratified only                          | Easy                           | ❌ Misses topical coverage (Tax dominates the corpus).                                          | If topical diversity is somehow guaranteed by the source distribution.  |
+| Active-learning only (no stratification) | Maximally informative          | ❌ Starts cold — the first 300 labels need stratification to even produce a usable AL baseline. | After the first 300 labels are in.                                      |
 
 ## Worked example
 
