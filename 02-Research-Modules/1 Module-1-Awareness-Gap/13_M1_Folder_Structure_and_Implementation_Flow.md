@@ -98,7 +98,7 @@ xyz/                                          # repo root
 │   │   │
 │   │   └── utils/
 │   │       ├── __init__.py
-│   │       ├── constants.py                   # 12 category codes, 10 sector codes
+│   │       ├── constants.py                   # 8 domain codes, 3 sector codes
 │   │       ├── logging.py                     # structured JSON logging
 │   │       └── validation.py                  # data-quality assertions
 │   │

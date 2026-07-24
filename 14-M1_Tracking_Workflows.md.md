@@ -214,10 +214,10 @@ A morning queue clear (intended):
 09:15 — admin opens /admin/m1/review-queue
          Queue depth: 12 items, sorted by confidence ASC
          Top item: classifier confidence 0.42
-         Item is VAT-amendment look-alike; classifier said "FINANCIAL_REGULATION"
+         Item is VAT-amendment look-alike; classifier said "BUSINESS_REGISTRATION"
 09:16 — admin clicks the row → drawer opens
          classification_chunk shows: "VAT registration threshold raised from LKR 60M to LKR 80M..."
-         Top-3: TAX_RATE_CHANGE 0.32 | FINANCIAL_REGULATION 0.42 | BUSINESS_REGISTRATION 0.18
+         Top-3: TAX_RATE_CHANGE 0.32 | BUSINESS_REGISTRATION 0.42 | SECTOR_SPECIFIC 0.18
          Admin sees classifier ranked FINANCIAL above TAX_RATE_CHANGE — wrong
 09:16 — admin clicks "Override + Verify" → picks TAX_RATE_CHANGE → save
          needs_review=false; expert_verified=true; audit-log row written
@@ -885,12 +885,8 @@ The M1 taxonomy has 12 mutually-exclusive **categories** (single-label) + 10 **s
 | `PRODUCT_STANDARD` | Product standard | `<DomainBadge variant="domain-product">` | same |
 | `BUSINESS_REGISTRATION` | Business registration | `<DomainBadge variant="domain-business">` | same |
 | `IMPORT_EXPORT` | Import / export | `<DomainBadge variant="domain-trade">` | same |
-| `FINANCIAL_REGULATION` | Financial regulation | `<DomainBadge variant="domain-finance">` | same |
-| `SECTOR_SPECIFIC` | Sector-specific | `<DomainBadge variant="domain-sector">` | same |
-| `ENVIRONMENTAL` | Environmental | `<DomainBadge variant="domain-env">` | same |
+| `SECTOR_SPECIFIC` | Sector-specific (CAA MRP / Food Act / NMRA) | `<DomainBadge variant="domain-sector">` | same |
 | `PENALTY_ENFORCEMENT` | Penalty enforcement | `<DomainBadge variant="domain-penalty">` | same |
-| `DEADLINE_EXTENSION` | Deadline extension | `<DomainBadge variant="domain-deadline">` | same |
-| `NO_SME_IMPACT` | No SME impact | `<DomainBadge variant="domain-none">` (muted grey) | Admin-only — SMEs never see these |
 
 Labels render in EN by default; SI/TA via next-intl message keys `m1.category.{code}`. Trilingual parity is a CI-tested invariant.
 
@@ -898,16 +894,9 @@ Labels render in EN by default; SI/TA via next-intl message keys `m1.category.{c
 
 | Code | Label (EN) | Badge | Affects (sample) |
 |---|---|---|---|
-| `manufacturing` | Manufacturing | `<SectorBadge>` (uniform colour; sector identity isn't colour-coded, only label) | VAT, EPF, OSH |
-| `retail` | Retail | same | VAT, Product standards, Imports |
-| `services` | Services | same | VAT, Labour |
-| `agriculture` | Agriculture | same | Subsidies, Land |
-| `construction` | Construction | same | Labour, OSH |
-| `it_bpo` | IT / BPO | same | Data protection, Labour |
-| `hospitality` | Hospitality | same | Tourism, Labour |
-| `transport` | Transport | same | Customs, Vehicle |
-| `healthcare` | Healthcare | same | Pharmaceutical, Labour |
-| `finance` | Finance | same | CBSL regulations |
+| `grocery_retail` | Grocery / Food Retail | `<SectorBadge>` (uniform colour; sector identity isn't colour-coded, only label) | VAT, CAA MRP, Food Act, SCL |
+| `food_service` | Food Service | same | VAT, Food Act hygiene, Labour, Excise licences |
+| `general_retail` | General-Goods Retail | same | VAT, Customs/CESS, SLSI standards, MRP |
 
 > Categories use **colour** as a primary identity cue (12 distinct hues); sectors use **label only** (10 uniform-coloured chips). The asymmetry is intentional — categories are more numerous than colours-distinguishable, but the design constraint is that an admin filter rail can hold 12 coloured filter chips without becoming a rainbow soup.
 
@@ -935,7 +924,7 @@ When categories or sectors land in URL state, they use lowercase enum codes (NOT
 /regulations?sector=manufacturing,retail
 ```
 
-Multi-value: comma. Negation: leading `!` (e.g. `change_category=!NO_SME_IMPACT`). Date-range and other filters follow the same lowercase + comma + `!` convention.
+Multi-value: comma. Negation: leading `!` (e.g. `change_category=!PENALTY_ENFORCEMENT`). Date-range and other filters follow the same lowercase + comma + `!` convention.
 
 ### Sort orderings
 

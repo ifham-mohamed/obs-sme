@@ -55,7 +55,7 @@ A CA-led batch review using the seeded demo regulations:
          filters down to 14 VAT regulations awaiting expert sign-off
 10:05 — CA opens VAT_2024_AMD detail page
          reviews classifier output: change_category=TAX_RATE_CHANGE ✓
-         reviews sectors: [manufacturing, retail, services, ..., 10 sectors] ✓ (it's a universal VAT change)
+         reviews sectors: [grocery_retail, food_service, general_retail] ✓ (it's an economy-wide VAT change)
          clicks "Verify" → green badge appears with "Verified by K. Perera at 2026-05-14 10:06"
          audit_log row: event_type='regulation.verified', actor='kperera@enigmatrix.lk'
 10:15 — CA spot-checks 12 more rows individually; finds all correct

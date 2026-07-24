@@ -37,34 +37,23 @@ This document specifies the annotation protocol for constructing the 800-documen
 <View>
   <Text name="gazette_text" value="$classification_chunk" />
 
-  <Header value="Regulatory Category (select ONE):" />
+  <Header value="Regulation Domain (select ONE):" />
   <Choices name="change_category" toName="gazette_text" choice="single" required="true">
     <Choice value="TAX_RATE_CHANGE" />
-    <Choice value="LABOUR_LAW" />
+    <Choice value="IMPORT_EXPORT" />
+    <Choice value="SECTOR_SPECIFIC" />
     <Choice value="EPF_ETF_CHANGE" />
+    <Choice value="LABOUR_LAW" />
     <Choice value="PRODUCT_STANDARD" />
     <Choice value="BUSINESS_REGISTRATION" />
-    <Choice value="IMPORT_EXPORT" />
-    <Choice value="FINANCIAL_REGULATION" />
-    <Choice value="SECTOR_SPECIFIC" />
-    <Choice value="ENVIRONMENTAL" />
     <Choice value="PENALTY_ENFORCEMENT" />
-    <Choice value="DEADLINE_EXTENSION" />
-    <Choice value="NO_SME_IMPACT" />
   </Choices>
 
-  <Header value="Affected Sectors (select ALL that apply):" />
+  <Header value="Affected Sectors (select ALL that apply; all three if economy-wide):" />
   <Choices name="affected_sectors" toName="gazette_text" choice="multiple">
-    <Choice value="manufacturing" />
-    <Choice value="retail" />
-    <Choice value="services" />
-    <Choice value="agriculture" />
-    <Choice value="construction" />
-    <Choice value="it_bpo" />
-    <Choice value="hospitality" />
-    <Choice value="transport" />
-    <Choice value="healthcare" />
-    <Choice value="finance" />
+    <Choice value="grocery_retail" />
+    <Choice value="food_service" />
+    <Choice value="general_retail" />
   </Choices>
 
   <Header value="Notes / Edge Case Flags:" />
@@ -74,9 +63,11 @@ This document specifies the annotation protocol for constructing the 800-documen
 
 ---
 
-## 2. 12-Category Taxonomy — Decision Criteria
+## 2. 8-Domain Regulation Taxonomy — Decision Criteria
 
-Each annotator must apply the following criteria in priority order. Categories are mutually exclusive (single-label).
+> **2026-07-24 revision.** This legacy snapshot's per-category subsections below predate the shop-focused revision. The canonical decision criteria are in [[09_M1_Annotation_Guidelines]] §2: the taxonomy is now the 8 regulation domains — `TAX_RATE_CHANGE` (anchor; VAT/SVAT/income/excise), `IMPORT_EXPORT` (duty/CESS/SCL, import controls), `SECTOR_SPECIFIC` (CAA maximum-retail-price, Food Act, NMRA), `EPF_ETF_CHANGE`, `LABOUR_LAW` (wages-board/minimum-wage), `PRODUCT_STANDARD` (SLSI, labelling), `BUSINESS_REGISTRATION` (trade licences), `PENALTY_ENFORCEMENT` — with `FINANCIAL_REGULATION`/`ENVIRONMENTAL`/`DEADLINE_EXTENSION`/`NO_SME_IMPACT` retired (out-of-scope gazettes → `is_sme_relevant = FALSE` + empty sectors; tax deadline extensions → `TAX_RATE_CHANGE`).
+
+Each annotator must apply the following criteria in priority order. Domains are mutually exclusive (single-label).
 
 ### 2.1 `TAX_RATE_CHANGE`
 **Applies when:** The gazette amends a tax rate, introduces a new tax bracket, changes VAT rates, modifies customs duty schedules, or introduces/removes tax exemptions under the Inland Revenue Act or Customs Ordinance.
@@ -178,16 +169,9 @@ Sector assignment is multi-label. Assign ALL sectors that are materially affecte
 
 | Sector | Assign when the gazette affects... |
 |---|---|
-| `manufacturing` | Factories producing physical goods: food processing, textiles, electronics, construction materials |
-| `retail` | Shops, supermarkets, street vendors, e-commerce retailers |
-| `services` | Professional services: accounting, law, IT consulting, security, cleaning |
-| `agriculture` | Farming, fisheries, poultry, livestock, food crop production |
-| `construction` | Building contractors, civil engineering, real estate development |
-| `it_bpo` | Software development, BPO call centres, data processing companies |
-| `hospitality` | Hotels, restaurants, travel agencies, event venues |
-| `transport` | Freight transport, passenger transport, logistics, warehousing |
-| `healthcare` | Pharmacies, private hospitals, medical device suppliers, labs |
-| `finance` | Money changers, leasing companies, pawning establishments, microfinance |
+| `grocery_retail` | Grocery / food retail: neighbourhood kade, mini-marts, small supermarkets |
+| `food_service` | Food service: restaurants, cafés, bakeries, take-aways |
+| `general_retail` | General-goods retail: textile/apparel shops, electronics/mobile shops, hardware stores |
 
 > **Important:** Do NOT assign sectors by superficial keyword match. A gazette regulating "EPF contributions" applies to ALL sectors with employees — assign all 10. A gazette regulating "SLSI standards for electrical appliances" applies to `manufacturing` and `retail` only.
 
@@ -214,8 +198,7 @@ def compute_sector_kappa(annotator_a: list[list], annotator_b: list[list]) -> fl
     """Multi-label Fleiss kappa approximated as mean of per-sector binary kappa."""
     from sklearn.preprocessing import MultiLabelBinarizer
     mlb = MultiLabelBinarizer(classes=[
-        "manufacturing", "retail", "services", "agriculture", "construction",
-        "it_bpo", "hospitality", "transport", "healthcare", "finance"
+        "grocery_retail", "food_service", "general_retail"
     ])
     a_bin = mlb.fit_transform(annotator_a)
     b_bin = mlb.transform(annotator_b)

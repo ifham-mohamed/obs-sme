@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_NON_CODING_TASKS_AND_GOLIVE_READINESS_PLAN.md",
+                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/RESEARCH_DESIGN/SME_SECTOR_AND_REGULATION_SCOPE_PLAN.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "M1_NON_CODING_TASKS_AND_GOLIVE_READINESS_PLAN"
+              "title": "SME_SECTOR_AND_REGULATION_SCOPE_PLAN"
             }
           }
         ]
@@ -186,18 +186,21 @@
   },
   "active": "22d18590d71c8738",
   "lastOpenFiles": [
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/RESEARCH_DESIGN/SME_SECTOR_AND_REGULATION_SCOPE_PLAN.md.tmp.27868.4080b6024808",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/RESEARCH_DESIGN/SME_SECTOR_AND_REGULATION_SCOPE_PLAN.md.tmp.27868.bd61a7ff76a8",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/16_M1_Development_Roadmap.md.tmp.2516.df52cc599c9a",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_NON_CODING_TASKS_AND_GOLIVE_READINESS_PLAN.md.tmp.3880.5d583ae74e70",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/PHASE3_ANNOTATION_CLASSIFICATION_ANALYSIS.md.tmp.3880.0e77638fd8b1",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/PHASE3_ANNOTATION_CLASSIFICATION_ANALYSIS.md.tmp.3880.4ecf631ec812",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.3880.d793f38ea6cd",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.3880.c1d5c370d7df",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.3880.124a7c0d94f4",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/02_MEMBER1_MODULE1_REPORT.md.tmp.3880.551eac8e57a6",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/02_MEMBER1_MODULE1_REPORT.md.tmp.3880.1fa77937218f",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/01_MASTER_PROJECT_OVERVIEW.md.tmp.3880.655ed16e4ecb",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/01_MASTER_PROJECT_OVERVIEW.md.tmp.3880.922623ead26c",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_NON_CODING_TASKS_AND_GOLIVE_READINESS_PLAN.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/RESEARCH_DESIGN/SME_SECTOR_AND_REGULATION_SCOPE_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/RESEARCH_DESIGN/SME_SECTOR_AND_REGULATION_SCOPE_PLAN.md.tmp.1104.356b413d4d4a",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/RESEARCH_DESIGN",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_model_training/CLASSIFIER_MODEL_TRAINING_READINESS_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_model_training/CLASSIFIER_MODEL_TRAINING_READINESS_PLAN.md.tmp.24488.4a52bd93a14a",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_model_training",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_NON_CODING_TASKS_AND_GOLIVE_READINESS_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_NON_CODING_TASKS_AND_GOLIVE_READINESS_PLAN.md.tmp.34204.d46f5454edd6",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS",
     "02-Research-Modules/1 Module-1-Awareness-Gap/11_M1_1_API_Authentication_Authorization.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_1_ML_Folder_Guide.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_3_Scraper_Folder_Guide.md",
@@ -209,10 +212,7 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/04_M1_3_Text_Chunking_Strategy.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_2_Gazette_Segmentation.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_runtime_deps/EXTRACTION_RUNTIME_DEPS_RUNBOOK_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_runtime_deps/EXTRACTION_RUNTIME_DEPS_RUNBOOK_PLAN.md.tmp.25608.3b2d3f5fb992",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_runtime_deps",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/pipeline_stage_starvation/PIPELINE_STAGE_STARVATION_FIX_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/pipeline_stage_starvation/PIPELINE_STAGE_STARVATION_FIX_PLAN.md.tmp.27596.a6042e03da4f",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/language_check_constraint/LANGUAGE_CHECK_CONSTRAINT_FIX_PLAN.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE1_FOUNDATION/celery_async_loop_db/CELERY_ASYNC_LOOP_DB_FIX_PLAN.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/extraction_run_page_realtime/EXTRACTION_RUN_PAGE_REALTIME_PLAN.md",

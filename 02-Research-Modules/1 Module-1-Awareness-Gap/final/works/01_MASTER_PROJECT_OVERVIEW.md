@@ -58,7 +58,7 @@ xyz/
 | Backend | FastAPI, SQLAlchemy 2.0 async, Alembic, Pydantic v2, Celery + Beat (Redis), slowapi rate-limits |
 | Scraping | Scrapy — spiders: `gazette_spider`, `weekly_gazette_spider`, `acts_spider`, `bills_spider` (gazette.lk + documents.gov.lk) |
 | Extraction | PyMuPDF, pdfplumber, pypdfium2, Tesseract 5 (`eng+sin+tam`), Surya OCR fallback; font-aware Wijesekara→Unicode conversion |
-| Classification | XLM-RoBERTa + LoRA dual head (12-category single-label + 10-sector multi-label), ONNX Runtime CPU inference (INT8 option) |
+| Classification | XLM-RoBERTa + LoRA dual head (8-domain single-label + 3-sector multi-label), ONNX Runtime CPU inference (INT8 option) |
 | Frontend | Next.js 14 App Router, Tailwind + shadcn-pattern HSL tokens (trust-blue/amber, light+dark), next-intl EN/SI/TA, TanStack Query, Playwright E2E |
 | Storage | Postgres (Aiven in prod), ChromaDB (RAG, deferred), Redis (Celery broker) |
 | Data quality | Great-Expectations-style JSON suites in `enigmatrix-backend/data_quality/` |
@@ -128,7 +128,7 @@ This answers *"how good is our extraction?"* quantitatively — a core thesis ar
 - **Thesis artefact generator**: `scripts/regenerate_thesis_tables.py` → `data/thesis/table_4_{1,2,3}.csv`, `figure_4_{1,2}.svg`, `RUN_PROVENANCE.md` (`make thesis-artifacts`).
 
 ### 5.4 M1 Phase 3 — Annotation + Classification (Sessions 61–65, F-216…F-228)
-- **3a/3b (🟢):** Label Studio project XML (12-category + 10-sector + SME-relevance + confidence + notes), 20-doc trilingual calibration set with expert labels, stratified + k-means + active-learning samplers (`m1/data/samplers.py`), `scripts/sample_for_labeling.py` → `batch_01.csv` (200 docs: 150 stratified + 40 k-means + 10 handpick).
+- **3a/3b (🟢):** Label Studio project XML (8-domain + 3-sector + SME-relevance + confidence + notes), 20-doc trilingual calibration set with expert labels, stratified + k-means + active-learning samplers (`m1/data/samplers.py`), `scripts/sample_for_labeling.py` → `batch_01.csv` (200 docs: 150 stratified + 40 k-means + 10 handpick).
 - **3d (scaffold 🟢, training 🟡):** `m1/model/` — labels, config, temporal-split data loader (no leakage, unit-tested), XLM-R+LoRA dual-head architecture, 3-seed trainer CLI with FP16/early-stop/`model_registry.json`, gate macro-F1 ≥ 0.92.
 - **3e (🟢 code):** `m1/model/eval.py` (per-slice macro-F1 by language/quarter/length, slice-cliff ≤ 8pp check, error analysis CSV) + `baselines.py` (TF-IDF+LogReg, TF-IDF+LinearSVC — the RQ1 comparison).
 - **3f (🟢 code):** `export_onnx.py` (merges LoRA, optional INT8) + `GazetteInference` ONNX Runtime engine + backend `m1_classifier_service` + `classify_gazette` task auto-chained after preprocessing; migration `202606300001` adds `change_category` confidence columns.

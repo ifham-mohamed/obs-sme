@@ -1,6 +1,6 @@
 # SME Regulatory Intelligence Platform
 ## Predefined Question Bank — Modules 2 & 3
-### Coverage: All 9 Regulatory Domains × 12 Sectors
+### Coverage: 8 Regulation Domains × 3 Study Sectors (grocery_retail / food_service / general_retail)
 
 ---
 
@@ -15,7 +15,7 @@
 Each question is tagged with:
 - **`question_code`** — for the database
 - **`domain`** — which regulation
-- **`sector`** — which sectors it applies to (UNIVERSAL = all)
+- **`sector`** — which study sectors it applies to (General/NULL = all three)
 - **`knowledge_type`** — factual / procedural / application / exception
 - **`format`** — MCQ / numeric / ordered_steps / scenario_response
 - **`correct_answer`** — verified against official sources
@@ -23,13 +23,13 @@ Each question is tagged with:
 
 ---
 
-## DOMAIN 1: VALUE ADDED TAX (VAT)
+## DOMAIN: TAX_RATE_CHANGE — Value Added Tax (VAT)
 
 > **VAT/SSCL merge (April 2026) — worked M0→M2→M3 chain.** From 1 April 2026 the SSCL (~2.5%) is abolished as a separate levy and folded into VAT at a single 20% rate. Most businesses were already paying ~18%+SSCL ≈ 20%, so this is a **restructuring of two line items into one, not a real 2-point increase** — invoices must now show one "20% VAT" line. This is seeded as the M1 regulation `VAT_SSCL_MERGE_2026` and a full cross-module chain (see [`../SETUP/11_Survey_System.md`](../SETUP/11_Survey_System.md) §10.3): M0 awareness `awareness.v1.q13` ("aware it's a restructuring" / "aware but think it's a hike" / "no" / "unsure" — the non-ideal three route to M2) → M2 knowledge `VAT_SSCL_MERGE_FACT_001` ("which two charges does the 20% VAT replace?" → A: VAT 18% + SSCL ✓) and `VAT_SSCL_MERGE_APP_001` ("compute the VAT on a LKR 1M supply" → A: LKR 200,000 as one line ✓; wrong → M3) → M3 behaviour `M3_VAT_SSCL_MERGE_PRACTICE` ("one 20% line, or still VAT+SSCL separately?" → wrong → M3 stress `M3_VAT_SSCL_MERGE_PENALTY` — back-VAT + 25-50% penalty + re-issuing non-compliant invoices). The M3 follow-ups are junction-linked to `VAT_SSCL_MERGE_2026` (so the reg-scoped flow traverses them) but carry no `m3_field_mapping`, so they don't project into the legacy snapshot tables — an admin can opt them in via that column if the risk model should use them.
 
-### Universal VAT Questions (all sectors)
+### General VAT Questions (all study sectors)
 
-**VAT_FACT_001** | Universal | Factual | MCQ
+**VAT_FACT_001** | General | Factual | MCQ
 > What is the current standard VAT rate in Sri Lanka?
 - A) 8%
 - B) 15%
@@ -40,7 +40,7 @@ Each question is tagged with:
 
 ---
 
-**VAT_FACT_002** | Universal | Factual | MCQ
+**VAT_FACT_002** | General | Factual | MCQ
 > As of April 2026, what is the annual turnover threshold above which a business MUST register for VAT?
 - A) LKR 12 million
 - B) LKR 36 million ✓
@@ -51,7 +51,7 @@ Each question is tagged with:
 
 ---
 
-**VAT_FACT_003** | Universal | Factual | MCQ
+**VAT_FACT_003** | General | Factual | MCQ
 > By which date of the following month must monthly VAT returns be filed?
 - A) Last day of the next month ✓
 - B) 15th of the next month
@@ -62,7 +62,7 @@ Each question is tagged with:
 
 ---
 
-**VAT_PROC_001** | Universal | Procedural | Ordered Steps
+**VAT_PROC_001** | General | Procedural | Ordered Steps
 > Arrange the following steps in the correct order for filing a monthly VAT return:
 1. Calculate output VAT (VAT collected on sales)
 2. Calculate input VAT (VAT paid on purchases)
@@ -76,7 +76,7 @@ Each question is tagged with:
 
 ---
 
-**VAT_APP_001** | Universal | Application | Scenario Response
+**VAT_APP_001** | General | Application | Scenario Response
 > A customer pays you LKR 118,000 on March 25th as advance payment for goods you will deliver in May. In which VAT return period must you account for this VAT?
 - A) March return (the period of payment) ✓
 - B) May return (the period of delivery)
@@ -87,7 +87,7 @@ Each question is tagged with:
 
 ---
 
-**VAT_APP_002** | Universal | Application | Scenario Response
+**VAT_APP_002** | General | Application | Scenario Response
 > You issued a tax invoice for LKR 200,000 + 18% VAT in January. In April, the customer returns 50% of the goods. What is the correct VAT treatment?
 - A) Issue a credit note and adjust output VAT in the April return ✓
 - B) Refund the customer in cash; no VAT adjustment needed
@@ -98,7 +98,7 @@ Each question is tagged with:
 
 ---
 
-**VAT_EXC_001** | Universal | Exception | MCQ
+**VAT_EXC_001** | General | Exception | MCQ
 > You purchased raw materials worth LKR 200,000 + VAT but the supplier issued only a cash receipt — not a formal tax invoice. Can you claim the input VAT?
 - A) Yes, any receipt is sufficient
 - B) No — input VAT can only be claimed against a valid tax invoice ✓
@@ -109,7 +109,7 @@ Each question is tagged with:
 
 ---
 
-**VAT_EXC_002** | Universal | Exception | MCQ
+**VAT_EXC_002** | General | Exception | MCQ
 > Effective 1 October 2025, what happened to the SVAT (Simplified VAT) scheme?
 - A) It was made mandatory for all exporters
 - B) It was abolished and replaced with an approved refund process ✓
@@ -120,20 +120,9 @@ Each question is tagged with:
 
 ---
 
-### Sector-Specific VAT Questions
+### Sector-Specific VAT Questions (three study sectors)
 
-**VAT_MFG_001** | Manufacturing | Application | MCQ
-> A manufacturer exports finished textiles to the UK and receives payment in GBP within 4 months. The export sale is:
-- A) Standard rated at 18%
-- B) Zero-rated (you can claim input VAT) ✓
-- C) Exempt (no input VAT recoverable)
-- D) Subject to special export tax
-
-*Source: VAT Act Section 7 — exports zero-rated if foreign currency received within 6 months.*
-
----
-
-**VAT_RTL_001** | Retail & Wholesale | Procedural | MCQ
+**VAT_RTL_001** | General-Goods Retail | Procedural | MCQ
 > When selling to another VAT-registered business, which detail is NOT mandatory on the tax invoice?
 - A) Buyer's VAT registration number
 - B) Buyer's date of birth ✓
@@ -144,40 +133,7 @@ Each question is tagged with:
 
 ---
 
-**VAT_ITS_001** | IT & Software | Exception | MCQ
-> Your IT firm exports software services to a US client. Payment arrives in USD via a Sri Lankan bank within 5 months of invoice. The VAT treatment is:
-- A) Standard rated at 18%
-- B) Zero-rated, with input VAT recoverable ✓
-- C) Exempt
-- D) Subject to 8% reduced rate
-
-*Source: VAT Act Section 7 — exported services zero-rated when consumed outside SL and forex received within 6 months.*
-
----
-
-**VAT_ITS_002** | IT & Software | Factual | MCQ
-> As of April 2026, do all commercial exporters of services need to register for VAT regardless of turnover?
-- A) Yes — registration is mandatory for all commercial exporters ✓
-- B) No — only if turnover exceeds LKR 36M
-- C) No — exporters are fully exempt
-- D) Only if exporting to specific countries
-
-*Source: 2026 VAT regime changes — mandatory for exporters regardless of threshold.*
-
----
-
-**VAT_TRH_001** | Tourism & Hospitality | Application | MCQ
-> Your hotel charges a guest LKR 25,000 for the room and adds a 10% service charge. VAT is calculated on:
-- A) Room charge only
-- B) Room charge + service charge ✓
-- C) Service charge only
-- D) Room charge minus 10% discount
-
-*Source: VAT Act — service charges form part of taxable value.*
-
----
-
-**VAT_FNB_001** | Food & Beverage | Exception | MCQ
+**VAT_FNB_001** | Grocery / Food Retail | Exception | MCQ
 > Which of the following food categories is generally VAT EXEMPT in Sri Lanka?
 - A) Restaurant prepared meals
 - B) Locally produced unprocessed rice ✓
@@ -188,64 +144,22 @@ Each question is tagged with:
 
 ---
 
-**VAT_CON_001** | Construction | Procedural | Scenario Response
-> You are a contractor working on a 24-month construction project. How is VAT typically accounted for on long-running projects?
-- A) Only when the project completes
-- B) On each progress billing/certified payment as it is invoiced ✓
-- C) At the start of the project on the full contract value
-- D) Annually on the project value
+**VAT_FSV_001** | Food Service | Application | MCQ
+> Your restaurant bills a customer LKR 25,000 for meals and adds a 10% service charge. VAT is calculated on:
+- A) Meal charge only
+- B) Meal charge + service charge ✓
+- C) Service charge only
+- D) Meal charge minus 10% discount
 
-*Source: VAT Act — time of supply for construction services tied to invoicing/payment milestones.*
+*Source: VAT Act — service charges form part of taxable value.*
 
----
-
-**VAT_AGR_001** | Agriculture | Exception | MCQ
-> A farmer sells unprocessed paddy directly to a wholesale buyer. The sale is:
-- A) Standard rated at 18%
-- B) VAT exempt ✓
-- C) Zero-rated
-- D) Subject to special agricultural tax
-
-*Source: VAT exemption schedule for unprocessed agricultural produce.*
+> **Retired (out-of-scope sectors, 2026-07-24):** VAT_MFG_001 (Manufacturing), VAT_ITS_001/VAT_ITS_002 (IT & Software), VAT_TRH_001 (Tourism & Hospitality — adapted into VAT_FSV_001), VAT_CON_001 (Construction), VAT_AGR_001 (Agriculture), VAT_TPT_001 (Transport), VAT_HLT_001 (Healthcare), VAT_EDU_001 (Education). The study scope covers grocery/food retail, food service, and general-goods retail only.
 
 ---
 
-**VAT_TPT_001** | Transport | Exception | MCQ
-> Passenger transport services in Sri Lanka are generally:
-- A) Standard rated at 18%
-- B) Zero-rated
-- C) VAT exempt ✓
-- D) Subject to a special 5% rate
+## DOMAIN: TAX_RATE_CHANGE — Income Tax (Corporate)
 
-*Source: VAT Act exempt services schedule.*
-
----
-
-**VAT_HLT_001** | Healthcare | Exception | MCQ
-> Medical services provided by a registered hospital to patients are generally:
-- A) Standard rated at 18%
-- B) VAT exempt ✓
-- C) Zero-rated
-- D) Subject to a healthcare-specific levy only
-
-*Source: VAT Act — healthcare services are exempt supplies.*
-
----
-
-**VAT_EDU_001** | Education | Exception | MCQ
-> Tuition fees charged by a registered educational institution are:
-- A) Standard rated at 18%
-- B) VAT exempt ✓
-- C) Zero-rated
-- D) Subject to 8% reduced rate
-
-*Source: VAT Act — educational services are exempt supplies.*
-
----
-
-## DOMAIN 2: INCOME TAX (Corporate)
-
-**IT_FACT_001** | Universal | Factual | MCQ
+**IT_FACT_001** | General | Factual | MCQ
 > What is the standard corporate income tax rate in Sri Lanka?
 - A) 15%
 - B) 24%
@@ -256,7 +170,7 @@ Each question is tagged with:
 
 ---
 
-**IT_FACT_002** | Universal | Factual | MCQ
+**IT_FACT_002** | General | Factual | MCQ
 > By what date must a company file its annual corporate income tax return for the year ending 31 March?
 - A) 30 June (3 months after year-end)
 - B) 30 September
@@ -267,7 +181,7 @@ Each question is tagged with:
 
 ---
 
-**IT_FACT_003** | Universal | Factual | MCQ
+**IT_FACT_003** | General | Factual | MCQ
 > Within how many days of incorporation must a new company register with the Inland Revenue Department?
 - A) 14 days
 - B) 30 days ✓
@@ -278,7 +192,7 @@ Each question is tagged with:
 
 ---
 
-**IT_PROC_001** | Universal | Procedural | Ordered Steps
+**IT_PROC_001** | General | Procedural | Ordered Steps
 > A company makes an income tax payment via four quarterly installments. Order these correctly through the year for a 1 April – 31 March year of assessment:
 1. First installment due
 2. Second installment due
@@ -291,7 +205,7 @@ Each question is tagged with:
 
 ---
 
-**IT_APP_001** | Universal | Application | Scenario Response
+**IT_APP_001** | General | Application | Scenario Response
 > Your business made a NET LOSS of LKR 5 million this assessment year. Are you required to file a tax return?
 - A) No, since there is no tax payable
 - B) Yes — a return must still be filed; the loss can be carried forward ✓
@@ -302,7 +216,7 @@ Each question is tagged with:
 
 ---
 
-**IT_EXC_001** | Universal | Exception | MCQ
+**IT_EXC_001** | General | Exception | MCQ
 > If a company underpays tax negligently and the underpayment exceeds LKR 10 million OR 25% of total tax liability, what is the penalty?
 - A) 10% of underpayment
 - B) 25% of underpayment
@@ -313,9 +227,9 @@ Each question is tagged with:
 
 ---
 
-## DOMAIN 3: WITHHOLDING TAX (WHT)
+## DOMAIN: TAX_RATE_CHANGE — Withholding Tax (WHT)
 
-**WHT_FACT_001** | Universal | Factual | MCQ
+**WHT_FACT_001** | General | Factual | MCQ
 > What is the WHT rate on payments exceeding LKR 100,000 per month to a resident independent service provider (e.g., consultant, freelancer)?
 - A) 2%
 - B) 5% ✓
@@ -326,7 +240,7 @@ Each question is tagged with:
 
 ---
 
-**WHT_FACT_002** | Universal | Factual | MCQ
+**WHT_FACT_002** | General | Factual | MCQ
 > What is the final WHT rate on dividends paid by a resident company?
 - A) 5%
 - B) 10%
@@ -337,7 +251,7 @@ Each question is tagged with:
 
 ---
 
-**WHT_PROC_001** | Universal | Procedural | Ordered Steps
+**WHT_PROC_001** | General | Procedural | Ordered Steps
 > You make a payment of LKR 150,000 to a freelance designer. Order the correct WHT actions:
 1. Calculate 5% WHT (LKR 7,500)
 2. Pay net amount (LKR 142,500) to designer
@@ -349,7 +263,7 @@ Each question is tagged with:
 
 ---
 
-**WHT_APP_001** | Universal | Application | MCQ
+**WHT_APP_001** | General | Application | MCQ
 > A company pays a dividend on 20th April. By what date must the WHT be remitted to IRD?
 - A) Within 7 days
 - B) Within 15 days after end of the calendar month of payment ✓
@@ -360,9 +274,9 @@ Each question is tagged with:
 
 ---
 
-## DOMAIN 4: SOCIAL SECURITY CONTRIBUTION LEVY (SSCL)
+## DOMAIN: TAX_RATE_CHANGE — Social Security Contribution Levy (SSCL)
 
-**SSCL_FACT_001** | Universal | Factual | MCQ
+**SSCL_FACT_001** | General | Factual | MCQ
 > What is the standard SSCL rate?
 - A) 1%
 - B) 2.5% ✓
@@ -373,7 +287,7 @@ Each question is tagged with:
 
 ---
 
-**SSCL_FACT_002** | Universal | Factual | MCQ
+**SSCL_FACT_002** | General | Factual | MCQ
 > As of April 2026, what is the SSCL registration threshold?
 - A) LKR 12 million
 - B) LKR 36 million ✓
@@ -395,9 +309,9 @@ Each question is tagged with:
 
 ---
 
-## DOMAIN 5: EMPLOYEES PROVIDENT FUND (EPF)
+## DOMAIN: EPF_ETF_CHANGE — Employees Provident Fund (EPF)
 
-**EPF_FACT_001** | Universal | Factual | MCQ
+**EPF_FACT_001** | General | Factual | MCQ
 > What is the employer's monthly EPF contribution as a percentage of an employee's gross monthly earnings?
 - A) 8%
 - B) 10%
@@ -408,7 +322,7 @@ Each question is tagged with:
 
 ---
 
-**EPF_FACT_002** | Universal | Factual | MCQ
+**EPF_FACT_002** | General | Factual | MCQ
 > What is the employee's monthly EPF contribution rate?
 - A) 8% ✓
 - B) 10%
@@ -419,7 +333,7 @@ Each question is tagged with:
 
 ---
 
-**EPF_FACT_003** | Universal | Factual | MCQ
+**EPF_FACT_003** | General | Factual | MCQ
 > By what date must EPF contributions for a given month be remitted?
 - A) 7th of the following month
 - B) 15th of the following month
@@ -430,7 +344,7 @@ Each question is tagged with:
 
 ---
 
-**EPF_FACT_004** | Universal | Factual | MCQ
+**EPF_FACT_004** | General | Factual | MCQ
 > Within how many days of hiring the first employee must an employer register with the Department of Labour?
 - A) 7 days
 - B) 14 days ✓
@@ -441,7 +355,7 @@ Each question is tagged with:
 
 ---
 
-**EPF_PROC_001** | Universal | Procedural | Ordered Steps
+**EPF_PROC_001** | General | Procedural | Ordered Steps
 > Order the correct steps for monthly EPF/ETF processing:
 1. Calculate gross EPF-eligible earnings per employee
 2. Compute employee 8% deduction and employer 12% contribution
@@ -454,7 +368,7 @@ Each question is tagged with:
 
 ---
 
-**EPF_APP_001** | Universal | Application | MCQ
+**EPF_APP_001** | General | Application | MCQ
 > An employee earns LKR 50,000 basic + LKR 10,000 cost-of-living allowance + LKR 5,000 overtime + LKR 8,000 performance bonus. What is the EPF-eligible monthly earning?
 - A) LKR 50,000
 - B) LKR 60,000 ✓ (basic + COL allowance only)
@@ -465,7 +379,7 @@ Each question is tagged with:
 
 ---
 
-**EPF_EXC_001** | Universal | Exception | MCQ
+**EPF_EXC_001** | General | Exception | MCQ
 > A new employee joins on the 20th of the month. EPF contribution is calculated on:
 - A) The full month's salary
 - B) The proportional salary actually earned in that month ✓
@@ -476,7 +390,7 @@ Each question is tagged with:
 
 ---
 
-**EPF_APP_002** | Universal | Application | Scenario Response
+**EPF_APP_002** | General | Application | Scenario Response
 > You forgot to remit last month's EPF contribution. What is the correct procedure?
 > (Open answer — score on whether they mention: 1) Pay arrears with surcharge, 2) Use proper remittance form, 3) Inform EPF department, 4) Surcharge accrues based on days delayed)
 
@@ -484,9 +398,9 @@ Each question is tagged with:
 
 ---
 
-## DOMAIN 6: EMPLOYEES TRUST FUND (ETF)
+## DOMAIN: EPF_ETF_CHANGE — Employees Trust Fund (ETF)
 
-**ETF_FACT_001** | Universal | Factual | MCQ
+**ETF_FACT_001** | General | Factual | MCQ
 > ETF contribution is paid by:
 - A) Employee only
 - B) Employer only ✓
@@ -497,7 +411,7 @@ Each question is tagged with:
 
 ---
 
-**ETF_FACT_002** | Universal | Factual | MCQ
+**ETF_FACT_002** | General | Factual | MCQ
 > What is the ETF contribution rate as a percentage of employee's total monthly earnings?
 - A) 1%
 - B) 2%
@@ -508,7 +422,7 @@ Each question is tagged with:
 
 ---
 
-**ETF_PROC_001** | Universal | Procedural | MCQ
+**ETF_PROC_001** | General | Procedural | MCQ
 > An employer with 18 employees should use which remittance form for ETF?
 - A) Form R4
 - B) Form R1 ✓
@@ -519,7 +433,7 @@ Each question is tagged with:
 
 ---
 
-**ETF_EXC_001** | Universal | Exception | MCQ
+**ETF_EXC_001** | General | Exception | MCQ
 > Can an employer deduct ETF contributions from an employee's salary?
 - A) Yes, partially
 - B) Yes, the full 3%
@@ -530,9 +444,9 @@ Each question is tagged with:
 
 ---
 
-## DOMAIN 7: COMPANY REGISTRATION (eROC)
+## DOMAIN: BUSINESS_REGISTRATION — Company Registration (eROC)
 
-**ROC_FACT_001** | Universal | Factual | MCQ
+**ROC_FACT_001** | General | Factual | MCQ
 > A Private Limited Company in Sri Lanka must file annual returns with the Registrar of Companies within how long after the financial year-end?
 - A) 30 days
 - B) 3 months
@@ -543,7 +457,7 @@ Each question is tagged with:
 
 ---
 
-**ROC_FACT_002** | Universal | Factual | MCQ
+**ROC_FACT_002** | General | Factual | MCQ
 > What is the minimum number of shareholders required to incorporate a Private Limited Company in Sri Lanka?
 - A) 1 ✓
 - B) 2
@@ -554,7 +468,7 @@ Each question is tagged with:
 
 ---
 
-**ROC_PROC_001** | Universal | Procedural | Ordered Steps
+**ROC_PROC_001** | General | Procedural | Ordered Steps
 > Order the steps to incorporate a Pvt Ltd company:
 1. Reserve company name with eROC
 2. Prepare Articles of Association and incorporation forms
@@ -567,9 +481,9 @@ Each question is tagged with:
 
 ---
 
-## DOMAIN 8: CUSTOMS DUTY (Import/Export businesses)
+## DOMAIN: IMPORT_EXPORT — Customs Duty, CESS, SCL & Import Controls
 
-**CUS_FACT_001** | Manufacturing/Retail/IT (Import-dependent) | Factual | MCQ
+**CUS_FACT_001** | General (all study sectors — shop stock is import-priced) | Factual | MCQ
 > As of April 2026, the revised customs import duty bands are:
 - A) 5%, 10%, 15%, 25%
 - B) 0%, 10%, 20%, 30% ✓
@@ -578,18 +492,7 @@ Each question is tagged with:
 
 *Source: 2026 Budget — national tariff policy revision effective April 2026.*
 
----
-
-## DOMAIN 9: TOURISM DEVELOPMENT LEVY (TDL) — Tourism only
-
-**TDL_FACT_001** | Tourism & Hospitality | Factual | MCQ
-> The Tourism Development Levy is calculated on:
-- A) Net profit
-- B) Gross turnover from tourism services ✓
-- C) Number of guests
-- D) Property value
-
-*Source: TDL Act — verify current rate and base.*
+> **Retired (2026-07-24):** DOMAIN 9 (Tourism Development Levy / TDL_FACT_001) — tourism is outside the three-sector study scope. New question stock for the remaining domains (SECTOR_SPECIFIC — CAA MRP / Food Act / NMRA; LABOUR_LAW — wages board; PRODUCT_STANDARD — SLSI/labelling; PENALTY_ENFORCEMENT) should be authored against `app/scripts/seed_m23_questions.py`, which is the executable form of this spec.
 
 ---
 
@@ -599,223 +502,150 @@ These questions are NOT about correct/incorrect — they are about capturing **b
 
 ---
 
-## SECTION B1: COMPLIANCE HISTORY (Universal)
+## SECTION B1: COMPLIANCE HISTORY (General — all study sectors)
 
-**M3_HIST_001** | Universal | Yes/No
+**M3_HIST_001** | General | Yes/No
 > In the last 24 months, has your business missed ANY tax filing deadline (VAT, EPF, ETF, Income Tax, or any other)?
 - Yes / No / Prefer not to say
 
-**M3_HIST_002** | Universal | Numeric
+**M3_HIST_002** | General | Numeric
 > If yes, approximately how many times?
 - 1 / 2-3 / 4-6 / 7+ / Don't remember
 
-**M3_HIST_003** | Universal | Multi-select
+**M3_HIST_003** | General | Multi-select
 > Which deadlines have you missed? (Select all that apply)
 - VAT return / VAT payment / EPF contribution / ETF contribution / Income tax installment / Annual income tax return / Annual return to ROC / WHT remittance / Other
 
-**M3_HIST_004** | Universal | Yes/No
+**M3_HIST_004** | General | Yes/No
 > Have you received a penalty notice from IRD, EPF Dept, ETF Board, or any regulatory body in the last 24 months?
 
-**M3_HIST_005** | Universal | Range
+**M3_HIST_005** | General | Range
 > Approximate total penalty paid in last 24 months:
 - None / Under LKR 25,000 / 25K-100K / 100K-500K / 500K-2M / Above 2M / Prefer not to say
 
-**M3_HIST_006** | Universal | Yes/No
+**M3_HIST_006** | General | Yes/No
 > Are you currently under any tax audit, inquiry, or investigation?
 
-**M3_HIST_007** | Universal | Yes/No
+**M3_HIST_007** | General | Yes/No
 > Have you ever had to pay back-taxes or revised assessments due to errors in original filing?
 
-**M3_HIST_008** | Universal | 1-5 Scale
+**M3_HIST_008** | General | 1-5 Scale
 > On a scale of 1 to 5, how confident are you that your business is FULLY compliant with all regulatory requirements RIGHT NOW?
 - 1 = Not at all confident → 5 = Completely confident
 
 ---
 
-## SECTION B2: BEHAVIORAL & OPERATIONAL SIGNALS (Universal)
+## SECTION B2: BEHAVIORAL & OPERATIONAL SIGNALS (General — all study sectors)
 
-**M3_BEH_001** | Universal | Single-select
+**M3_BEH_001** | General | Single-select
 > How do you typically file your taxes?
 - Self via IRD e-filing / Self via paper submission / Through external accountant / Through tax agent / Mixed
 
-**M3_BEH_002** | Universal | Single-select
+**M3_BEH_002** | General | Single-select
 > What method do you use to maintain your business books?
 - No formal books / Manual ledger / Excel spreadsheets / Accounting software / Mixed
 
-**M3_BEH_003** | Universal | Single-select
+**M3_BEH_003** | General | Single-select
 > If you use accounting software, which one?
 - QuickBooks / Zoho Books / Sage / Tally / Local Sri Lankan software (specify) / None
 
-**M3_BEH_004** | Universal | Single-select
+**M3_BEH_004** | General | Single-select
 > How often do you update your business records/books?
 - Daily / Weekly / Monthly / Quarterly / Only at filing time / Don't keep formal books
 
-**M3_BEH_005** | Universal | Yes/No
+**M3_BEH_005** | General | Yes/No
 > Do you maintain a calendar or system that tracks all your filing deadlines?
 
-**M3_BEH_006** | Universal | Verifiable Open Text
+**M3_BEH_006** | General | Verifiable Open Text
 > Without checking, what is the date of your NEXT VAT return filing? (And what about EPF?)
 > *(System checks against actual ground truth — measures real awareness vs claimed awareness)*
 
-**M3_BEH_007** | Universal | Single-select
+**M3_BEH_007** | General | Single-select
 > When did you last attend any tax/compliance training, seminar, or workshop?
 - Within last 6 months / 6-12 months / 1-2 years / More than 2 years / Never
 
-**M3_BEH_008** | Universal | Single-select
+**M3_BEH_008** | General | Single-select
 > Who is responsible for compliance in your business?
 - Owner personally / Dedicated finance staff / Shared informally / External accountant only / No one specifically
 
-**M3_BEH_009** | Universal | Single-select
+**M3_BEH_009** | General | Single-select
 > Has your finance/accounts staff changed in the last 12 months?
 - No change / 1 person changed / Multiple changes / We have no dedicated finance staff
 
-**M3_BEH_010** | Universal | Numeric
+**M3_BEH_010** | General | Numeric
 > How many different regulatory bodies do you regularly file with?
 - 1 / 2 / 3 / 4 / 5+ / Not sure
 
 ---
 
-## SECTION B3: STRESS & CAPACITY INDICATORS (Universal)
+## SECTION B3: STRESS & CAPACITY INDICATORS (General — all study sectors)
 
-**M3_STR_001** | Universal | 1-5 Scale
+**M3_STR_001** | General | 1-5 Scale
 > How often do cash flow problems affect your ability to pay taxes on time? (1=Never, 5=Very often)
 
-**M3_STR_002** | Universal | Yes/No
+**M3_STR_002** | General | Yes/No
 > Have you ever delayed filing or payment because you couldn't afford the tax amount at the time?
 
-**M3_STR_003** | Universal | 1-5 Scale
+**M3_STR_003** | General | 1-5 Scale
 > How difficult do you find it to understand official tax notices or letters when you receive them? (1=Very easy, 5=Very difficult)
 
-**M3_STR_004** | Universal | Multi-select
+**M3_STR_004** | General | Multi-select
 > What are your biggest barriers to staying compliant? (Select all that apply, then rank top 3)
 - Time constraints / Cost of accountant / Complex rules / Language barrier (English documents) / Cash flow / Volume of paperwork / Frequent rule changes / Lack of training / Tech literacy / Unclear official communication / Other
 
 ---
 
-## SECTION B4: SECTOR-SPECIFIC RISK QUESTIONS
+## SECTION B4: SECTOR-SPECIFIC RISK QUESTIONS (three study sectors)
 
-### Manufacturing
-**M3_SEC_MFG_001** | Yes/No
-> Do you handle VAT on work-in-progress, partial deliveries, or stage-billed contracts?
-
-**M3_SEC_MFG_002** | Yes/No
-> Do you systematically track input tax credits across multiple raw material suppliers?
-
-**M3_SEC_MFG_003** | Yes/No
-> Do you export any portion of your output? (Export VAT zero-rating compliance triggers)
-
----
-
-### Retail & Wholesale
-**M3_SEC_RTL_001** | Yes/No
+### Grocery / Food Retail
+**M3_SEC_GRC_001** | Yes/No
 > Do you reconcile daily sales totals with your VAT records at end of each day?
 
-**M3_SEC_RTL_002** | Yes/No
-> Do you have a documented process for handling returns and refunds in your VAT records?
+**M3_SEC_GRC_002** | Yes/No
+> Are you clear on which of your stock items are VAT exempt vs taxable (e.g., unprocessed rice vs imported chocolates)?
 
-**M3_SEC_RTL_003** | Single-select
+**M3_SEC_GRC_003** | Yes/No
+> Do you check that MRP (maximum retail price) labels are respected at point of sale? (CAA inspections issue on-the-spot fines)
+
+**M3_SEC_GRC_004** | Single-select
 > What proportion of your sales are cash vs card/bank transfer?
 - Mostly cash (>70%) / Mostly digital (>70%) / Roughly even / Don't track separately
 
 ---
 
-### IT & Software / Services
-**M3_SEC_ITS_001** | Yes/No
-> Do you receive payments in foreign currency for exported services?
+### Food Service
+**M3_SEC_FSV_001** | Yes/No
+> Are you clear on which of your menu items are VAT exempt vs taxable?
 
-**M3_SEC_ITS_002** | Yes/No
-> Do you ensure foreign currency receipts arrive within 6 months of invoice (for VAT zero-rating)?
+**M3_SEC_FSV_002** | Yes/No
+> Do you maintain renewed health, hygiene, and food safety registrations (Food Act / local council)?
 
-**M3_SEC_ITS_003** | Yes/No
-> Are you aware of and compliant with the new April 2026 VAT regime for exporters?
-
----
-
-### Tourism & Hospitality
-**M3_SEC_TRH_001** | Yes/No
-> Do you separately track Tourism Development Levy obligations?
-
-**M3_SEC_TRH_002** | Multi-select
-> Which annual licenses/registrations apply to your establishment?
-- SLTDA registration / Local council license / Liquor license / Health/food license / Fire safety / Other
-
-**M3_SEC_TRH_003** | Yes/No
-> Do you accept foreign currency from tourists, and have proper records of forex conversion?
-
----
-
-### Food & Beverage
-**M3_SEC_FNB_001** | Yes/No
-> Are you clear on which of your menu items/products are VAT exempt vs taxable?
-
-**M3_SEC_FNB_002** | Yes/No
-> Do you maintain renewed health, hygiene, and food safety registrations?
-
-**M3_SEC_FNB_003** | Yes/No
+**M3_SEC_FSV_003** | Yes/No
 > Do you sell any excise-applicable items (alcohol, tobacco) requiring separate licensing?
 
 ---
 
-### Construction
-**M3_SEC_CON_001** | Yes/No
-> Do you correctly apply WHT on subcontractor payments above thresholds?
+### General-Goods Retail
+**M3_SEC_GRT_001** | Yes/No
+> Do you have a documented process for handling returns and refunds in your VAT records?
 
-**M3_SEC_CON_002** | Yes/No
-> Do you maintain CIDA registration appropriate to your business size?
+**M3_SEC_GRT_002** | Yes/No
+> Do the imported goods you sell (electronics, appliances, textiles) carry required SLSI certification / type approval?
 
-**M3_SEC_CON_003** | Single-select
-> Are you handling any government/public sector contracts?
-- Yes — major / Yes — minor / No / Bidding for some
+**M3_SEC_GRT_003** | Yes/No
+> Do you track customs duty, CESS and SCL changes that affect your re-order pricing?
 
----
-
-### Agriculture
-**M3_SEC_AGR_001** | Yes/No
-> Do you process raw produce or sell only unprocessed crops? (Different VAT treatment)
-
-**M3_SEC_AGR_002** | Yes/No
-> Do you have agriculture-specific tax incentive registrations?
-
-**M3_SEC_AGR_003** | Single-select
-> What proportion of your suppliers (input providers) issue formal invoices?
-- All / Most / Some / None / Don't know
-
----
-
-### Transport
-**M3_SEC_TPT_001** | Multi-select
-> What types of transport services do you provide?
-- Passenger / Goods / Both
-
-**M3_SEC_TPT_002** | Yes/No
-> Do all your route permits and vehicle licenses have current renewal status?
-
----
-
-### Healthcare / Education
-**M3_SEC_HE_001** | Yes/No
-> Are you clear which of your services are VAT exempt vs taxable (e.g., consultation vs commercial activities)?
-
-**M3_SEC_HE_002** | Yes/No
-> Are your professional council/board registrations current?
+> **Retired (2026-07-24):** Manufacturing (M3_SEC_MFG_*), IT & Software / Services (M3_SEC_ITS_*), Tourism & Hospitality (M3_SEC_TRH_*), Construction (M3_SEC_CON_*), Agriculture (M3_SEC_AGR_*), Transport (M3_SEC_TPT_*), Healthcare / Education (M3_SEC_HE_*) — outside the three-sector study scope.
 
 ---
 
 # PART C — QUESTION COVERAGE MATRIX
 
-| Sector | VAT | IT | WHT | SSCL | EPF | ETF | ROC | CUS | TDL | Total Q's |
-|--------|-----|-----|-----|------|-----|-----|-----|-----|-----|-----------|
-| Manufacturing | ✓ +MFG | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ~25 |
-| Retail & Wholesale | ✓ +RTL | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ~24 |
-| Services | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | — | ~22 |
-| IT & Software | ✓ +ITS | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | — | ~25 |
-| Agriculture | ✓ +AGR | ✓ | ✓ | — | ✓ | ✓ | ✓ | — | — | ~21 |
-| Construction | ✓ +CON | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | — | ~24 |
-| Tourism & Hosp. | ✓ +TRH | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ✓ | ~25 |
-| Food & Beverage | ✓ +FNB | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | ~25 |
-| Healthcare | ✓ +HLT | ✓ | ✓ | — | ✓ | ✓ | ✓ | — | — | ~21 |
-| Education | ✓ +EDU | ✓ | ✓ | — | ✓ | ✓ | ✓ | — | — | ~21 |
-| Transport | ✓ +TPT | ✓ | ✓ | — | ✓ | ✓ | ✓ | — | — | ~21 |
+| Sector | TAX_RATE_CHANGE | IMPORT_EXPORT | SECTOR_SPECIFIC | EPF_ETF_CHANGE | LABOUR_LAW | PRODUCT_STANDARD | BUSINESS_REGISTRATION | PENALTY_ENFORCEMENT | Total Q's |
+|--------|-----------------|---------------|-----------------|----------------|------------|------------------|-----------------------|---------------------|-----------|
+| Grocery / Food Retail | ✓ +FNB | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ~24 |
+| Food Service | ✓ +FSV | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ~24 |
+| General-Goods Retail | ✓ +RTL | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ~24 |
 
 ---
 
@@ -824,7 +654,7 @@ These questions are NOT about correct/incorrect — they are about capturing **b
 For each Module 2 question, insert into `m2_questions` with:
 - `question_code` = the code shown (e.g., VAT_FACT_001)
 - `domain_id` = FK to regulatory_domains
-- `sector_id` = NULL if Universal, else FK to sectors
+- `sector_id` = NULL if General (applies to all study sectors), else FK to sectors
 - `knowledge_type` = factual / procedural / application / exception
 - `question_format` = mcq_single / numeric / ordered_steps / scenario_response
 - `correct_answer` = JSONB, e.g. `{"selected_option": "C"}` or `{"steps_order": [3,1,2,6,4,5]}`
@@ -844,7 +674,7 @@ For each Module 3 question, insert into the appropriate table per the schema:
 # PART E — RECOMMENDED SURVEY FLOW
 
 ## Total estimated time per respondent
-- Module 2 universal questions: ~25 questions × 45 sec = ~19 min
+- Module 2 general questions: ~25 questions × 45 sec = ~19 min
 - Module 2 sector-specific: ~5 questions × 60 sec = ~5 min
 - Module 3 history + behavior + sector: ~30 questions × 30 sec = ~15 min
 - **Total: ~40 minutes** — split across 2 sessions if possible.

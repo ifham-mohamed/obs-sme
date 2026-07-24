@@ -38,7 +38,7 @@
 - [x] [[04_M1_3_Text_Chunking_Strategy]] — quantitative chunking comparison + the hybrid §-aware + sliding-window algorithm (`MAX_LEN=512`, `STRIDE=64`) with multilingual token implications.
 
 ## 05 · Model Architecture — [[05_M1_Model_Architecture]]
-*Why/what: the classifier design — 3-step sampling, the 12-category + 10-sector task, a 4-way approach comparison (XLM-R + LoRA selected), and the dual-head architecture.*
+*Why/what: the classifier design — 3-step sampling, the 8-domain + 3-sector task, a 4-way approach comparison (XLM-R + LoRA selected), and the dual-head architecture.*
 - [ ] [[05_M1_1_Sampling_Strategy]] — stratified-by-year-language → k-means (k=20, silhouette-justified) → active-learning selection, with sparse-cell handling.
 - [~] [[05_M1_2_Architecture_Comparison_Deep_Dive]] — train-from-scratch vs fine-tune-XLM-R vs zero-shot-GPT-4 vs rule-based, sourced with a 50-doc pilot and cost/failure analysis.
 - [ ] [[05_M1_3_LoRA_Hyperparameter_Justification]] — the `r × alpha` ablation plan, `target_modules` trade-off, `bias="none"` precedent, and memory budget.
@@ -59,7 +59,7 @@
 - [~] [[08_M1_2_Edge_Cases_Failure_Modes]] — a 23-entry runbook extending the parent's 9 cases, each with a detection signal, resolution, and monitoring metric.
 
 ## 09 · Annotation Guidelines — [[09_M1_Annotation_Guidelines]]
-*Why/what: how gold labels are made — Label Studio (4-way choice) + config XML, 12-category decision criteria, 10-sector rules, the IAA κ ≥ 0.75 protocol, and the SME survey.*
+*Why/what: how gold labels are made — Label Studio (4-way choice) + config XML, 8-domain decision criteria, 3-sector rules, the IAA κ ≥ 0.75 protocol, and the SME survey.*
 - [~] [[09_M1_1_Category_Taxonomy_Examples]] — 5–8 worked examples per category plus contrastive examples for confusable pairs (template + seeded-regulation based).
 - [ ] [[09_M1_2_Annotation_Workflow_IAA_Protocol]] — the IAA computation, disagreement-resolution paths, calibration-test design, and per-annotator performance tracking.
 - [ ] [[09_M1_3_SME_Survey_Instrument]] — the operational side of the Q1–Q8 survey: per-sector tailoring SQL, delivery mechanism, response-tracking schema, and validity rules.
@@ -92,7 +92,7 @@
 - [x] [[14_M1_6_SME_Awareness_Survey]] — **S2** awareness survey participation (`/surveys/regulation/[id]`, `/surveys/awareness`, `/surveys/history`).
 - [~] [[14_M1_7_SME_Compliance_Action_Tracking]] — **S3** action-taken status captured by survey Q7; no dedicated "My Regulations" tracker yet.
 - [ ] [[14_M1_8_SME_Deadline_Alert_History]] — **S4** deadline countdown + alert-delivery history (backend writes events; no SME UI).
-- [x] [[14_M1_9_Category_Sector_Workflows]] — **X9** cross-cutting reference for how the 12 categories × 10 sectors flow through every surface (schema + badge conventions shipped).
+- [x] [[14_M1_9_Category_Sector_Workflows]] — **X9** cross-cutting reference for how the 8 domains × 3 sectors flow through every surface (schema + badge conventions shipped).
 
 ## 15 · Folder Reference (per-folder build guides) — [[15_M1_Folder_Reference]]
 *Why/what: the parent index of six "how to build this folder" guides, each with a file table (owner / status / primary doc / how-to-build), start steps, dependencies, and acceptance.*

@@ -24,7 +24,7 @@ The 800-document corpus is partitioned as follows:
 | Validation | 120 (15%) | Hyperparameter tuning, early stopping | ✅ Yes |
 | Test | 120 (15%) | Final evaluation (held out until after training) | ✅ Yes |
 
-Stratification ensures that each split maintains the expected class proportions from the annotation plan (see [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)). For minority classes with < 50 examples (e.g. `DEADLINE_EXTENSION` at ~8 examples total), all examples are placed in train with synthetic augmentation to fill the gap.
+Stratification ensures that each split maintains the expected class proportions from the annotation plan (see [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)). For minority classes with < 50 examples (e.g. `PENALTY_ENFORCEMENT` at ~20 examples total), all examples are placed in train with synthetic augmentation to fill the gap.
 
 ### 1.2 Temporal Split Implementation
 
@@ -130,14 +130,10 @@ The 12 regulatory categories are heavily skewed. Without augmentation, minority 
 | `LABOUR_LAW` | ~160 | 160 |
 | `EPF_ETF_CHANGE` | ~96 | 96 |
 | `PRODUCT_STANDARD` | ~80 | 80 |
-| `BUSINESS_REGISTRATION` | ~64 | 80 (1.25× aug) |
-| `IMPORT_EXPORT` | ~56 | 80 (1.4× aug) |
-| `FINANCIAL_REGULATION` | ~48 | 80 (1.7× aug) |
-| `SECTOR_SPECIFIC` | ~40 | 80 (2× aug) |
-| `ENVIRONMENTAL` | ~24 | 80 (3.3× aug) |
-| `PENALTY_ENFORCEMENT` | ~16 | 80 (5× aug) |
-| `DEADLINE_EXTENSION` | ~8 | 80 (10× aug) |
-| `NO_SME_IMPACT` | ~8 | 80 (10× aug) |
+| `BUSINESS_REGISTRATION` | ~40 | 100 (2.5× aug) |
+| `IMPORT_EXPORT` | ~130 | 130 |
+| `SECTOR_SPECIFIC` | ~130 | 130 |
+| `PENALTY_ENFORCEMENT` | ~20 | 100 (5× aug) |
 
 ### 2.2 Augmentation Techniques
 
@@ -343,11 +339,10 @@ Based on domain analysis of gazette text before training, certain category pairs
 
 | Confused Pair | Reason | Mitigation |
 |---|---|---|
-| `TAX_RATE_CHANGE` ↔ `FINANCIAL_REGULATION` | Both mention CBSL and rate changes | Add gazette-source features (IRD vs CBSL) |
+| `TAX_RATE_CHANGE` ↔ `IMPORT_EXPORT` | Both announce rate/duty changes with similar phrasing | Add gazette-source features (IRD vs Customs/Controller of Imports) |
 | `EPF_ETF_CHANGE` ↔ `LABOUR_LAW` | Both reference Labour Act and employees | Add EPF-specific keyword features to training |
 | `SECTOR_SPECIFIC` ↔ `PRODUCT_STANDARD` | Licensing and standards documents overlap | LoRA attention patterns should disambiguate |
-| `PENALTY_ENFORCEMENT` ↔ `DEADLINE_EXTENSION` | Both appear in enforcement notice gazettes | Section-aware chunking to capture fine amounts |
-| `NO_SME_IMPACT` ↔ Any | Low-count class; model may under-predict | Oversample via augmentation (10× target) |
+| `PENALTY_ENFORCEMENT` ↔ any substantive domain | Enforcement gazettes restate the underlying rule | Section-aware chunking to capture fine amounts as the primary content |
 
 ### 5.2 Threshold Tuning for Sectors
 
@@ -788,9 +783,9 @@ The 5× cap is *empirical*: beyond 5× augmentation on a single source doc, the 
 
 ### Step — Per-technique F1 impact (planned ablation)
 
-| Configuration | Macro-F1 | Δ vs no-aug | Δ on `DEADLINE_EXTENSION` (worst minority) |
+| Configuration | Macro-F1 | Δ vs no-aug | Δ on `PENALTY_ENFORCEMENT` (worst minority) |
 |---|---|---|---|
-| No augmentation | 0.86 (projected) | — | 0.21 (very weak — 8 examples) |
+| No augmentation | 0.86 (projected) | — | 0.21 (very weak — ~20 examples) |
 | + Back-translation (5×) | 0.89 | +3 pp | 0.55 |
 | + Synonym swap (5×) | 0.90 | +4 pp | 0.62 |
 | + SI paraphrase (5× SI minority only) | 0.92 | +6 pp | 0.65 |
@@ -813,9 +808,9 @@ Conclusion: back-translation + synonym swap are the load-bearing techniques. Sin
 Input minority-class document:
 
 ```
-Original (DEADLINE_EXTENSION, EN):
-"The Commissioner has extended the deadline for filing the third quarter VAT return
-from 20 January to 31 January 2024."
+Original (PENALTY_ENFORCEMENT, EN):
+"The penalty for late filing of the quarterly VAT return is increased
+from 1.0% to 1.5% per month of the tax payable."
 
 Back-translation EN→FR→EN:
 "The Commissioner extended the deadline for filing the VAT return for the third quarter

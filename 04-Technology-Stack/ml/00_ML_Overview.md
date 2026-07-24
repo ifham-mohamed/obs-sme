@@ -34,7 +34,7 @@ BUILD_11 (shared training pipeline) → BUILD_07 (M1 XLM-R) → BUILD_09 (M3 XGB
 |------|-------------|
 | [01_AI_ML_Fundamentals.md](research/01_AI_ML_Fundamentals.md) | What is a model, loss functions, backprop, fine-tuning vs training from scratch |
 | [02_Complete_ML_Lifecycle.md](research/02_Complete_ML_Lifecycle.md) | 9-stage pipeline: problem framing → data → labeling → training → eval → deploy → monitor |
-| [11_Module1_NLP_Classifier_Training.md](research/11_Module1_NLP_Classifier_Training.md) | 12-way regulatory taxonomy (TAX_INCOME, TAX_VAT_SVAT, EPF_ETF…), XLM-R training harness |
+| [11_Module1_NLP_Classifier_Training.md](research/11_Module1_NLP_Classifier_Training.md) | 8-domain regulation taxonomy (TAX_RATE_CHANGE, IMPORT_EXPORT, SECTOR_SPECIFIC…), XLM-R training harness |
 | [13_Module2_Knowledge_Architecture.md](research/13_Module2_Knowledge_Architecture.md) | Compliance knowledge as latent construct; three-instrument design; psychometric validity |
 | [14_Module3_Risk_Architecture.md](research/14_Module3_Risk_Architecture.md) | Feature taxonomy (firmographic, behavioral, sectoral, M1-exposure, M2-knowledge); gradient-boosted trees |
 | [15_Module4_Misinformation_Architecture.md](research/15_Module4_Misinformation_Architecture.md) | 9-way veracity taxonomy; misleading mechanics; claim-check tool design (target spec) |

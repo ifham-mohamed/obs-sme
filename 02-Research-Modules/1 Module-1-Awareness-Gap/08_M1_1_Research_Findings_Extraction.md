@@ -68,7 +68,7 @@ WHERE a.awareness_date IS NOT NULL;
 
 - **Data source.** `v_m1_channel_effectiveness` (parent doc §2 + view in [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md)).
 - **Sample size.** ≥ 10 SMEs per sector to enable per-sector ranking.
-- **Statistical test.** One-way ANOVA / Kruskal-Wallis (10 sectors); Dunn post-hoc for pairwise differences.
+- **Statistical test.** One-way ANOVA / Kruskal-Wallis (3 sectors); Dunn post-hoc for pairwise differences.
 - **Expected effect.** At least one sector pair differs at p < 0.05; "government_sms" + "enigmatrix_alert" rank fastest; "peer" slowest.
 - **Notebook.** `findings_secondary_diffusion.ipynb`, cell 2.
 

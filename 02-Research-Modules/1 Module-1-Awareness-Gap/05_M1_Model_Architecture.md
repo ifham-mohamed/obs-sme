@@ -123,41 +123,30 @@ This separation matters because the AL baseline is *deliberately* trained on ear
 
 ## 2. Classification Task Definition
 
-### 1.1 Task 1: Category Classification (Single-Label)
+### 1.1 Task 1: Regulation-Domain Classification (Single-Label)
 
-Given cleaned gazette text $x$, predict category $k \in \{k_1, \ldots, k_{12}\}$:
+Given cleaned gazette text $x$, predict domain $k \in \{k_1, \ldots, k_{8}\}$:
 
-| Code | Category | Expected Proportion |
+| Code | Domain | Expected Proportion |
 |---|---|---|
-| `TAX_RATE_CHANGE` | Income tax, VAT, customs duty amendments | 25% |
-| `LABOUR_LAW` | Minimum wage, leave, working hours | 20% |
-| `EPF_ETF_CHANGE` | EPF/ETF contribution rate or eligibility | 12% |
-| `PRODUCT_STANDARD` | SLSI mandatory product safety standards | 10% |
-| `BUSINESS_REGISTRATION` | eROC filing requirements, annual returns | 8% |
-| `IMPORT_EXPORT` | Import/export permits, quotas, bans | 7% |
-| `FINANCIAL_REGULATION` | CBSL licensing, forex, lending rules | 6% |
-| `SECTOR_SPECIFIC` | Industry-specific licensing | 5% |
-| `ENVIRONMENTAL` | Waste, emissions, effluent standards | 3% |
+| `TAX_RATE_CHANGE` | VAT/SVAT, income tax, excise amendments (anchor) | 29% |
+| `IMPORT_EXPORT` | Customs duty, CESS, SCL, import controls | 16% |
+| `SECTOR_SPECIFIC` | CAA maximum-retail-price, Food Act, NMRA | 16% |
+| `EPF_ETF_CHANGE` | EPF/ETF employer obligations | 13% |
+| `LABOUR_LAW` | Wages-board / minimum wage, leave, hours | 11% |
+| `PRODUCT_STANDARD` | SLSI standards, labelling | 8% |
+| `BUSINESS_REGISTRATION` | Trade licences, eROC filings, registration | 5% |
 | `PENALTY_ENFORCEMENT` | New fines, enforcement actions | 2% |
-| `DEADLINE_EXTENSION` | Extensions to compliance deadlines | 1% |
-| `NO_SME_IMPACT` | Regulations with no SME impact | 1% |
 
 ### 1.2 Task 2: Sector Assignment (Multi-Label)
 
-Given the same text $x$, predict $S \subseteq \{s_1, \ldots, s_{10}\}$:
+Given the same text $x$, predict $S \subseteq \{s_1, s_2, s_3\}$ over the three shop-focused study sectors (economy-wide regulations carry all three):
 
 | Code | Sector | Expected Positive Rate |
 |---|---|---|
-| `manufacturing` | Manufacturing and processing | 18% |
-| `retail` | Retail trade | 16% |
-| `services` | Services (professional, technical) | 15% |
-| `agriculture` | Agriculture, fisheries, livestock | 12% |
-| `construction` | Construction and real estate | 10% |
-| `it_bpo` | IT/BPO and digital services | 8% |
-| `hospitality` | Hotels, restaurants, tourism | 7% |
-| `transport` | Transport and logistics | 6% |
-| `healthcare` | Healthcare and pharmaceuticals | 5% |
-| `finance` | Non-bank financial services | 3% |
+| `grocery_retail` | Grocery / food retail — kade, mini-marts, small supermarkets | 55% |
+| `food_service` | Food service — restaurants, cafés, bakeries, take-aways | 45% |
+| `general_retail` | General-goods retail — textile/apparel, electronics/mobile, hardware | 50% |
 
 ---
 
@@ -264,7 +253,7 @@ flowchart TD
     E --> F[Category Head\nLinear 768 to 12\nSoftmax]
     E --> G[Sector Head\nLinear 768 to 10\nSigmoid per sector]
     F --> H[category prediction\nargmax of 12-class softmax\ne.g. TAX_RATE_CHANGE 0.94]
-    G --> I[sector predictions\nthreshold 0.50 per sector\ne.g. manufacturing 0.87\nretail 0.72]
+    G --> I[sector predictions\nthreshold 0.50 per sector\ne.g. grocery_retail 0.87\ngeneral_retail 0.72]
 ```
 
 ### 4.4 Model Code

@@ -24,7 +24,7 @@ The 800-document corpus is partitioned as follows:
 | Validation | 120 (15%) | Hyperparameter tuning, early stopping | ✅ Yes |
 | Test | 120 (15%) | Final evaluation (held out until after training) | ✅ Yes |
 
-Stratification ensures that each split maintains the expected class proportions from the annotation plan (see [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)). For minority classes with < 50 examples (e.g. `DEADLINE_EXTENSION` at ~8 examples total), all examples are placed in train with synthetic augmentation to fill the gap.
+Stratification ensures that each split maintains the expected class proportions from the annotation plan (see [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)). For minority classes with < 50 examples (e.g. `PENALTY_ENFORCEMENT` at ~20 examples total), all examples are placed in train with synthetic augmentation to fill the gap.
 
 ### 1.2 Temporal Split Implementation
 
@@ -122,22 +122,18 @@ The `labeled_set_sha256` is the SHA-256 of the *exact* parquet file used — if 
 
 ### 2.1 Class Distribution Problem
 
-The 12 regulatory categories are heavily skewed. Without augmentation, minority classes would have fewer than 10 training examples:
+The 8 regulation domains are heavily skewed. Without augmentation, minority classes would have fewer than 20 training examples:
 
-| Category | Expected Raw Count (800 total) | Augmented Target |
+| Domain | Expected Raw Count (800 total) | Augmented Target |
 |---|---|---|
-| `TAX_RATE_CHANGE` | ~200 | 200 (no aug needed) |
-| `LABOUR_LAW` | ~160 | 160 |
-| `EPF_ETF_CHANGE` | ~96 | 96 |
-| `PRODUCT_STANDARD` | ~80 | 80 |
-| `BUSINESS_REGISTRATION` | ~64 | 80 (1.25× aug) |
-| `IMPORT_EXPORT` | ~56 | 80 (1.4× aug) |
-| `FINANCIAL_REGULATION` | ~48 | 80 (1.7× aug) |
-| `SECTOR_SPECIFIC` | ~40 | 80 (2× aug) |
-| `ENVIRONMENTAL` | ~24 | 80 (3.3× aug) |
-| `PENALTY_ENFORCEMENT` | ~16 | 80 (5× aug) |
-| `DEADLINE_EXTENSION` | ~8 | 80 (10× aug) |
-| `NO_SME_IMPACT` | ~8 | 80 (10× aug) |
+| `TAX_RATE_CHANGE` | ~230 | 230 (no aug needed) |
+| `IMPORT_EXPORT` | ~130 | 130 |
+| `SECTOR_SPECIFIC` | ~130 | 130 |
+| `EPF_ETF_CHANGE` | ~100 | 100 |
+| `LABOUR_LAW` | ~90 | 100 (1.1× aug) |
+| `PRODUCT_STANDARD` | ~60 | 100 (1.7× aug) |
+| `BUSINESS_REGISTRATION` | ~40 | 100 (2.5× aug) |
+| `PENALTY_ENFORCEMENT` | ~20 | 100 (5× aug) |
 
 ### 2.2 Augmentation Techniques
 
@@ -168,7 +164,7 @@ def back_translate(text: str, src="en", pivot="fr") -> str:
 
 > **Augmented examples are added to the training split only.** Validation and test sets contain only original labeled examples.
 
-**Diminishing returns above 5×.** The augmented-target column above includes ratios up to 10× for `DEADLINE_EXTENSION` and `NO_SME_IMPACT` (~8 originals → 80 augmented). Back-translation and paraphrase preserve *meaning* but their diversity collapses: after a 5× expansion, additional synthetic examples are near-duplicates of earlier augmentations, and validation F1 plateaus or *decreases*. We therefore cap augmentation at **5×** in practice: classes with <16 originals top out at `5 × original_count` rather than 80, and the deficit is filled by an additional targeted-labeling sprint (active-learning step from [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md)). The actual cap is enforced in the augmentation pipeline (`ml/m1/data/augmentation.py`) by a `max_ratio=5` argument; the diversity validation that justifies it — cosine-similarity histograms of augmented vs original, per-class F1 before/after cap — lives in [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md).
+**Diminishing returns above 5×.** The augmented-target column above tops out at 5× for `PENALTY_ENFORCEMENT` (~20 originals → 100 augmented). Back-translation and paraphrase preserve *meaning* but their diversity collapses: after a 5× expansion, additional synthetic examples are near-duplicates of earlier augmentations, and validation F1 plateaus or *decreases*. We therefore cap augmentation at **5×** in practice: classes with few originals top out at `5 × original_count`, and any deficit is filled by an additional targeted-labeling sprint (active-learning step from [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md)). The actual cap is enforced in the augmentation pipeline (`ml/m1/data/augmentation.py`) by a `max_ratio=5` argument; the diversity validation that justifies it — cosine-similarity histograms of augmented vs original, per-class F1 before/after cap — lives in [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md).
 
 ---
 
@@ -280,7 +276,7 @@ def train_model(model, train_loader, val_loader, num_epochs=10, patience=3):
 | Metric | Formula | Target | Task |
 |---|---|---|---|
 | Macro-averaged F1 (category) | Mean F1 across 12 classes | ≥ 0.92 | Category classification |
-| Macro-averaged F1 (sector) | Mean F1 across 10 sectors | ≥ 0.88 | Sector assignment |
+| Macro-averaged F1 (sector) | Mean F1 across 3 study sectors | ≥ 0.88 | Sector assignment |
 | Per-class F1 | Per-category F1 score | ≥ 0.80 for each | Both |
 | Top-1 accuracy (category) | % correct argmax predictions | ≥ 0.95 | Category classification |
 | Micro-F1 (sector) | Pooled TP/FP/FN across sectors | ≥ 0.90 | Sector assignment |
@@ -343,11 +339,10 @@ Based on domain analysis of gazette text before training, certain category pairs
 
 | Confused Pair | Reason | Mitigation |
 |---|---|---|
-| `TAX_RATE_CHANGE` ↔ `FINANCIAL_REGULATION` | Both mention CBSL and rate changes | Add gazette-source features (IRD vs CBSL) |
+| `TAX_RATE_CHANGE` ↔ `IMPORT_EXPORT` | Both announce rate/duty changes with similar phrasing | Add gazette-source features (IRD vs Customs/Controller of Imports) |
 | `EPF_ETF_CHANGE` ↔ `LABOUR_LAW` | Both reference Labour Act and employees | Add EPF-specific keyword features to training |
 | `SECTOR_SPECIFIC` ↔ `PRODUCT_STANDARD` | Licensing and standards documents overlap | LoRA attention patterns should disambiguate |
-| `PENALTY_ENFORCEMENT` ↔ `DEADLINE_EXTENSION` | Both appear in enforcement notice gazettes | Section-aware chunking to capture fine amounts |
-| `NO_SME_IMPACT` ↔ Any | Low-count class; model may under-predict | Oversample via augmentation (10× target) |
+| `PENALTY_ENFORCEMENT` ↔ any substantive domain | Enforcement gazettes restate the underlying rule | Section-aware chunking to capture fine amounts as the primary content |
 
 ### 5.2 Threshold Tuning for Sectors
 
@@ -408,7 +403,7 @@ Expected performance on 12-class gazette classification with 800 training exampl
 
 ### 6.2 Baseline B — Zero-Shot LLM (Ceiling Estimate)
 
-Send each test gazette (first 1,500 characters) and the 12 category definitions to a frontier LLM with a strict classification prompt. This baseline:
+Send each test gazette (first 1,500 characters) and the 8 domain definitions to a frontier LLM with a strict classification prompt. This baseline:
 - Sets a practical ceiling for what is achievable without labeled training data
 - Reveals which categories are intrinsically hard to disambiguate (where even frontier models struggle)
 - Demonstrates the cost/quality trade-off for production deployment

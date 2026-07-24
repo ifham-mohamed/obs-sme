@@ -26,11 +26,10 @@ The 0.92 number is a *projection* extrapolated from:
 Pilot on 50 hand-labelled gazettes, system prompt:
 
 ```
-You are a regulatory classifier. Read the gazette text. Output ONE of these 12 categories:
-TAX_RATE_CHANGE | LABOUR_LAW | EPF_ETF_CHANGE | PRODUCT_STANDARD | BUSINESS_REGISTRATION |
-IMPORT_EXPORT | FINANCIAL_REGULATION | SECTOR_SPECIFIC | ENVIRONMENTAL | PENALTY_ENFORCEMENT |
-DEADLINE_EXTENSION | NO_SME_IMPACT.
-Respond with the category code only.
+You are a regulatory classifier. Read the gazette text. Output ONE of these 8 domains:
+TAX_RATE_CHANGE | IMPORT_EXPORT | SECTOR_SPECIFIC | EPF_ETF_CHANGE |
+LABOUR_LAW | PRODUCT_STANDARD | BUSINESS_REGISTRATION | PENALTY_ENFORCEMENT.
+Respond with the domain code only.
 ```
 
 Result: 0.72 macro-F1. Breakdown by language: EN 0.84, SI 0.61, TA 0.58. The model fails dramatically on Sinhala/Tamil — confirming that GPT-4's coverage of South Asian languages is markedly weaker than English.
@@ -76,13 +75,13 @@ GPT-4 predictions vs ground truth:
   SI (15 docs):  9 correct, 6 wrong → 0.60 acc
   TA (10 docs):  6 correct, 4 wrong → 0.60 acc
 
-Macro-F1 across 12 categories (computed on 50 docs):
+Macro-F1 across 8 domains (computed on 50 docs):
   Confusion: most errors are TAX_RATE_CHANGE → PENALTY_ENFORCEMENT
-             and TAX_RATE_CHANGE → DEADLINE_EXTENSION
+             and TAX_RATE_CHANGE → IMPORT_EXPORT
   Macro-F1: 0.72
 
 Three example errors:
-1. SI gazette amending VAT rate → GPT-4 said NO_SME_IMPACT (model doesn't read Sinhala)
+1. SI gazette amending VAT rate → GPT-4 marked it not SME-relevant (model doesn't read Sinhala)
 2. EN gazette extending tax filing deadline → GPT-4 said TAX_RATE_CHANGE
 3. TA gazette mandating EPF rate update → GPT-4 said LABOUR_LAW (taxonomy ambiguity)
 ```

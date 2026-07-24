@@ -84,7 +84,7 @@ class GazetteCalibrationReader(CalibrationDataReader):
         return next(self.iter, None)
 ```
 
-Calibration set: 50 hand-picked gazettes spanning all 12 categories + all 3 languages. Stored in `research/data/quantization_calibration.parquet`.
+Calibration set: 50 hand-picked gazettes spanning all 8 domains + all 3 languages. Stored in `research/data/quantization_calibration.parquet`.
 
 ### Step 4 — Post-quantization F1 validation
 

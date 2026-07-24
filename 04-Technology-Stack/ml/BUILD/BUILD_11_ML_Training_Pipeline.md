@@ -66,10 +66,9 @@ datasets:
       train: { path: m1_regulations/train.parquet, rows: 4812, sha256: 9b1f...c2 }
       val:   { path: m1_regulations/val.parquet,   rows: 602,  sha256: 41ad...77 }
       test:  { path: m1_regulations/test.parquet,  rows: 603,  sha256: e0c8...1d }
-    label_set: [TAX_INCOME, TAX_VAT_SVAT, TAX_CUSTOMS_TARIFF, EPF_ETF,
-                IMPORT_EXPORT_CONTROL, HEALTH_SAFETY, ENVIRONMENTAL,
-                EMPLOYMENT_LABOUR, COMPANY_REGISTRATION, SECTOR_SPECIFIC,
-                CONSUMER_PROTECTION, OTHER_REGULATORY]
+    label_set: [TAX_RATE_CHANGE, IMPORT_EXPORT, SECTOR_SPECIFIC, EPF_ETF_CHANGE,
+                LABOUR_LAW, PRODUCT_STANDARD, BUSINESS_REGISTRATION,
+                PENALTY_ENFORCEMENT]
   m3_fraud:
     schema: [features_json, label]
     splits:
@@ -238,10 +237,9 @@ from datasets import Dataset
 from ml.common.trainer import BaseTrainer, TrainConfig
 from ml.common.gates import enforce_gate
 
-LABELS = ["TAX_INCOME","TAX_VAT_SVAT","TAX_CUSTOMS_TARIFF","EPF_ETF",
-          "IMPORT_EXPORT_CONTROL","HEALTH_SAFETY","ENVIRONMENTAL",
-          "EMPLOYMENT_LABOUR","COMPANY_REGISTRATION","SECTOR_SPECIFIC",
-          "CONSUMER_PROTECTION","OTHER_REGULATORY"]
+LABELS = ["TAX_RATE_CHANGE","IMPORT_EXPORT","SECTOR_SPECIFIC","EPF_ETF_CHANGE",
+          "LABOUR_LAW","PRODUCT_STANDARD","BUSINESS_REGISTRATION",
+          "PENALTY_ENFORCEMENT"]
 L2I = {l: i for i, l in enumerate(LABELS)}
 
 class M1Trainer(BaseTrainer):

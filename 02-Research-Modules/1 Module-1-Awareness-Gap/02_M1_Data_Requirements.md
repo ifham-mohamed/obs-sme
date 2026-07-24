@@ -101,7 +101,7 @@ All ingested gazette data maps to the `m1_regulations` table in PostgreSQL. The 
 | `summary_en` | TEXT | Yes | AI-generated English action summary | Stage E |
 | `summary_si` | TEXT | Yes | Sinhala translation of summary | Stage E |
 | `summary_ta` | TEXT | Yes | Tamil translation of summary | Stage E |
-| `change_category` | TEXT | Yes | 12-category code (see taxonomy) | Stage C (classified) |
+| `change_category` | TEXT | Yes | 8-domain code (see taxonomy) | Stage C (classified) |
 | `category_baseline` | TEXT | Yes | TF-IDF+SVM prediction for ablation | Stage C |
 | `confidence` | NUMERIC(4,3) | Yes | XLM-R softmax probability [0–1] | Stage C |
 | `domain_code` | TEXT | Yes | High-level regulatory domain | Stage C |
@@ -387,8 +387,8 @@ Validation of each index's actual benefit (with `EXPLAIN ANALYZE` traces) lives 
 | Data Type                                            | Required Volume | Current Status              | Gap        |
 | ---------------------------------------------------- | --------------- | --------------------------- | ---------- |
 | Labeled gazette documents                            | ≥ 800           | ~0 (annotation in planning) | 800        |
-| Examples per category (12 categories)                | ≥ 50 each       | 0                           | 600        |
-| `NO_SME_IMPACT` examples                             | ≥ 200           | 0                           | 200        |
+| Examples per domain (8 domains)                      | ≥ 50 each       | 0                           | 400        |
+| Not-SME-relevant examples (`is_sme_relevant=FALSE`)  | ≥ 200           | 0                           | 200        |
 | Historical unlabeled gazettes (pre-training context) | ≥ 5,000         | ~10,000 on gazette.lk       | Sufficient |
 | Sinhala-text examples (35% of corpus target)         | ≥ 280           | 0                           | 280        |
 | Tamil-text examples (15% of corpus target)           | ≥ 120           | 0                           | 120        |
@@ -505,9 +505,9 @@ flowchart TD
     BPLUS2 --> BPLUS5[(INSERT m1_sub_documents\none row per detected section\npart/schedule/section/notice/numbered_clause/preamble)]
 
     BPLUS3 --> C1[Stage C: Classification\nclassify_gazette Celery task]
-    C1 --> C2[XLM-R Inference\n12-category softmax]
+    C1 --> C2[XLM-R Inference\n8-domain softmax]
     C1 --> C3[TF-IDF+SVM\nBaseline inference]
-    C2 --> C4[Sector Mapper\n10-sector multi-label]
+    C2 --> C4[Sector Mapper\n3-sector multi-label]
     C4 --> C5[(UPDATE m1_regulations\nchange_category, confidence\naffected_sectors, status=classified)]
 
     C5 --> E1[Stage E: Summarization\nMarianMT EN to SI and TA]
@@ -560,7 +560,7 @@ This section traces Extraordinary Gazette **2486/22** (2026-04-15) — mandating
   "is_sme_relevant": true,
   "change_category": "PRODUCT_STANDARD",
   "severity_level": "high",
-  "affected_sectors": ["manufacturing", "retail", "it_bpo"],
+  "affected_sectors": ["general_retail"],
   "status": "alerted"
 }
 ```

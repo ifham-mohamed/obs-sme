@@ -73,7 +73,7 @@ The 5× cap is *empirical*: beyond 5× augmentation on a single source doc, the 
 
 ### Step — Per-technique F1 impact (planned ablation)
 
-| Configuration | Macro-F1 | Δ vs no-aug | Δ on `DEADLINE_EXTENSION` (worst minority) |
+| Configuration | Macro-F1 | Δ vs no-aug | Δ on `PENALTY_ENFORCEMENT` (worst minority) |
 |---|---|---|---|
 | No augmentation | 0.86 (projected) | — | 0.21 (very weak — 8 examples) |
 | + Back-translation (5×) | 0.89 | +3 pp | 0.55 |
@@ -98,7 +98,7 @@ Conclusion: back-translation + synonym swap are the load-bearing techniques. Sin
 Input minority-class document:
 
 ```
-Original (DEADLINE_EXTENSION, EN):
+Original (TAX_RATE_CHANGE — tax-schedule; deadline extensions fold into this domain, EN):
 "The Commissioner has extended the deadline for filing the third quarter VAT return
 from 20 January to 31 January 2024."
 

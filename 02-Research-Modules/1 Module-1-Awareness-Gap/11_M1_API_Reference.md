@@ -104,7 +104,7 @@ List all regulations with filtering and pagination.
 | `page` | int | 1 | Page number |
 | `page_size` | int | 20 | Items per page (max 100) |
 | `change_category` | str | — | Filter by category code (e.g. `TAX_RATE_CHANGE`) |
-| `sector` | str | — | Filter by sector code (e.g. `manufacturing`) |
+| `sector` | str | — | Filter by sector code (e.g. `grocery_retail`) |
 | `status` | str | — | Filter by pipeline status |
 | `needs_review` | bool | — | If true, return only needs_review=true |
 | `is_verified` | bool | — | Filter by verification status |
@@ -127,7 +127,7 @@ List all regulations with filtering and pagination.
       "title_en": "Income Tax (Amendment) Act No. 8 of 2024",
       "change_category": "TAX_RATE_CHANGE",
       "confidence": 0.947,
-      "affected_sectors": ["manufacturing", "retail", "services"],
+      "affected_sectors": ["grocery_retail", "food_service", "general_retail"],
       "is_sme_relevant": true,
       "needs_review": false,
       "is_verified": true,
@@ -160,7 +160,7 @@ Create a regulation record manually (pre-classifier phase or manual entry).
   "source_url": "https://gazette.lk/gazette/2501/14",
   "title_en": "Customs (Amendment) Regulations 2024",
   "change_category": "IMPORT_EXPORT",
-  "affected_sectors": ["manufacturing", "retail"],
+  "affected_sectors": ["grocery_retail", "general_retail"],
   "is_sme_relevant": true,
   "penalty_range_lkr": "LKR 50,000 – 500,000",
   "effective_date": "2024-12-01",
@@ -199,11 +199,11 @@ Get a single regulation by UUID.
   "domain_code": "TAX",
   "severity_level": "high",
   "is_sme_relevant": true,
-  "affected_sectors": ["manufacturing", "retail", "services", "finance"],
+  "affected_sectors": ["grocery_retail", "food_service", "general_retail"],
   "penalty_range_lkr": null,
   "principal_act_amended": "Inland Revenue Act No. 24 of 2017",
   "effective_date": "2025-01-01",
-  "real_world_example_en": "A manufacturing company with annual revenue over LKR 500M will see their tax liability increase by ~6%.",
+  "real_world_example_en": "A general-goods retailer with annual revenue over LKR 500M will see their tax liability increase by ~6%.",
   "needs_review": false,
   "is_verified": true,
   "expert_verified_by": "Nalaka Perera, CA Sri Lanka",
@@ -227,8 +227,8 @@ Partial update of a regulation (admin override). All fields optional.
 
 ```json
 {
-  "change_category": "FINANCIAL_REGULATION",
-  "affected_sectors": ["finance", "services"],
+  "change_category": "SECTOR_SPECIFIC",
+  "affected_sectors": [],
   "is_sme_relevant": false,
   "is_active": true
 }
@@ -263,18 +263,11 @@ Trigger on-demand reclassification of a specific regulation using the ONNX infer
   "regulation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "change_category": "TAX_RATE_CHANGE",
   "confidence": 0.947,
-  "affected_sectors": ["manufacturing", "retail", "services"],
+  "affected_sectors": ["grocery_retail", "food_service", "general_retail"],
   "sector_probabilities": {
-    "manufacturing": 0.821,
-    "retail": 0.763,
-    "services": 0.541,
-    "agriculture": 0.112,
-    "construction": 0.087,
-    "it_bpo": 0.073,
-    "hospitality": 0.054,
-    "transport": 0.043,
-    "healthcare": 0.031,
-    "finance": 0.498
+    "grocery_retail": 0.821,
+    "food_service": 0.763,
+    "general_retail": 0.741
   },
   "needs_review": false,
   "classified_at": "2024-09-15T06:14:22Z"
@@ -295,7 +288,7 @@ Mark a regulation as expert-verified.
 {
   "verified": true,
   "verifier_name": "Nalaka Perera, CA Sri Lanka",
-  "notes": "Category confirmed correct. Sector assignment reviewed — added finance sector."
+  "notes": "Category confirmed correct. Sector assignment reviewed — confirmed economy-wide (all 3 study sectors)."
 }
 ```
 
@@ -325,7 +318,7 @@ Get sector assignments for a regulation.
 ```json
 {
   "regulation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-  "sectors": ["manufacturing", "retail", "services", "finance"]
+  "sectors": ["grocery_retail", "food_service", "general_retail"]
 }
 ```
 
@@ -341,7 +334,7 @@ Replace sector assignments (full replacement, not append).
 
 ```json
 {
-  "sectors": ["manufacturing", "retail", "finance"]
+  "sectors": ["grocery_retail", "general_retail"]
 }
 ```
 
@@ -466,10 +459,10 @@ SME-facing read-only list of classified, summarised, SME-relevant regulations.
       "title_en": "Income Tax (Amendment) Act No. 8 of 2024",
       "summary_en": "Increases corporate income tax from 24% to 30%...",
       "change_category": "TAX_RATE_CHANGE",
-      "affected_sectors": ["manufacturing", "retail", "services", "finance"],
+      "affected_sectors": ["grocery_retail", "food_service", "general_retail"],
       "severity_level": "high",
       "effective_date": "2025-01-01",
-      "real_world_example_en": "A manufacturing company with annual revenue...",
+      "real_world_example_en": "A general-goods retailer with annual revenue...",
       "source_url": "https://gazette.lk/gazette/2486/22"
     }
   ],
@@ -783,7 +776,7 @@ curl -X POST -H "Authorization: Bearer $TOKEN" \
   "https://api.enigmatrix.lk/api/v1/m1/regulations/3fa85f64-.../verify"
 
 # Public SME endpoint — no auth
-curl "https://api.enigmatrix.lk/api/v1/m1/regulations/public?sector=manufacturing&language=en"
+curl "https://api.enigmatrix.lk/api/v1/m1/regulations/public?sector=grocery_retail&language=en"
 ```
 
 ---

@@ -41,11 +41,11 @@ A morning queue clear (intended):
 09:15 — admin opens /admin/m1/review-queue
          Queue depth: 12 items, sorted by confidence ASC
          Top item: classifier confidence 0.42
-         Item is VAT-amendment look-alike; classifier said "FINANCIAL_REGULATION"
+         Item is VAT-amendment look-alike; classifier said "SECTOR_SPECIFIC"
 09:16 — admin clicks the row → drawer opens
          classification_chunk shows: "VAT registration threshold raised from LKR 60M to LKR 80M..."
-         Top-3: TAX_RATE_CHANGE 0.32 | FINANCIAL_REGULATION 0.42 | BUSINESS_REGISTRATION 0.18
-         Admin sees classifier ranked FINANCIAL above TAX_RATE_CHANGE — wrong
+         Top-3: TAX_RATE_CHANGE 0.32 | SECTOR_SPECIFIC 0.42 | BUSINESS_REGISTRATION 0.18
+         Admin sees classifier ranked SECTOR_SPECIFIC above TAX_RATE_CHANGE — wrong
 09:16 — admin clicks "Override + Verify" → picks TAX_RATE_CHANGE → save
          needs_review=false; expert_verified=true; audit-log row written
          Row disappears from queue; next item auto-focuses
@@ -62,7 +62,7 @@ This loop currently takes the admin ~30 minutes via the regulation-bank filter w
 - **Stale queue.** Admin starts working on a row that's already been confirmed in another tab (or by another admin). Mitigation: optimistic UI — when "Confirm" returns 409 Conflict, drawer surfaces "Already confirmed by {admin_email} at {time}" + offers "Move to next".
 - **Confidence-only sort hides high-impact items.** A high-confidence classification on a critical regulation (e.g. nationwide VAT change) deserves a second look even at 0.85 confidence. Mitigation: a secondary `severity_level >= 4` view at the top of the page (collapsible).
 - **Expert queue grows unbounded.** If the domain expert is OOO, escalated rows sit. Mitigation: 7-day SLA banner at the top of `/admin/m1/expert-queue`; aged items annotate the regulation bank with a warning badge.
-- **Override choice taxonomy drift.** If the 12-category taxonomy ever changes, old override choices need migration. Mitigation: per [m1/09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md), the taxonomy is locked at Week 5 of the project; changes go through a migration script.
+- **Override choice taxonomy drift.** If the 8-domain taxonomy ever changes, old override choices need migration. Mitigation: per [m1/09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md), the taxonomy is locked at Week 5 of the project; changes go through a migration script.
 
 ## Validation & acceptance criteria
 

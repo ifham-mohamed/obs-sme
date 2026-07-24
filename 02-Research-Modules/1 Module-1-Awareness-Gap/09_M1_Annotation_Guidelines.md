@@ -8,7 +8,7 @@
 
 ## Abstract
 
-This document specifies the annotation protocol for constructing the 800-document labeled training corpus required by the Module 1 gazette classifier. It defines the complete 12-category taxonomy with per-category decision criteria, the 10-sector multi-label schema, annotator qualification requirements, inter-annotator agreement (IAA) targets (Cohen's κ ≥ 0.75), and the annotation tooling selection. Four annotation platforms are evaluated — Label Studio, Prodigy, Doccano, and a custom web-based tool — and Label Studio is selected for its active-learning integration, multi-label support, and zero licensing cost. The guidelines are designed to achieve labeling consistency sufficient for a training corpus that reaches the F1 ≥ 0.92 target defined in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md).
+This document specifies the annotation protocol for constructing the 800-document labeled training corpus required by the Module 1 gazette classifier. It defines the complete 8-domain regulation taxonomy with per-domain decision criteria, the 3-sector (shop-focused) multi-label schema, annotator qualification requirements, inter-annotator agreement (IAA) targets (Cohen's κ ≥ 0.75), and the annotation tooling selection. Four annotation platforms are evaluated — Label Studio, Prodigy, Doccano, and a custom web-based tool — and Label Studio is selected for its active-learning integration, multi-label support, and zero licensing cost. The guidelines are designed to achieve labeling consistency sufficient for a training corpus that reaches the F1 ≥ 0.92 target defined in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md).
 
 ---
 
@@ -37,34 +37,23 @@ This document specifies the annotation protocol for constructing the 800-documen
 <View>
   <Text name="gazette_text" value="$classification_chunk" />
 
-  <Header value="Regulatory Category (select ONE):" />
+  <Header value="Regulation Domain (select ONE):" />
   <Choices name="change_category" toName="gazette_text" choice="single" required="true">
     <Choice value="TAX_RATE_CHANGE" />
-    <Choice value="LABOUR_LAW" />
+    <Choice value="IMPORT_EXPORT" />
+    <Choice value="SECTOR_SPECIFIC" />
     <Choice value="EPF_ETF_CHANGE" />
+    <Choice value="LABOUR_LAW" />
     <Choice value="PRODUCT_STANDARD" />
     <Choice value="BUSINESS_REGISTRATION" />
-    <Choice value="IMPORT_EXPORT" />
-    <Choice value="FINANCIAL_REGULATION" />
-    <Choice value="SECTOR_SPECIFIC" />
-    <Choice value="ENVIRONMENTAL" />
     <Choice value="PENALTY_ENFORCEMENT" />
-    <Choice value="DEADLINE_EXTENSION" />
-    <Choice value="NO_SME_IMPACT" />
   </Choices>
 
-  <Header value="Affected Sectors (select ALL that apply):" />
+  <Header value="Affected Sectors (select ALL that apply; all three if economy-wide):" />
   <Choices name="affected_sectors" toName="gazette_text" choice="multiple">
-    <Choice value="manufacturing" />
-    <Choice value="retail" />
-    <Choice value="services" />
-    <Choice value="agriculture" />
-    <Choice value="construction" />
-    <Choice value="it_bpo" />
-    <Choice value="hospitality" />
-    <Choice value="transport" />
-    <Choice value="healthcare" />
-    <Choice value="finance" />
+    <Choice value="grocery_retail" />
+    <Choice value="food_service" />
+    <Choice value="general_retail" />
   </Choices>
 
   <Header value="Notes / Edge Case Flags:" />
@@ -74,22 +63,44 @@ This document specifies the annotation protocol for constructing the 800-documen
 
 ---
 
-## 2. 12-Category Taxonomy — Decision Criteria
+## 2. 8-Domain Regulation Taxonomy — Decision Criteria
 
-Each annotator must apply the following criteria in priority order. Categories are mutually exclusive (single-label).
+Each annotator must apply the following criteria in priority order. Domains are mutually exclusive (single-label). The taxonomy is shop-focused (2026-07-24): the eight streams below are the regulation channels that materially reach grocery/food retail, food service, and general-goods retail SMEs.
 
-### 2.1 `TAX_RATE_CHANGE`
-**Applies when:** The gazette amends a tax rate, introduces a new tax bracket, changes VAT rates, modifies customs duty schedules, or introduces/removes tax exemptions under the Inland Revenue Act or Customs Ordinance.
+### 2.1 `TAX_RATE_CHANGE` (anchor stream)
+**Applies when:** The gazette amends a tax rate, introduces a new tax bracket, changes VAT/SVAT rates, modifies income tax or excise duty, or introduces/removes tax exemptions under the Inland Revenue Act. Deadline extensions on tax obligations also fall here (the schedule of *what SMEs owe and when*).
 
 **Decision signals:**
 - Mentions IRD (Inland Revenue Department) as the issuing authority
-- Contains phrases: `income tax`, `value added tax`, `VAT`, `customs duty`, `import duty`, `excise duty`, `stamp duty`
-- Numerical rate change: e.g. `from 15% to 18%`, `duty-free threshold`
+- Contains phrases: `income tax`, `value added tax`, `VAT`, `SVAT`, `excise duty`, `stamp duty`
+- Numerical rate change: e.g. `from 15% to 18%`, `registration threshold`
 
-**Does NOT apply if:** The gazette imposes a penalty for non-payment of tax (→ `PENALTY_ENFORCEMENT`) or extends a tax filing deadline (→ `DEADLINE_EXTENSION`).
+**Does NOT apply if:** The gazette imposes a penalty for non-payment of tax (→ `PENALTY_ENFORCEMENT`) or changes customs/border charges (→ `IMPORT_EXPORT`).
 
-### 2.2 `LABOUR_LAW`
-**Applies when:** The gazette amends the Shop and Office Employees Act, Wages Board Ordinance, or any minimum wage order; changes annual leave entitlements; modifies working hours; introduces new leave types (maternity, sick leave); or amends employment termination procedures.
+### 2.2 `IMPORT_EXPORT`
+**Applies when:** The gazette changes customs duty, CESS, SCL (Special Commodity Levy), imposes/lifts/modifies import controls, permits, quotas, bans, or licensing requirements for goods; updates prohibited or controlled goods lists; or modifies customs clearance procedures. Highly shop-relevant: stock for grocery, electronics, textile and hardware shops is import-priced.
+
+**Decision signals:**
+- Customs/Excise authority or Controller of Imports cited
+- Phrases: `customs duty`, `CESS`, `SCL`, `import licence`, `import control`, `HS code`, `tariff`
+
+### 2.3 `SECTOR_SPECIFIC` (biggest shop-relevant stream)
+**Applies when:** The gazette introduces or modifies sector-targeted compliance that reaches shops directly: CAA (Consumer Affairs Authority) maximum-retail-price orders, Food Act regulations (Ministry of Health food safety/hygiene), NMRA (National Medicines Regulatory Authority) rules, or other single-industry licensing that does not fit the streams above.
+
+**Decision signals:**
+- CAA, Food Advisory Committee / Ministry of Health (Food Act), or NMRA as issuing authority
+- Phrases: `maximum retail price`, `MRP`, `price order`, `food handling`, `food licence`, `registered pharmaceuticals`
+
+### 2.4 `EPF_ETF_CHANGE`
+**Applies when:** The gazette explicitly modifies EPF (Employees' Provident Fund) or ETF (Employees' Trust Fund) employer obligations — contribution rates, eligibility thresholds, remittance/withdrawal procedures, or fund administration rules.
+
+**Decision signals:**
+- Mentions EPF Act, ETF Act explicitly
+- Contribution percentages: `8% employee`, `12% employer`, `3% ETF`
+- Phrases: `provident fund`, `trust fund contribution`, `EPF registration`
+
+### 2.5 `LABOUR_LAW`
+**Applies when:** The gazette amends the Shop and Office Employees Act, Wages Board Ordinance, or any minimum-wage order; changes annual leave entitlements; modifies working hours; introduces new leave types (maternity, sick leave); or amends employment termination procedures.
 
 **Decision signals:**
 - Phrases: `minimum wage`, `wages board`, `overtime rate`, `working hours`, `annual leave`, `maternity leave`
@@ -97,99 +108,44 @@ Each annotator must apply the following criteria in priority order. Categories a
 
 **Does NOT apply if:** The gazette changes EPF/ETF contribution rates specifically (→ `EPF_ETF_CHANGE`).
 
-### 2.3 `EPF_ETF_CHANGE`
-**Applies when:** The gazette explicitly modifies EPF (Employees' Provident Fund) or ETF (Employees' Trust Fund) contribution rates, changes eligibility thresholds, modifies withdrawal procedures, or updates fund administration rules.
-
-**Decision signals:**
-- Mentions EPF Act, ETF Act explicitly
-- Contribution percentages: `8% employee`, `12% employer`, `3% ETF`
-- Phrases: `provident fund`, `trust fund contribution`, `EPF registration`
-
-### 2.4 `PRODUCT_STANDARD`
-**Applies when:** The gazette mandates compliance with Sri Lanka Standards Institution (SLSI) product safety standards, adds products to the mandatory certification list, updates technical specifications for imported or locally manufactured goods, or imposes labeling requirements.
+### 2.6 `PRODUCT_STANDARD`
+**Applies when:** The gazette mandates compliance with Sri Lanka Standards Institution (SLSI) product standards, adds products to the mandatory certification list, updates technical specifications for imported or locally sold goods, or imposes labelling requirements.
 
 **Decision signals:**
 - SLSI cited as issuing authority
 - SLS number cited: e.g. `SLS 1234:2023`
-- Phrases: `mandatory certification`, `product conformity`, `consumer safety standard`
+- Phrases: `mandatory certification`, `product conformity`, `labelling`, `consumer safety standard`
 
-### 2.5 `BUSINESS_REGISTRATION`
-**Applies when:** The gazette modifies company registration requirements under the Companies Act, changes annual return filing procedures via eROC (Department of Registrar of Companies), updates sole proprietorship/partnership registration requirements, or amends business licensing procedures.
-
-**Decision signals:**
-- DRC / eROC / Registrar of Companies as issuing authority
-- Phrases: `annual return`, `business registration`, `company act`, `memorandum of association`
-
-### 2.6 `IMPORT_EXPORT`
-**Applies when:** The gazette imposes, lifts, or modifies import/export permits, quotas, bans, or licensing requirements for specific goods; updates prohibited or controlled goods lists; or modifies customs clearance procedures.
+### 2.7 `BUSINESS_REGISTRATION`
+**Applies when:** The gazette modifies trade licence requirements (local authority), company registration under the Companies Act, annual return filing via eROC (Department of Registrar of Companies), or sole proprietorship/partnership registration requirements.
 
 **Decision signals:**
-- Customs/Excise authority cited
-- Phrases: `import licence`, `export quota`, `banned imports`, `restricted goods`, `HS code`
+- DRC / eROC / Registrar of Companies / local authority as issuing authority
+- Phrases: `trade licence`, `annual return`, `business registration`, `company act`
 
-### 2.7 `FINANCIAL_REGULATION`
-**Applies when:** The gazette introduces CBSL (Central Bank of Sri Lanka) licensing requirements for financial institutions, modifies forex transaction limits, changes lending rate caps, introduces new capital adequacy requirements, or regulates non-bank financial intermediaries.
-
-**Decision signals:**
-- CBSL / Monetary Board as issuing authority
-- Phrases: `banking licence`, `foreign exchange`, `lending rate`, `microfinance`, `finance company`
-
-### 2.8 `SECTOR_SPECIFIC`
-**Applies when:** The gazette introduces or modifies a licensing or regulatory requirement that applies exclusively to one industry sector and does not fit any of the above categories. Examples: food safety licensing (Ministry of Health), tourism operating permits (SLTDA), construction contractor registration (CIDA).
-
-**Decision signals:**
-- Sector-specific ministry as issuing authority
-- Licensing language targeted at one industry
-
-### 2.9 `ENVIRONMENTAL`
-**Applies when:** The gazette imposes new environmental compliance obligations — effluent discharge standards, solid waste management requirements, emissions limits, or environmental impact assessment requirements — from the Central Environmental Authority (CEA).
-
-**Decision signals:**
-- CEA as issuing authority
-- Phrases: `effluent`, `emissions`, `environmental protection licence`, `EIA`, `solid waste`
-
-### 2.10 `PENALTY_ENFORCEMENT`
-**Applies when:** The gazette's primary purpose is to announce new or increased fines, penalties, enforcement notices, or revocation of existing licenses for non-compliance. Note: most gazettes mention penalties incidentally — this category only applies when penalties are the primary subject.
+### 2.8 `PENALTY_ENFORCEMENT` (the "cost of not knowing")
+**Applies when:** The gazette's primary purpose is to announce new or increased fines, penalties, enforcement notices, or revocation of existing licences for non-compliance. Note: most gazettes mention penalties incidentally — this domain only applies when penalties are the primary subject.
 
 **Decision signals:**
 - Gazette title begins with "Enforcement Notice" or "Penalty Order"
 - Penalty amounts are the central content, not incidental
 - No underlying regulatory change is announced
 
-### 2.11 `DEADLINE_EXTENSION`
-**Applies when:** The gazette's sole or primary purpose is to extend a previously published compliance deadline or filing date, without changing any underlying regulation.
-
-**Decision signals:**
-- References a previous gazette number
-- Phrases: `extended to`, `deadline extended`, `w.e.f. [new date]`, `compliance period`
-
-### 2.12 `NO_SME_IMPACT`
-**Applies when:** The gazette is a valid regulatory publication but does not impose any obligations or changes that affect SMEs. Examples: government appointment notices, military land acquisition orders, academic institution recognition, senior civil servant designations.
-
-**Decision signals:**
-- Content relates exclusively to: government appointments, land acquisitions for public works, court fee schedules, academic body recognition
-- No business licensing, taxation, labour, or standards change
+> **Out-of-scope gazettes:** Gazettes with no obligations for the three study sectors (government appointments, land acquisitions, constitutional notices, finance/CBSL directives, environmental/CEA orders aimed at factories, etc.) are handled by the separate `is_sme_relevant = FALSE` flag plus an empty `affected_sectors` set — there is no reject *domain* in the 8-domain taxonomy.
 
 ---
 
 ## 3. Sector Assignment Guidelines
 
-Sector assignment is multi-label. Assign ALL sectors that are materially affected by the gazette's regulation.
+Sector assignment is multi-label over the three shop-focused study sectors. Assign ALL sectors materially affected by the gazette's regulation; assign **all three** for economy-wide obligations (VAT, EPF/ETF, labour law, business registration).
 
 | Sector | Assign when the gazette affects... |
 |---|---|
-| `manufacturing` | Factories producing physical goods: food processing, textiles, electronics, construction materials |
-| `retail` | Shops, supermarkets, street vendors, e-commerce retailers |
-| `services` | Professional services: accounting, law, IT consulting, security, cleaning |
-| `agriculture` | Farming, fisheries, poultry, livestock, food crop production |
-| `construction` | Building contractors, civil engineering, real estate development |
-| `it_bpo` | Software development, BPO call centres, data processing companies |
-| `hospitality` | Hotels, restaurants, travel agencies, event venues |
-| `transport` | Freight transport, passenger transport, logistics, warehousing |
-| `healthcare` | Pharmacies, private hospitals, medical device suppliers, labs |
-| `finance` | Money changers, leasing companies, pawning establishments, microfinance |
+| `grocery_retail` | Grocery / food retail: neighbourhood kade, mini-marts, small supermarkets |
+| `food_service` | Food service: restaurants, cafés, bakeries, take-aways |
+| `general_retail` | General-goods retail: textile/apparel shops, electronics/mobile shops, hardware stores |
 
-> **Important:** Do NOT assign sectors by superficial keyword match. A gazette regulating "EPF contributions" applies to ALL sectors with employees — assign all 10. A gazette regulating "SLSI standards for electrical appliances" applies to `manufacturing` and `retail` only.
+> **Important:** Do NOT assign sectors by superficial keyword match. A gazette regulating "EPF contributions" applies to every sector with employees — assign all 3. A gazette regulating "SLSI standards for electrical appliances" applies to `general_retail` only; a Food Act hygiene rule applies to `grocery_retail` + `food_service`.
 
 ---
 
@@ -214,8 +170,7 @@ def compute_sector_kappa(annotator_a: list[list], annotator_b: list[list]) -> fl
     """Multi-label Fleiss kappa approximated as mean of per-sector binary kappa."""
     from sklearn.preprocessing import MultiLabelBinarizer
     mlb = MultiLabelBinarizer(classes=[
-        "manufacturing", "retail", "services", "agriculture", "construction",
-        "it_bpo", "hospitality", "transport", "healthcare", "finance"
+        "grocery_retail", "food_service", "general_retail"
     ])
     a_bin = mlb.fit_transform(annotator_a)
     b_bin = mlb.transform(annotator_b)
@@ -240,9 +195,9 @@ Sector is multi-label, so annotator disagreement is more subtle than a simple "d
 
 | Disagreement type | Example | Resolution rule |
 |---|---|---|
-| **Strict-subset** | A: `[manufacturing, retail]` · B: `[manufacturing, retail, services]` | **Union** — accept B's superset. Rationale: missing a sector is worse than over-tagging (false negative misses an alert recipient; false positive sends a slightly off-topic alert). |
-| **Overlap-with-extras** | A: `[manufacturing, retail]` · B: `[manufacturing, services]` | **Domain expert review.** Neither annotator's set strictly contains the other; this signals genuine ambiguity in the regulation's scope. |
-| **Disjoint** | A: `[manufacturing]` · B: `[finance]` | **Domain expert review + flag** — the two annotators are reading the regulation as targeting different industries. Likely indicates a guideline ambiguity that needs an update to §3 (sector decision criteria). |
+| **Strict-subset** | A: `[grocery_retail, general_retail]` · B: `[grocery_retail, general_retail, food_service]` | **Union** — accept B's superset. Rationale: missing a sector is worse than over-tagging (false negative misses an alert recipient; false positive sends a slightly off-topic alert). |
+| **Overlap-with-extras** | A: `[grocery_retail, general_retail]` · B: `[grocery_retail, food_service]` | **Domain expert review.** Neither annotator's set strictly contains the other; this signals genuine ambiguity in the regulation's scope. |
+| **Disjoint** | A: `[grocery_retail]` · B: `[food_service]` | **Domain expert review + flag** — the two annotators are reading the regulation as targeting different shop types. Likely indicates a guideline ambiguity that needs an update to §3 (sector decision criteria). |
 
 The strict-subset rule is implemented in `ml/m1/data/resolve_iaa.py:resolve_sector_iaa()`; the other two paths route to a Label Studio task queue for the domain expert. All resolution outcomes are logged with `resolution_method` so the eventual training set can be audited.
 
@@ -300,13 +255,13 @@ flowchart TD
 
 ## 6.1 Contrastive Examples for Confusable Categories
 
-Three category pairs cause most inter-annotator disagreement. The contrasts below — anchored in seeded demo regulations from `app/scripts/seed_regulations.py` — give annotators concrete decision anchors:
+Three domain pairs cause most inter-annotator disagreement. The contrasts below — anchored in seeded demo regulations from `app/scripts/seed_regulations.py` — give annotators concrete decision anchors:
 
 | Confusable pair | Example A (label A) | Example B (label B) | What distinguishes them |
 |---|---|---|---|
-| `BUSINESS_REGISTRATION` vs `FINANCIAL_REGULATION` | "Annual return filing fees for limited companies increased from LKR 1,000 to LKR 5,000" → `BUSINESS_REGISTRATION` | "Annual financial reporting required from all NBFI license-holders to CBSL with quarterly disclosure" → `FINANCIAL_REGULATION` | Issuing authority + obligation: `BUSINESS_REGISTRATION` is about *existing as a registered business* (eROC); `FINANCIAL_REGULATION` is about *financial-sector conduct rules* (CBSL). When unsure, look at the issuing agency. |
-| `TAX_RATE_CHANGE` vs `DEADLINE_EXTENSION` | "VAT rate increased from 15 % to 18 % effective 2024-01-01" → `TAX_RATE_CHANGE` | "VAT return filing deadline for Q4 2023 extended from 20 January to 31 January 2024" → `DEADLINE_EXTENSION` | Substance vs schedule: `TAX_RATE_CHANGE` modifies *what* SMEs owe; `DEADLINE_EXTENSION` modifies *when* an existing obligation is due. Same tax, different axis. |
-| `PRODUCT_STANDARD` vs `ENVIRONMENTAL` | "Multi-pin adapters must carry SLSI safety certification before sale" (`VAT_SSCL_MERGE` example) → `PRODUCT_STANDARD` | "Lead content in industrial paints reduced from 0.06 % to 0.009 %" → `ENVIRONMENTAL` | Who is harmed by non-compliance: `PRODUCT_STANDARD` targets *consumer safety*; `ENVIRONMENTAL` targets *ecological harm*. Both can co-occur — when SLSI mandates lead reduction *for paint*, prefer `PRODUCT_STANDARD` (the consumer-facing framing wins). |
+| `TAX_RATE_CHANGE` vs `IMPORT_EXPORT` | "VAT rate increased from 15 % to 18 % effective 2024-01-01" → `TAX_RATE_CHANGE` | "Customs duty on imported textiles raised from 10 % to 25 %; CESS revised on HS 5208" → `IMPORT_EXPORT` | Where the charge bites: `TAX_RATE_CHANGE` is inland taxation (IRD-administered — VAT/SVAT, income, excise); `IMPORT_EXPORT` is border charges and controls (Customs — duty, CESS, SCL, permits). |
+| `SECTOR_SPECIFIC` vs `PRODUCT_STANDARD` | "CAA maximum retail price order for milk powder; selling above MRP an offence" → `SECTOR_SPECIFIC` | "Multi-pin adapters must carry SLSI safety certification before sale" → `PRODUCT_STANDARD` | Instrument type: `SECTOR_SPECIFIC` is conduct/price/licensing regulation of the *selling activity* (CAA, Food Act, NMRA); `PRODUCT_STANDARD` certifies the *product itself* (SLSI mark, labelling). |
+| `PENALTY_ENFORCEMENT` vs `BUSINESS_REGISTRATION` | "Late fee for annual returns raised to Rs 2,500/month; 12-month defaulters struck off" → `PENALTY_ENFORCEMENT` | "Annual return filing fees for limited companies increased from LKR 1,000 to LKR 5,000" → `BUSINESS_REGISTRATION` | Primary purpose: if the gazette's central content is the *sanction* (fine schedule, strike-off), choose `PENALTY_ENFORCEMENT`; if it modifies the *registration obligation or its ordinary fees*, choose `BUSINESS_REGISTRATION`. |
 
 Eight more contrastive pairs (with full text excerpts) are in [09_M1_1_Category_Taxonomy_Examples.md](09_M1_1_Category_Taxonomy_Examples.md). Annotators study these *before* the calibration test, not after — the contrastive examples are part of the training, the calibration test measures whether the training stuck.
 
@@ -314,12 +269,12 @@ Eight more contrastive pairs (with full text excerpts) are in [09_M1_1_Category_
 
 | Edge Case | Resolution |
 |---|---|
-| Gazette amends tax rates AND extends a deadline | Assign `TAX_RATE_CHANGE` (primary change); use annotator_notes to flag deadline extension |
+| Gazette amends tax rates AND extends a deadline | Assign `TAX_RATE_CHANGE` (rate + schedule are the same stream in the 8-domain taxonomy); use annotator_notes to flag the deadline component |
 | EPF gazette that also mandates wage increases | Assign `EPF_ETF_CHANGE` if EPF rates are the primary change; `LABOUR_LAW` if wages are primary |
 | Gazette in Sinhala only, annotator cannot read it | Route to Sinhala annotator; do NOT use machine translation for annotation |
-| SLSI standard gazette with both labeling and testing requirements | Assign `PRODUCT_STANDARD`; sectors = `manufacturing` + `retail` |
-| Gazette with schedule listing 50 regulated substances | Treat as `PRODUCT_STANDARD` if substances are consumer products; `ENVIRONMENTAL` if they are pollutants |
-| Extraordinary gazette announcing state of emergency business restrictions | Assign `SECTOR_SPECIFIC`; sectors = all 10 (economy-wide) |
+| SLSI standard gazette with both labelling and testing requirements | Assign `PRODUCT_STANDARD`; sectors = whichever shop types sell the product (e.g. `general_retail` for appliances; `grocery_retail` for packaged food) |
+| Gazette with schedule listing 50 regulated substances | Treat as `PRODUCT_STANDARD` if the substances are consumer products sold by shops; if aimed at factories/polluters only, mark `is_sme_relevant = FALSE` with empty sectors |
+| Extraordinary gazette announcing state of emergency business restrictions | Assign `SECTOR_SPECIFIC`; sectors = all 3 (economy-wide) |
 
 ---
 
@@ -332,7 +287,7 @@ This section documents the survey instrument used to collect the empirical lag d
 The survey is structured in three phases:
 
 1. **Introduction block** — Consent, SME profile (sector, district, headcount, years in operation). Pre-fills from `m1_sme_profiles` if the respondent is already registered.
-2. **Per-regulation question block** — Repeated for each of 7 sector-tailored regulations + 2 universal regulations (9 regulations total per respondent). Each block presents a plain-language description of the regulation and asks Q1–Q7.
+2. **Per-regulation question block** — Repeated for each of 7 sector-tailored regulations + 2 economy-wide regulations (9 regulations total per respondent). Each block presents a plain-language description of the regulation and asks Q1–Q7.
 3. **Open question block** — Q8 (open text) on what would most help the respondent stay compliant. Answered once, at the end.
 
 ### 9.2 Per-Regulation Question Block (Q1–Q7)
@@ -381,7 +336,7 @@ Respondents may select all channels that apply for Q3:
 
 ### 9.5 Sector-Tailored Regulation Selection (SQL)
 
-The 7 sector-specific regulations shown to each respondent are selected based on the respondent's `primary_sector` from `m1_sme_profiles`. The 2 universal regulations (one IRD, one EPF) are shown to all respondents regardless of sector.
+The 7 sector-specific regulations shown to each respondent are selected based on the respondent's `primary_sector` from `m1_sme_profiles` (one of `grocery_retail` / `food_service` / `general_retail`). The 2 economy-wide regulations (one IRD, one EPF) are shown to all respondents regardless of sector.
 
 ```sql
 -- Sector-tailored selection: 7 most recent regulations for the respondent's sector
@@ -401,8 +356,8 @@ WITH sector_regulations AS (
     ORDER BY r.gazette_published_date DESC
     LIMIT 7
 ),
--- Universal regulations: one IRD + one EPF in the same 2-year window
-universal_regulations AS (
+-- Economy-wide regulations: one IRD + one EPF in the same 2-year window
+economywide_regulations AS (
     (SELECT id, title, gazette_published_date, change_category, sector_tags
      FROM m1_regulations
      WHERE change_category = 'TAX_RATE_CHANGE' AND status = 'ALERTED' AND needs_review = false
@@ -410,13 +365,13 @@ universal_regulations AS (
     UNION ALL
     (SELECT id, title, gazette_published_date, change_category, sector_tags
      FROM m1_regulations
-     WHERE change_category = 'EMPLOYEE_CONTRIBUTION_CHANGE' AND status = 'ALERTED' AND needs_review = false
+     WHERE change_category = 'EPF_ETF_CHANGE' AND status = 'ALERTED' AND needs_review = false
      ORDER BY gazette_published_date DESC LIMIT 1)
 )
 -- Final survey regulation list (up to 9 regulations)
 SELECT * FROM sector_regulations
 UNION ALL
-SELECT * FROM universal_regulations
+SELECT * FROM economywide_regulations
 ORDER BY gazette_published_date DESC;
 ```
 
@@ -426,7 +381,7 @@ The SQL result is passed to the survey front-end, which renders one Q1–Q7 bloc
 
 ## 8. Conclusion
 
-The annotation protocol establishes a rigorous, reproducible framework for constructing the 800-document labeled corpus. Label Studio is selected as the annotation platform for its IAA dashboard, multi-label support, and active-learning integration that enables the ML model to pre-annotate later batches — reducing annotator burden by an estimated 40% after the first 400 labeled examples. The 12-category taxonomy with explicit decision criteria and edge-case resolution guidance is designed to achieve κ ≥ 0.75, which research by Artstein & Poesio (2008) identifies as the minimum threshold for reliable ML training labels.
+The annotation protocol establishes a rigorous, reproducible framework for constructing the 800-document labeled corpus. Label Studio is selected as the annotation platform for its IAA dashboard, multi-label support, and active-learning integration that enables the ML model to pre-annotate later batches — reducing annotator burden by an estimated 40% after the first 400 labeled examples. The 8-domain taxonomy with explicit decision criteria and edge-case resolution guidance is designed to achieve κ ≥ 0.75, which research by Artstein & Poesio (2008) identifies as the minimum threshold for reliable ML training labels.
 
 ---
 

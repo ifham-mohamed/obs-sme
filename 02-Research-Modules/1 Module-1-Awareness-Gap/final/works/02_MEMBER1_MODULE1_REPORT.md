@@ -10,7 +10,7 @@
 
 Member 1 owns Module 1 end-to-end: the automated gazette pipeline (scrape → extract → preprocess → classify → alert) **and** the diffusion-measurement research programme (propagation tracking, lag analytics, findings F1–F6, retraining loop), plus the admin tooling that operates it (extraction portal, dataset registry, accuracy measurement UI). Research questions:
 
-- **RQ1** — Can a trilingual classifier assign gazette changes to a 12-category + 10-sector taxonomy at macro-F1 ≥ 0.92 (no language slice worse than 8pp below overall)?
+- **RQ1** — Can a trilingual classifier assign gazette changes to an 8-domain + 3-sector taxonomy at macro-F1 ≥ 0.92 (no language slice worse than 8pp below overall)?
 - **RQ2** — Does extraction quality (esp. Sinhala/Tamil OCR + Wijesekara conversion) support reliable downstream classification?
 - **RQ3/RQ4** — What is the measured regulatory information-diffusion lag across channels, and do targeted alerts reduce it (F6, difference-in-differences)?
 
@@ -31,7 +31,7 @@ The largest completed block. Why it exists: gazette PDFs are heterogeneous (born
 6. **Data population** — 800 raw PDFs bulk-extracted (11 batches); legacy-baseline backfill script materialising pre-registry extractions into the dataset registry (`scripts/backfill_legacy_baseline.py`).
 
 ### Phase 3 — Annotation + Classification (3a/3b 🟢 · 3d–3f code 🟢 · 3c human gate 🔲)
-- **3a/3b:** Label Studio config (12 categories × 10 sectors × relevance × confidence), 20-doc trilingual calibration set with expert rationales, sampling library (stratified × k-means × active learning) → `batch_01.csv` (200 docs). *Files:* `research/data/label_studio_config.xml`, `research/data/calibration_set_v1.csv`, `enigmatrix-ml/m1/data/samplers.py`, `scripts/sample_for_labeling.py`.
+- **3a/3b:** Label Studio config (8 domains × 3 sectors × relevance × confidence), 20-doc trilingual calibration set with expert rationales, sampling library (stratified × k-means × active learning) → `batch_01.csv` (200 docs). *Files:* `research/data/label_studio_config.xml`, `research/data/calibration_set_v1.csv`, `enigmatrix-ml/m1/data/samplers.py`, `scripts/sample_for_labeling.py`.
 - **3d:** `m1/model/` — XLM-R + LoRA dual-head classifier, temporal-split data loader (leakage-tested), 3-seed trainer with F1 gate ≥ 0.92, `model_registry.json`. *Why XLM-R+LoRA:* one multilingual encoder covers EN/SI/TA; LoRA keeps training feasible on a single GPU; dual head handles single-label category + multi-label sectors jointly (CE + BCE loss).
 - **3e:** per-slice evaluation (language / quarter / length, slice-cliff ≤ 8pp) + TF-IDF baselines — the RQ1 comparison is itself a finding.
 - **3f:** ONNX export (LoRA-merged, optional INT8) + `GazetteInference` runtime + `m1_classifier_service` (min-confidence 0.55 review threshold) + `classify_gazette` Celery task auto-chained after preprocessing. Migration `202606300001`.

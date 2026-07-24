@@ -66,7 +66,7 @@
 |---|---|---|---|---|
 | `schema/pydantic_models.py` | `PreprocessedGazette`, `PredictionOut`, etc. | 🔲 | [04_M1_Preprocessing_Pipeline.md §3.5](04_M1_Preprocessing_Pipeline.md) | Mirror the dataclass shape from doc 04; immutable + JSON-serializable |
 | `schema/manifest.py` | Dataset `manifest.yaml` schema | 🔲 | [06_M1_Training_Evaluation.md §reproducibility hash](06_M1_Training_Evaluation.md) | Validates `model_registry.json` shape |
-| `utils/constants.py` | 12 category codes, 10 sector codes | 🔲 | [09_M1_Annotation_Guidelines.md §2 + §3](09_M1_Annotation_Guidelines.md) | Two `Literal`-style enums; single source of truth |
+| `utils/constants.py` | 8 domain codes, 3 sector codes | 🔲 | [09_M1_Annotation_Guidelines.md §2 + §3](09_M1_Annotation_Guidelines.md) | Two `Literal`-style enums; single source of truth |
 | `utils/logging.py` | Structured JSON logging | 🔲 | — | `structlog` config; per-task `request_id` propagation |
 | `utils/validation.py` | Data-quality assertions | 🔲 | [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md) | Functions consumed by Pydantic validators + nightly health checks |
 

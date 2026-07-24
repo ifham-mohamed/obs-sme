@@ -214,11 +214,10 @@ from pathlib import Path
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-ID2LABEL = {  # must match ml/module1/train_xlmr.py
-    0: "TAX_INCOME", 1: "TAX_VAT_SVAT", 2: "TAX_CUSTOMS_TARIFF",
-    3: "EPF_ETF", 4: "IMPORT_EXPORT_CONTROL", 5: "HEALTH_SAFETY",
-    6: "ENVIRONMENTAL", 7: "EMPLOYMENT_LABOUR", 8: "COMPANY_REGISTRATION",
-    9: "SECTOR_SPECIFIC", 10: "CONSUMER_PROTECTION", 11: "OTHER_REGULATORY",
+ID2LABEL = {  # must match enigmatrix-ml/m1/model/labels.py::CATEGORIES
+    0: "TAX_RATE_CHANGE", 1: "IMPORT_EXPORT", 2: "SECTOR_SPECIFIC",
+    3: "EPF_ETF_CHANGE", 4: "LABOUR_LAW", 5: "PRODUCT_STANDARD",
+    6: "BUSINESS_REGISTRATION", 7: "PENALTY_ENFORCEMENT",
 }
 
 @lru_cache(maxsize=2)
@@ -446,8 +445,8 @@ import { Badge } from "@/components/ui/badge";
 import type { Regulation } from "@/lib/types";
 
 const CATEGORY_BADGE: Record<string, string> = {
-  TAX_VAT_SVAT: "bg-amber-100 text-amber-800",
-  EPF_ETF: "bg-blue-100 text-blue-800",
+  TAX_RATE_CHANGE: "bg-amber-100 text-amber-800",
+  EPF_ETF_CHANGE: "bg-blue-100 text-blue-800",
   // ...
 };
 

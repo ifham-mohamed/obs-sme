@@ -22,8 +22,8 @@ This companion documents both halves: the shipped widget + list, and the intende
 
 > 🔲 Intended workflow — sector-applicability filter design not yet locked.
 
-1. **Sticky filter chip bar** at the top of `/regulations`: chips for `Sector = manufacturing`, `Region = Colombo`, `Status = applicable to me`, `Effective in next 30 days`, `Has my action?` Clicking a chip toggles it; chips reflect in the URL (`?sector=manufacturing&region=colombo&applicable=true`).
-2. **Applicability score per row.** Each `<RegulationCard>` shows a small badge: `100 % applicable` (the SME's sector is in `affected_sectors` AND district matches), `50 % applicable` (sector match only), `10 %` (universal regulations that apply to all sectors). Computed client-side from the SME's profile + the regulation's `affected_sectors[]`.
+1. **Sticky filter chip bar** at the top of `/regulations`: chips for `Sector = grocery_retail`, `Region = Colombo`, `Status = applicable to me`, `Effective in next 30 days`, `Has my action?` Clicking a chip toggles it; chips reflect in the URL (`?sector=grocery_retail&region=colombo&applicable=true`).
+2. **Applicability score per row.** Each `<RegulationCard>` shows a small badge: `100 % applicable` (the SME's sector is in `affected_sectors` AND district matches), `50 % applicable` (sector match only), `economy-wide` (regulations that apply to all 3 study sectors). Computed client-side from the SME's profile + the regulation's `affected_sectors[]`.
 3. **Sort options.** Newest, earliest effective date, severity DESC, "most relevant to me" (applicability × severity).
 4. **Save filter.** Power-user feature: save a filter set to the SME's profile so it's pre-applied on next visit.
 
@@ -72,7 +72,7 @@ Click card → same /surveys/regulation/[id] flow
 ## Failure modes & edge cases
 
 - **SME has no `primary_sector`.** Brand-new SME with empty profile. Mitigation: the dashboard widget hides itself; the user is prompted to complete their profile (currently routes to `/profile`).
-- **Cross-sector regulation (universal).** Applies to all 10 sectors — `affected_sectors` is the full list. Renders as "10 % applicable" today; future could be "applies to everyone" with a special badge.
+- **Cross-sector regulation (economy-wide).** Applies to all 3 study sectors — `affected_sectors` is the full list. Renders as "applicable to all sectors" today; future could be "applies to everyone" with a special badge.
 - **Profile updated → cached widget stale.** SME changes sector; widget on dashboard might still show the old recommendations until next fetch. Mitigation: `react-query` invalidation on profile mutate (already in place per Session 13).
 - **Empty pending list.** SME has surveyed everything; widget shows "All caught up — view all regulations →".
 - **Trilingual list:** locale-aware title with EN fallback ("Showing English" badge when SI/TA missing). Existing pattern from [12_UI_Screens §3.5](../frontend/SETUP/12_UI_Screens_and_Loading.md).

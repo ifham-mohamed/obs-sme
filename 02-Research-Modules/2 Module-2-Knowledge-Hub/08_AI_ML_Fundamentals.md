@@ -85,7 +85,7 @@ You need **labeled examples**: pairs of `(text, category)`. For example:
 → category: "TAX_RATE_CHANGE"
 
 "The Commissioner General hereby extends the deadline for filing..."
-→ category: "DEADLINE_EXTENSION"
+→ domain: "TAX_RATE_CHANGE" (tax-obligation schedule change)
 ```
 
 You will manually label 500–1500 examples per classifier. This is the most time-consuming and most important step.

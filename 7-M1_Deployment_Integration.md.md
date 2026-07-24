@@ -130,14 +130,12 @@ import torch
 
 class GazetteInferenceEngine:
     CATEGORY_LABELS = [
-        "TAX_RATE_CHANGE", "LABOUR_LAW", "EPF_ETF_CHANGE", "PRODUCT_STANDARD",
-        "BUSINESS_REGISTRATION", "IMPORT_EXPORT", "FINANCIAL_REGULATION",
-        "SECTOR_SPECIFIC", "ENVIRONMENTAL", "PENALTY_ENFORCEMENT",
-        "DEADLINE_EXTENSION", "NO_SME_IMPACT"
+        "TAX_RATE_CHANGE", "IMPORT_EXPORT", "SECTOR_SPECIFIC", "EPF_ETF_CHANGE",
+        "LABOUR_LAW", "PRODUCT_STANDARD", "BUSINESS_REGISTRATION",
+        "PENALTY_ENFORCEMENT"
     ]
     SECTOR_LABELS = [
-        "manufacturing", "retail", "services", "agriculture", "construction",
-        "it_bpo", "hospitality", "transport", "healthcare", "finance"
+        "grocery_retail", "food_service", "general_retail"
     ]
     SECTOR_THRESHOLD = 0.48  # Tuned on validation set
 

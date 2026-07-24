@@ -48,7 +48,7 @@ The actual **training run**, quantization validation, and the review-queue *UI* 
 ## 3. Step-by-step: planned vs. built (with code files)
 
 ### 3a — Annotation infra (🟡)
-Label Studio project XML + `research/data/calibration_set_v1.csv` (20 reference docs across 12 categories × EN/SI/TA + edge cases). Annotation environment (`mydata/`) stood up but untracked (F-243). **Gap:** annotator recruitment + first-attempt κ ≥ 0.80 not recorded → [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]] Stage A gives the κ-gated runbook that records the matrix to `FEATURES.md`.
+Label Studio project XML + `research/data/calibration_set_v1.csv` (20 reference docs across 8 domains × EN/SI/TA + edge cases). Annotation environment (`mydata/`) stood up but untracked (F-243). **Gap:** annotator recruitment + first-attempt κ ≥ 0.80 not recorded → [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/19_PHASE3_GAP_CLOSURE_PLAN]] Stage A gives the κ-gated runbook that records the matrix to `FEATURES.md`.
 
 ### 3b — Sampling (🟢)
 `enigmatrix-ml/m1/data/samplers.py`: `stratified_sample` (year × language), `kmeans_diversity_sample` (TF-IDF + MiniBatchKMeans), `find_minority_candidates`, `select_uncertainty_batch` (margin AL), `sample_for_labeling` (200+40+10). Driven by `scripts/sample_for_labeling.py` (DB or `--demo`). `batch_01.csv` produced.
@@ -147,8 +147,8 @@ Phase-2 extracted/preprocessed gazettes (DB)
   → scripts/sample_for_labeling.py → m1/data/samplers.py
         stratified(year×lang) + kmeans_diversity + select_uncertainty_batch(AL)
      → research/data/labeling/batch_NN.csv
-  → Label Studio (mydata/) → annotators (12 cat + 10 sector) → dual-annotation κ gate (≥0.80 calib, ≥0.75 IAA)
-     → gold_standard.csv  (≥ 20/category, heuristic rows excluded via classification_source)
+  → Label Studio (mydata/) → annotators (8 domain + 3 sector) → dual-annotation κ gate (≥0.80 calib, ≥0.75 IAA)
+     → gold_standard.csv  (≥ 20/domain, heuristic rows excluded via classification_source)
   → m1/model/data.py → temporal parquet splits
   → m1/model/train_xlmr.py  (XLM-R + LoRA, 3 seeds, AdamW, fp16)  → checkpoint (macro-F1 ≥ 0.92 gate)
   → m1/model/eval.py  (per-language / quarter / length / method slices)

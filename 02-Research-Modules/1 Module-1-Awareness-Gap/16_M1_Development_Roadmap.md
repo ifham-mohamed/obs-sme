@@ -110,7 +110,7 @@ Already shipped. You're inheriting:
 
 - **Read first:** [05_M1_Model_Architecture.md §1.3 (active-learning baseline)](05_M1_Model_Architecture.md).
 - **Build:** AL baseline (TF-IDF + LR) + uncertainty-sampling acquisition function. Iterate batches 2–4 (200 docs each) over ~6 weeks.
-- **DoD:** 800 labels in `gold_standard.csv` (≥ 50 per category); IAA on dual-annotated subset ≥ 0.75 κ.
+- **DoD:** 800 labels in `gold_standard.csv` (≥ 50 per domain); IAA on dual-annotated subset ≥ 0.75 κ.
 
 ### Step 3d — Train XLM-R + LoRA classifier
 

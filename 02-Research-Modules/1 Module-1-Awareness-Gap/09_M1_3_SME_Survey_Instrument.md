@@ -19,11 +19,11 @@ Three channels seed respondents into the survey:
 | NEDA / Chamber partner email | ~30 % | Free (partner provides list) | List bias — toward members + active SMEs |
 | Snowball / referral | ~10 % | Free | Familiarity bias — limited |
 
-Target: 100 + responses across all 10 sectors with ≥ 10 / sector.
+Target: 100 + responses across all 3 study sectors with ≥ 30 / sector.
 
 ### Step 2 — Per-sector regulation selection
 
-Each respondent sees 7 sector-tailored regulations + 2 universal (IRD + EPF). The full SQL is in parent doc §9.5. The query is parameterised on `respondent_sector` from `sme_profiles`. The 7 regulations are the most recent for that sector with `needs_review=false`.
+Each respondent sees 7 sector-tailored regulations + 2 economy-wide (IRD + EPF). The full SQL is in parent doc §9.5. The query is parameterised on `respondent_sector` from `sme_profiles`. The 7 regulations are the most recent for that sector with `needs_review=false`.
 
 ### Step 3 — Response delivery flow
 
@@ -107,8 +107,8 @@ Themes feed the thesis discussion + policy recommendations.
 A typical respondent flow:
 
 ```
-[Day 0 09:14] respondent (sme_alpha, manufacturing, Kandy) lands on /portal/m1/survey
-[Day 0 09:14] server retrieves 7 manufacturing regulations + 2 universal = 9
+[Day 0 09:14] respondent (sme_alpha, grocery_retail, Kandy) lands on /portal/m1/survey
+[Day 0 09:14] server retrieves 7 grocery_retail regulations + 2 economy-wide = 9
 [Day 0 09:14] m1_survey_attempts row inserted (started_at=09:14)
 [Day 0 09:24] respondent submits — 9 regulations answered, Q8 filled (n=180 chars)
 [Day 0 09:24] server validates consent; OK
@@ -131,7 +131,7 @@ The submission takes ~10 minutes — short enough that the abandonment rate stay
 ## Validation & acceptance criteria
 
 - **Survey instrument identical to parent doc §9.** No drift between the parent doc and what the portal renders (CI test on the rendered form).
-- **Per-sector quota.** ≥ 10 respondents in each of the 10 sectors before F4 is reported.
+- **Per-sector quota.** ≥ 30 respondents in each of the 3 study sectors before F4 is reported.
 - **Q8 thematic IAA.** κ ≥ 0.70 between the two coders on the final coding pass.
 - **Completion rate.** ≥ 30 % of survey-started respondents complete all 9 regulations. If below, audit drop-off page (which Q is the abandonment point).
 

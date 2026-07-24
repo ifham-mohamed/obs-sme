@@ -146,22 +146,18 @@ def detect_language(text):
 
 #### NLP Classifier Training Pipeline (9 Stages)
 
-The **12-Way Regulatory Change Taxonomy:**
+The **8-Domain Regulation Taxonomy** (shop-focused study scope — grocery/food retail, food service, general-goods retail):
 
-| # | Category | Example Trigger |
-|---|----------|----------------|
-| 1 | TAX_INCOME | Income tax rate or threshold change |
-| 2 | TAX_VAT_SVAT | VAT rate revised to 18% |
-| 3 | TAX_CUSTOMS_TARIFF | Import duty schedule amended |
-| 4 | EPF_ETF | Contribution rate / procedure change |
-| 5 | IMPORT_EXPORT_CONTROL | Export restriction announced |
-| 6 | HEALTH_SAFETY | Food safety regulation |
-| 7 | ENVIRONMENTAL | Environmental compliance requirement |
-| 8 | EMPLOYMENT_LABOUR | Labour law amendment |
-| 9 | COMPANY_REGISTRATION | eROC form change, Form 6 |
-| 10 | SECTOR_SPECIFIC | Regulation targeting one sector |
-| 11 | CONSUMER_PROTECTION | Consumer rights notice |
-| 12 | OTHER_REGULATORY | Fits none of the above |
+| # | Domain | Example Trigger |
+|---|--------|----------------|
+| 1 | TAX_RATE_CHANGE | VAT/SVAT rate revised to 18%; income tax or excise change (anchor) |
+| 2 | IMPORT_EXPORT | Customs duty / CESS / SCL revision; import controls |
+| 3 | SECTOR_SPECIFIC | CAA maximum-retail-price order; Food Act rule; NMRA licensing |
+| 4 | EPF_ETF_CHANGE | Employer contribution rate / procedure change |
+| 5 | LABOUR_LAW | Wages-board order; minimum-wage amendment |
+| 6 | PRODUCT_STANDARD | SLSI standard; labelling requirement |
+| 7 | BUSINESS_REGISTRATION | Trade licence; eROC form change |
+| 8 | PENALTY_ENFORCEMENT | Fine/enforcement notice — the "cost of not knowing" |
 
 **Training Pipeline:**
 1. **Sampling** — stratified random by year+language + k-means cluster diversity (k=20) + active learning on low-confidence examples

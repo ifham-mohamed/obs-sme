@@ -27,20 +27,16 @@ label-start                     # opens http://localhost:8080
 <View>
   <Header value="Gazette $gazette_number  ($gazette_published_date)"/>
   <Text name="text" value="$text"/>
-  <Header value="Change category (choose exactly one)"/>
+  <Header value="Regulation domain (choose exactly one)"/>
   <Choices name="category" toName="text" choice="single" showInLine="false">
-    <Choice value="TAX_RATE_CHANGE"/>     <Choice value="LABOUR_LAW"/>
-    <Choice value="EPF_ETF_CHANGE"/>      <Choice value="PRODUCT_STANDARD"/>
-    <Choice value="BUSINESS_REGISTRATION"/><Choice value="IMPORT_EXPORT"/>
-    <Choice value="FINANCIAL_REGULATION"/> <Choice value="SECTOR_SPECIFIC"/>
-    <Choice value="ENVIRONMENTAL"/>        <Choice value="PENALTY_ENFORCEMENT"/>
-    <Choice value="DEADLINE_EXTENSION"/>   <Choice value="NO_SME_IMPACT"/>
+    <Choice value="TAX_RATE_CHANGE"/>     <Choice value="IMPORT_EXPORT"/>
+    <Choice value="SECTOR_SPECIFIC"/>     <Choice value="EPF_ETF_CHANGE"/>
+    <Choice value="LABOUR_LAW"/>          <Choice value="PRODUCT_STANDARD"/>
+    <Choice value="BUSINESS_REGISTRATION"/><Choice value="PENALTY_ENFORCEMENT"/>
   </Choices>
-  <Header value="Affected sectors (choose all that apply)"/>
+  <Header value="Affected sectors (choose all that apply; all three if economy-wide)"/>
   <Choices name="sector" toName="text" choice="multiple" showInLine="true">
-    <Choice value="agriculture"/><Choice value="manufacturing"/><Choice value="retail"/>
-    <Choice value="tourism"/><Choice value="construction"/><Choice value="services"/>
-    <Choice value="finance"/><Choice value="it"/><Choice value="transport"/><Choice value="food"/>
+    <Choice value="grocery_retail"/><Choice value="food_service"/><Choice value="general_retail"/>
   </Choices>
 </View>
 ```

@@ -8,7 +8,7 @@
 
 ## Abstract
 
-Sri Lanka publishes over 500 official gazette notifications annually through the Department of Government Printing, each carrying binding regulatory changes that affect small and medium enterprises (SMEs) across manufacturing, retail, services, and agriculture. Empirical evidence from the Inland Revenue Department (IRD) and the Employees' Provident Fund (EPF) indicates that the majority of SMEs — particularly those with fewer than 50 employees — remain unaware of relevant amendments until enforcement action commences. This research designs, trains, and deploys a multilingual natural language processing (NLP) pipeline that automatically ingests gazette PDFs, classifies them into 12 SME-relevant regulatory categories, maps them to affected industry sectors, and delivers structured alerts to registered SMEs within two hours of publication. The system, designated **Module 1 (Regulatory Awareness Gap)** of the Enigmatrix platform, aims to achieve a macro-averaged F1 score ≥ 0.92 on category classification and ≥ 0.88 on sector assignment across English, Sinhala, and Tamil gazette texts.
+Sri Lanka publishes over 500 official gazette notifications annually through the Department of Government Printing, each carrying binding regulatory changes that affect small and medium enterprises (SMEs) across grocery/food retail, food service, and general-goods retail. Empirical evidence from the Inland Revenue Department (IRD) and the Employees' Provident Fund (EPF) indicates that the majority of SMEs — particularly those with fewer than 50 employees — remain unaware of relevant amendments until enforcement action commences. This research designs, trains, and deploys a multilingual natural language processing (NLP) pipeline that automatically ingests gazette PDFs, classifies them into 8 SME-relevant regulatory domains, maps them to affected study sectors, and delivers structured alerts to registered SMEs within two hours of publication. The system, designated **Module 1 (Regulatory Awareness Gap)** of the Enigmatrix platform, aims to achieve a macro-averaged F1 score ≥ 0.92 on category classification and ≥ 0.88 on sector assignment across English, Sinhala, and Tamil gazette texts.
 
 ---
 
@@ -33,8 +33,8 @@ The root cause is structural: gazettes are published as PDF documents without pu
 **Formal statement:** Given a set of Sri Lankan Official Gazette PDF documents $G = \{g_1, g_2, \ldots, g_n\}$ published at timestamps $T = \{t_1, t_2, \ldots, t_n\}$, construct an automated pipeline $P$ such that:
 
 1. Each gazette $g_i$ is ingested within 6 hours of publication
-2. A classifier $C$ assigns $g_i$ to one of 12 regulatory categories $K = \{k_1, \ldots, k_{12}\}$ with macro-averaged F1 ≥ 0.92
-3. A sector mapper $S$ assigns $g_i$ to one or more of 10 SME industry sectors with F1 ≥ 0.88
+2. A classifier $C$ assigns $g_i$ to one of 8 regulatory domains $K = \{k_1, \ldots, k_8\}$ with macro-averaged F1 ≥ 0.92
+3. A sector mapper $S$ assigns $g_i$ to one or more of 3 study SME sectors with F1 ≥ 0.88
 4. Structured alerts reach registered SMEs matched to the affected sectors within 24 hours of $t_i$
 
 **Secondary research question:** What is the measurable information lag $\Delta t = t_{\text{awareness}} - t_{\text{publication}}$ between gazette publication and SME first-awareness, and which dissemination channels minimise this lag?
@@ -56,8 +56,8 @@ The root cause is structural: gazettes are published as PDF documents without pu
 
 ### In Scope
 - Official Gazette PDFs from [gazette.lk](https://www.gazette.lk) and [documents.gov.lk](https://documents.gov.lk), 2015–present
-- 12 regulatory categories (defined in [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md))
-- 10 SME industry sectors: manufacturing, retail, services, agriculture, construction, IT/BPO, hospitality, transport, healthcare, finance
+- 8 regulatory domains (defined in [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md))
+- 3 study SME sectors: grocery/food retail (`grocery_retail`), food service (`food_service`), general-goods retail (`general_retail`)
 - English, Sinhala, and Tamil text (gazette primary language + translated summaries)
 - Administrative districts: all 25 districts of Sri Lanka
 
@@ -78,7 +78,7 @@ The root cause is structural: gazettes are published as PDF documents without pu
 | Ingestion latency                      | ≤ 6 hours from publication         | Automated timestamp logging        |
 | Alert delivery latency                 | ≤ 24 hours from publication        | `m1_propagation_events` table      |
 | System uptime                          | ≥ 99.9%                            | Uptime monitoring (UptimeRobot)    |
-| Labeled training corpus                | ≥ 800 examples (≥ 50/category)     | Annotation tracker                 |
+| Labeled training corpus                | ≥ 800 examples (≥ 50/domain)       | Annotation tracker                 |
 | SME survey responses                   | ≥ 100 unique SMEs                  | `m1_sme_awareness_responses` table |
 | Propagation data points                | ≥ 800 (200 regulations × 4 stages) | `m1_propagation_events` COUNT      |
 | Admin verification rate (needs_review) | < 20% flagged for manual review    | `needs_review` field ratio         |
@@ -101,8 +101,8 @@ flowchart TD
     subgraph auto["PROPOSED AUTOMATED PIPELINE (Module 1)"]
         A1[Gazette Published\ngazette.lk] --> A2[Scrapy Ingestion\nT+0 to T+6h]
         A2 --> A3[PDF Extraction\nPyMuPDF + Tesseract]
-        A3 --> A4[XLM-R Classification\n12 categories]
-        A4 --> A5[Sector Mapping\n10 sectors]
+        A3 --> A4[XLM-R Classification\n8 domains]
+        A4 --> A5[Sector Mapping\n3 sectors]
         A5 --> A6[EN/SI/TA Summary\nMarianMT]
         A6 --> A7[SME Alert\nEmail/SMS/Dashboard]
         A7 --> A8[SME Action\nT+1 to T+24h]

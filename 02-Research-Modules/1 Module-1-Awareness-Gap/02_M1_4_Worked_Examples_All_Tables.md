@@ -66,21 +66,20 @@ A multi-clause amendment that touches 19 distinct clauses across the principal V
   "title_en":"VAT Amendment Act No. 8 of 2024",
   "change_category":"TAX_RATE_CHANGE",
   "severity_level":"critical",
-  "affected_sectors":["manufacturing","retail","services","agriculture","construction","it_bpo","hospitality","transport","healthcare","finance"],
+  "affected_sectors":["grocery_retail","food_service","general_retail"],
   "primary_language":"en",
   "is_sme_relevant":true,
   "status":"alerted"
 }
 ```
 
-**`m1_regulation_sectors` rows (10 — one per sector):**
+**`m1_regulation_sectors` rows (3 — one per study sector; economy-wide = all three):**
 
 ```sql
 INSERT INTO m1_regulation_sectors (regulation_id, sector_code) VALUES
-  ('reg_vat_2024_amd', 'manufacturing'),
-  ('reg_vat_2024_amd', 'retail'),
-  ('reg_vat_2024_amd', 'services'),
-  -- ... 7 more
+  ('reg_vat_2024_amd', 'grocery_retail'),
+  ('reg_vat_2024_amd', 'food_service'),
+  ('reg_vat_2024_amd', 'general_retail');
 ```
 
 **`m1_regulation_changes` rows** — 19 total; 5 representative shown in [02_M1_Data_Requirements.md §7.1](02_M1_Data_Requirements.md). The pattern: each clause-level change is a separate row with `clause_reference`, `old_value`, `new_value`, `applies_to`, `real_world_impact`.
@@ -104,7 +103,7 @@ INSERT INTO m1_regulation_sectors (regulation_id, sector_code) VALUES
 
 ### Example C — EPF Contribution Rate Change (`EPF_2024_RATE`)
 
-EPF rate changes are cross-cutting — every employer is affected. The example illustrates the schema's all-10-sectors case + an analytical view that highlights this.
+EPF rate changes are cross-cutting — every employer is affected. The example illustrates the schema's all-3-sectors (economy-wide) case + an analytical view that highlights this.
 
 **`m1_regulations`:**
 
@@ -117,7 +116,7 @@ EPF rate changes are cross-cutting — every employer is affected. The example i
   "title_en":"Employees' Provident Fund (Contribution Rate Amendment) Order 2024",
   "change_category":"EPF_ETF_CHANGE",
   "severity_level":"high",
-  "affected_sectors":["manufacturing","retail","services","agriculture","construction","it_bpo","hospitality","transport","healthcare","finance"],
+  "affected_sectors":["grocery_retail","food_service","general_retail"],
   "primary_language":"en",
   "is_sme_relevant":true,
   "status":"alerted"
@@ -196,7 +195,7 @@ A reader who can write each of those nine inserts for a *new* regulation has ful
 
 - **Round-trip test.** For each of the three examples, a unit test in `tests/m1/test_worked_examples.py` inserts all rows, runs the two views, and asserts the expected lag values.
 - **Constraint coverage.** Each example exercises at least one `CHECK` constraint from [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md) (e.g. EPF example tests the `chk_category_when_classified` constraint).
-- **Sector coverage.** Across the three examples, all 10 sectors and all 12 categories are exercised at least once.
+- **Sector coverage.** Across the three examples, all 3 study sectors and a spread of the 8 domains are exercised at least once.
 
 ## Build note (2026-07-23) — as shipped
 

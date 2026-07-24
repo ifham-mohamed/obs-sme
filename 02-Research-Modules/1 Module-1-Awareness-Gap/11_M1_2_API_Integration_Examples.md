@@ -71,7 +71,7 @@ curl -X POST https://api.enigmatrix.lk/api/v1/m1/regulations \
     "gazette_date":"2026-05-14",
     "title_en":"Sample Regulation",
     "change_category":"PRODUCT_STANDARD",
-    "affected_sectors":["manufacturing"],
+    "affected_sectors":["general_retail"],
     "primary_language":"en"
   }'
 ```
@@ -91,7 +91,7 @@ curl -X POST https://api.enigmatrix.lk/api/v1/m1/regulations/{id}/classify \
 curl -X PATCH https://api.enigmatrix.lk/api/v1/m1/regulations/{id}/sectors \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"sectors":["manufacturing","retail","services"]}'
+  -d '{"sectors":["grocery_retail","food_service","general_retail"]}'
 ```
 
 ### Section 5 — Propagation events
@@ -119,7 +119,7 @@ curl -X POST https://api.enigmatrix.lk/api/v1/m1/survey-responses \
 ### Section 7 — Public listing (no auth)
 
 ```bash
-curl -X GET "https://api.enigmatrix.lk/api/v1/m1/regulations/public?sector=manufacturing&page=1"
+curl -X GET "https://api.enigmatrix.lk/api/v1/m1/regulations/public?sector=grocery_retail&page=1"
 # → 200 OK (no auth header needed)
 ```
 
@@ -167,11 +167,11 @@ Output:
 
 ```
 change_category
-DEADLINE_EXTENSION    14.5
-EPF_ETF_CHANGE        42.0
-ENVIRONMENTAL         55.0
-LABOUR_LAW            38.0
-TAX_RATE_CHANGE       31.0
+BUSINESS_REGISTRATION  14.5
+EPF_ETF_CHANGE         42.0
+SECTOR_SPECIFIC        55.0
+LABOUR_LAW             38.0
+TAX_RATE_CHANGE        31.0
 ...
 ```
 

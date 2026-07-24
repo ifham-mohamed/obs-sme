@@ -27,7 +27,7 @@ features: F-221 (this plan) · F-222 (3c) · F-223 (3d) · F-224 (3e) · F-225 (
 1. **Produce the real batch_01** (replace the demo): `make labeling-batch` against the production DB (`DATABASE_URL` set) → real `research/data/labeling/batch_01.csv` (200 docs: 150 stratified + 40 k-means + 10 minority).
 2. **Stand up Label Studio**, paste `label_studio_config.xml`, import `batch_01.csv` (heuristic `predicted_category` pre-annotations from F-219 reduce effort).
 3. **Calibration round** — both annotators label `calibration_set_v1.csv`; gate **κ ≥ 0.80** vs the locked `expert_change_category` (Artstein & Poesio threshold). If below, refine edge-case guidance (09 §6.1) and re-run.
-4. **Scale with active learning** — once a baseline exists, generate `batch_02..N` via `select_uncertainty_batch` (lowest-margin first); dual-annotate a 15% overlap each batch to keep tracking κ. Over-sample rare canonical categories (e.g. `ENVIRONMENTAL`, `EPF_ETF_CHANGE`).
+4. **Scale with active learning** — once a baseline exists, generate `batch_02..N` via `select_uncertainty_batch` (lowest-margin first); dual-annotate a 15% overlap each batch to keep tracking κ. Over-sample rare canonical domains (e.g. `PENALTY_ENFORCEMENT`, `BUSINESS_REGISTRATION`).
 5. **Freeze + split** — export `gold_standard.csv`; temporal 70/15/15 split by `gazette_published_date` (test = latest dates, no leakage) → `enigmatrix-ml/datasets/m1_regulations/{train,val,test}.parquet`.
 
 **DoD:** κ ≥ 0.75 on the dual-annotated subset; `gold_standard.csv` ≥ 800 rows, ≥ 50/category, all 12 present; temporal splits with no date leakage.

@@ -52,7 +52,7 @@ Turns the empty pipeline into a populated corpus. All code exists; these are *ru
 This is the **keystone** and the single biggest non-coding effort. No model can be trained without it (AI_WORK_LOG S70 runbook).
 
 1. **Label Studio** set up (happiest on Linux/venv) and connected to the preprocessed corpus.
-2. **Calibration round** — small shared batch, measure inter-annotator agreement; gate **κ ≥ 0.80** on the 12-category scheme before scaling.
+2. **Calibration round** — small shared batch, measure inter-annotator agreement; gate **κ ≥ 0.80** on the 8-domain scheme before scaling.
 3. **Dual-annotation batches** + adjudication; running **κ ≥ 0.75**.
 4. **Active-learning loop** — prioritise low-confidence / disagreement items.
 5. Reach **~800 gold labels**, drawn *excluding* the heuristic-seeded rows (use `classification_source` to exclude — Session 70) so train/eval isn't contaminated.

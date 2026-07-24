@@ -11,7 +11,7 @@ Parent doc §4–§5 describes IAA protocol and annotator qualifications at a hi
 
 ### Step 1 — Calibration test
 
-A 20-document hand-picked set spanning all 12 categories + 3 languages + 4 edge-case patterns. Stored in `research/data/calibration_set_v1.csv`. Document IDs `cal_001` through `cal_020`. The "expert reference" labels are set by the domain expert (CA / Attorney) and locked.
+A 20-document hand-picked set spanning all 8 domains + 3 languages + 4 edge-case patterns. Stored in `research/data/calibration_set_v1.csv`. Document IDs `cal_001` through `cal_020`. The "expert reference" labels are set by the domain expert (CA / Attorney) and locked.
 
 **Coverage matrix** (the calibration set has at least one doc in each cell):
 
@@ -21,7 +21,7 @@ A 20-document hand-picked set spanning all 12 categories + 3 languages + 4 edge-
 | LABOUR_LAW | ✅ | ✅ | — (single combined doc) |
 | EPF_ETF_CHANGE | ✅ | ✅ | — |
 | ...etc | | | |
-| Edge cases | 4 docs spanning multi-penalty, repeal, no-SME-impact, gazette-with-tables | | |
+| Edge cases | 4 docs spanning multi-penalty, repeal, not-SME-relevant, gazette-with-tables | | |
 
 ### Step 2 — Calibration result table
 
@@ -53,7 +53,7 @@ from sklearn.metrics import cohen_kappa_score
 
 def sector_kappa(a_lists: list[list[str]], b_lists: list[list[str]]) -> float:
     """Mean per-sector binary κ — practical proxy for Fleiss' κ on multi-label."""
-    mlb = MultiLabelBinarizer(classes=[...10 sectors...])
+    mlb = MultiLabelBinarizer(classes=[...3 sectors...])
     a_bin = mlb.fit_transform(a_lists)
     b_bin = mlb.transform(b_lists)
     return float(np.mean([cohen_kappa_score(a_bin[:,i], b_bin[:,i]) for i in range(a_bin.shape[1])]))
@@ -107,8 +107,8 @@ The full workflow for a single document, end-to-end:
 ```
 Doc reg_2491_14 (VAT amendment) enters Label Studio queue
    ↓
-[Annotator A] labels: category=TAX_RATE_CHANGE, sectors=[manufacturing, retail, services]
-[Annotator B] labels: category=TAX_RATE_CHANGE, sectors=[manufacturing, retail]
+[Annotator A] labels: category=TAX_RATE_CHANGE, sectors=[grocery_retail, food_service, general_retail]
+[Annotator B] labels: category=TAX_RATE_CHANGE, sectors=[grocery_retail, food_service]
    ↓
 IAA computation:
    - Category: A = B → κ undefined for n=1; treat as agreement
@@ -116,7 +116,7 @@ IAA computation:
    ↓
 Consensus label written to m1_regulation_labels:
    category=TAX_RATE_CHANGE
-   sectors=[manufacturing, retail, services]
+   sectors=[grocery_retail, food_service, general_retail]
    match_method='consensus_strict_subset_union'
    ↓
 Doc joins the training set; both annotators credited
@@ -125,15 +125,16 @@ Doc joins the training set; both annotators credited
 A disagreement case:
 
 ```
-Doc reg_2492_03 ("textile-dyeing effluent pH limits")
+Doc reg_2492_03 ("milk powder maximum retail price order + packaging rules")
    ↓
-[Annotator A] labels: ENVIRONMENTAL, [manufacturing]
-[Annotator B] labels: PRODUCT_STANDARD, [manufacturing]
+[Annotator A] labels: SECTOR_SPECIFIC, [grocery_retail]
+[Annotator B] labels: PRODUCT_STANDARD, [grocery_retail]
    ↓
 IAA: category disagreement → route to domain expert
    ↓
-Expert review: "Effluent rules → ENVIRONMENTAL. Product standards would govern the
-product itself, not its byproducts. Annotator A is correct."
+Expert review: "A CAA maximum-retail-price order regulates the selling activity →
+SECTOR_SPECIFIC. PRODUCT_STANDARD would govern an SLSI mark on the product itself.
+Annotator A is correct."
    ↓
 Consensus label = A's label
 m1_annotations records:
