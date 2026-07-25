@@ -122,17 +122,17 @@ The `labeled_set_sha256` is the SHA-256 of the *exact* parquet file used — if 
 
 ### 2.1 Class Distribution Problem
 
-The 12 regulatory categories are heavily skewed. Without augmentation, minority classes would have fewer than 10 training examples:
+The 8 regulation domains are heavily skewed. Without augmentation, minority classes would have fewer than 20 training examples:
 
-| Category | Expected Raw Count (800 total) | Augmented Target |
+| Domain | Expected Raw Count (800 total) | Augmented Target |
 |---|---|---|
-| `TAX_RATE_CHANGE` | ~200 | 200 (no aug needed) |
-| `LABOUR_LAW` | ~160 | 160 |
-| `EPF_ETF_CHANGE` | ~96 | 96 |
-| `PRODUCT_STANDARD` | ~80 | 80 |
-| `BUSINESS_REGISTRATION` | ~40 | 100 (2.5× aug) |
+| `TAX_RATE_CHANGE` | ~230 | 230 (no aug needed) |
 | `IMPORT_EXPORT` | ~130 | 130 |
 | `SECTOR_SPECIFIC` | ~130 | 130 |
+| `EPF_ETF_CHANGE` | ~100 | 100 |
+| `LABOUR_LAW` | ~90 | 100 (1.1× aug) |
+| `PRODUCT_STANDARD` | ~60 | 100 (1.7× aug) |
+| `BUSINESS_REGISTRATION` | ~40 | 100 (2.5× aug) |
 | `PENALTY_ENFORCEMENT` | ~20 | 100 (5× aug) |
 
 ### 2.2 Augmentation Techniques
@@ -164,7 +164,7 @@ def back_translate(text: str, src="en", pivot="fr") -> str:
 
 > **Augmented examples are added to the training split only.** Validation and test sets contain only original labeled examples.
 
-**Diminishing returns above 5×.** The augmented-target column above includes ratios up to 10× for `DEADLINE_EXTENSION` and `NO_SME_IMPACT` (~8 originals → 80 augmented). Back-translation and paraphrase preserve *meaning* but their diversity collapses: after a 5× expansion, additional synthetic examples are near-duplicates of earlier augmentations, and validation F1 plateaus or *decreases*. We therefore cap augmentation at **5×** in practice: classes with <16 originals top out at `5 × original_count` rather than 80, and the deficit is filled by an additional targeted-labeling sprint (active-learning step from [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md)). The actual cap is enforced in the augmentation pipeline (`ml/m1/data/augmentation.py`) by a `max_ratio=5` argument; the diversity validation that justifies it — cosine-similarity histograms of augmented vs original, per-class F1 before/after cap — lives in [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md).
+**Diminishing returns above 5×.** The augmented-target column above tops out at 5× for `PENALTY_ENFORCEMENT` (~20 originals → 100 augmented). Back-translation and paraphrase preserve *meaning* but their diversity collapses: after a 5× expansion, additional synthetic examples are near-duplicates of earlier augmentations, and validation F1 plateaus or *decreases*. We therefore cap augmentation at **5×** in practice: classes with few originals top out at `5 × original_count`, and any deficit is filled by an additional targeted-labeling sprint (active-learning step from [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md)). The actual cap is enforced in the augmentation pipeline (`ml/m1/data/augmentation.py`) by a `max_ratio=5` argument; the diversity validation that justifies it — cosine-similarity histograms of augmented vs original, per-class F1 before/after cap — lives in [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md).
 
 ---
 
@@ -276,7 +276,7 @@ def train_model(model, train_loader, val_loader, num_epochs=10, patience=3):
 | Metric | Formula | Target | Task |
 |---|---|---|---|
 | Macro-averaged F1 (category) | Mean F1 across 12 classes | ≥ 0.92 | Category classification |
-| Macro-averaged F1 (sector) | Mean F1 across 10 sectors | ≥ 0.88 | Sector assignment |
+| Macro-averaged F1 (sector) | Mean F1 across 3 study sectors | ≥ 0.88 | Sector assignment |
 | Per-class F1 | Per-category F1 score | ≥ 0.80 for each | Both |
 | Top-1 accuracy (category) | % correct argmax predictions | ≥ 0.95 | Category classification |
 | Micro-F1 (sector) | Pooled TP/FP/FN across sectors | ≥ 0.90 | Sector assignment |
@@ -403,7 +403,7 @@ Expected performance on 12-class gazette classification with 800 training exampl
 
 ### 6.2 Baseline B — Zero-Shot LLM (Ceiling Estimate)
 
-Send each test gazette (first 1,500 characters) and the 12 category definitions to a frontier LLM with a strict classification prompt. This baseline:
+Send each test gazette (first 1,500 characters) and the 8 domain definitions to a frontier LLM with a strict classification prompt. This baseline:
 - Sets a practical ceiling for what is achievable without labeled training data
 - Reveals which categories are intrinsically hard to disambiguate (where even frontier models struggle)
 - Demonstrates the cost/quality trade-off for production deployment
@@ -708,6 +708,7 @@ The training protocol combines parameter-efficient LoRA fine-tuning with targete
 - Loshchilov & Hutter (2017). *Decoupled Weight Decay Regularization (AdamW)*. ICLR 2019.
 
 
+
 # 06_M1_1 — Data Augmentation Strategy
 
 > Companion to [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) — back-translation + paraphrase + synonym substitution with diversity validation; per-augmentation F1 impact; 5× cap rationale.
@@ -785,7 +786,7 @@ The 5× cap is *empirical*: beyond 5× augmentation on a single source doc, the 
 
 | Configuration | Macro-F1 | Δ vs no-aug | Δ on `PENALTY_ENFORCEMENT` (worst minority) |
 |---|---|---|---|
-| No augmentation | 0.86 (projected) | — | 0.21 (very weak — ~20 examples) |
+| No augmentation | 0.86 (projected) | — | 0.21 (very weak — 8 examples) |
 | + Back-translation (5×) | 0.89 | +3 pp | 0.55 |
 | + Synonym swap (5×) | 0.90 | +4 pp | 0.62 |
 | + SI paraphrase (5× SI minority only) | 0.92 | +6 pp | 0.65 |
@@ -808,9 +809,9 @@ Conclusion: back-translation + synonym swap are the load-bearing techniques. Sin
 Input minority-class document:
 
 ```
-Original (PENALTY_ENFORCEMENT, EN):
-"The penalty for late filing of the quarterly VAT return is increased
-from 1.0% to 1.5% per month of the tax payable."
+Original (TAX_RATE_CHANGE — tax-schedule; deadline extensions fold into this domain, EN):
+"The Commissioner has extended the deadline for filing the third quarter VAT return
+from 20 January to 31 January 2024."
 
 Back-translation EN→FR→EN:
 "The Commissioner extended the deadline for filing the VAT return for the third quarter

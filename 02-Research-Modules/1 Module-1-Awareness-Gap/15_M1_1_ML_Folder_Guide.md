@@ -1,11 +1,12 @@
-# 15_M1_1 — `ml/` Folder Build Guide
+# 15_M1_1 — `enigmatrix-ml/` Folder Build Guide
 
-> Companion to [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) — build guide for the `ml/` slice of doc 13's M1 tree.
-> **Implementation status snapshot:** 🔲 ~28 deferred · 🟡 0 partial · ✅ 0 shipped (the entire `ml/` slice lands with BUILD_07 + BUILD_11).
+> Companion to [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) — build guide for the ML slice of the M1 tree.
+> **Repo note (2026-07-24):** the real folder is **`enigmatrix-ml/`** (not `ml/`). Much of it is now **shipped**, not deferred: the full `m1/extraction/` chain (PDF classify → PyMuPDF/pdfplumber/pypdfium2/Tesseract/Surya page engines → Wijesekara + font-aware conversion → segmenter → language detection), `m1/preprocessing/` (cleaning, metadata, chunking), the `m1/evaluation/` extraction-metrics package, `m1/model/` (labels, architecture, `train_xlmr`, eval, baselines, `export_onnx`, inference, promotion), and `m1/data/samplers.py`. The idealised names below (`shared/`, `model/training.py`, `model/calibration.py`) map to real files noted inline.
+> **Implementation status snapshot:** ✅ extraction + preprocessing + evaluation + model scaffolds + sampler shipped · 🟡 model training/ONNX being validated · 🔲 `data/sources.py` / `data/loaders.py` / `data/augmentation.py` / `summarization/` deferred.
 
 ## Purpose
 
-`ml/` is the ML monorepo — everything that trains, evaluates, or runs the gazette classifier. It owns Stages B (extraction), C (preprocessing), D (classification + inference), and E (summarisation) from the pipeline. Cross-module helpers (embeddings, drift detection, reproducibility) live in `ml/shared/`. Each module is isolated: `ml/m1/` never imports from `ml/m2/` — shared code goes through `ml/shared/`.
+`enigmatrix-ml/` is the ML monorepo — everything that trains, evaluates, or runs the gazette classifier, plus the Phase-2 extraction chain and the Phase-2 extraction-quality **evaluation** package. It owns Stages B (extraction), C (preprocessing), D (classification + inference), and E (summarisation). Each module is isolated: `m1/` never imports sibling-module code — shared helpers stay local. **Labelling entry point:** `m1/data/samplers.py` (called by `xyz/scripts/sample_for_labeling.py`).
 
 ## Files in this folder
 
@@ -17,14 +18,22 @@
 | `shared/drift.py` | KL-divergence + Population Stability Index helpers | 🔲 | [12_M1_Monitoring_Maintenance.md §3.1](12_M1_Monitoring_Maintenance.md) | Two pure functions: `kl_divergence(p, q)` + `psi(prod, ref)`; pip-only deps |
 | `shared/reproducibility.py` | `hash_dataset()` + `pin_environment()` | 🔲 | [06_M1_Training_Evaluation.md §reproducibility hash](06_M1_Training_Evaluation.md) | SHA-256 over the labeled parquet + `pip freeze` snapshot |
 
-### `ml/m1/data/`
+### `enigmatrix-ml/m1/data/` — the labelling sampler (Phase 3b)
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
+| File | Owns | Status | Primary doc | Notes |
 |---|---|---|---|---|
-| `data/sources.py` | 15-source registry (matches `m1_sources` table) | 🔲 | [02_M1_1_Data_Sources_Catalogue.md](02_M1_1_Data_Sources_Catalogue.md) | Hard-code the 15 sources as `dict[str, Source]`; the registry seeds the DB table |
-| `data/loaders.py` | Async DB → labeled-set iterator | 🔲 | [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md) | `async def load_labeled_set(split) -> AsyncIterator[Sample]`; uses `asyncpg` |
-| `data/samplers.py` | Stratified + k-means + active-learning | 🔲 | [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md) | Three functions: `stratified_sample`, `cluster_diverse_sample`, `active_learning_sample` |
-| `data/augmentation.py` | Back-translation + paraphrase + Sinhala morph rules | 🔲 | [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md) | Cap at 5× per source doc; diversity-validate via embedding cosine |
+| `data/samplers.py` | Stratified + k-means-diversity + minority-class sampling for annotation batches | ✅ **Shipped** | [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md) | Public API: `stratified_sample(df, small_cell_threshold, target_per_cell)`, `kmeans_diversity_sample(df, exclude_ids, n, k)`, `find_minority_candidates(df, exclude_ids, min_per_category)`, `sample_for_labeling(df, n_strat, n_kmeans, n_handpick, k, random_state)`. Constants: `TARGET_PER_CELL=20`, `OPTIMAL_K=20`. Carries `CATEGORIES_8` in sync with `model/labels.py`. Called by `xyz/scripts/sample_for_labeling.py`. |
+| `data/sources.py` | 15-source registry (matches `m1_sources` table) | 🔲 Deferred | [02_M1_1_Data_Sources_Catalogue.md](02_M1_1_Data_Sources_Catalogue.md) | Hard-code the 15 sources as `dict[str, Source]`; the registry seeds the DB table |
+| `data/loaders.py` | Async DB → labeled-set iterator | 🔲 Deferred | [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md) | `async def load_labeled_set(split) -> AsyncIterator[Sample]` (in practice `scripts/sample_for_labeling.py::_load_from_db` currently fills this role) |
+| `data/augmentation.py` | Back-translation + paraphrase + Sinhala morph rules | 🔲 Deferred | [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md) | Cap at 5× per source doc; diversity-validate via embedding cosine |
+
+> **Labelling data + Label Studio** live under `xyz/research/data/` and `xyz/mydata/`, not in `enigmatrix-ml/` — see [15_M1_4_Research_Folder_Guide.md](15_M1_4_Research_Folder_Guide.md) and `research/data/PHASE3_ANNOTATION_RUNBOOK.md`. The `model/labels.py` module here is the single source of truth for the 8 domains + 3 sectors that the Label Studio config mirrors.
+
+### `enigmatrix-ml/m1/evaluation/` — Phase-2 extraction-quality metrics (shipped, not in the original tree)
+
+| File | Owns | Status | Notes |
+|---|---|---|---|
+| `evaluation/field_metrics.py`, `completeness.py`, `aggregates.py`, `strata.py`, `raw_text.py`, `date_scope.py`, `xlsx_reader.py`, `metrics/{strings,semantic,dates,categorical,numeric,text_summary}.py` | Scores legacy-extraction output against the `data/golden/` ground-truth (the `structured_v1.xlsx` 21-field set); produces `data/eval/baseline_v0.json` | ✅ Shipped | Driven by `xyz/scripts/run_baseline_measurement.py`; see [15_M1_4](15_M1_4_Research_Folder_Guide.md) + `data/golden/README.md`. This package did not exist in doc 13's original tree. |
 
 ### `ml/m1/extraction/`
 
@@ -87,7 +96,7 @@ Follow the roadmap's [Phase 2 + Phase 3 ordering](16_M1_Development_Roadmap.md).
 2. **Start with `ml/m1/extraction/pdf_classifier.py`.** It has zero dependencies on other `ml/` files; the only external deps are `pymupdf` + the `M1_PDF_TEXT_THRESHOLD` / `M1_PDF_SCANNED_THRESHOLD` env vars. Tests live at `tests/m1/extraction/test_pdf_classifier.py` — TDD pattern.
 3. **Then `text_extractors.py` + `ocr.py`.** These complete Stage B; without them the Celery `extract_gazette` task can't advance a row past `status='ingested'`.
 4. **Then `preprocessing/cleaning.py` + `metadata_extractor.py` + `chunking.py`.** Stage C — feeds Stage D's classifier input.
-5. **Then `data/sources.py` + `data/loaders.py` + `data/samplers.py`.** These enable the labeling loop (Phase 3 of the roadmap).
+5. **Labeling loop — `data/samplers.py` is ✅ shipped.** It powers Phase 3b via `xyz/scripts/sample_for_labeling.py`. Remaining `data/` work is `sources.py` + `loaders.py` (DB registry + labeled-set iterator) + `augmentation.py` (Phase 3d training-data augmentation). Operate the labelling loop from `research/data/PHASE3_ANNOTATION_RUNBOOK.md`.
 6. **Then `model/*` files** in order: architecture → training → evaluation → inference. Each depends on the previous.
 7. **Finally `summarization/marianmt.py`.** Independent of the classifier; can be built in parallel with `model/*` once Stage D has output to summarise.
 

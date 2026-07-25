@@ -101,7 +101,7 @@ All ingested gazette data maps to the `m1_regulations` table in PostgreSQL. The 
 | `summary_en` | TEXT | Yes | AI-generated English action summary | Stage E |
 | `summary_si` | TEXT | Yes | Sinhala translation of summary | Stage E |
 | `summary_ta` | TEXT | Yes | Tamil translation of summary | Stage E |
-| `change_category` | TEXT | Yes | 12-category code (see taxonomy) | Stage C (classified) |
+| `change_category` | TEXT | Yes | 8-domain code (see taxonomy) | Stage C (classified) |
 | `category_baseline` | TEXT | Yes | TF-IDF+SVM prediction for ablation | Stage C |
 | `confidence` | NUMERIC(4,3) | Yes | XLM-R softmax probability [0–1] | Stage C |
 | `domain_code` | TEXT | Yes | High-level regulatory domain | Stage C |
@@ -387,8 +387,8 @@ Validation of each index's actual benefit (with `EXPLAIN ANALYZE` traces) lives 
 | Data Type                                            | Required Volume | Current Status              | Gap        |
 | ---------------------------------------------------- | --------------- | --------------------------- | ---------- |
 | Labeled gazette documents                            | ≥ 800           | ~0 (annotation in planning) | 800        |
-| Examples per category (12 categories)                | ≥ 50 each       | 0                           | 600        |
-| `NO_SME_IMPACT` examples                             | ≥ 200           | 0                           | 200        |
+| Examples per domain (8 domains)                      | ≥ 50 each       | 0                           | 400        |
+| Not-SME-relevant examples (`is_sme_relevant=FALSE`)  | ≥ 200           | 0                           | 200        |
 | Historical unlabeled gazettes (pre-training context) | ≥ 5,000         | ~10,000 on gazette.lk       | Sufficient |
 | Sinhala-text examples (35% of corpus target)         | ≥ 280           | 0                           | 280        |
 | Tamil-text examples (15% of corpus target)           | ≥ 120           | 0                           | 120        |
@@ -505,9 +505,9 @@ flowchart TD
     BPLUS2 --> BPLUS5[(INSERT m1_sub_documents\none row per detected section\npart/schedule/section/notice/numbered_clause/preamble)]
 
     BPLUS3 --> C1[Stage C: Classification\nclassify_gazette Celery task]
-    C1 --> C2[XLM-R Inference\n12-category softmax]
+    C1 --> C2[XLM-R Inference\n8-domain softmax]
     C1 --> C3[TF-IDF+SVM\nBaseline inference]
-    C2 --> C4[Sector Mapper\n10-sector multi-label]
+    C2 --> C4[Sector Mapper\n3-sector multi-label]
     C4 --> C5[(UPDATE m1_regulations\nchange_category, confidence\naffected_sectors, status=classified)]
 
     C5 --> E1[Stage E: Summarization\nMarianMT EN to SI and TA]
@@ -560,7 +560,7 @@ This section traces Extraordinary Gazette **2486/22** (2026-04-15) — mandating
   "is_sme_relevant": true,
   "change_category": "PRODUCT_STANDARD",
   "severity_level": "high",
-  "affected_sectors": ["manufacturing", "retail", "it_bpo"],
+  "affected_sectors": ["general_retail"],
   "status": "alerted"
 }
 ```
@@ -839,6 +839,7 @@ Sample produced row in `m1_regulations`:
 - Related: [03_M1_Data_Collection.md](03_M1_Data_Collection.md) §1 (Scrapy framework), §5 (cron schedule)
 - BUILD phase: BUILD_07 §Scrapy spiders, BUILD_12 §portal watchers
 - Code (when shipped): `scraper/spiders/*`, `backend/app/tasks/m1/portal_watcher.py`, `rss_watcher.py`
+
 
 # 02_M1_2 — Database Schema Validation
 
@@ -1233,21 +1234,20 @@ A multi-clause amendment that touches 19 distinct clauses across the principal V
   "title_en":"VAT Amendment Act No. 8 of 2024",
   "change_category":"TAX_RATE_CHANGE",
   "severity_level":"critical",
-  "affected_sectors":["manufacturing","retail","services","agriculture","construction","it_bpo","hospitality","transport","healthcare","finance"],
+  "affected_sectors":["grocery_retail","food_service","general_retail"],
   "primary_language":"en",
   "is_sme_relevant":true,
   "status":"alerted"
 }
 ```
 
-**`m1_regulation_sectors` rows (10 — one per sector):**
+**`m1_regulation_sectors` rows (3 — one per study sector; economy-wide = all three):**
 
 ```sql
 INSERT INTO m1_regulation_sectors (regulation_id, sector_code) VALUES
-  ('reg_vat_2024_amd', 'manufacturing'),
-  ('reg_vat_2024_amd', 'retail'),
-  ('reg_vat_2024_amd', 'services'),
-  -- ... 7 more
+  ('reg_vat_2024_amd', 'grocery_retail'),
+  ('reg_vat_2024_amd', 'food_service'),
+  ('reg_vat_2024_amd', 'general_retail');
 ```
 
 **`m1_regulation_changes` rows** — 19 total; 5 representative shown in [02_M1_Data_Requirements.md §7.1](02_M1_Data_Requirements.md). The pattern: each clause-level change is a separate row with `clause_reference`, `old_value`, `new_value`, `applies_to`, `real_world_impact`.
@@ -1271,7 +1271,7 @@ INSERT INTO m1_regulation_sectors (regulation_id, sector_code) VALUES
 
 ### Example C — EPF Contribution Rate Change (`EPF_2024_RATE`)
 
-EPF rate changes are cross-cutting — every employer is affected. The example illustrates the schema's all-10-sectors case + an analytical view that highlights this.
+EPF rate changes are cross-cutting — every employer is affected. The example illustrates the schema's all-3-sectors (economy-wide) case + an analytical view that highlights this.
 
 **`m1_regulations`:**
 
@@ -1284,7 +1284,7 @@ EPF rate changes are cross-cutting — every employer is affected. The example i
   "title_en":"Employees' Provident Fund (Contribution Rate Amendment) Order 2024",
   "change_category":"EPF_ETF_CHANGE",
   "severity_level":"high",
-  "affected_sectors":["manufacturing","retail","services","agriculture","construction","it_bpo","hospitality","transport","healthcare","finance"],
+  "affected_sectors":["grocery_retail","food_service","general_retail"],
   "primary_language":"en",
   "is_sme_relevant":true,
   "status":"alerted"
@@ -1363,7 +1363,7 @@ A reader who can write each of those nine inserts for a *new* regulation has ful
 
 - **Round-trip test.** For each of the three examples, a unit test in `tests/m1/test_worked_examples.py` inserts all rows, runs the two views, and asserts the expected lag values.
 - **Constraint coverage.** Each example exercises at least one `CHECK` constraint from [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md) (e.g. EPF example tests the `chk_category_when_classified` constraint).
-- **Sector coverage.** Across the three examples, all 10 sectors and all 12 categories are exercised at least once.
+- **Sector coverage.** Across the three examples, all 3 study sectors and a spread of the 8 domains are exercised at least once.
 
 ## Build note (2026-07-23) — as shipped
 

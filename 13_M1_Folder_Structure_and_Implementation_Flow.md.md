@@ -1,7 +1,8 @@
 # 13 — M1 Folder Structure & Implementation Flow
 
 > Where every M1 file lives, what it owns, when it lands, and how the same shape extends to M2/M3/M4.
-> **Implementation status:** 🟡 Spec only — code lands with BUILD_07 (ingest), BUILD_11 (ML), BUILD_12 (schedulers).
+> **Implementation status (2026-07-24):** 🟢 Largely built. Phase-2 ingest + the full `enigmatrix-ml/m1/` extraction/preprocessing/evaluation stack, the `model/` scaffolds, and the Phase-3 labelling surface (sampler + Label Studio config + calibration set + `batch_01` + runbook) are shipped. Remaining: alerts/schedulers (BUILD_12), summarisation, and the findings notebooks.
+> **Path note:** the short names below (`ml/`, `backend/`, `scraper/`) map to the real roots `enigmatrix-ml/`, `enigmatrix-backend/` (which also hosts the Scrapy scraper), and the top-level `research/` · `data/` · `mydata/` · `scripts/` · `storage/`. Labelling operation: see [15_M1_4](15_M1_4_Research_Folder_Guide.md) + `research/data/PHASE3_ANNOTATION_RUNBOOK.md`.
 
 ---
 
@@ -9,7 +10,7 @@
 
 The 12 numbered M1 docs describe **what** the gazette-classifier system does. This doc describes **where in the project tree** each piece lives once BUILD_07/11/12 ship. It also locks the per-module shape so M2 (Knowledge), M3 (Vulnerability), and M4 (Misinformation) can copy the layout without re-litigating decisions.
 
-> Today (2026-05-14): the only M1 code that actually exists is the admin-CRUD slice — `backend/app/services/m1_regulation_service.py` + `backend/app/scripts/seed_regulations.py` + 5 demo regulations. Everything below is the **target** layout. Each sub-step doc carries a status badge so a reader can tell what's shipped vs deferred.
+> Current state (2026-07-24): far beyond the original admin-CRUD slice. Shipped now includes the Phase-2 Scrapy spiders + Celery ingest/extract chain (`enigmatrix-backend/`), the whole `enigmatrix-ml/m1/` extraction → preprocessing → evaluation → model stack, and the Phase-3 labelling surface (`enigmatrix-ml/m1/data/samplers.py`, `research/data/label_studio_config.xml`, `calibration_set_v1.csv`, `labeling/batch_01.csv`, the live `mydata/` Label Studio instance, and `research/data/PHASE3_ANNOTATION_RUNBOOK.md`). The tree below is still the canonical *target* layout; each sub-step doc + the 15_M1_* folder guides carry current status badges.
 
 ---
 
@@ -98,7 +99,7 @@ xyz/                                          # repo root
 │   │   │
 │   │   └── utils/
 │   │       ├── __init__.py
-│   │       ├── constants.py                   # 12 category codes, 10 sector codes
+│   │       ├── constants.py                   # 8 domain codes, 3 sector codes
 │   │       ├── logging.py                     # structured JSON logging
 │   │       └── validation.py                  # data-quality assertions
 │   │

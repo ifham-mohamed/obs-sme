@@ -1,7 +1,8 @@
 # 15_M1_6 — `enigmatrix-docs/m1/` Folder Build Guide
 
 > Companion to [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) — build guide for the docs folder itself.
-> **Implementation status snapshot:** ✅ 61 docs shipped (12 main + 29 backend sub-step companions + 1 folder spec + 1 tracking parent + 9 tracking companions + 1 folder-ref parent + 6 folder guides + 1 roadmap + this README).
+> **Two locations (2026-07-24):** the canonical docs live in **`enigmatrix-docs/m1/`** in the repo; they are also authored/mirrored in the **Obsidian research vault** at `E:\Obsidian\sme\02-Research-Modules\1 Module-1-Awareness-Gap\` (which additionally holds `findings/`, `local-dev/`, `planned-for-development/`, and `final/works/` that aren't in the repo copy). Keep the numbered `NN_M1_*.md` set in sync between the two. Operational runbooks that pair with code (e.g. the Phase-3 annotation runbook) live next to the code under `research/data/`, **not** here.
+> **Implementation status snapshot:** ✅ Shipped — the full numbered doc set (01–16 mains + sub-step companions + 14 tracking + 15 folder guides + README). Counts drift as docs are added; treat the numbers below as approximate.
 
 ## Purpose
 
@@ -21,7 +22,7 @@ Doc 13's tree summary line for this folder is `enigmatrix-docs/m1/ ├── 01_
 | `16_M1_Development_Roadmap.md` | Sequenced "start here" guide | 1 | Phase-based; each phase has steps with "Do this next" call-outs |
 | `README.md` | Index of everything above | 1 | Document Index table + Sub-Step Companions table + cross-refs |
 
-**Total: 61 files in `enigmatrix-docs/m1/`** as of this pass.
+**~60+ files in `enigmatrix-docs/m1/`** (main docs + sub-step companions + tracking + folder guides + README), plus the repo also carries a `planned-for-devlopment/` scratch folder. The Obsidian vault mirror carries the same numbered set plus research-only folders. Exact counts drift — the `README.md` index is the source of truth, not this number.
 
 ## How to add a new doc
 

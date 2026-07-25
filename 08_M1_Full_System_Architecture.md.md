@@ -294,7 +294,7 @@ The pipeline generates the empirical dataset from which Module 1's academic find
 | **F1** | Median lag: gazette → government portal | Median + IQR over ≥ 200 regulations | `m1_propagation_events` WHERE channel LIKE 'portal_%' | ~7 days (hypothesis) |
 | **F2** | Median lag: gazette → news media first mention | Median + IQR over ≥ 200 regulations | `m1_propagation_events` WHERE channel LIKE 'news_%' | ~23 days (hypothesis) |
 | **F3** | Median lag: gazette → SME first awareness | Median + IQR; Wilcoxon rank-sum (urban vs rural) | `m1_sme_awareness_responses.awareness_date` − `regulation_id → gazette_published` | 33 days urban / 58 days rural (hypothesis) |
-| **F4** | Sector lag variance | One-way ANOVA / Kruskal-Wallis (10 sectors) | F3 disaggregated by `m1_sme_profiles.primary_sector` | ≥ 1 sector pair significantly different (p < 0.05) |
+| **F4** | Sector lag variance | One-way ANOVA / Kruskal-Wallis (3 sectors) | F3 disaggregated by `m1_sme_profiles.primary_sector` | ≥ 1 sector pair significantly different (p < 0.05) |
 | **F5** | Language lag (EN vs SI vs TA gazette) | Kruskal-Wallis (3 groups) | F3 disaggregated by `m1_regulations.primary_language` | SI/TA lag > EN lag (hypothesis) |
 | **F6** | Alert system lag reduction | Difference-in-Differences: subscribed vs non-subscribed SMEs | F3 split on `m1_sme_profiles.is_subscribed` | Subscribed SMEs: ≤ 1 day lag; non-subscribed: ~33–58 day baseline |
 
@@ -369,7 +369,7 @@ Each research finding requires a minimum sample size to be statistically valid:
 The following checklist must be fully satisfied before Module 1 is considered complete for thesis submission:
 
 - [ ] **Data:** ≥ 800 gazette documents ingested from gazette.lk (2015–present), stored in `m1_regulations`
-- [ ] **Annotation:** ≥ 800 labeled examples in Label Studio; all 12 categories have ≥ 50 examples
+- [ ] **Annotation:** ≥ 800 labeled examples in Label Studio; all 8 domains have ≥ 50 examples
 - [ ] **Model:** XLM-R + LoRA trained; macro F1 ≥ 0.92 (category) and ≥ 0.88 (sector) on temporal test set
 - [ ] **Baselines:** TF-IDF + LR and zero-shot LLM baselines evaluated; 4-row comparison table completed
 - [ ] **Propagation events:** ≥ 800 rows in `m1_propagation_events` (≥ 200 regulations × 4 stages)
@@ -483,7 +483,7 @@ WHERE a.awareness_date IS NOT NULL;
 
 - **Data source.** `v_m1_channel_effectiveness` (parent doc §2 + view in [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md)).
 - **Sample size.** ≥ 10 SMEs per sector to enable per-sector ranking.
-- **Statistical test.** One-way ANOVA / Kruskal-Wallis (10 sectors); Dunn post-hoc for pairwise differences.
+- **Statistical test.** One-way ANOVA / Kruskal-Wallis (3 sectors); Dunn post-hoc for pairwise differences.
 - **Expected effect.** At least one sector pair differs at p < 0.05; "government_sms" + "enigmatrix_alert" rank fastest; "peer" slowest.
 - **Notebook.** `findings_secondary_diffusion.ipynb`, cell 2.
 
@@ -550,6 +550,7 @@ The number is reported in the thesis as: "SMEs in urban districts learn of new r
 - Related: [02_M1_Data_Requirements.md §3.3](02_M1_Data_Requirements.md) (`v_m1_*` views), [09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md)
 - BUILD phase: BUILD_07 §research notebooks
 - Code (when shipped): `research/notebooks/findings_*.ipynb`
+
 
 # 08_M1_2 — Edge Cases & Failure Modes (extended catalogue)
 

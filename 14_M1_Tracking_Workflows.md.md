@@ -214,11 +214,11 @@ A morning queue clear (intended):
 09:15 — admin opens /admin/m1/review-queue
          Queue depth: 12 items, sorted by confidence ASC
          Top item: classifier confidence 0.42
-         Item is VAT-amendment look-alike; classifier said "BUSINESS_REGISTRATION"
+         Item is VAT-amendment look-alike; classifier said "SECTOR_SPECIFIC"
 09:16 — admin clicks the row → drawer opens
          classification_chunk shows: "VAT registration threshold raised from LKR 60M to LKR 80M..."
-         Top-3: TAX_RATE_CHANGE 0.32 | BUSINESS_REGISTRATION 0.42 | SECTOR_SPECIFIC 0.18
-         Admin sees classifier ranked FINANCIAL above TAX_RATE_CHANGE — wrong
+         Top-3: TAX_RATE_CHANGE 0.32 | SECTOR_SPECIFIC 0.42 | BUSINESS_REGISTRATION 0.18
+         Admin sees classifier ranked SECTOR_SPECIFIC above TAX_RATE_CHANGE — wrong
 09:16 — admin clicks "Override + Verify" → picks TAX_RATE_CHANGE → save
          needs_review=false; expert_verified=true; audit-log row written
          Row disappears from queue; next item auto-focuses
@@ -235,7 +235,7 @@ This loop currently takes the admin ~30 minutes via the regulation-bank filter w
 - **Stale queue.** Admin starts working on a row that's already been confirmed in another tab (or by another admin). Mitigation: optimistic UI — when "Confirm" returns 409 Conflict, drawer surfaces "Already confirmed by {admin_email} at {time}" + offers "Move to next".
 - **Confidence-only sort hides high-impact items.** A high-confidence classification on a critical regulation (e.g. nationwide VAT change) deserves a second look even at 0.85 confidence. Mitigation: a secondary `severity_level >= 4` view at the top of the page (collapsible).
 - **Expert queue grows unbounded.** If the domain expert is OOO, escalated rows sit. Mitigation: 7-day SLA banner at the top of `/admin/m1/expert-queue`; aged items annotate the regulation bank with a warning badge.
-- **Override choice taxonomy drift.** If the 12-category taxonomy ever changes, old override choices need migration. Mitigation: per [m1/09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md), the taxonomy is locked at Week 5 of the project; changes go through a migration script.
+- **Override choice taxonomy drift.** If the 8-domain taxonomy ever changes, old override choices need migration. Mitigation: per [m1/09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md), the taxonomy is locked at Week 5 of the project; changes go through a migration script.
 
 ## Validation & acceptance criteria
 
@@ -314,7 +314,7 @@ A CA-led batch review using the seeded demo regulations:
          filters down to 14 VAT regulations awaiting expert sign-off
 10:05 — CA opens VAT_2024_AMD detail page
          reviews classifier output: change_category=TAX_RATE_CHANGE ✓
-         reviews sectors: [manufacturing, retail, services, ..., 10 sectors] ✓ (it's a universal VAT change)
+         reviews sectors: [grocery_retail, food_service, general_retail] ✓ (it's an economy-wide VAT change)
          clicks "Verify" → green badge appears with "Verified by K. Perera at 2026-05-14 10:06"
          audit_log row: event_type='regulation.verified', actor='kperera@enigmatrix.lk'
 10:15 — CA spot-checks 12 more rows individually; finds all correct
@@ -485,8 +485,8 @@ This companion documents both halves: the shipped widget + list, and the intende
 
 > 🔲 Intended workflow — sector-applicability filter design not yet locked.
 
-1. **Sticky filter chip bar** at the top of `/regulations`: chips for `Sector = manufacturing`, `Region = Colombo`, `Status = applicable to me`, `Effective in next 30 days`, `Has my action?` Clicking a chip toggles it; chips reflect in the URL (`?sector=manufacturing&region=colombo&applicable=true`).
-2. **Applicability score per row.** Each `<RegulationCard>` shows a small badge: `100 % applicable` (the SME's sector is in `affected_sectors` AND district matches), `50 % applicable` (sector match only), `10 %` (universal regulations that apply to all sectors). Computed client-side from the SME's profile + the regulation's `affected_sectors[]`.
+1. **Sticky filter chip bar** at the top of `/regulations`: chips for `Sector = grocery_retail`, `Region = Colombo`, `Status = applicable to me`, `Effective in next 30 days`, `Has my action?` Clicking a chip toggles it; chips reflect in the URL (`?sector=grocery_retail&region=colombo&applicable=true`).
+2. **Applicability score per row.** Each `<RegulationCard>` shows a small badge: `100 % applicable` (the SME's sector is in `affected_sectors` AND district matches), `50 % applicable` (sector match only), `economy-wide` (regulations that apply to all 3 study sectors). Computed client-side from the SME's profile + the regulation's `affected_sectors[]`.
 3. **Sort options.** Newest, earliest effective date, severity DESC, "most relevant to me" (applicability × severity).
 4. **Save filter.** Power-user feature: save a filter set to the SME's profile so it's pre-applied on next visit.
 
@@ -535,7 +535,7 @@ Click card → same /surveys/regulation/[id] flow
 ## Failure modes & edge cases
 
 - **SME has no `primary_sector`.** Brand-new SME with empty profile. Mitigation: the dashboard widget hides itself; the user is prompted to complete their profile (currently routes to `/profile`).
-- **Cross-sector regulation (universal).** Applies to all 10 sectors — `affected_sectors` is the full list. Renders as "10 % applicable" today; future could be "applies to everyone" with a special badge.
+- **Cross-sector regulation (economy-wide).** Applies to all 3 study sectors — `affected_sectors` is the full list. Renders as "applicable to all sectors" today; future could be "applies to everyone" with a special badge.
 - **Profile updated → cached widget stale.** SME changes sector; widget on dashboard might still show the old recommendations until next fetch. Mitigation: `react-query` invalidation on profile mutate (already in place per Session 13).
 - **Empty pending list.** SME has surveyed everything; widget shows "All caught up — view all regulations →".
 - **Trilingual list:** locale-aware title with EN fallback ("Showing English" badge when SI/TA missing). Existing pattern from [12_UI_Screens §3.5](../frontend/SETUP/12_UI_Screens_and_Loading.md).
@@ -866,26 +866,26 @@ SME notes the SMS arrived 0 days after gazette publication → confirms the syst
 
 # 14_M1_9 — Category × Sector Workflows (cross-cutting reference)
 
-> Companion to [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) — covers the cross-cutting reference **X9: how the 12 categories + 10 sectors flow through every M1 surface**.
-> **Implementation status:** Reference doc — describes existing conventions across the 8 tracking surfaces (A1–A4, S1–S4). The 12 categories + 10 sectors are shipped in the schema + admin form; the badge colour conventions documented here are shipped via `components/ui/`.
+> Companion to [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) — covers the cross-cutting reference **X9: how the 8 regulation domains + 3 study sectors flow through every M1 surface**.
+> **Implementation status:** Reference doc — describes existing conventions across the 8 tracking surfaces (A1–A4, S1–S4). The 8 domains + 3 sectors are shipped in the schema + admin form; the badge colour conventions documented here are shipped via `components/ui/`.
 
 ## Purpose
 
-The M1 taxonomy has 12 mutually-exclusive **categories** (single-label) + 10 **sectors** (multi-label), defined in [m1/09_M1_Annotation_Guidelines.md §2 + §3](09_M1_Annotation_Guidelines.md). Each appears on dozens of frontend surfaces — admin filters, badges on cards, columns in tables, chips in URL state, accent colours on per-module shells. Without a single reference, naming + colour drifts across surfaces ("Manufacturing" vs "manufacturing" vs "Mfg"; tax-blue vs slate). This doc is the lookup table — what each value is, where it appears, what colour + label it carries.
+The M1 taxonomy has 8 mutually-exclusive **regulation domains** (single-label) + 3 shop-focused **study sectors** (multi-label), defined in [m1/09_M1_Annotation_Guidelines.md §2 + §3](09_M1_Annotation_Guidelines.md). Each appears on dozens of frontend surfaces — admin filters, badges on cards, columns in tables, chips in URL state, accent colours on per-module shells. Without a single reference, naming + colour drifts across surfaces ("Grocery / Food Retail" vs "grocery_retail" vs "Grocery"; tax-blue vs slate). This doc is the lookup table — what each value is, where it appears, what colour + label it carries.
 
 ## Detailed process
 
-### Category convention table
+### Domain convention table
 
 | Code | Label (EN) | Badge variant | Where it appears |
 |---|---|---|---|
 | `TAX_RATE_CHANGE` | Tax rate change | `<DomainBadge variant="domain-tax">` (slate) | Admin list filter, regulation card, survey context card |
-| `LABOUR_LAW` | Labour law | `<DomainBadge variant="domain-labour">` | same |
-| `EPF_ETF_CHANGE` | EPF / ETF change | `<DomainBadge variant="domain-epf">` | same |
-| `PRODUCT_STANDARD` | Product standard | `<DomainBadge variant="domain-product">` | same |
-| `BUSINESS_REGISTRATION` | Business registration | `<DomainBadge variant="domain-business">` | same |
 | `IMPORT_EXPORT` | Import / export | `<DomainBadge variant="domain-trade">` | same |
 | `SECTOR_SPECIFIC` | Sector-specific (CAA MRP / Food Act / NMRA) | `<DomainBadge variant="domain-sector">` | same |
+| `EPF_ETF_CHANGE` | EPF / ETF change | `<DomainBadge variant="domain-epf">` | same |
+| `LABOUR_LAW` | Labour law | `<DomainBadge variant="domain-labour">` | same |
+| `PRODUCT_STANDARD` | Product standard | `<DomainBadge variant="domain-product">` | same |
+| `BUSINESS_REGISTRATION` | Business registration | `<DomainBadge variant="domain-business">` | same |
 | `PENALTY_ENFORCEMENT` | Penalty enforcement | `<DomainBadge variant="domain-penalty">` | same |
 
 Labels render in EN by default; SI/TA via next-intl message keys `m1.category.{code}`. Trilingual parity is a CI-tested invariant.
@@ -898,7 +898,7 @@ Labels render in EN by default; SI/TA via next-intl message keys `m1.category.{c
 | `food_service` | Food Service | same | VAT, Food Act hygiene, Labour, Excise licences |
 | `general_retail` | General-Goods Retail | same | VAT, Customs/CESS, SLSI standards, MRP |
 
-> Categories use **colour** as a primary identity cue (12 distinct hues); sectors use **label only** (10 uniform-coloured chips). The asymmetry is intentional — categories are more numerous than colours-distinguishable, but the design constraint is that an admin filter rail can hold 12 coloured filter chips without becoming a rainbow soup.
+> Domains use **colour** as a primary identity cue (8 distinct hues); sectors use **label only** (3 uniform-coloured chips). The asymmetry is intentional — domains are more numerous than colours-distinguishable, but the design constraint is that an admin filter rail can hold 8 coloured filter chips without becoming a rainbow soup.
 
 ### Where these values appear across the 8 surfaces
 
@@ -909,7 +909,7 @@ Labels render in EN by default; SI/TA via next-intl message keys `m1.category.{c
 | A3 (Verification) | Read-only badge on the detail page | Read-only chip list on the detail page |
 | A4 (Lag analytics) | Cross-tab dimension (lag-by-category) | Cross-tab dimension (lag-by-sector) |
 | S1 (Discovery) | Filter chip on `/regulations` | Filter chip + applicability badge |
-| S2 (Survey) | Survey is partitioned per-regulation (categories are read-only on the context card) | Sector-tailored regulation selection (7 sector regulations + 2 universal) |
+| S2 (Survey) | Survey is partitioned per-regulation (categories are read-only on the context card) | Sector-tailored regulation selection (7 sector regulations + 2 economy-wide) |
 | S3 (Compliance tracker) | Status pill on the row + category badge | Sector chips on the row |
 | S4 (Deadlines + alerts) | Category badge in the alert-history table | n/a (alerts already filtered to SME's sector at send time) |
 
@@ -921,7 +921,7 @@ When categories or sectors land in URL state, they use lowercase enum codes (NOT
 
 ```
 /admin/regulations?change_category=TAX_RATE_CHANGE,EPF_ETF_CHANGE
-/regulations?sector=manufacturing,retail
+/regulations?sector=grocery_retail,general_retail
 ```
 
 Multi-value: comma. Negation: leading `!` (e.g. `change_category=!PENALTY_ENFORCEMENT`). Date-range and other filters follow the same lowercase + comma + `!` convention.
@@ -942,8 +942,8 @@ This is a reference doc; the conventions are shipped, not designed-from-scratch.
 
 | Convention | Locked at | Why |
 |---|---|---|
-| 12 categories single-label | [m1/09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md) | Mutually exclusive in the data model — UI mirrors |
-| 10 sectors multi-label | Same | Multi-label in the data model — UI mirrors |
+| 8 domains single-label | [m1/09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md) | Mutually exclusive in the data model — UI mirrors |
+| 3 sectors multi-label | Same | Multi-label in the data model — UI mirrors |
 | `<DomainBadge>` per-category colour | `frontend/components/ui/domain-badge.tsx` | One component owns the colour map |
 | Sector chips uniform colour | `frontend/components/ui/sector-badge.tsx` | Avoids the "rainbow soup" problem |
 | Lowercase enum + comma URL state | Existing pattern across `/admin/regulations`, `/admin/questions` | Consistency across admin surfaces |
@@ -954,20 +954,19 @@ This is a reference doc; the conventions are shipped, not designed-from-scratch.
 An admin filter on `/admin/regulations`:
 
 ```
-URL: /admin/regulations?change_category=TAX_RATE_CHANGE,EPF_ETF_CHANGE&sector=manufacturing&page=1
+URL: /admin/regulations?change_category=TAX_RATE_CHANGE,EPF_ETF_CHANGE&sector=grocery_retail&page=1
 
 Filter rail (left):
-  Category
+  Domain
     [✓] Tax rate change         (slate badge)
     [ ] Labour law
     [✓] EPF / ETF change        (purple badge)
     [ ] Product standard
-    ... 8 more
+    ... 4 more
   Sector
-    [✓] Manufacturing
-    [ ] Retail
-    [ ] Services
-    ... 7 more
+    [✓] Grocery / Food Retail
+    [ ] Food Service
+    [ ] General-Goods Retail
 
 Result table renders 18 rows.
 Each row's category column shows the same coloured <DomainBadge> as the filter rail.
@@ -977,20 +976,20 @@ Sector column shows multi-chip stack — sectors alphabetised.
 The SME-side mirror (intended):
 
 ```
-URL: /regulations?sector=retail&applicable=true
+URL: /regulations?sector=general_retail&applicable=true
 
 Filter chip bar (top):
-  [Sector: Retail ×]  [Applicable to me ×]
+  [Sector: General-Goods Retail ×]  [Applicable to me ×]
 
 Result: 12 cards, each showing:
   <DomainBadge variant="domain-tax">   for a VAT regulation
-  <SectorBadge>retail</SectorBadge>   <SectorBadge>services</SectorBadge>
+  <SectorBadge>grocery_retail</SectorBadge>   <SectorBadge>general_retail</SectorBadge>
   <ApplicabilityBadge level="100%">applicable</ApplicabilityBadge>
 ```
 
 ## Failure modes & edge cases
 
-- **New category added.** Adding a 13th category requires: schema migration (per [m1/09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md)) + new `<DomainBadge>` variant (new CSS class + colour) + trilingual labels in `messages/*.json` + CI translation test pass. The convention freezes new categories until the next quarterly review — taxonomy drift is documented as a risk in [m1/01_M1_Research_Problem.md §10](01_M1_Research_Problem.md).
+- **New domain added.** Adding a 9th domain requires: schema migration (per [m1/09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md)) + new `<DomainBadge>` variant (new CSS class + colour) + trilingual labels in `messages/*.json` + CI translation test pass. The convention freezes new categories until the next quarterly review — taxonomy drift is documented as a risk in [m1/01_M1_Research_Problem.md §10](01_M1_Research_Problem.md).
 - **Renamed enum.** Renaming an existing enum (e.g. `EPF_ETF_CHANGE` → `EPF_CONTRIBUTION_CHANGE`) breaks every URL ever shared. Mitigation: never rename; deprecate + add new.
 - **Locale-missing label.** A new category landed without SI/TA. CI fails the PR — translation must land with the enum.
 - **Colour-blind users.** Categories rely on colour; mitigated by always-present labels. Plus the `<DomainBadge>` uses distinguishable hue + saturation pairs.

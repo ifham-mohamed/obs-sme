@@ -1,83 +1,77 @@
-# 15_M1_2 — `backend/` Folder Build Guide
+# 15_M1_2 — Backend Folder Build Guide (`enigmatrix-backend/`)
 
-> Companion to [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) — build guide for the `backend/app/` slice of doc 13's M1 tree.
-> **Implementation status snapshot:** ✅ ~6 shipped (admin CRUD + audit + 1 model + middleware) · 🟡 ~3 partial · 🔲 ~16 deferred (Celery tasks + remaining models + migrations + scripts).
+> Companion to [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) — build guide for the backend slice of the M1 tree.
+> **Repo note (2026-07-24):** the real folder is **`enigmatrix-backend/`**, and M1 code is a **self-contained package at `app/m1/`** (`api/`, `models/`, `schemas/`, `services/`, `tasks/`) — moved there from the flat `app/{services,models,...}` layout the old guide assumed. It is now **largely shipped**: Phase-2 ingest/extract/preprocess, the extraction dataset/measurement admin surface, alerts, drift, retraining, propagation matching, and pipeline validation all exist. Deferred: the live ONNX classify path (waits on the trained model) + some Stage-E summarisation.
+> **Implementation status snapshot:** ✅ ~70 M1 files under `app/m1/` shipped (api/models/schemas/services/tasks) + Scrapy Stage A + seeds + audit + migrations · 🟡 classify/summarise tasks wired but pending the trained model · 🔲 MarianMT summarisation.
 
 ## Purpose
 
-`backend/app/` is the FastAPI service that fronts M1 — the admin API, the SME survey endpoints, the Celery task layer that drives Stages A–F via `ml/m1/` calls, and the database schema. The admin-CRUD slice + audit log are already in production; the Celery task tree is the biggest deferred surface. Every `ml/m1/` module is called *from* a Celery task here.
+`enigmatrix-backend/` is the FastAPI + Celery service that fronts M1 — the admin + SME API, the extraction/measurement admin tooling, the Celery task layer that drives Stages A–F (calling `enigmatrix-ml/m1/` for the algorithms), and the Postgres schema. M1 lives in its own `app/m1/` package so it never tangles with M2/M3 code; cross-module concerns (auth, surveys, audit) stay in the top-level `app/` dirs.
 
 ## Files in this folder
 
-### `backend/app/api/v1/`
+### `app/m1/api/` — M1 REST + WebSocket routers (all ✅ shipped)
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `api/v1/m1_regulations.py` | Admin + SME REST endpoints for M1 | ✅ Shipped (admin CRUD) | [11_M1_API_Reference.md](11_M1_API_Reference.md) + [11_M1_1_API_Authentication_Authorization.md](11_M1_1_API_Authentication_Authorization.md) | Already exists; extend with `/classify`, `/verify` (verify exists), `/propagation-events`, `/analytics/*` endpoints in BUILD_07/12 |
+| File | Owns |
+|---|---|
+| `api/regulations.py` | Admin + SME regulation CRUD / list / detail |
+| `api/admin_pipeline.py` | Pipeline-state admin surface (A1) |
+| `api/extractions.py` + `api/extraction_ws.py` | Extraction runs + live WebSocket feed |
+| `api/gazette_extraction.py` | Per-gazette extraction trigger + status |
+| `api/datasets.py` | Golden/dataset upload + versioning |
+| `api/measurements.py` + `api/completeness.py` | Baseline measurement + completeness reports |
+| `api/alerts.py` | Alert history / dispatch surface |
 
-### `backend/app/services/`
+> Cross-module routers stay in `app/api/v1/` (`regulations.py`, `verify.py`, `qa.py`, `risk.py`, `admin_*`, `survey_*`). Router assembly: `app/api/v1/router_slim.py` + `app/main.py`.
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `services/m1_regulation_service.py` | Admin-slice business logic | ✅ Shipped | [11_M1_API_Reference.md](11_M1_API_Reference.md) | Already exists; extend with classify/verify bridge methods that enqueue Celery tasks |
-| `services/shared/audit_service.py` | Singular `audit_log` writes (Session 14) | ✅ Shipped | — | Already exists; reused by every M1 mutation |
+### `app/m1/services/` — business logic (✅ shipped; ~30 modules)
 
-### `backend/app/tasks/m1/`
+| Area | Modules |
+|---|---|
+| Regulation + sources | `regulation_service`, `source_catalogue` / `sources_catalogue`, `secondary_sources`, `embeddings` |
+| Extraction ops | `pipeline_service`, `extraction_run_status`, `extraction_run_archive`, `extraction_cancel`, `extraction_live_feed`, `pdf_resolver`, `metadata_confidence`, `profile_service` |
+| Datasets + measurement | `dataset_service`, `dataset_upload`, `xlsx_parser`, `measurement_report`, `measurement_aggregates`, `completeness_check`, `overlap_service`, `snapshot_service`, `storage_projection` |
+| Classify + drift + alerts | `classifier_service`, `drift`, `alert_service`, `alert_content`, `alert_providers` |
+| Propagation (Phase 4) | `propagation_matching`, `propagation_service` |
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `tasks/m1/gazette_scraper.py` | Stage A — wraps the Scrapy spider in a Celery task | 🔲 | [03_M1_Data_Collection.md §6.1](03_M1_Data_Collection.md) | `CrawlerRunner` + Celery retry-on-infra-failure-only |
-| `tasks/m1/extract_gazette.py` | Stage B — calls `ml/m1/extraction/*` | 🔲 | [03_M1_1_PDF_Extraction_Chain.md](03_M1_1_PDF_Extraction_Chain.md) | Reads PDF path; advances `status='extracted'` on success |
-| `tasks/m1/classify_gazette.py` | Stage D — calls `ml/m1/model/inference.py` | 🔲 | [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) | Reads chunk 0; writes category + sectors + confidence; sets `needs_review` if conf < 0.70 |
-| `tasks/m1/summarise_gazette.py` | Stage E — calls `ml/m1/summarization/marianmt.py` | 🔲 | [04_M1_3_Text_Chunking_Strategy.md](04_M1_3_Text_Chunking_Strategy.md) | Per-chunk summarise; concat per-language summaries |
-| `tasks/m1/alert_dispatch.py` | Stage F — SendGrid + Twilio + chunked batching | 🔲 | [08_M1_Full_System_Architecture.md §8.1](08_M1_Full_System_Architecture.md) | Idempotency on `(regulation_id, sme_id, channel)`; respect SendGrid rate limit |
-| `tasks/m1/portal_watcher.py` | Secondary sources (IRD/EPF/eROC) | 🔲 | [03_M1_3_Secondary_Source_Integration.md](03_M1_3_Secondary_Source_Integration.md) | `httpx` per source; INSERT ... ON CONFLICT DO NOTHING on `m1_propagation_events` |
-| `tasks/m1/rss_watcher.py` | News RSS (5 outlets) | 🔲 | [03_M1_3_Secondary_Source_Integration.md](03_M1_3_Secondary_Source_Integration.md) | `feedparser` + embedding-similarity matching for Tier 2 |
-| `tasks/m1/analytics.py` | Nightly view refresh + drift trigger + retraining trigger | 🔲 | [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) + [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md) | Celery Beat `0 2 * * *`; advisory-lock the view refresh |
+> Shared audit writes live at `app/services/` (`audit_service`) + the passive `app/middleware/` audit layer.
 
-### `backend/app/models/`
+### `app/m1/tasks/` — Celery task tree (✅ shipped; classify/summarise pending the model)
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `models/m1_regulation.py` | `m1_regulations` ORM model | 🟡 | [02_M1_Data_Requirements.md §2.1](02_M1_Data_Requirements.md) | Exists for the admin slice; the remaining 8 `m1_*` tables (sectors, events, sources, changes, examples, penalties, court cases, survey responses) land with BUILD_07 |
+| Stage | Tasks |
+|---|---|
+| A — Ingest | `run_scraper`, `gazette_scraper`, `reconcile_raw`, `migrate_raw_layout` |
+| B/C — Extract + preprocess | `run_extraction`, `extract_gazette`, `preprocess_gazette`, `quality_probe`, `prune_extraction_runs` |
+| D — Classify | `classify_gazette` (🟡 wired; live path waits on the trained ONNX model) |
+| F — Alerts | `alert_dispatch` |
+| Secondary (Phase 4) | `portal_watcher`, `rss_watcher`, `source_health` |
+| Measurement + governance | `run_measurement`, `validate_dataset_version`, `validate_pipeline`, `analytics`, `retention`, `retire_old_versions` |
+| Retraining | `retraining` |
 
-### `backend/app/schemas/`
+> Backend-side extraction helpers also live at `app/extraction/` (`pdf_classifier.py`, `text_extractors.py`, `pdf_metadata.py`); the heavier algorithms are in `enigmatrix-ml/m1/`.
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `schemas/m1.py` | Pydantic API request/response models | ✅ Shipped (admin slice) | [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md) | Extend with classify/verify/propagation/survey schemas in BUILD_07 |
+### `app/m1/models/` + `app/m1/schemas/` (✅ shipped)
 
-### `backend/app/config/`
+| Layer | Modules |
+|---|---|
+| `m1/models/` | `regulation_penalty`, `sub_document`, `gazette_item`, `dataset`, `propagation_event`, `propagation_review`, `alert`, `retraining_run`, `extraction_profile`, `extraction_run`, `measurement`, `quality_probe`, `pipeline_audit`, `source` |
+| top-level `app/models/` | `regulation` (`M1Regulation`), `regulatory_domain`, `audit_log` |
+| `m1/schemas/` | `regulation_penalty`, `sub_document`, `dataset`, `pipeline`, `measurement`, `extraction`, `alert` |
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `config/feature_flags.py` | Per-stage on/off + model version | 🔲 | [13_M1_Folder_Structure §upgradability rules](13_M1_Folder_Structure_and_Implementation_Flow.md) | Env-var driven; pinned to `M1_INGESTION_ENABLED`, `M1_INFERENCE_ENABLED`, `M1_MODEL_VERSION`, `M1_MODEL_CANARY_PCT` |
+### Migrations, seeds, config
 
-### `backend/app/db/migrations/versions/`
-
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `*_m1_*.py` | Alembic migrations for the 9 `m1_*` tables | 🟡 | [02_M1_Data_Requirements.md §2](02_M1_Data_Requirements.md) + [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md) | Migration per table + per index; `NOT VALID` constraint pattern for pre-populated tables |
-
-### `backend/app/scripts/`
-
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `scripts/seed_regulations.py` | 5 demo regulations | ✅ Shipped | [02_M1_4_Worked_Examples_All_Tables.md](02_M1_4_Worked_Examples_All_Tables.md) | Already exists; extend with more worked-example regulations in BUILD_07 |
-| `scripts/m1_backfill_classifications.py` | Re-classify the last 30 days | 🔲 | [12_M1_2_Retraining_Deployment_Rollback.md §Day 5](12_M1_2_Retraining_Deployment_Rollback.md) | Rate-limited (10/min); writes both old + new prediction for ablation |
-| `scripts/m1_validate_pipeline.py` | Nightly data-quality checks | 🔲 | [02_M1_2_Database_Schema_Validation.md §Layer 3](02_M1_2_Database_Schema_Validation.md) | 13 checks; appends rows to `m1_pipeline_audits` |
-
-### `backend/app/middleware/`
-
-| File | Owns | Status | Primary doc | How to build (1-liner) |
-|---|---|---|---|---|
-| `middleware/audit_middleware.py` | Passive HTTP-level audit logging (Session 14) | ✅ Shipped | — | Already exists; no M1-specific change needed |
+| Path | Owns | Status |
+|---|---|---|
+| `enigmatrix-backend/alembic/versions/*_m1_*.py` | Alembic migrations (e.g. `202607230001_m1_schema_validation_and_governance`, `202607210005_classification_source`) | ✅ Shipped |
+| `app/scripts/seed_*.py` | `seed_lookups` (8 domains + 3 sectors), `seed_regulations`, `seed_m1_worked_examples`, `seed_m23_questions`, `seed_phase4`, `seed_demo_responses`, `seed_dev` | ✅ Shipped |
+| `app/settings.py` | Pydantic settings / feature flags (env-driven) | ✅ Shipped |
+| `app/middleware/` + `app/services/audit_service` | Passive HTTP audit logging | ✅ Shipped |
 
 ## How to start building
 
-The backend has the most "spans-the-roadmap-phases" surface area. Sequence:
+Most of this is **already built** — the sequence below is retained as the dependency order for the remaining work (live classify path + summarisation) and as an orientation for new contributors. The M1 package is at `app/m1/`; run the API with `make dev` / `uvicorn app.main:app` and Celery with the project's worker config.
 
-1. **DB schema first (Phase 2 prerequisite).** Add the 8 deferred `m1_*` table migrations under `db/migrations/versions/`. Run `alembic upgrade head` after each. Update `models/m1_*` ORM files in lockstep. The schema is the contract for everything that follows.
+1. **DB schema — ✅ shipped.** The `m1_*` migrations live under `enigmatrix-backend/alembic/versions/`; `alembic upgrade head` applies them. ORM under `app/m1/models/` + `app/models/regulation.py`. Seeds via `app/scripts/seed_lookups.py` (8 domains + 3 sectors) then `seed_regulations.py` / `seed_m1_worked_examples.py`.
 2. **`config/feature_flags.py`.** Stub it with env-var-backed flags. Every Celery task entry-point reads from here. Build it before the tasks so they can gate themselves cleanly.
 3. **`tasks/m1/__init__.py` + Celery routing.** Set up the task module + the queue names (`m1-extract`, `m1-classify`, `m1-summarise`, `m1-alert`) before any individual task; Celery Beat schedule lives in `backend/app/celery_config.py`.
 4. **`tasks/m1/extract_gazette.py`.** First task — wraps Stage B from `ml/m1/extraction/`. Status transition `ingested → extracted`. Once this works, the rest of the chain follows the same pattern.
@@ -89,10 +83,10 @@ The backend has the most "spans-the-roadmap-phases" surface area. Sequence:
 
 ## Dependencies
 
-- **`ml/m1/` modules** ([15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md)) — every task imports `from ml.m1.extraction import ...`. The boundary is strict: backend tasks own *orchestration*, not *algorithms*.
-- **Postgres** — schema + connection pool. The 9 `m1_*` tables are the persistent state machine.
-- **Redis** — Celery broker + inference cache + session blacklist. Required for any Celery task to run.
-- **`scraper/`** ([15_M1_3_Scraper_Folder_Guide.md](15_M1_3_Scraper_Folder_Guide.md)) — Stage A produces PDFs that Stage B (this folder) consumes.
+- **`enigmatrix-ml/m1/` modules** ([15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md)) — tasks import the extraction/preprocessing/model algorithms from the ML package. The boundary is strict: backend tasks own *orchestration*, not *algorithms*.
+- **Postgres** — schema + connection pool; the `m1_*` tables are the persistent state machine.
+- **Redis** — Celery broker + inference cache. Required for any Celery task to run.
+- **`enigmatrix-backend/scraper/`** ([15_M1_3_Scraper_Folder_Guide.md](15_M1_3_Scraper_Folder_Guide.md)) — Stage A produces PDFs that Stage B consumes.
 - **`storage/`** ([15_M1_5_Storage_Folder_Guide.md](15_M1_5_Storage_Folder_Guide.md)) — raw PDFs, OCR cache, ONNX models. Tasks read + write here.
 
 ## Tests & acceptance criteria

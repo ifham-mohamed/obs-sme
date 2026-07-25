@@ -104,7 +104,7 @@ List all regulations with filtering and pagination.
 | `page` | int | 1 | Page number |
 | `page_size` | int | 20 | Items per page (max 100) |
 | `change_category` | str | — | Filter by category code (e.g. `TAX_RATE_CHANGE`) |
-| `sector` | str | — | Filter by sector code (e.g. `manufacturing`) |
+| `sector` | str | — | Filter by sector code (e.g. `grocery_retail`) |
 | `status` | str | — | Filter by pipeline status |
 | `needs_review` | bool | — | If true, return only needs_review=true |
 | `is_verified` | bool | — | Filter by verification status |
@@ -203,7 +203,7 @@ Get a single regulation by UUID.
   "penalty_range_lkr": null,
   "principal_act_amended": "Inland Revenue Act No. 24 of 2017",
   "effective_date": "2025-01-01",
-  "real_world_example_en": "A manufacturing company with annual revenue over LKR 500M will see their tax liability increase by ~6%.",
+  "real_world_example_en": "A general-goods retailer with annual revenue over LKR 500M will see their tax liability increase by ~6%.",
   "needs_review": false,
   "is_verified": true,
   "expert_verified_by": "Nalaka Perera, CA Sri Lanka",
@@ -288,7 +288,7 @@ Mark a regulation as expert-verified.
 {
   "verified": true,
   "verifier_name": "Nalaka Perera, CA Sri Lanka",
-  "notes": "Category confirmed correct. Sector assignment reviewed — added finance sector."
+  "notes": "Category confirmed correct. Sector assignment reviewed — confirmed economy-wide (all 3 study sectors)."
 }
 ```
 
@@ -462,7 +462,7 @@ SME-facing read-only list of classified, summarised, SME-relevant regulations.
       "affected_sectors": ["grocery_retail", "food_service", "general_retail"],
       "severity_level": "high",
       "effective_date": "2025-01-01",
-      "real_world_example_en": "A manufacturing company with annual revenue...",
+      "real_world_example_en": "A general-goods retailer with annual revenue...",
       "source_url": "https://gazette.lk/gazette/2486/22"
     }
   ],
@@ -776,7 +776,7 @@ curl -X POST -H "Authorization: Bearer $TOKEN" \
   "https://api.enigmatrix.lk/api/v1/m1/regulations/3fa85f64-.../verify"
 
 # Public SME endpoint — no auth
-curl "https://api.enigmatrix.lk/api/v1/m1/regulations/public?sector=manufacturing&language=en"
+curl "https://api.enigmatrix.lk/api/v1/m1/regulations/public?sector=grocery_retail&language=en"
 ```
 
 ---
@@ -1089,7 +1089,7 @@ curl -X POST https://api.enigmatrix.lk/api/v1/m1/survey-responses \
 ### Section 7 — Public listing (no auth)
 
 ```bash
-curl -X GET "https://api.enigmatrix.lk/api/v1/m1/regulations/public?sector=manufacturing&page=1"
+curl -X GET "https://api.enigmatrix.lk/api/v1/m1/regulations/public?sector=grocery_retail&page=1"
 # → 200 OK (no auth header needed)
 ```
 
@@ -1137,11 +1137,11 @@ Output:
 
 ```
 change_category
-BUSINESS_REGISTRATION 14.5
-EPF_ETF_CHANGE        42.0
-ENVIRONMENTAL         55.0
-LABOUR_LAW            38.0
-TAX_RATE_CHANGE       31.0
+BUSINESS_REGISTRATION  14.5
+EPF_ETF_CHANGE         42.0
+SECTOR_SPECIFIC        55.0
+LABOUR_LAW             38.0
+TAX_RATE_CHANGE        31.0
 ...
 ```
 

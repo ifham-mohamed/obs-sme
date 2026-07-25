@@ -414,6 +414,7 @@ Both buckets stored in language_distribution_json; downstream summariser uses si
 - BUILD phase: BUILD_07 §language detection
 - Code (when shipped): `ml/m1/extraction/language_detection.py`
 
+
 # 10_M1_2 — OCR & Wijesekara Conversion
 
 > Companion to [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) — full Tesseract 5.3.x config, Wijesekara → Unicode mapping table, detection heuristic, end-to-end scanned-PDF pipeline.

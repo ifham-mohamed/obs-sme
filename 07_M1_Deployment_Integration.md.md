@@ -504,7 +504,7 @@ class GazetteCalibrationReader(CalibrationDataReader):
         return next(self.iter, None)
 ```
 
-Calibration set: 50 hand-picked gazettes spanning all 12 categories + all 3 languages. Stored in `research/data/quantization_calibration.parquet`.
+Calibration set: 50 hand-picked gazettes spanning all 8 domains + all 3 languages. Stored in `research/data/quantization_calibration.parquet`.
 
 ### Step 4 — Post-quantization F1 validation
 
@@ -575,6 +575,7 @@ $ python scripts/quantize_onnx.py --input storage/models/m1/v1.0/gazette_classif
 - Related: [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §9 (versioning), [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md)
 - BUILD phase: BUILD_11 §model export, §quantization
 - Code (when shipped): `ml/m1/model/export_onnx.py`, `quantize.py`
+
 
 
 # 07_M1_2 — Fly.io Deployment Operations

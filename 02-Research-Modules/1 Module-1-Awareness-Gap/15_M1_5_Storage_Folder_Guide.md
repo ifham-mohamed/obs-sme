@@ -1,7 +1,8 @@
 # 15_M1_5 — `storage/` Folder Build Guide
 
-> Companion to [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) — build guide for the `storage/` slice of doc 13's M1 tree.
-> **Implementation status snapshot:** 🟡 Conventions documented; directories populate as Phase 2 (PDFs/OCR cache) + Phase 3 (model artifacts) run.
+> Companion to [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) — build guide for the `storage/` slice of the M1 tree.
+> **Repo note (2026-07-24):** `storage/` is mostly conventions still. What's actually present today is the fastText language-ID model at **`storage/models/m1/baseline/lid.176.bin`** (used by `enigmatrix-ml/m1/extraction/language_detection.py`, fetched via `enigmatrix-ml/scripts/download_lid_model.py`). Raw-PDF / OCR-cache dirs populate at runtime; the trained ONNX classifier lands once Phase-3 labelling → training completes.
+> **Implementation status snapshot:** 🟡 Conventions documented; `models/m1/baseline/lid.176.bin` present; raw/OCR/inference caches + `models/m1/v*/` populate as Phase 2/3 run.
 
 ## Purpose
 
@@ -28,6 +29,7 @@
 | `models/m1/v1.0/model_registry.json` | Reproducibility fingerprint | 🔲 | [06_M1_Training_Evaluation.md §reproducibility hash](06_M1_Training_Evaluation.md) | **Committed to git** (small JSON); contains git SHA + data SHA-256 + env.yml hash + per-language F1 |
 | `models/m1/v1.0/metrics.json` | Per-language F1 + confusion matrix + ECE | 🔲 | [06_M1_Training_Evaluation.md §4](06_M1_Training_Evaluation.md) | **Committed to git**; consumed by monitoring dashboard |
 | `models/m1/v0.9/` | Previous version (rollback target) | 🔲 | [07_M1_2_Fly_io_Deployment_Operations.md §rollback](07_M1_2_Fly_io_Deployment_Operations.md) | Always kept on the Fly volume for ~60s rollback |
+| `models/m1/baseline/lid.176.bin` | fastText language-ID model (EN/SI/TA routing) | ✅ **Present** | [10_M1_1_Language_Detection_Routing.md](10_M1_1_Language_Detection_Routing.md) | Fetched by `enigmatrix-ml/scripts/download_lid_model.py`; read by `enigmatrix-ml/m1/extraction/language_detection.py` |
 | `models/m1/baseline/tfidf_lr_model.pkl` | Production-baseline TF-IDF + LR | 🔲 | [05_M1_2_Architecture_Comparison_Deep_Dive.md](05_M1_2_Architecture_Comparison_Deep_Dive.md) | Trained on the full labelled set; used for ablation only |
 | `models/m1/baseline/vocabulary.pkl` | Baseline's vocabulary | 🔲 | Same | Companion to `tfidf_lr_model.pkl`; pickle for reproducibility |
 
@@ -46,10 +48,10 @@ The two committed files per model version (`model_registry.json` + `metrics.json
 
 ## Dependencies
 
-- **`scraper/pipelines.py`** ([15_M1_3_Scraper_Folder_Guide.md](15_M1_3_Scraper_Folder_Guide.md)) — writes to `storage/m1/raw/`.
-- **`ml/m1/extraction/ocr.py`** ([15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md)) — reads/writes `storage/m1/ocr_cache/`.
-- **`ml/m1/model/inference.py`** ([15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md)) — reads `storage/models/m1/v<X>/*.onnx`.
-- **`ml/m1/model/training.py`** + `export_onnx.py` ([15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md)) — writes the entire `storage/models/m1/v<X>/` tree.
+- **`enigmatrix-backend/scraper/pipelines.py`** ([15_M1_3_Scraper_Folder_Guide.md](15_M1_3_Scraper_Folder_Guide.md)) — writes to `storage/m1/raw/`.
+- **`enigmatrix-ml/m1/extraction/ocr.py`** ([15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md)) — reads/writes `storage/m1/ocr_cache/`.
+- **`enigmatrix-ml/m1/model/inference.py`** ([15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md)) — reads `storage/models/m1/v<X>/*.onnx`.
+- **`enigmatrix-ml/m1/model/train_xlmr.py`** + `export_onnx.py` ([15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md)) — writes the entire `storage/models/m1/v<X>/` tree.
 - **AWS S3** — Glacier lifecycle for raw PDFs > 2 years old.
 - **Fly.io persistent volume** — mounts production model files at `/app/storage/models/`.
 

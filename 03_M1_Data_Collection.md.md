@@ -835,6 +835,7 @@ The signature line is treated as a *boundary marker* but not its own section —
 - BUILD phase: BUILD_07 §Segmentation
 - Code (when shipped): `ml/m1/extraction/segmenter.py`
 
+
 # 03_M1_3 — Secondary Source Integration
 
 > Companion to [03_M1_Data_Collection.md](03_M1_Data_Collection.md) — portal-watcher + RSS-watcher de-duplication contract, 3-tier matching, `multilingual-e5-base` embedding choice with comparisons.

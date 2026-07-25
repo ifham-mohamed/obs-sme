@@ -10,16 +10,18 @@
 
 Doc 13 specifies *every* file in the future M1 codebase. The 53 m1 docs explain the *why* + the *spec* for each major piece. But a new contributor opening doc 13's tree has no entry point for "I'm going to start by writing `ml/m1/extraction/pdf_classifier.py` — show me how." This reference closes that gap. Each sub-folder guide collects every file in that folder into one table — owner, status, primary doc, 1-liner on how to build — plus a "How to start building" section that sequences the work inside that folder.
 
-The folders track doc 13's tree exactly:
+The real repo roots (2026-07-24) — the guides use the short names `ml/`, `backend/`, `scraper/`, but the actual folders are the `enigmatrix-*` ones; the scraper lives under the backend:
 
 ```
 xyz/
-├── ml/         → 15_M1_1_ML_Folder_Guide.md
-├── backend/    → 15_M1_2_Backend_Folder_Guide.md
-├── scraper/    → 15_M1_3_Scraper_Folder_Guide.md
-├── research/   → 15_M1_4_Research_Folder_Guide.md
-├── storage/    → 15_M1_5_Storage_Folder_Guide.md
-└── enigmatrix-docs/m1/  → 15_M1_6_Docs_Folder_Guide.md
+├── enigmatrix-ml/        → 15_M1_1_ML_Folder_Guide.md   (extraction, preprocessing, evaluation, model, data/samplers)
+├── enigmatrix-backend/   → 15_M1_2_Backend_Folder_Guide.md   (also hosts the Scrapy scraper → 15_M1_3)
+├── research/             → 15_M1_4_Research_Folder_Guide.md   (labelling data + notebooks)
+├── mydata/               → live Label Studio instance (see 15_M1_4 + PHASE3_ANNOTATION_RUNBOOK.md)
+├── data/                 → Phase-2 extraction golden set + eval (data/golden, data/eval)
+├── scripts/              → sample_for_labeling.py, score_calibration.py, run_baseline_measurement.py, …
+├── storage/             → 15_M1_5_Storage_Folder_Guide.md   (model artifacts, e.g. storage/models/m1/baseline/lid.176.bin)
+└── enigmatrix-docs/      → 15_M1_6_Docs_Folder_Guide.md
 ```
 
 ---
@@ -28,12 +30,12 @@ xyz/
 
 | Guide | Folder it covers | File count (approx) | Status snapshot |
 |---|---|---|---|
-| [15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md) | `ml/` (everything ML — training, inference, extraction, preprocessing, shared helpers, tests) | ~30 files | 🔲 Mostly deferred (BUILD_07/11) |
-| [15_M1_2_Backend_Folder_Guide.md](15_M1_2_Backend_Folder_Guide.md) | `backend/app/` (API routes, services, Celery tasks, models, schemas, migrations, scripts, middleware) | ~25 files | 🟡 Admin-CRUD slice + audit-log shipped; the rest deferred |
-| [15_M1_3_Scraper_Folder_Guide.md](15_M1_3_Scraper_Folder_Guide.md) | `scraper/` (Scrapy project — settings, pipelines, spiders) | ~5 files | 🔲 Deferred (BUILD_07) |
-| [15_M1_4_Research_Folder_Guide.md](15_M1_4_Research_Folder_Guide.md) | `research/` (notebooks, figures, labeling data, test splits) | ~10 files | 🔲 Deferred (notebooks scaffold post-BUILD_07/11) |
-| [15_M1_5_Storage_Folder_Guide.md](15_M1_5_Storage_Folder_Guide.md) | `storage/` (raw PDFs, OCR cache, inference cache, model artifacts) | ~5 directories | 🟡 Conventions documented; populated by Phase 2/3 |
-| [15_M1_6_Docs_Folder_Guide.md](15_M1_6_Docs_Folder_Guide.md) | `enigmatrix-docs/m1/` (this folder — 61 docs after this pass) | 61 files | ✅ Shipped — the docs themselves |
+| [15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md) | `enigmatrix-ml/` (extraction, preprocessing, evaluation, model, `data/samplers`, tests) | ~100 files | ✅ Extraction + preprocessing + evaluation + model + sampler shipped; augmentation/summarisation deferred |
+| [15_M1_2_Backend_Folder_Guide.md](15_M1_2_Backend_Folder_Guide.md) | `enigmatrix-backend/app/` (API routes, services, Celery tasks, models, schemas, migrations, scripts, middleware) | ~40 files | 🟡 Admin-CRUD + audit-log + Phase-2 ingest/extract pipeline shipped; alerts/schedulers deferred |
+| [15_M1_3_Scraper_Folder_Guide.md](15_M1_3_Scraper_Folder_Guide.md) | Scrapy project (under `enigmatrix-backend/`) — settings, pipelines, spiders | ~5 files | ✅ Phase-2 spiders shipped (gazette + weekly + acts + bills) |
+| [15_M1_4_Research_Folder_Guide.md](15_M1_4_Research_Folder_Guide.md) | `research/` (labeling data + config + calibration + runbook; notebooks/figures) | ~10 files | 🟡 Labelling surface shipped (config, calibration, batch_01, runbook); notebooks deferred |
+| [15_M1_5_Storage_Folder_Guide.md](15_M1_5_Storage_Folder_Guide.md) | `storage/` (raw PDFs, OCR cache, inference cache, model artifacts) | ~5 directories | 🟡 Conventions documented; `storage/models/m1/baseline/lid.176.bin` present |
+| [15_M1_6_Docs_Folder_Guide.md](15_M1_6_Docs_Folder_Guide.md) | `enigmatrix-docs/m1/` (the docs set) | 61 files | ✅ Shipped — the docs themselves |
 
 ---
 

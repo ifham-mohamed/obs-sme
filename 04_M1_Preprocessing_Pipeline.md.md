@@ -329,6 +329,7 @@ The preprocessing pipeline converts raw, noisy gazette PDF text into structured,
 - Bird et al. (2009). *Natural Language Processing with Python (NLTK)*. O'Reilly.
 
 
+
 # 04_M1_1 — Gazette Noise Removal
 
 > Companion to [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md) — 8 noise classes with before/after snippets, regex unit-test suite, common failure modes.
@@ -532,12 +533,12 @@ Stored in `m1_regulations.amendment_type` (a new column added by the BUILD_07 mi
 
 ## Technology choices
 
-| Option | Trade-off | Decision | When to reconsider |
-|---|---|---|---|
-| Regex (chosen) | Fast, transparent, locale-aware | ✅ All four fields fit comfortably in regex; ~1 ms per gazette | If field-extraction precision drops below 90 %. |
-| Trained NER (e.g. spaCy `en_core_web_lg`) | Better recall on unusual phrasings | ❌ Sinhala/Tamil NER models are immature; English `en_core_web_lg` adds 500 MB for marginal gain | If the project expands to court-case NER (different problem). |
-| LLM extraction | Best for novel patterns | ❌ Cost + latency; regex covers 95 % already | If we encounter a class of regulations the regex consistently misses. |
-| `dateparser` for dates | Handles 90+ formats out-of-the-box | ✅ Used downstream after the regex anchors the date string | Always use it for parsing — `dateutil` is the same library family. |
+| Option                                    | Trade-off                          | Decision                                                                                        | When to reconsider                                                    |
+| ----------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Regex (chosen)                            | Fast, transparent, locale-aware    | ✅ All four fields fit comfortably in regex; ~1 ms per gazette                                   | If field-extraction precision drops below 90 %.                       |
+| Trained NER (e.g. spaCy `en_core_web_lg`) | Better recall on unusual phrasings | ❌ Sinhala/Tamil NER models are immature; English `en_core_web_lg` adds 500 MB for marginal gain | If the project expands to court-case NER (different problem).         |
+| LLM extraction                            | Best for novel patterns            | ❌ Cost + latency; regex covers 95 % already                                                     | If we encounter a class of regulations the regex consistently misses. |
+| `dateparser` for dates                    | Handles 90+ formats out-of-the-box | ✅ Used downstream after the regex anchors the date string                                       | Always use it for parsing — `dateutil` is the same library family.    |
 
 ## Worked example
 
@@ -735,3 +736,5 @@ The English equivalent of the same regulation (post-translation, ~1,400 chars) w
 - Related: [03_M1_2_Gazette_Segmentation.md](03_M1_2_Gazette_Segmentation.md) (shares section detector), [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) (classifier consumes chunk 0)
 - BUILD phase: BUILD_07 §Chunking
 - Code (when shipped): `ml/m1/preprocessing/chunking.py`
+
+
