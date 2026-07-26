@@ -57,12 +57,12 @@ The TF-IDF + LR baseline doesn't appear in §3.1 because it doesn't compete on t
 
 See the parent doc §3.1 — the choice is XLM-R + LoRA. This sub-doc justifies, not re-litigates.
 
-| Option | Trade-off | Decision | When to reconsider |
-|---|---|---|---|
-| XLM-R + LoRA (chosen) | Best F1 × cost × reproducibility | ✅ The only approach that hits ≥ 0.92 F1 + offline + reproducible + < $30 training cost | If GPT-5/Claude-5 fixes the Sinhala/Tamil drop-off AND becomes reproducibility-friendly. |
-| XLM-R full fine-tune (no LoRA) | Slightly better F1 (~0.5 pp) | ❌ 50× the trainable params, no real-world gain at 800 docs | If labeled corpus reaches 5 k+ docs. |
-| Larger backbone (XLM-R large 355M) | ~+3 pp F1 | ❌ 3× memory; doesn't fit ONNX Runtime CPU latency budget | If we get a GPU inference path. |
-| IndicBERT | Specialised on Indic langs | ❌ Weaker English legal performance — that's our majority language | Never (English is non-negotiable). |
+| Option                             | Trade-off                        | Decision                                                                               | When to reconsider                                                                       |
+| ---------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| XLM-R + LoRA (chosen)              | Best F1 × cost × reproducibility | ✅ The only approach that hits ≥ 0.92 F1 + offline + reproducible + < $30 training cost | If GPT-5/Claude-5 fixes the Sinhala/Tamil drop-off AND becomes reproducibility-friendly. |
+| XLM-R full fine-tune (no LoRA)     | Slightly better F1 (~0.5 pp)     | ❌ 50× the trainable params, no real-world gain at 800 docs                             | If labeled corpus reaches 5 k+ docs.                                                     |
+| Larger backbone (XLM-R large 355M) | ~+3 pp F1                        | ❌ 3× memory; doesn't fit ONNX Runtime CPU latency budget                               | If we get a GPU inference path.                                                          |
+| IndicBERT                          | Specialised on Indic langs       | ❌ Weaker English legal performance — that's our majority language                      | Never (English is non-negotiable).                                                       |
 
 ## Worked example
 

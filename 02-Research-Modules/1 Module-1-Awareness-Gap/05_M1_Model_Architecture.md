@@ -8,13 +8,13 @@
 
 ## Abstract
 
-This document specifies the classification model architecture for Module 1, which must simultaneously assign each gazette document to one of 12 regulatory categories (single-label) and to one or more of 10 SME industry sectors (multi-label). Four architectural approaches are evaluated: training from scratch, fine-tuning a pre-trained multilingual BERT-family model, zero-shot classification via large language models, and rule-based classification. Fine-tuning `facebook/xlm-roberta-base` with Low-Rank Adaptation (LoRA) is selected based on its superior multilingual performance, reproducibility, offline inference capability, and cost-effectiveness. A dual-head architecture shares a common XLM-R encoder with separate classification heads for category prediction and sector prediction, enabling joint training with a combined loss function.
+This document specifies the classification model architecture for Module 1, which must simultaneously assign each gazette document to one of **8 regulatory categories** (single-label) and to one or more of **3 SME industry sectors** (multi-label). Four architectural approaches are evaluated: **training from scratch**, **fine-tuning** a **pre-trained multilingual BERT-family model**, **zero-shot classification via large language models**, and **rule-based classification**. Fine-tuning `facebook/xlm-roberta-base` with **Low-Rank Adaptation** (LoRA) is selected based on its superior multilingual performance, reproducibility, offline inference capability, and cost-effectiveness. **A dual-head architecture shares a common XLM-R encoder with separate classification heads for category prediction and sector prediction, enabling joint training with a combined loss function.**
 
 ---
 
 ## 1. Sampling Strategy for Labeling
 
-Before model architecture can be addressed, a representative labeled corpus must be constructed. Naïve random sampling from the regulations table produces a corpus biased toward recent English gazettes and dominant categories. A three-step sampling strategy ensures diversity across language, time period, and regulatory topic — all of which affect cross-lingual F1 and temporal generalization.
+Before model architecture can be addressed, a representative labeled corpus must be constructed. **Naïve random sampling** from the regulations table produces a corpus biased toward recent English gazettes and dominant categories. A **three-step sampling strategy** ensures **diversity across language**, **time period**, and **regulatory topic** — all of which affect cross-lingual F1 and temporal generalization.
 
 ### 1.1 Step 1 — Stratified Random Sampling
 
@@ -154,12 +154,12 @@ Given the same text $x$, predict $S \subseteq \{s_1, s_2, s_3\}$ over the three 
 
 ### 3.1 Comparison Table
 
-| Approach | Multilingual | Training Data Needed | GPU Required | F1 (estimated) | Offline | Reproducible | Cost/1k inferences | Chosen |
-|---|---|---|---|---|---|---|---|---|
-| **Train from Scratch** | ❌ | 50k+ labeled | ✅ | ~0.55 | ✅ | ✅ | Low | ❌ |
-| **XLM-R Fine-tune (LoRA)** | ✅ EN/SI/TA | 800+ labeled | Recommended | ~0.92 | ✅ | ✅ | Very low | ✅ |
-| **Zero-shot (GPT-4)** | ✅ | 0 | ❌ | ~0.72 | ❌ | ❌ | ~$0.01/gazette | ❌ |
-| **Rule-Based (regex)** | ❌ | 0 | ❌ | ~0.60 | ✅ | ✅ | Near zero | Baseline only |
+| Approach                   | Multilingual | Training Data Needed | GPU Required | F1 (estimated) | Offline | Reproducible | Cost/1k inferences | Chosen        |
+| -------------------------- | ------------ | -------------------- | ------------ | -------------- | ------- | ------------ | ------------------ | ------------- |
+| **Train from Scratch**     | ❌            | 50k+ labeled         | ✅            | ~0.55          | ✅       | ✅            | Low                | ❌             |
+| **XLM-R Fine-tune (LoRA)** | ✅ EN/SI/TA   | 800+ labeled         | Recommended  | ~0.92          | ✅       | ✅            | Very low           | ✅             |
+| **Zero-shot (GPT-4)**      | ✅            | 0                    | ❌            | ~0.72          | ❌       | ❌            | ~$0.01/gazette     | ❌             |
+| **Rule-Based (regex)**     | ❌            | 0                    | ❌            | ~0.60          | ✅       | ✅            | Near zero          | Baseline only |
 
 ### 3.2 Training from Scratch — Why Rejected
 
@@ -194,13 +194,13 @@ This baseline is retained as `category_baseline` in the `m1_regulations` schema 
 
 Within the BERT fine-tuning family, four multilingual models are compared:
 
-| Model | Parameters | Sinhala in Vocab | Tamil in Vocab | Training Data Size | Legal Domain Perf. | Why Chosen |
-|---|---|---|---|---|---|---|
-| `bert-base-multilingual-cased` (mBERT) | 110M | ⚠️ Limited | ✅ | 104 languages, Wikipedia | ~0.79 F1 | Not chosen |
-| `facebook/xlm-roberta-base` | 125M | ✅ Native | ✅ Native | 100 langs, CommonCrawl 2.5TB | ~0.87 F1 | ✅ **Selected** |
-| `facebook/xlm-roberta-large` | 355M | ✅ Native | ✅ Native | Same as base | ~0.91 F1 | Too large for ONNX serving |
-| `ai4bharat/indic-bert` | 212M | ✅ | ✅ | 12 Indic languages | ~0.83 F1 | Less English legal perf. |
-| `distilbert-base-multilingual-cased` | 66M | ⚠️ Limited | ⚠️ Limited | 104 languages, distilled | ~0.74 F1 | Not chosen |
+| Model                                  | Parameters | Sinhala in Vocab | Tamil in Vocab | Training Data Size           | Legal Domain Perf. | Why Chosen                 |
+| -------------------------------------- | ---------- | ---------------- | -------------- | ---------------------------- | ------------------ | -------------------------- |
+| `bert-base-multilingual-cased` (mBERT) | 110M       | ⚠️ Limited       | ✅              | 104 languages, Wikipedia     | ~0.79 F1           | Not chosen                 |
+| `facebook/xlm-roberta-base`            | 125M       | ✅ Native         | ✅ Native       | 100 langs, CommonCrawl 2.5TB | ~0.87 F1           | ✅ **Selected**             |
+| `facebook/xlm-roberta-large`           | 355M       | ✅ Native         | ✅ Native       | Same as base                 | ~0.91 F1           | Too large for ONNX serving |
+| `ai4bharat/indic-bert`                 | 212M       | ✅                | ✅              | 12 Indic languages           | ~0.83 F1           | Less English legal perf.   |
+| `distilbert-base-multilingual-cased`   | 66M        | ⚠️ Limited       | ⚠️ Limited     | 104 languages, distilled     | ~0.74 F1           | Not chosen                 |
 
 **XLM-R base is selected** because:
 1. Its SentencePiece vocabulary of 250,002 tokens was trained on Common Crawl data for 100 languages including Sinhala (`si`) and Tamil (`ta`) at sufficient frequency for meaningful subword coverage (Conneau et al., 2019).
