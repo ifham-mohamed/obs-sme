@@ -22,6 +22,34 @@
             }
           },
           {
+            "id": "8c763ae769db1732",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_1_Sampling_Strategy.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "05_M1_1_Sampling_Strategy"
+            }
+          },
+          {
+            "id": "dbca5b5f73906776",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_Model_Architecture.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "05_M1_Model_Architecture"
+            }
+          },
+          {
             "id": "0aa7303caeaf1b80",
             "type": "leaf",
             "state": {
@@ -77,7 +105,8 @@
               "title": "05_M1_Model_Architecture"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -242,23 +271,29 @@
   },
   "active": "22d18590d71c8738",
   "lastOpenFiles": [
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.27072.43d6fe002d9c",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.24212.69780610298c",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.12848.a542f5e52e27",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.12848.c4c780600dd4",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.21880.8a210e9867ab",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.21880.e839a34214c8",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.8444.e7287fb338e3",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.8444.84016021ad57",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md.tmp.22800.c36deeb17f5c",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/09_PHASE2_MEASUREMENT_EQS_UPGRADE.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/09_PHASE2_MEASUREMENT_EQS_UPGRADE.md.tmp.24448.e27807e733c2",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/08_M1_Full_System_Architecture.md.tmp.26248.cc5294496dd0",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_Folder_Reference.md.tmp.26248.d5e8db2b66ab",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md.tmp.26248.d47b4c4ac8d5",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/12_M1_Monitoring_Maintenance.md.tmp.26248.e2d8193e4559",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/07_M1_Deployment_Integration.md.tmp.26248.f452e020bda8",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/02_M1_Data_Requirements.md.tmp.26248.dda1ebc1c51f",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/06_M1_Training_Evaluation.md.tmp.26248.39e963d630ce",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/11_M1_API_Reference.md.tmp.26248.23fd97b19812",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/14_M1_Tracking_Workflows.md.tmp.26248.04f50ac39c06",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_Model_Architecture.md.tmp.26248.8e6cbd4533ae",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/10_M1_Sinhala_Tamil_NLP.md.tmp.26248.5d417b973a5d",
     "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_Model_Architecture.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_1_Sampling_Strategy.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/16_M1_Development_Roadmap.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_Folder_Reference.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_NON_CODING_TASKS_AND_GOLIVE_READINESS_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/SURVEY_BUILDER_AND_QUESTION_ASSIGNMENT_MANUAL.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/QUESTION_BANK_AUTHORING_AND_BRANCHING_MANUAL.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/10_PIPELINE_STAGING_AND_MANUAL_STEPPING.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/09_PHASE2_MEASUREMENT_EQS_UPGRADE.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_3_LoRA_Hyperparameter_Justification.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_2_Architecture_Comparison_Deep_Dive.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_1_Sampling_Strategy.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/04_M1_Preprocessing_Pipeline.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md",
     "15_M1_Folder_Reference.md.md",
@@ -268,16 +303,10 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_3_Scraper_Folder_Guide.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_2_Backend_Folder_Guide.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_1_ML_Folder_Guide.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_Folder_Reference.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/15_M1_6_Docs_Folder_Guide.md.tmp.16488.f8c6c73e86a2",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/RESEARCH_DESIGN/SME_SECTOR_AND_REGULATION_SCOPE_PLAN.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_NON_CODING_TASKS_AND_GOLIVE_READINESS_PLAN.md",
     "04-Technology-Stack/backend/00_Backend_Overview.md",
     "BUILD_PLAN/BUILD_07_Module1_Awareness.md",
     "BUILD_PLAN/BUILD_10_Module4_Misinformation.md",
-    "BUILD_PLAN/BUILD_12_Data_Ingestion_and_Scheduling.md",
-    "04-Technology-Stack/backend/SETUP/04_Backend_Development.md",
-    "BUILD_PLAN/BUILD_03_Backend_API.md",
     "Interim/report/Attachments/SMEs Interim 1.jpeg",
     "Interim/report/Attachments/SMEs Interim.jpeg",
     "Interim/report/Attachments/SMEs Interim.png",

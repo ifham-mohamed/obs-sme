@@ -76,6 +76,18 @@ So the operator flow is exactly: run (manual) → all `ingested` → completenes
 
 ---
 
+## 2.7 Stage-scoped accuracy measurement (2026-07-26)
+A measurement can now score only the fields available at the candidate version's pipeline stage, **cumulatively** (ingested ⊂ extracted ⊂ preprocessed ⊂ classified) — so an `extracted` snapshot is judged on identity + text/method fields, not penalised for dates/classification it doesn't have yet.
+
+- **Field → stage map** lives in `enigmatrix-ml/m1/evaluation/field_metrics.py` (`STAGE_ORDER`, `_STAGE_ADDS`, `fields_for_stage()`). "Content + provenance-presence" (the chosen option): identity/content fields score normally; provenance/bulk-text fields (`raw_text`, `cleaned_text`, `raw_pdf_path`, `source_url`, `extraction_method`, `extracted_at`, `gazette_number`) were added to `FIELD_METRICS` — the text/path ones with a new **`presence_nonempty`** metric (scores "did this stage populate the column?", not-applicable when the golden itself is empty), `extraction_method` via `categorical_exact`.
+- **Auto + override:** `POST /measurements/run` gained a `stage` field. Precedence: explicit `metrics_override` › explicit `stage` › **auto** (candidate's `snapshot_stage`). The resolved stage becomes the cumulative field list stored as `metrics_override`, which the scorer already honours — no scorer/task rewrite. `stage:'all'`/unknown scores every field.
+- **UI:** the measurement run form has a **"Stage to score"** picker — Auto / Ingested / Extracted / Preprocessed / Classified / All.
+- **Tests:** `tests/evaluation/test_stage_fields.py`; full eval suite 163 passed.
+
+Caveat: adding the provenance/text fields to `FIELD_METRICS` means a *default* (stage-`all`) measurement now also scores their presence — a more complete number, at some cost to comparability with pre-2026-07-26 baselines.
+
+**Readable run identity.** The measurement run detail (`GET /measurements/{run_id}`) now resolves `baseline`/`candidate` into a `VersionRef` (dataset name, `v{n}`, `snapshot_stage`, row count, GT flag) instead of a bare UUID, and the run page hero renders **"Manual Ground Truth · v1 · classified · 204 rows"** with a GT badge — falling back to the UUID only if the version was deleted.
+
 ## 3. Known system issues currently in the logs
 
 ### 3.1 fastText language model missing (CRITICAL, non-fatal)
@@ -111,6 +123,28 @@ Not an error — it registered 0 rows because ingestion now goes through the spi
 The Wijesekara legacy-font remap didn't need to fire (no `(cid:NN)` glyph corruption in these PDFs). Expected for native-text gazettes; the corrupted-Sinhala remap only triggers when cid markers are present.
 
 ---
+
+## 2.5 Re-extracting an already-in-DB window (v1/v2/v3)
+Re-extracting a date range whose gazettes already exist is **allowed** (warn-only, not blocked). Live rows stay unique per gazette (`gazette_number`/`regulation_short_code` are UNIQUE) and are de-duplicated/updated in place; each re-extraction of the window can be sealed as a new **dataset version** (v1, v2, v3…) via the existing version system. The scrape overlap warning now reports the incremental version — `build_run_overlap_warning` returns `next_run_number = priorCrawls + 1`, and the UI shows a prominent **"Already in the DB — re-extraction allowed · will create v{n}"** alert with the prior-crawl count. Design choice (2026-07-26): dataset-version versioning + allow-and-warn, no schema change and no duplicate live rows.
+
+## 2.6 Re-extracting already-in-DB rows as v2/v3 — what changed where
+Decision: **dataset-version versioning, one live row per gazette, re-extract in place** (no schema change). When a scrape finds every gazette already ingested it creates 0 new rows, so there's nothing for the batch buttons to do. The flow to re-extract and version them:
+
+**DB schema — no change.** Versions already exist as `m1_dataset_versions` (v1/v2/v3), and `snapshot_range` auto-continues the newest overlapping dataset as the next version. The only prior column add was `manual_hold` (migration `202607260002`). The `gazette_number`/`regulation_short_code` UNIQUE constraints stay — no duplicate live rows.
+
+**Backend.** `POST /api/v1/admin/m1/pipeline/reextract-window` (new) resets already-processed rows in a source+date window (`extracted`/`preprocessed`/`classified`/`extraction_failed`) back to `status='ingested'` + `manual_hold=true`, so they re-enter the manual pipeline and can be re-extracted in place. The existing `POST /api/v1/m1/extractions/snapshot-range` seals the window's current live rows into a new sealed dataset version (auto v2/v3) — reused unchanged.
+
+**Frontend.** The run-page **Batch pipeline control** gains an "Already in DB" row: **Re-extract window** (calls `reextract-window`, confirms first, then the existing Extract all / Preprocess all buttons re-run the reset rows) and **Seal as version** (calls `snapshot-range`, reports "Sealed v{n}"). The scrape overlap alert already labels the run **"will create v{n}"**.
+
+Operator loop for a v2: **Seal as version** (captures current = v1) → **Re-extract window** (reset N rows) → **Extract all → Preprocess all** (re-extract in place) → **Seal as version** (captures v2). Each seal is a measurable dataset version.
+
+Each sealed version now records its **snapshot stage** — the pipeline status the rows were at when sealed (`ingested` / `extracted` / `preprocessed` / `classified` / `mixed`), stored on `m1_dataset_versions.snapshot_stage` (migration `202607260003`), computed in `snapshot_range`, returned by `candidate-versions`, and shown on each version chip (e.g. **v1 · ingested**, **v2 · extracted**). So a seal taken before extraction is visibly distinct from one taken after. `snapshot_stage` is also carried on `DatasetVersionResponse`, so the **dataset detail page Versions list** shows the stage badge next to each version's source (not just the run-page chips). Versions sealed before this change have a NULL stage (no badge).
+
+More fixes (2026-07-26):
+- **Batch buttons now use window-scoped counts.** After "Re-extract window" reset the rows to `ingested`, the Extract-all button still read 0/disabled because its counts came from *this run's* summary (which created 0 rows) while the 70 rows belonged to the original run. New `POST /admin/m1/pipeline/window-counts` returns per-status counts for the whole window (`document_type` + `gazette_published_date`), and the batch control uses those — so re-extracted rows enable Extract/Preprocess regardless of which run created them. (If extraction then fails for rows lacking a `download_url`, that surfaces as `extraction_failed` — a data issue, not the button.)
+- **Remove a sealed snapshot — retire or delete.** Each version chip has two actions: **Retire** (soft, reversible — existing `DELETE /datasets/{id}/versions/{version_id}/retire`) and **Delete** (hard, permanent — new `DELETE /datasets/{id}/versions/{version_id}/delete` → `dataset_service.delete_version`, which cascade-removes the version's `m1_dataset_rows`, repoints `current_version_id`, and refuses with 409 if a measurement run references the version). The chip list refetches after either.
+
+Two follow-up fixes (2026-07-26): (1) the batch/reextract row selection now matches `snapshot_service` exactly — `document_type == doctype_for_source(source_id)` + `gazette_published_date` in window — instead of the `m1_gazette_items.document_date` join, which was NULL for these rows and made "Re-extract window" reset 0 while the seal found 70. (2) The run-page batch control now shows a **persisted "Sealed versions: v1 (n) · v2 (n)…"** chip row fetched from `candidate-versions`, so sealed versions survive a page refresh instead of only appearing as a transient toast.
 
 ## 3.6 Deploy note — restart the worker after these changes
 Celery workers do **not** hot-reload (only the API's `uvicorn --reload` does). After any change to a Celery task signature or a model, you must:
