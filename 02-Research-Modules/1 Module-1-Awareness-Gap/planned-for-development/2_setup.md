@@ -194,9 +194,9 @@ The rollback is fully reversible. Note: rolling back the migration *while* the w
 
 ## What's deferred to Step 2c
 
-- **Language detection per chunk.** `extract_gazette` produces a single `raw_text` blob; per-line language routing (EN / SI / TA / mixed) lands in Step 2c — spec at [../10_M1_1_Language_Detection_Routing.md](../10_M1_1_Language_Detection_Routing.md).
-- **Wijesekara → Unicode conversion** for pre-2010 scanned Sinhala. Same step — [../10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md).
-- **Segmenter for multi-notice gazettes.** A single gazette PDF can contain N distinct notices; splitting them is [../03_M1_2_Gazette_Segmentation.md](../03_M1_2_Gazette_Segmentation.md). The MVP `extract_gazette` writes one `raw_text` blob per gazette; per-notice rows are a Step 2c/2d follow-up.
+- **Language detection per chunk.** `extract_gazette` produces a single `raw_text` blob; per-line language routing (EN / SI / TA / mixed) lands in Step 2c — spec at [../10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md).
+- **Wijesekara → Unicode conversion** for pre-2010 scanned Sinhala. Same step — [../10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md).
+- **Segmenter for multi-notice gazettes.** A single gazette PDF can contain N distinct notices; splitting them is [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md). The MVP `extract_gazette` writes one `raw_text` blob per gazette; per-notice rows are a Step 2c/2d follow-up.
 - **Production worker hosting on Fly.io.** Local-only for Step 2b. See [../07_M1_Deployment_Integration.md](../07_M1_Deployment_Integration.md).
 
 The next paired files will be `3.md` + `3_setup.md` when Step 2c's plan lands.
@@ -208,5 +208,5 @@ The next paired files will be `3.md` + `3_setup.md` when Step 2c's plan lands.
 - **Plan that produces this code:** [2.md](2026-05%20Step%202b%20-%20Celery%20task%20wiring%20+%20Stage-B%20extraction%20(M1%20Phase%202).md)
 - **Predecessor:** [1.md](2026-05%20Step%202a%20—%20Scrapy%20gazette%20spider%20(M1%20Phase%202%20—%20Ingest%20+%20extraction,%20MVP%20slice).md) + [1_setup.md](1_setup.md) (Step 2a — the spider)
 - **Roadmap step:** [../16_M1_Development_Roadmap.md](../16_M1_Development_Roadmap.md) Phase 2 Step 2b
-- **Detail docs:** [../03_M1_Data_Collection.md §6.1](../03_M1_Data_Collection.md) (Celery retry), [../03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md) (PyMuPDF/pdfplumber/Tesseract chain)
+- **Detail docs:** [../03_M1_Data_Collection.md §6.1](../03_M1_Data_Collection.md) (Celery retry), [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md) (PyMuPDF/pdfplumber/Tesseract chain)
 - **Tracker entries** (when Step 2b executes): forthcoming Session-N / F-N rows in [../../tracker/SESSIONS.md](../../tracker/SESSIONS.md), [CHANGES.md](../../tracker/CHANGES.md), [FEATURES.md](../../tracker/FEATURES.md), and [../../../AI_WORK_LOG.md](../../../AI_WORK_LOG.md).

@@ -8,7 +8,7 @@ module: m1
 # Phase 2 Step 2c — Canonical `ml/m1/extraction/` chain (local dev)
 
 > **Shipped:** Session 28 / F-149 (extraction chain moved to its canonical home + research-grade rigour added).
-> **Spec**: [planned-for-development/3_setup.md](../planned-for-development/3_setup.md) · [03_M1_1_PDF_Extraction_Chain](../03_M1_1_PDF_Extraction_Chain.md).
+> **Spec**: [planned-for-development/3_setup.md](../planned-for-development/3_setup.md) · [03_M1_1_PDF_Extraction_Chain](../03_M1_Data_Collection.md).
 
 ## 1 · What this step does
 
@@ -147,4 +147,4 @@ graphify update C:\Reasearch\xyz
 - [planned-for-development/3_setup.md](../planned-for-development/3_setup.md) — Step 2c full setup spec
 - [phase2_step2b_celery_extract](phase2_step2b_celery_extract.md) — predecessor (runtime MVP)
 - [phase2_step2d_language_wijesekara](phase2_step2d_language_wijesekara.md) — successor (lang detect + Wijesekara)
-- [03_M1_1_PDF_Extraction_Chain](../03_M1_1_PDF_Extraction_Chain.md) — full extraction spec
+- [03_M1_1_PDF_Extraction_Chain](../03_M1_Data_Collection.md) — full extraction spec

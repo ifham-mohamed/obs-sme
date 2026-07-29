@@ -46,4 +46,4 @@ cd ../enigmatrix-backend && uv run python -c "from app.tasks.m1.retraining impor
 - Canary rollout (serve N% traffic to the candidate) is deferred; the gate+regression rule is the safe interim.
 
 ## Cross-refs
-`12_M1_2_Retraining_Deployment_Rollback.md` · roadmap §Phase 5 5c · trigger from 4c `analytics.py` (drift).
+`12_M1_Monitoring_Maintenance.md` · roadmap §Phase 5 5c · trigger from 4c `analytics.py` (drift).

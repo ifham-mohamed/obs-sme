@@ -76,7 +76,7 @@ M1_LID_MODEL_PATH=storage/models/m1/baseline/lid.176.bin uv run pytest tests/m1 
 
 ## 5 · End-to-end orchestrator smoke
 
-Run the worked example from the spec ([04_M1_2 §worked-example](../04_M1_2_Metadata_Extraction_Patterns.md)) directly:
+Run the worked example from the spec ([04_M1_2 §worked-example](../04_M1_Preprocessing_Pipeline.md)) directly:
 
 ```bash
 M1_LID_MODEL_PATH=storage/models/m1/baseline/lid.176.bin uv run python - <<'EOF'
@@ -193,4 +193,4 @@ graphify update C:\Reasearch\xyz
 - [phase2_step2d_language_wijesekara](phase2_step2d_language_wijesekara.md) — predecessor (provides cleaned + routed input)
 - [phase2_step2f_celery_wiring](phase2_step2f_celery_wiring.md) — successor (backend wiring + DB persistence)
 - [04_M1_Preprocessing_Pipeline](../04_M1_Preprocessing_Pipeline.md) — parent spec
-- [04_M1_1_Gazette_Noise_Removal](../04_M1_1_Gazette_Noise_Removal.md) · [04_M1_2_Metadata_Extraction_Patterns](../04_M1_2_Metadata_Extraction_Patterns.md) · [04_M1_3_Text_Chunking_Strategy](../04_M1_3_Text_Chunking_Strategy.md)
+- [04_M1_1_Gazette_Noise_Removal](../04_M1_Preprocessing_Pipeline.md) · [04_M1_2_Metadata_Extraction_Patterns](../04_M1_Preprocessing_Pipeline.md) · [04_M1_3_Text_Chunking_Strategy](../04_M1_Preprocessing_Pipeline.md)

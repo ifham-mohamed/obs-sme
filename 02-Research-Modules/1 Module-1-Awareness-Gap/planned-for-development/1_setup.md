@@ -174,8 +174,8 @@ The spider is the MVP slice. Items intentionally **not** built this turn:
 | Deferred | Why | Lands in |
 |---|---|---|
 | Celery dispatch of `extract_gazette` | Needs broker + `celery_config.py` + `tasks/m1/` scaffold; standalone Celery infra is its own slice | Step 2b |
-| PDF text extraction (PyMuPDF → pdfplumber → Tesseract chain) | Drives `status: ingested → extracted` | Step 2b — see [../03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md) |
-| Language detection per line + Wijesekara conversion | Needed for SI/TA gazettes | Step 2c — see [../10_M1_1_Language_Detection_Routing.md](../10_M1_1_Language_Detection_Routing.md) and [../10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md) |
+| PDF text extraction (PyMuPDF → pdfplumber → Tesseract chain) | Drives `status: ingested → extracted` | Step 2b — see [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md) |
+| Language detection per line + Wijesekara conversion | Needed for SI/TA gazettes | Step 2c — see [../10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md) and [../10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md) |
 | Worker hosting in production | Vercel can't run Scrapy or Celery | Step 2b deployment notes — [../07_M1_Deployment_Integration.md](../07_M1_Deployment_Integration.md) |
 
 The next paired files will be `2.md` (Step 2b plan) + `2_setup.md` (Step 2b setup + verification).
@@ -187,5 +187,5 @@ The next paired files will be `2.md` (Step 2b plan) + `2_setup.md` (Step 2b setu
 - **The plan that produced this code:** [1.md](2026-05%20Step%202a%20—%20Scrapy%20gazette%20spider%20(M1%20Phase%202%20—%20Ingest%20+%20extraction,%20MVP%20slice).md)
 - **Tracker entries:** Session 23 / F-145 in [../../tracker/SESSIONS.md](../../tracker/SESSIONS.md), [CHANGES.md](../../tracker/CHANGES.md), [FEATURES.md](../../tracker/FEATURES.md); narrative in [../../../AI_WORK_LOG.md](../../../AI_WORK_LOG.md)
 - **M1 development roadmap (Phase 2 Step 2a):** [../16_M1_Development_Roadmap.md](../16_M1_Development_Roadmap.md)
-- **Backend canonical specs:** [../03_M1_Data_Collection.md §1 + §1.3](../03_M1_Data_Collection.md) (Scrapy framework + spider scaffold), [../03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md), [../13_M1_Folder_Structure_and_Implementation_Flow.md](../13_M1_Folder_Structure_and_Implementation_Flow.md) (target folder tree)
-- **Frontend admin tracking workflow** (for the regulations the spider produces): [../14_M1_1_Admin_Pipeline_State_Tracking.md](../14_M1_1_Admin_Pipeline_State_Tracking.md)
+- **Backend canonical specs:** [../03_M1_Data_Collection.md §1 + §1.3](../03_M1_Data_Collection.md) (Scrapy framework + spider scaffold), [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md), [../13_M1_Folder_Structure_and_Implementation_Flow.md](../13_M1_Folder_Structure_and_Implementation_Flow.md) (target folder tree)
+- **Frontend admin tracking workflow** (for the regulations the spider produces): [../14_M1_Tracking_Workflows.md](../14_M1_Tracking_Workflows.md)

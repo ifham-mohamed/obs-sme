@@ -28,7 +28,7 @@ The single screen from which the entire vault is reachable. Each section below m
 
 ## 02 — Research Modules
 
-### Module 1 — Regulatory Awareness Gap (deep-dive, 61 files)
+### Module 1 — Regulatory Awareness Gap (deep-dive, 17 canonical root files)
 
 - **[00_INDEX](../02-Research-Modules/1%20Module-1-Awareness-Gap/00_INDEX.md)**
 - [01 Research Problem](../02-Research-Modules/1%20Module-1-Awareness-Gap/01_M1_Research_Problem.md)

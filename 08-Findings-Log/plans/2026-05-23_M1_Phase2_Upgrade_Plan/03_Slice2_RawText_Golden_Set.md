@@ -168,4 +168,4 @@ Document this caveat in `data/golden/raw_text/STATISTICAL_POWER.md` so it's not 
 
 - [02_Slice1_Measurement_Scaffolding](02_Slice1_Measurement_Scaffolding.md) — slice 1's overall_score is per-field; this slice's CER is per-character. Both feed Chapter 4.
 - [08_Slice7_New_Extraction_Profiles](08_Slice7_New_Extraction_Profiles.md) — `wijesekara_routing_v1`'s gate is "CER on the Wijesekara stratum drops below 0.10".
-- `enigmatrix-docs/m1/10_M1_2_OCR_Wijesekara_Conversion.md` — spec for the Wijesekara module that slice 7 expands.
+- `enigmatrix-docs/m1/10_M1_Sinhala_Tamil_NLP.md` — spec for the Wijesekara module that slice 7 expands.

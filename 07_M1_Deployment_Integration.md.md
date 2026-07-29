@@ -2,7 +2,7 @@
 
 > **Cross-references:** [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) · [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) · [11_M1_API_Reference.md](11_M1_API_Reference.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — Fly volume layout, rollback path, inference Celery task.
-> **Sub-step companions:** [07_M1_1_ONNX_Export_Quantization.md](07_M1_1_ONNX_Export_Quantization.md) · [07_M1_2_Fly_io_Deployment_Operations.md](07_M1_2_Fly_io_Deployment_Operations.md)
+> **Sub-step companions:** [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) · [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md)
 
 ---
 
@@ -354,7 +354,7 @@ curl https://enigmatrix-m1-classifier.fly.dev/health | jq .model_version
 redis-cli --scan --pattern "m1:classify:*v1.1*" | xargs redis-cli unlink
 ```
 
-End-to-end rollback time: ~60 seconds (machine restart + first-inference warmup). No data loss — DB rows already classified by `v1.1` remain tagged `model_version='v1.1'` for audit; new classifications go through `v1.0`. The retraining / canary / automatic-rollback flow is detailed in [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md).
+End-to-end rollback time: ~60 seconds (machine restart + first-inference warmup). No data loss — DB rows already classified by `v1.1` remain tagged `model_version='v1.1'` for audit; new classifications go through `v1.0`. The retraining / canary / automatic-rollback flow is detailed in [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md).
 
 ---
 
@@ -372,7 +372,7 @@ End-to-end rollback time: ~60 seconds (machine restart + first-inference warmup)
 | **Total (extraction → alert)** | **End-to-end** | **≤ 24 hours** |
 | **Inference only (API call)** | **POST /classify** | **≤ 2 seconds** |
 
-**Throughput vs latency clarification.** The "1.8 s per gazette" figure is *single-shot latency* — the wall-clock time for one Celery task to return. It is **not** "0.55 inferences per second per machine." Throughput on one Fly machine is bounded differently: the ONNX session has 2 intra-op threads + 2 inter-op threads (config in §3.1), so a single CPU machine can process **batch=8 in ~3 s** (≈ 2.6 inferences/s effective, with batching) before hitting the 1 GB memory ceiling. The Celery queue uses `concurrency=2`, so two tasks classify in parallel — at peak `~5 inferences/s/machine`. The "30 inferences/min" cited in §1 of [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) is the **steady-state target** (well below capacity); peak observed throughput comes from short-lived batch bursts when a scraper run drops 30 gazettes in one cycle. Detailed sizing curves are in [07_M1_2_Fly_io_Deployment_Operations.md](07_M1_2_Fly_io_Deployment_Operations.md).
+**Throughput vs latency clarification.** The "1.8 s per gazette" figure is *single-shot latency* — the wall-clock time for one Celery task to return. It is **not** "0.55 inferences per second per machine." Throughput on one Fly machine is bounded differently: the ONNX session has 2 intra-op threads + 2 inter-op threads (config in §3.1), so a single CPU machine can process **batch=8 in ~3 s** (≈ 2.6 inferences/s effective, with batching) before hitting the 1 GB memory ceiling. The Celery queue uses `concurrency=2`, so two tasks classify in parallel — at peak `~5 inferences/s/machine`. The "30 inferences/min" cited in §1 of [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) is the **steady-state target** (well below capacity); peak observed throughput comes from short-lived batch bursts when a scraper run drops 30 gazettes in one cycle. Detailed sizing curves are in [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md).
 
 ---
 
@@ -572,7 +572,7 @@ $ python scripts/quantize_onnx.py --input storage/models/m1/v1.0/gazette_classif
 ## Cross-references
 
 - Parent: [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) §2
-- Related: [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §9 (versioning), [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md)
+- Related: [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §9 (versioning), [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md)
 - BUILD phase: BUILD_11 §model export, §quantization
 - Code (when shipped): `ml/m1/model/export_onnx.py`, `quantize.py`
 
@@ -772,6 +772,6 @@ fly ssh console -a enigmatrix-m1-classifier -C "rm -rf /app/storage/models/m1/v1
 ## Cross-references
 
 - Parent: [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) §5
-- Related: [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md)
+- Related: [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md)
 - BUILD phase: BUILD_07 §deployment, §canary
 - Code (when shipped): `fly.toml`, `backend/app/api/v1/health.py`, `backend/app/tasks/m1/classify_gazette.py`

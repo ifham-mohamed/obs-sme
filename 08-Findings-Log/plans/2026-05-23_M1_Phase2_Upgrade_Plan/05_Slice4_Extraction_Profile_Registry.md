@@ -46,7 +46,7 @@ class LegacyV1Profile:
     that already exist in `enigmatrix-ml/m1/extraction/` and packs the
     result into the uniform ExtractedRegulation shape.
 
-    Spec: enigmatrix-docs/m1/03_M1_1_PDF_Extraction_Chain.md
+    Spec: enigmatrix-docs/m1/03_M1_Data_Collection.md
     """
 
     name = "legacy_v1"

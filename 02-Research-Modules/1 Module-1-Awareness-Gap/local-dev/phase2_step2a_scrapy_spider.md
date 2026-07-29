@@ -8,7 +8,7 @@ module: m1
 # Phase 2 Step 2a — Scrapy gazette spider (local dev)
 
 > **Shipped:** Session 23 / F-145 (`Enigmatrixx/enigmatrix-backend@<sha>`; spider lives at `enigmatrix-backend/scraper/`).
-> **Spec**: [planned-for-development/1_setup.md](../planned-for-development/1_setup.md) · [03_M1_Data_Collection](../03_M1_Data_Collection.md) §1.3 · [03_M1_1_PDF_Extraction_Chain](../03_M1_1_PDF_Extraction_Chain.md).
+> **Spec**: [planned-for-development/1_setup.md](../planned-for-development/1_setup.md) · [03_M1_Data_Collection](../03_M1_Data_Collection.md) §1.3 · [03_M1_1_PDF_Extraction_Chain](../03_M1_Data_Collection.md).
 
 ## 1 · What this step does
 

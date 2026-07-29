@@ -2,7 +2,7 @@
 
 > **Cross-references:** [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) · [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) · [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/m1/model/training.py`, `evaluation.py`; `model_registry.json` location.
-> **Sub-step companions:** [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md) · [06_M1_2_Slice_Analysis_Framework.md](06_M1_2_Slice_Analysis_Framework.md)
+> **Sub-step companions:** [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) · [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md)
 
 ---
 
@@ -114,7 +114,7 @@ The actual date-window achieved, and any fallback flag, are recorded in `model_r
 }
 ```
 
-The `labeled_set_sha256` is the SHA-256 of the *exact* parquet file used — if a labeller corrects 3 rows after training, the hash changes and the next training run knows it's working from a different dataset. The `environment_yml_sha256` rolls up the full pinned dep set, so a future reproducer knows the precise package versions. Together these make any single training run *bit-identical-reproducible* with the same hardware. The full reproducibility checklist (data hash, env.yml, ONNX RT pin, GPU determinism flags) is in [06_M1_1_Data_Augmentation_Strategy.md §Validation](06_M1_1_Data_Augmentation_Strategy.md).
+The `labeled_set_sha256` is the SHA-256 of the *exact* parquet file used — if a labeller corrects 3 rows after training, the hash changes and the next training run knows it's working from a different dataset. The `environment_yml_sha256` rolls up the full pinned dep set, so a future reproducer knows the precise package versions. Together these make any single training run *bit-identical-reproducible* with the same hardware. The full reproducibility checklist (data hash, env.yml, ONNX RT pin, GPU determinism flags) is in [06_M1_Training_Evaluation.md §Validation](06_M1_Training_Evaluation.md).
 
 ---
 
@@ -164,7 +164,7 @@ def back_translate(text: str, src="en", pivot="fr") -> str:
 
 > **Augmented examples are added to the training split only.** Validation and test sets contain only original labeled examples.
 
-**Diminishing returns above 5×.** The augmented-target column above tops out at 5× for `PENALTY_ENFORCEMENT` (~20 originals → 100 augmented). Back-translation and paraphrase preserve *meaning* but their diversity collapses: after a 5× expansion, additional synthetic examples are near-duplicates of earlier augmentations, and validation F1 plateaus or *decreases*. We therefore cap augmentation at **5×** in practice: classes with few originals top out at `5 × original_count`, and any deficit is filled by an additional targeted-labeling sprint (active-learning step from [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md)). The actual cap is enforced in the augmentation pipeline (`ml/m1/data/augmentation.py`) by a `max_ratio=5` argument; the diversity validation that justifies it — cosine-similarity histograms of augmented vs original, per-class F1 before/after cap — lives in [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md).
+**Diminishing returns above 5×.** The augmented-target column above tops out at 5× for `PENALTY_ENFORCEMENT` (~20 originals → 100 augmented). Back-translation and paraphrase preserve *meaning* but their diversity collapses: after a 5× expansion, additional synthetic examples are near-duplicates of earlier augmentations, and validation F1 plateaus or *decreases*. We therefore cap augmentation at **5×** in practice: classes with few originals top out at `5 × original_count`, and any deficit is filled by an additional targeted-labeling sprint (active-learning step from [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md)). The actual cap is enforced in the augmentation pipeline (`ml/m1/data/augmentation.py`) by a `max_ratio=5` argument; the diversity validation that justifies it — cosine-similarity histograms of augmented vs original, per-class F1 before/after cap — lives in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md).
 
 ---
 
@@ -846,7 +846,7 @@ Cap stops at 5× — even if more techniques were tried.
 ## Cross-references
 
 - Parent: [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §2
-- Related: [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md) (interplay with active learning)
+- Related: [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) (interplay with active learning)
 - BUILD phase: BUILD_11 §augmentation
 - Code (when shipped): `ml/m1/data/augmentation.py`, `scripts/run_augmentation_ablation.py`
 
@@ -935,7 +935,7 @@ def category_balance(predictions: pd.DataFrame) -> pd.DataFrame:
 |---|---|---|---|
 | **Confidence cliff** | F1 drops > 10 pp in low-confidence bucket | Calibration miscalibrated | Temperature scaling (`ml/m1/model/calibration.py`) |
 | **Length cliff** | F1 drops > 8 pp on long texts (> 4 chunks) | Classification picks chunk 0 only; category signal in later sections | Aggregate logits across chunks (logit-mean over all chunks) |
-| **Language cliff** | F1 SI > 8 pp below EN | Insufficient SI training data | Targeted SI paraphrase augmentation (technique C in [06_M1_1_Data_Augmentation_Strategy.md](06_M1_1_Data_Augmentation_Strategy.md)) |
+| **Language cliff** | F1 SI > 8 pp below EN | Insufficient SI training data | Targeted SI paraphrase augmentation (technique C in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md)) |
 | **Extraction-method cliff** | F1 on `tesseract` rows > 5 pp below `pymupdf` rows | OCR noise propagates to classifier | Tighten OCR threshold; or retrain on more scanned examples |
 
 ### Visualization templates
@@ -1002,6 +1002,6 @@ Decision triggered:
 ## Cross-references
 
 - Parent: [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §4.2, §5
-- Related: [12_M1_1_Performance_Monitoring_Alerting.md](12_M1_1_Performance_Monitoring_Alerting.md) (same slice computations run on production data)
+- Related: [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) (same slice computations run on production data)
 - BUILD phase: BUILD_11 §evaluation suite
 - Code (when shipped): `ml/m1/model/evaluation.py`, `research/notebooks/findings_classifier_evaluation.ipynb`

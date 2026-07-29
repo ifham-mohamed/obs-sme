@@ -48,7 +48,7 @@ The user wants to start executing the M1 Development Roadmap ([16_M1_Development
 
 | Path                                                                                | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `enigmatrix-backend/alembic/versions/202605160001_m1_regulations_status_columns.py` | Adds 3 columns to `m1_regulations`: `status VARCHAR(20) NOT NULL DEFAULT 'ingested'` (per [02_M1_2_Database_Schema_Validation.md §Step 1](enigmatrix-docs/m1/02_M1_2_Database_Schema_Validation.md) constraints), `raw_pdf_path TEXT`, `gazette_number TEXT`. Indexes: `ix_m1_regulations_status` (partial WHERE `status != 'archived'`), `ix_m1_regulations_gazette_number` (UNIQUE NULLS NOT DISTINCT). `down_revision` = the most-recent existing migration (`202605150001_*` per the m1/16 roadmap context). |
+| `enigmatrix-backend/alembic/versions/202605160001_m1_regulations_status_columns.py` | Adds 3 columns to `m1_regulations`: `status VARCHAR(20) NOT NULL DEFAULT 'ingested'` (per [02_M1_Data_Requirements.md §Step 1](enigmatrix-docs/m1/02_M1_Data_Requirements.md) constraints), `raw_pdf_path TEXT`, `gazette_number TEXT`. Indexes: `ix_m1_regulations_status` (partial WHERE `status != 'archived'`), `ix_m1_regulations_gazette_number` (UNIQUE NULLS NOT DISTINCT). `down_revision` = the most-recent existing migration (`202605150001_*` per the m1/16 roadmap context). |
 
 ### MODIFIED — Backend support (3 files)
 
@@ -133,7 +133,7 @@ A future contributor searching for code by following an old doc's path lands in 
 - Line 43: `app/tasks/gazette_scraper.py` → `backend/app/tasks/m1/gazette_scraper.py` (adds both `backend/` + `m1/`).
 - Line 125: `app/services/gazette_extractor.py` → `ml/m1/extraction/text_extractors.py`. _Rationale:_ the surrounding code is the PyMuPDF → pdfplumber → Tesseract chain, which doc 13 places in `ml/m1/extraction/text_extractors.py`. The `app/services/` location is obsolete.
 - Line 163: `pipeline/inspect.py` → `ml/m1/extraction/pdf_classifier.py`.
-- Line 246: `pipeline/segment.py` → `ml/m1/extraction/segmenter.py`. _Rationale:_ the newer companion [03_M1_2_Gazette_Segmentation.md](enigmatrix-docs/m1/03_M1_2_Gazette_Segmentation.md) already uses `ml/m1/extraction/segmenter.py` — match it.
+- Line 246: `pipeline/segment.py` → `ml/m1/extraction/segmenter.py`. _Rationale:_ the newer companion [03_M1_Data_Collection.md](enigmatrix-docs/m1/03_M1_Data_Collection.md) already uses `ml/m1/extraction/segmenter.py` — match it.
 
 ### `07_M1_Deployment_Integration.md` (3 paths)
 
@@ -227,7 +227,7 @@ A future contributor searching for code by following an old doc's path lands in 
 The previous session was interrupted mid-move of the 10 `14_M1_*` tracking-workflow files from `enigmatrix-docs/frontend/SETUP/` → `enigmatrix-docs/m1/`. Since then (either by the user or another session) the move **and** the larger follow-on plan (per-folder M1 build guides + development roadmap) have both landed:
 
 - ✅ 10 `14_M1_*` files now live in `enigmatrix-docs/m1/`; `frontend/SETUP/` no longer holds them
-- ✅ 8 new docs created: `15_M1_Folder_Reference.md`, `15_M1_1_ML_Folder_Guide.md` through `15_M1_6_Docs_Folder_Guide.md`, `16_M1_Development_Roadmap.md`
+- ✅ 8 new docs created: `15_M1_Folder_Reference.md`, `15_M1_Folder_Reference.md` through `15_M1_Folder_Reference.md`, `16_M1_Development_Roadmap.md`
 - ✅ `m1/README.md` indexes rows 15 + 16 + the 6 sub-folder companions
 - ✅ `13_M1_Folder_Structure_and_Implementation_Flow.md` has the new See-also pointer (line 44)
 - ✅ All 5 of `15_M1_1`..`15_M1_5` carry the locked 6-section skeleton (Purpose / Files in this folder / How to start building / Dependencies / Tests / Cross-references)
@@ -235,7 +235,7 @@ The previous session was interrupted mid-move of the 10 `14_M1_*` tracking-workf
 
 ## The single remaining loose end
 
-`15_M1_6_Docs_Folder_Guide.md` has different section headers from the other five 15_M1 guides:
+`15_M1_Folder_Reference.md` has different section headers from the other five 15_M1 guides:
 
 | Locked skeleton                  | What 15_M1_6 has today                                                                     |
 | -------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -250,7 +250,7 @@ The doc body covers the same ground as "How to start building" — both "How to 
 
 ## The fix
 
-In `enigmatrix-docs/m1/15_M1_6_Docs_Folder_Guide.md`:
+In `enigmatrix-docs/m1/15_M1_Folder_Reference.md`:
 
 1. Rename `## How to start (if you're writing a new doc)` (line 62) → `## How to start building`.
 2. Leave `## How to add a new doc` (line 26) as-is — it remains the body of the "how to start building" guidance, just under a different sub-header. Optionally promote it to an h3 (`### How to add a new doc`) under the renamed h2 to make the nesting explicit.
@@ -259,7 +259,7 @@ That's one file, one heading rename + optional h2→h3 adjustment. No new files;
 
 ## Critical files
 
-- [enigmatrix-docs/m1/15_M1_6_Docs_Folder_Guide.md](enigmatrix-docs/m1/15_M1_6_Docs_Folder_Guide.md) — only file edited
+- [enigmatrix-docs/m1/15_M1_Folder_Reference.md](enigmatrix-docs/m1/15_M1_Folder_Reference.md) — only file edited
 
 ## Verification (read-only)
 
@@ -279,7 +279,7 @@ for f in 15_M1_[1-6]_*.md; do
 done
 ```
 
-Expected: all six guides report `6 / 6 sections`. Also: `git diff --stat` should show only `15_M1_6_Docs_Folder_Guide.md` changed; no other files; no code drift.
+Expected: all six guides report `6 / 6 sections`. Also: `git diff --stat` should show only `15_M1_Folder_Reference.md` changed; no other files; no code drift.
 
 ---
 
@@ -320,12 +320,12 @@ Index of the 6 sub-folder guides. Brief overview of the per-folder split. Status
 
 | #    | File                               | Covers                                                                                                                                                                                                                            | Cross-links into existing m1 docs                                                                                                                                                                     |
 | ---- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 15.1 | `15_M1_1_ML_Folder_Guide.md`       | `ml/shared/`, `ml/m1/*` (data, extraction, preprocessing, model, summarization, schema, utils), `ml/tests/m1/`                                                                                                                    | 03_M1_1 (extraction), 04_M1_1..3 (preprocessing), 05_M1_1..3 (model + sampling + LoRA), 06_M1_1..2 (training + augmentation + slice), 07_M1_1 (ONNX export), 10_M1_1..2 (lang detection + Wijesekara) |
-| 15.2 | `15_M1_2_Backend_Folder_Guide.md`  | `backend/app/api/v1/m1_regulations.py`, `services/m1_regulation_service.py`, `tasks/m1/*` (all 8 Celery tasks), `models/m1_regulation.py`, `schemas/m1.py`, `config/feature_flags.py`, `db/migrations/versions/*`, `scripts/m1_*` | 03_M1_Data_Collection §6.1 (Celery), 11_M1_API_Reference, 11_M1_1..2 (auth + integration), 12_M1_Monitoring (analytics task), 12_M1_2 (retrain workflow)                                              |
-| 15.3 | `15_M1_3_Scraper_Folder_Guide.md`  | `scraper/settings.py`, `pipelines.py`, `spiders/gazette_spider.py`, `spiders/portal_spiders.py`                                                                                                                                   | 03_M1_Data_Collection §1 (Scrapy choice), 02_M1_1 (15-source catalogue), 03_M1_3 (secondary source integration)                                                                                       |
-| 15.4 | `15_M1_4_Research_Folder_Guide.md` | `research/notebooks/*` (4 finding notebooks), `figures/`, `data/labeling/`, `data/test_split.parquet`                                                                                                                             | 08_M1_Full_System §10 (findings F1–F6), 08_M1_1 (findings extraction methodology), 09_M1_Annotation_Guidelines §9 (survey instrument), 09_M1_2 (annotator workflow + IAA)                             |
-| 15.5 | `15_M1_5_Storage_Folder_Guide.md`  | `storage/m1/raw/`, `ocr_cache/`, `inference_cache/`, `storage/models/m1/v*/`, `baseline/`                                                                                                                                         | 02_M1_3 (retention + cold archive), 06_M1_Training §9 (`model_registry.json` shape), 07_M1_Deployment §5 (Fly volume layout), 07_M1_2 (Fly ops)                                                       |
-| 15.6 | `15_M1_6_Docs_Folder_Guide.md`     | `enigmatrix-docs/m1/*` — the 53 docs themselves: how they're organised, how to add a new one, when to update which                                                                                                                | 13_M1_Folder_Structure §5 (per-module template), README.md (the m1 index itself), 14_M1_Tracking_Workflows (cross-doc pattern example)                                                                |
+| 15.1 | `15_M1_Folder_Reference.md`       | `ml/shared/`, `ml/m1/*` (data, extraction, preprocessing, model, summarization, schema, utils), `ml/tests/m1/`                                                                                                                    | 03_M1_1 (extraction), 04_M1_1..3 (preprocessing), 05_M1_1..3 (model + sampling + LoRA), 06_M1_1..2 (training + augmentation + slice), 07_M1_1 (ONNX export), 10_M1_1..2 (lang detection + Wijesekara) |
+| 15.2 | `15_M1_Folder_Reference.md`  | `backend/app/api/v1/m1_regulations.py`, `services/m1_regulation_service.py`, `tasks/m1/*` (all 8 Celery tasks), `models/m1_regulation.py`, `schemas/m1.py`, `config/feature_flags.py`, `db/migrations/versions/*`, `scripts/m1_*` | 03_M1_Data_Collection §6.1 (Celery), 11_M1_API_Reference, 11_M1_1..2 (auth + integration), 12_M1_Monitoring (analytics task), 12_M1_2 (retrain workflow)                                              |
+| 15.3 | `15_M1_Folder_Reference.md`  | `scraper/settings.py`, `pipelines.py`, `spiders/gazette_spider.py`, `spiders/portal_spiders.py`                                                                                                                                   | 03_M1_Data_Collection §1 (Scrapy choice), 02_M1_1 (15-source catalogue), 03_M1_3 (secondary source integration)                                                                                       |
+| 15.4 | `15_M1_Folder_Reference.md` | `research/notebooks/*` (4 finding notebooks), `figures/`, `data/labeling/`, `data/test_split.parquet`                                                                                                                             | 08_M1_Full_System §10 (findings F1–F6), 08_M1_1 (findings extraction methodology), 09_M1_Annotation_Guidelines §9 (survey instrument), 09_M1_2 (annotator workflow + IAA)                             |
+| 15.5 | `15_M1_Folder_Reference.md`  | `storage/m1/raw/`, `ocr_cache/`, `inference_cache/`, `storage/models/m1/v*/`, `baseline/`                                                                                                                                         | 02_M1_3 (retention + cold archive), 06_M1_Training §9 (`model_registry.json` shape), 07_M1_Deployment §5 (Fly volume layout), 07_M1_2 (Fly ops)                                                       |
+| 15.6 | `15_M1_Folder_Reference.md`     | `enigmatrix-docs/m1/*` — the 53 docs themselves: how they're organised, how to add a new one, when to update which                                                                                                                | 13_M1_Folder_Structure §5 (per-module template), README.md (the m1 index itself), 14_M1_Tracking_Workflows (cross-doc pattern example)                                                                |
 
 ### Roadmap: `16_M1_Development_Roadmap.md`
 
@@ -333,8 +333,8 @@ Sequenced "start here" guide. Structure:
 
 - **Where M1 stands today** — snapshot: ✅ admin-CRUD slice, audit log, demo seed (5 regs), unified survey flow, 53-doc research base. 🔲 ingest pipeline, ML training, schedulers, alerts, lag-analytics UI.
 - **Phase 1 — Foundation (✅ done).** Brief summary; readers skip to Phase 2.
-- **Phase 2 — Ingest + extraction (BUILD_07 §A–B).** Concrete order: (a) Scrapy spider — see [03_M1_Data_Collection.md](03_M1_Data_Collection.md) + [03_M1_1_PDF_Extraction_Chain.md](03_M1_1_PDF_Extraction_Chain.md); (b) Celery task wiring — see [03_M1_Data_Collection.md §6.1](03_M1_Data_Collection.md); (c) language detection + per-line routing — see [10_M1_1_Language_Detection_Routing.md](10_M1_1_Language_Detection_Routing.md); (d) preprocessing — see [04*M1*\*.md](04_M1_Preprocessing_Pipeline.md). DoD: gazettes flow from URL → `m1_regulations.status='extracted'` with cleaned text.
-- **Phase 3 — Annotation + classification (BUILD_07 §C–D + BUILD_11).** Order: (a) Label Studio setup + calibration test — see [09_M1_2_Annotation_Workflow_IAA_Protocol.md](09_M1_2_Annotation_Workflow_IAA_Protocol.md); (b) sampling for first 300 labels — see [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md); (c) train XLM-R + LoRA — see [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) + [05_M1_3_LoRA_Hyperparameter_Justification.md](05_M1_3_LoRA_Hyperparameter_Justification.md); (d) eval + slice analysis — see [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) + [06_M1_2_Slice_Analysis_Framework.md](06_M1_2_Slice_Analysis_Framework.md); (e) ONNX export + Fly deploy — see [07_M1_1_ONNX_Export_Quantization.md](07_M1_1_ONNX_Export_Quantization.md). DoD: macro-F1 ≥ 0.92; model serving from Fly.
+- **Phase 2 — Ingest + extraction (BUILD_07 §A–B).** Concrete order: (a) Scrapy spider — see [03_M1_Data_Collection.md](03_M1_Data_Collection.md) + [03_M1_Data_Collection.md](03_M1_Data_Collection.md); (b) Celery task wiring — see [03_M1_Data_Collection.md §6.1](03_M1_Data_Collection.md); (c) language detection + per-line routing — see [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md); (d) preprocessing — see [04*M1*\*.md](04_M1_Preprocessing_Pipeline.md). DoD: gazettes flow from URL → `m1_regulations.status='extracted'` with cleaned text.
+- **Phase 3 — Annotation + classification (BUILD_07 §C–D + BUILD_11).** Order: (a) Label Studio setup + calibration test — see [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md); (b) sampling for first 300 labels — see [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md); (c) train XLM-R + LoRA — see [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) + [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md); (d) eval + slice analysis — see [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) + [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md); (e) ONNX export + Fly deploy — see [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md). DoD: macro-F1 ≥ 0.92; model serving from Fly.
 - **Phase 4 — Schedulers + alerts (BUILD_12).** Portal + RSS watchers, alert dispatch, lag-view nightly refresh. Links to 02_M1_1, 03_M1_3, 08_M1_Full_System §8.1 (alert batching), 12_M1_Monitoring.
 - **Phase 5 — Research findings + survey (BUILD_07 + manual).** SME survey deployment (09_M1_3), F1–F6 extraction (08_M1_1), monitoring dashboard (14_M1_4 — deferred frontend), retraining cadence (12_M1_2).
 - **At any phase: tracking-workflow surfaces.** Cross-reference table — admin tracking surfaces ship with Phase 2/4 (A1, A3); deferred surfaces (A2, A4) ship with BUILD_13 frontend. SME surfaces (S2) ship with Phase 1 (already done); S1/S3/S4 ship with Phase 4 + BUILD_13.
@@ -348,7 +348,7 @@ Each phase has a _concrete first task_ call-out: "Open [the relevant doc] and do
 | File                                                                   | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `enigmatrix-docs/m1/README.md`                                         | Add row 15 (Folder Reference) + row 16 (Roadmap) to Document Index; add 7-row "Folder Build Guides" + 1-row "Development Roadmap" to the Sub-Step Companions table; bump file count from 53 → 61.                                                                                                                                                                                                                                                                                                                                     |
-| `enigmatrix-docs/m1/13_M1_Folder_Structure_and_Implementation_Flow.md` | At the top of `## M1 folder map`, add a "See also" callout: "Per-folder build guides — [15_M1_1_ML_Folder_Guide.md](15_M1_1_ML_Folder_Guide.md), [15_M1_2_Backend_Folder_Guide.md](15_M1_2_Backend_Folder_Guide.md), ... and the sequenced [16_M1_Development_Roadmap.md](16_M1_Development_Roadmap.md)." Inside the `## File-by-file role description` table, add a "Build guide" column linking each row to the relevant 15_M1_X guide. (Optional — skipped if it makes the table too wide; the See-also callout is the must-have.) |
+| `enigmatrix-docs/m1/13_M1_Folder_Structure_and_Implementation_Flow.md` | At the top of `## M1 folder map`, add a "See also" callout: "Per-folder build guides — [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md), [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md), ... and the sequenced [16_M1_Development_Roadmap.md](16_M1_Development_Roadmap.md)." Inside the `## File-by-file role description` table, add a "Build guide" column linking each row to the relevant 15_M1_X guide. (Optional — skipped if it makes the table too wide; the See-also callout is the must-have.) |
 
 **Total: 8 new + 2 edited = 10 file touches.**
 
@@ -402,12 +402,12 @@ The roadmap doc (`16_M1_Development_Roadmap.md`) uses a different shape — phas
 **New (will be created):**
 
 - `enigmatrix-docs/m1/15_M1_Folder_Reference.md` (parent)
-- `enigmatrix-docs/m1/15_M1_1_ML_Folder_Guide.md`
-- `enigmatrix-docs/m1/15_M1_2_Backend_Folder_Guide.md`
-- `enigmatrix-docs/m1/15_M1_3_Scraper_Folder_Guide.md`
-- `enigmatrix-docs/m1/15_M1_4_Research_Folder_Guide.md`
-- `enigmatrix-docs/m1/15_M1_5_Storage_Folder_Guide.md`
-- `enigmatrix-docs/m1/15_M1_6_Docs_Folder_Guide.md`
+- `enigmatrix-docs/m1/15_M1_Folder_Reference.md`
+- `enigmatrix-docs/m1/15_M1_Folder_Reference.md`
+- `enigmatrix-docs/m1/15_M1_Folder_Reference.md`
+- `enigmatrix-docs/m1/15_M1_Folder_Reference.md`
+- `enigmatrix-docs/m1/15_M1_Folder_Reference.md`
+- `enigmatrix-docs/m1/15_M1_Folder_Reference.md`
 - `enigmatrix-docs/m1/16_M1_Development_Roadmap.md`
 
 **Existing (will be edited):**

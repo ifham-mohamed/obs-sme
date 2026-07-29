@@ -62,7 +62,7 @@ What you see:
 
 **Example:** An SME in the retail sector sees "VAT Rate Change 2026" as pending (because it applies to `universal` + retail). Clicking "Start survey" goes to `/surveys/regulation/{uuid}` — the unified wizard scoped to that regulation.
 
-> **SME tracking workflows** are documented in [SETUP/14_M1_Tracking_Workflows.md](../m1/14_M1_Tracking_Workflows.md) — the workflow series covers regulation discovery ([14_M1_5](../m1/14_M1_5_SME_Regulation_Discovery.md)), awareness survey participation ([14_M1_6](../m1/14_M1_6_SME_Awareness_Survey.md)), compliance status tracking ([14_M1_7](../m1/14_M1_7_SME_Compliance_Action_Tracking.md)), and deadline + alert history ([14_M1_8](../m1/14_M1_8_SME_Deadline_Alert_History.md), deferred). Each carries a status badge so the SME sees what's available today vs in a future release.
+> **SME tracking workflows** are documented in [SETUP/14_M1_Tracking_Workflows.md](../m1/14_M1_Tracking_Workflows.md) — the workflow series covers regulation discovery ([14_M1_5](../m1/14_M1_Tracking_Workflows.md)), awareness survey participation ([14_M1_6](../m1/14_M1_Tracking_Workflows.md)), compliance status tracking ([14_M1_7](../m1/14_M1_Tracking_Workflows.md)), and deadline + alert history ([14_M1_8](../m1/14_M1_Tracking_Workflows.md), deferred). Each carries a status badge so the SME sees what's available today vs in a future release.
 
 ### 3.5 Regulations — `/regulations`
 Lists all active regulations with:
@@ -186,7 +186,7 @@ Current status: **coming soon** — backend returns 501.
 
 All admin routes require `role = "admin"`. Non-admins are redirected to `/dashboard`.
 
-> **Admin tracking workflows** are documented in [SETUP/14_M1_Tracking_Workflows.md](../m1/14_M1_Tracking_Workflows.md) — the workflow series covers pipeline-state triage ([14_M1_1](../m1/14_M1_1_Admin_Pipeline_State_Tracking.md)), needs-review queue ([14_M1_2](../m1/14_M1_2_Admin_Review_Queue_Triage.md), deferred), expert verification ([14_M1_3](../m1/14_M1_3_Admin_Expert_Verification.md)), and lag analytics ([14_M1_4](../m1/14_M1_4_Admin_Lag_Analytics.md), deferred). Each carries a status badge so a new admin sees what's shipped today vs deferred to BUILD_13.
+> **Admin tracking workflows** are documented in [SETUP/14_M1_Tracking_Workflows.md](../m1/14_M1_Tracking_Workflows.md) — the workflow series covers pipeline-state triage ([14_M1_1](../m1/14_M1_Tracking_Workflows.md)), needs-review queue ([14_M1_2](../m1/14_M1_Tracking_Workflows.md), deferred), expert verification ([14_M1_3](../m1/14_M1_Tracking_Workflows.md)), and lag analytics ([14_M1_4](../m1/14_M1_Tracking_Workflows.md), deferred). Each carries a status badge so a new admin sees what's shipped today vs deferred to BUILD_13.
 
 ### 4.1 Users — `/admin/users`
 Full user management table.

@@ -2,7 +2,7 @@
 
 > Where every M1 file lives, what it owns, when it lands, and how the same shape extends to M2/M3/M4.
 > **Implementation status (2026-07-24):** 🟢 Largely built. Phase-2 ingest + the full `enigmatrix-ml/m1/` extraction/preprocessing/evaluation stack, the `model/` scaffolds, and the Phase-3 labelling surface (sampler + Label Studio config + calibration set + `batch_01` + runbook) are shipped. Remaining: alerts/schedulers (BUILD_12), summarisation, and the findings notebooks.
-> **Path note:** the short names below (`ml/`, `backend/`, `scraper/`) map to the real roots `enigmatrix-ml/`, `enigmatrix-backend/` (which also hosts the Scrapy scraper), and the top-level `research/` · `data/` · `mydata/` · `scripts/` · `storage/`. Labelling operation: see [15_M1_4](15_M1_4_Research_Folder_Guide.md) + `research/data/PHASE3_ANNOTATION_RUNBOOK.md`.
+> **Path note:** the short names below (`ml/`, `backend/`, `scraper/`) map to the real roots `enigmatrix-ml/`, `enigmatrix-backend/` (which also hosts the Scrapy scraper), and the top-level `research/` · `data/` · `mydata/` · `scripts/` · `storage/`. Labelling operation: see [15_M1_4](15_M1_Folder_Reference.md) + `research/data/PHASE3_ANNOTATION_RUNBOOK.md`.
 
 ---
 
@@ -42,7 +42,7 @@ Adding M2 means copying `ml/m1/` to `ml/m2/`, copying `app/tasks/m1_*` to `app/t
 
 ## M1 folder map
 
-> **See also:** for per-folder *build instructions* (what every file owns + how to start building it + dependencies + acceptance) see [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) and its 6 sub-folder guides ([ml/](15_M1_1_ML_Folder_Guide.md) · [backend/](15_M1_2_Backend_Folder_Guide.md) · [scraper/](15_M1_3_Scraper_Folder_Guide.md) · [research/](15_M1_4_Research_Folder_Guide.md) · [storage/](15_M1_5_Storage_Folder_Guide.md) · [docs/](15_M1_6_Docs_Folder_Guide.md)). For the *sequenced order* in which to build these folders see the [16_M1_Development_Roadmap.md](16_M1_Development_Roadmap.md). This doc remains the *spec* (what every file owns); those docs are the *how to ship it*.
+> **See also:** for per-folder *build instructions* (what every file owns + how to start building it + dependencies + acceptance) see [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) and its 6 sub-folder guides ([ml/](15_M1_Folder_Reference.md) · [backend/](15_M1_Folder_Reference.md) · [scraper/](15_M1_Folder_Reference.md) · [research/](15_M1_Folder_Reference.md) · [storage/](15_M1_Folder_Reference.md) · [docs/](15_M1_Folder_Reference.md)). For the *sequenced order* in which to build these folders see the [16_M1_Development_Roadmap.md](16_M1_Development_Roadmap.md). This doc remains the *spec* (what every file owns); those docs are the *how to ship it*.
 
 This is the full tree once BUILD_07 + BUILD_11 + BUILD_12 have all shipped. Folders marked 🟡 are partially implemented today (admin-CRUD only); 🔲 are wholly deferred; ✅ are shipped.
 

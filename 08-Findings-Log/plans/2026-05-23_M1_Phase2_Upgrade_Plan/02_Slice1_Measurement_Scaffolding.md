@@ -221,4 +221,4 @@ The `baseline_v0.json` overall score becomes a row in Chapter 4 Table 4.1 ("Phas
 - [01_Alignment_Audit §F](01_Alignment_Audit.md#f-i18n-🟡-convention-drift) — no UI strings in this slice, so i18n N/A here.
 - [04_Slice3_Dataset_Registry_and_Upload](04_Slice3_Dataset_Registry_and_Upload.md) — slice 3 will store this same Excel inside `m1_dataset_rows`. Once that's done, the script becomes redundant and the Celery task in slice 5 takes over.
 - `enigmatrix-ml/m1/extraction/__init__.py` — canonical extraction public surface (referenced for vocabulary consistency).
-- `enigmatrix-docs/m1/02_M1_4_Worked_Examples_All_Tables.md` — multi-pin-adapter worked example. Use it as a Sinhala-heavy reference row when eyeballing baseline scores.
+- `enigmatrix-docs/m1/02_M1_Data_Requirements.md` — multi-pin-adapter worked example. Use it as a Sinhala-heavy reference row when eyeballing baseline scores.

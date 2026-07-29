@@ -1,7 +1,7 @@
 # Phase 2 · Data Collection — Secondary-Source 3-Tier Matching: Analysis
 
 > Group: `PHASE2_INGEST_EXTRACTION / secondary_source_matching`. Companion: [[PHASE2_SECONDARY_MATCHING_PLAN]].
-> Builds [[03_M1_3_Secondary_Source_Integration]] into code. **Status: implemented 2026-07-23 (verification deferred — sandbox VHDX down).**
+> Builds [[03_M1_Data_Collection|03_M1_3_Secondary_Source_Integration]] into code. **Status: implemented 2026-07-23 (verification deferred — sandbox VHDX down).**
 
 ## 1. What existed vs the doc
 

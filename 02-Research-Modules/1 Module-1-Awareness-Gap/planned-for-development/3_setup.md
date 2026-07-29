@@ -126,7 +126,7 @@ Once the recommended pair differs from production, update:
 
 ## 7. OCR CER measurement drill
 
-The 10 % CER DoD from [03_M1_1 §validation](../03_M1_1_PDF_Extraction_Chain.md) requires gold transcriptions. Once a contributor produces them:
+The 10 % CER DoD from [03_M1_1 §validation](../03_M1_Data_Collection.md) requires gold transcriptions. Once a contributor produces them:
 
 ```bash
 # Layout:
@@ -188,8 +188,8 @@ The Session-26 self-contained version of `enigmatrix-backend/app/extraction/` is
 
 Step 2c stops where the user's quoted roadmap stops — 3 files at `ml/m1/extraction/`. Out of scope this slice:
 
-- **Wijesekara conversion table** — `ocr.py::wijesekara_to_unicode` is a stub; the greedy longest-match table lives in [10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md). Step 2d ships the table + a `test_wijesekara_roundtrip` test.
-- **`language_detection.py`** — fastText `lid.176.bin` per [10_M1_1_Language_Detection_Routing.md](../10_M1_1_Language_Detection_Routing.md). Listed in `15_M1_1_ML_Folder_Guide.md` as a sibling extraction file; Step 2c.5 / Step 2d picks it up.
+- **Wijesekara conversion table** — `ocr.py::wijesekara_to_unicode` is a stub; the greedy longest-match table lives in [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md). Step 2d ships the table + a `test_wijesekara_roundtrip` test.
+- **`language_detection.py`** — fastText `lid.176.bin` per [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md). Listed in `15_M1_Folder_Reference.md` as a sibling extraction file; Step 2c.5 / Step 2d picks it up.
 - **50-PDF audit dataset** — `tests/m1/fixtures/audit/` ships empty with a `README.md` pointing at the calibration procedure. Populating it is research work — a separate ticket, likely surfacing once Step 2b's spider has collected ≥ 50 real gazettes from `documents.gov.lk`.
 - **OCR CER gold corpus** — `tests/m1/fixtures/ocr_gold/` ships empty. Populating it is research work too; requires a Sinhala/Tamil-fluent contributor to hand-transcribe ~5 pages × 10 PDFs.
 - **Per-page hybrid routing edge cases** — Step 2c handles the common case (PyMuPDF first, Tesseract if < 100 chars). The full `03_M1_1 §failure modes` table (garbled font encoding, password-protected PDFs, bilingual paragraph straddle, 60s Tesseract timeout) gets exhaustive tests in Step 2d.
@@ -198,9 +198,9 @@ Step 2c stops where the user's quoted roadmap stops — 3 files at `ml/m1/extrac
 ## 11. Cross-references
 
 - Companion plan: [3.md](2026-05%20Step%202c%20-%20canonical%20ml-m1-extraction%20chain%20(PDF%20classifier%20+%20extractors%20+%20OCR).md).
-- Parent spec: [03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md).
-- Folder guide: [15_M1_1_ML_Folder_Guide.md](../15_M1_1_ML_Folder_Guide.md).
+- Parent spec: [03_M1_Data_Collection.md](../03_M1_Data_Collection.md).
+- Folder guide: [15_M1_Folder_Reference.md](../15_M1_Folder_Reference.md).
 - Predecessor: [2.md](2026-05%20Step%202b%20-%20Celery%20task%20wiring%20+%20Stage-B%20extraction%20(M1%20Phase%202).md) + [2_setup.md](2_setup.md) (Session 26 Step 2b).
 - Roadmap: [16_M1_Development_Roadmap.md](../16_M1_Development_Roadmap.md) Phase 2 Step 2c.
 - Deployment: [07_M1_Deployment_Integration.md](../07_M1_Deployment_Integration.md), [13_M1_Folder_Structure_and_Implementation_Flow.md](../13_M1_Folder_Structure_and_Implementation_Flow.md).
-- Deferred: [10_M1_1_Language_Detection_Routing.md](../10_M1_1_Language_Detection_Routing.md), [10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md).
+- Deferred: [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md), [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md).

@@ -262,7 +262,7 @@ So the "upgrade" is **Slice 7 — new extraction profiles** (`page_routing_v1`, 
 
 ### 9.4 Language detection (which language → which routing)
 
-`language_detection.py`, two layers (per `10_M1_1_Language_Detection_Routing.md`):
+`language_detection.py`, two layers (per `10_M1_Sinhala_Tamil_NLP.md`):
 - **Layer 1 (document)** — fastText `lid.176.bin` (~127 MB), first **500 chars** (`M1_LID_WINDOW_CHARS`), confidence ≥ **0.70** (`M1_LID_MIN_CONFIDENCE`) → primary `en|si|ta|mixed`.
 - **Layer 2 (per-line)** — Unicode-range router: Sinhala `U+0D80–0DFF`, Tamil `U+0B80–0BFF`, English Latin. This is what lets a mixed EN/SI gazette line route correctly.
 

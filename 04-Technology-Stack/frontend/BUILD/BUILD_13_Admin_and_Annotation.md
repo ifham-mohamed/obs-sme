@@ -7,11 +7,11 @@
 > **Scope:** the **admin frontend** route group, the **Label Studio bridge** (project sync + webhook + import), the **audit trail extension**, and **bulk CSV** operations for the question bank and labeled examples. The actual review *business logic* — what counts as a valid M1 reclassification, what kappa threshold gates an M4 release, how an M3 override propagates back to the model registry — remains owned by the module BUILD files cited above. This file only specifies the surfaces (HTTP routes, UI pages, DB writes) that those modules plug into.
 
 > **M1 admin-tracking surfaces deferred to this build:**
-> - **`/admin/m1/review-queue`** — needs-review queue triage. See [../SETUP/14_M1_2_Admin_Review_Queue_Triage.md](../../m1/14_M1_2_Admin_Review_Queue_Triage.md) for the intended user workflow.
-> - **`/admin/m1/analytics`** — lag analytics + propagation tracker (4 cards: F1–F4 findings). See [../SETUP/14_M1_4_Admin_Lag_Analytics.md](../../m1/14_M1_4_Admin_Lag_Analytics.md).
-> - **`/admin/m1/pipeline`** — Stage A–F dashboard for at-a-glance bottleneck spotting. See [../SETUP/14_M1_1_Admin_Pipeline_State_Tracking.md](../../m1/14_M1_1_Admin_Pipeline_State_Tracking.md).
-> - **SME tracker `/portal/m1/my-regulations`** — action-taken/compliance ledger. See [../SETUP/14_M1_7_SME_Compliance_Action_Tracking.md](../../m1/14_M1_7_SME_Compliance_Action_Tracking.md).
-> - **SME deadlines + alerts `/portal/m1/deadlines`** — deadline countdown widget + alert delivery history. See [../SETUP/14_M1_8_SME_Deadline_Alert_History.md](../../m1/14_M1_8_SME_Deadline_Alert_History.md).
+> - **`/admin/m1/review-queue`** — needs-review queue triage. See [../SETUP/14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md) for the intended user workflow.
+> - **`/admin/m1/analytics`** — lag analytics + propagation tracker (4 cards: F1–F4 findings). See [../SETUP/14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md).
+> - **`/admin/m1/pipeline`** — Stage A–F dashboard for at-a-glance bottleneck spotting. See [../SETUP/14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md).
+> - **SME tracker `/portal/m1/my-regulations`** — action-taken/compliance ledger. See [../SETUP/14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md).
+> - **SME deadlines + alerts `/portal/m1/deadlines`** — deadline countdown widget + alert delivery history. See [../SETUP/14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md).
 >
 > These surfaces are documented in the `14_M1_*` companions with status badge 🔲 deferred + the *intended* user workflow drawn from the backend M1 docs. When BUILD_13 lands them, the badges flip to ✅.
 

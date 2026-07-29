@@ -2,7 +2,7 @@
 
 > **Cross-references:** [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md) · [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) · [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/m1/model/architecture.py`, `ml/m1/data/samplers.py`, `ml/m1/model/calibration.py`.
-> **Sub-step companions:** [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md) · [05_M1_2_Architecture_Comparison_Deep_Dive.md](05_M1_2_Architecture_Comparison_Deep_Dive.md) · [05_M1_3_LoRA_Hyperparameter_Justification.md](05_M1_3_LoRA_Hyperparameter_Justification.md)
+> **Sub-step companions:** [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) · [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) · [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md)
 
 ---
 
@@ -55,7 +55,7 @@ def stratified_with_small_cell_handling(df):
     return pd.concat(out)
 ```
 
-The detailed sampling algorithm — including the silhouette-based justification for `k=20` clusters, the active-learning baseline-vs-production-baseline disambiguation, and the budget-aware re-sampling cadence — is in [05_M1_1_Sampling_Strategy.md](05_M1_1_Sampling_Strategy.md).
+The detailed sampling algorithm — including the silhouette-based justification for `k=20` clusters, the active-learning baseline-vs-production-baseline disambiguation, and the budget-aware re-sampling cadence — is in [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md).
 
 ### 1.2 Step 2 — Cluster-Based Topical Diversity
 
@@ -235,7 +235,7 @@ lora_config = LoraConfig(
 | `bias` | `"none"` | **PEFT default** — biases are <1% of params and have negligible effect on classification F1. The choice is precedent-matching, not memory optimization; the savings would be ~25 kB of disk per adapter and trivial GPU memory. | Change only if biases are needed for full reproducibility with a fine-tuning paper that used them. |
 | `task_type` | `"FEATURE_EXTRACTION"` | Tells PEFT to leave the model's classification heads alone — we add our own dual heads externally. `SEQ_CLS` would force a single-head config that doesn't fit our dual-head architecture. | Don't change. |
 
-The full LoRA ablation plan — `r` × `alpha` × `target_modules` matrix with expected F1 from a 50-document pilot — is in [05_M1_3_LoRA_Hyperparameter_Justification.md](05_M1_3_LoRA_Hyperparameter_Justification.md).
+The full LoRA ablation plan — `r` × `alpha` × `target_modules` matrix with expected F1 from a 50-document pilot — is in [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md).
 
 **Why LoRA over full fine-tuning:**
 - Full fine-tuning of 125M parameters requires ~2.4GB GPU VRAM for float32 (or ~1.2GB for fp16). LoRA fine-tuning of 2.4M parameters fits in 4GB GPU VRAM with int8 quantization.
@@ -467,7 +467,7 @@ Error 1 confirms the multilingual gap; errors 2/3 are within the same family as 
 ## Cross-references
 
 - Parent: [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) §3
-- Related: [05_M1_3_LoRA_Hyperparameter_Justification.md](05_M1_3_LoRA_Hyperparameter_Justification.md), [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) (where projections are validated)
+- Related: [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md), [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) (where projections are validated)
 - BUILD phase: BUILD_11 §model training
 - Code (when shipped): `ml/m1/model/architecture.py`, `scripts/run_architecture_pilot.py`
 

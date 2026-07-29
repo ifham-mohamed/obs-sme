@@ -2,7 +2,7 @@
 
 > **Cross-references:** [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) · [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) · [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `research/data/labeling/` + `tests/m1/fixtures/gold_labels.csv`.
-> **Sub-step companions:** [09_M1_1_Category_Taxonomy_Examples.md](09_M1_1_Category_Taxonomy_Examples.md) · [09_M1_2_Annotation_Workflow_IAA_Protocol.md](09_M1_2_Annotation_Workflow_IAA_Protocol.md) · [09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md)
+> **Sub-step companions:** [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) · [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) · [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
 
 ---
 
@@ -227,7 +227,7 @@ The 20-document calibration set is hand-picked by the domain expert to span (a) 
 
 Pass rate target: ≥ 60 % of candidates pass on first attempt; conditional pass rate ≥ 80 %. If the pass rate drops below the target, the **guidelines** are revised (not the threshold) — the calibration set is the IAA contract with the model, not the candidate's IQ test.
 
-Calibration outcomes per annotator are stored in `m1_annotator_calibration` (`annotator_id`, `attempt_number`, `kappa_category`, `kappa_sector`, `passed_at`). The same table tracks ongoing performance — every annotator re-takes a fresh calibration test quarterly, with the rolling κ feeding a per-annotator quality dashboard. The full calibration-set construction protocol + a sample 20-document worksheet is in [09_M1_2_Annotation_Workflow_IAA_Protocol.md](09_M1_2_Annotation_Workflow_IAA_Protocol.md).
+Calibration outcomes per annotator are stored in `m1_annotator_calibration` (`annotator_id`, `attempt_number`, `kappa_category`, `kappa_sector`, `passed_at`). The same table tracks ongoing performance — every annotator re-takes a fresh calibration test quarterly, with the rolling κ feeding a per-annotator quality dashboard. The full calibration-set construction protocol + a sample 20-document worksheet is in [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md).
 
 ---
 
@@ -263,7 +263,7 @@ Three domain pairs cause most inter-annotator disagreement. The contrasts below 
 | `SECTOR_SPECIFIC` vs `PRODUCT_STANDARD` | "CAA maximum retail price order for milk powder; selling above MRP an offence" → `SECTOR_SPECIFIC` | "Multi-pin adapters must carry SLSI safety certification before sale" → `PRODUCT_STANDARD` | Instrument type: `SECTOR_SPECIFIC` is conduct/price/licensing regulation of the *selling activity* (CAA, Food Act, NMRA); `PRODUCT_STANDARD` certifies the *product itself* (SLSI mark, labelling). |
 | `PENALTY_ENFORCEMENT` vs `BUSINESS_REGISTRATION` | "Late fee for annual returns raised to Rs 2,500/month; 12-month defaulters struck off" → `PENALTY_ENFORCEMENT` | "Annual return filing fees for limited companies increased from LKR 1,000 to LKR 5,000" → `BUSINESS_REGISTRATION` | Primary purpose: if the gazette's central content is the *sanction* (fine schedule, strike-off), choose `PENALTY_ENFORCEMENT`; if it modifies the *registration obligation or its ordinary fees*, choose `BUSINESS_REGISTRATION`. |
 
-Eight more contrastive pairs (with full text excerpts) are in [09_M1_1_Category_Taxonomy_Examples.md](09_M1_1_Category_Taxonomy_Examples.md). Annotators study these *before* the calibration test, not after — the contrastive examples are part of the training, the calibration test measures whether the training stuck.
+Eight more contrastive pairs (with full text excerpts) are in [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md). Annotators study these *before* the calibration test, not after — the contrastive examples are part of the training, the calibration test measures whether the training stuck.
 
 ## 7. Common Edge Cases and Resolution
 
@@ -412,7 +412,7 @@ The training procedure for a new annotator is:
 
 1. Read the 8-domain taxonomy in [09_M1_Annotation_Guidelines.md §2](09_M1_Annotation_Guidelines.md).
 2. Read this doc — every example, in order.
-3. Take the 20-doc calibration test ([09_M1_2_Annotation_Workflow_IAA_Protocol.md](09_M1_2_Annotation_Workflow_IAA_Protocol.md)).
+3. Take the 20-doc calibration test ([09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)).
 4. If κ ≥ 0.80 on first attempt → start annotating production batches.
 
 ### 8-domain examples
@@ -480,7 +480,7 @@ The parent doc covers 3 pairs in §6.1. Three more:
 
 ## Technology choices
 
-This is an annotation-training doc; the "technology" is the calibration-test design. See [09_M1_2_Annotation_Workflow_IAA_Protocol.md](09_M1_2_Annotation_Workflow_IAA_Protocol.md).
+This is an annotation-training doc; the "technology" is the calibration-test design. See [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md).
 
 ## Worked example
 
@@ -506,7 +506,7 @@ Final: PRODUCT_STANDARD, sectors=[general_retail, grocery_retail]
 
 - **Example becomes stale.** If a regulation cited in an example is repealed, the example still has *training* value — it teaches the pattern. Update the doc only when the *category* meaning changes.
 - **Templates leak as real data.** Risk if a real regulation matches a template. Mitigation: every `[template]` example is hand-checked before publication against the seeded regulation set.
-- **Annotator memorises examples.** A failure mode of any worked-examples doc. Mitigation: the calibration set ([09_M1_2_*.md](09_M1_2_Annotation_Workflow_IAA_Protocol.md)) is *different* from this doc's examples.
+- **Annotator memorises examples.** A failure mode of any worked-examples doc. Mitigation: the calibration set ([09_M1_2_*.md](09_M1_Annotation_Guidelines.md)) is *different* from this doc's examples.
 
 ## Validation & acceptance criteria
 
@@ -518,7 +518,7 @@ Final: PRODUCT_STANDARD, sectors=[general_retail, grocery_retail]
 ## Cross-references
 
 - Parent: [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §2, §6.1
-- Related: [09_M1_2_Annotation_Workflow_IAA_Protocol.md](09_M1_2_Annotation_Workflow_IAA_Protocol.md)
+- Related: [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
 - BUILD phase: BUILD_07 §annotator onboarding
 - Code (when shipped): `research/data/calibration_set_v1.csv`, `tests/m1/fixtures/category_examples/`
 
@@ -686,7 +686,7 @@ Annotator B notified via dashboard; this counts toward B's drift metric
 ## Cross-references
 
 - Parent: [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §4, §5, §5.1
-- Related: [09_M1_1_Category_Taxonomy_Examples.md](09_M1_1_Category_Taxonomy_Examples.md), [09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md)
+- Related: [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md), [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
 - BUILD phase: BUILD_07 §annotator workflow
 - Code (when shipped): `m1_annotator_calibration` table, `research/data/calibration_set_v1.csv`
 
@@ -791,7 +791,7 @@ Themes feed the thesis discussion + policy recommendations.
 | Option | Trade-off | Decision | When to reconsider |
 |---|---|---|---|
 | Portal-embedded form (chosen) | Native integration; auto-fill from `sme_profiles` | ✅ Lowest friction; best response quality | If portal adoption stays below 100 SMEs at month 6, supplement with Typeform. |
-| Google Forms / Typeform | Easy to start | ❌ Loses `sme_profile_id` linkage → can't disaggregate F3 by district | Only for pre-pilot (already done in [01_M1_1_Research_Motivation_Evidence.md](01_M1_1_Research_Motivation_Evidence.md)). |
+| Google Forms / Typeform | Easy to start | ❌ Loses `sme_profile_id` linkage → can't disaggregate F3 by district | Only for pre-pilot (already done in [01_M1_Research_Problem.md](01_M1_Research_Problem.md)). |
 | Paper / phone | Maximum reach | ❌ 10× the cost per response, no auto-validation | Never. |
 | Per-respondent thank-you PDF | Boosts completion rate | ✅ Pre-pilot showed 18 → 32 % completion lift with personalised PDF reward | If completion rates collapse, add more incentive. |
 
@@ -818,7 +818,7 @@ The submission takes ~10 minutes — short enough that the abandonment rate stay
 
 - **Respondent abandons mid-survey.** Partial submission saved; `is_partial=true`. Excluded from F3/F4 but included in F6 ITT analysis.
 - **Repeat respondent (different account).** Detected by IP + behavioral fingerprint; flagged for review. Treated as separate respondent unless evidence of fraud.
-- **Consent withdrawn after submission.** Right-of-erasure (see [02_M1_3_Data_Governance_Retention.md](02_M1_3_Data_Governance_Retention.md)) anonymises the rows but keeps the aggregate research signal.
+- **Consent withdrawn after submission.** Right-of-erasure (see [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md)) anonymises the rows but keeps the aggregate research signal.
 - **Q3 channel selection conflicts with Q4 confidence.** Some respondents pick 5+ channels with high confidence; others pick 1 with low. Both are valid; downstream coding handles the variance.
 
 ## Validation & acceptance criteria
@@ -831,6 +831,6 @@ The submission takes ~10 minutes — short enough that the abandonment rate stay
 ## Cross-references
 
 - Parent: [09_M1_Annotation_Guidelines.md §9](09_M1_Annotation_Guidelines.md)
-- Related: [01_M1_1_Research_Motivation_Evidence.md](01_M1_1_Research_Motivation_Evidence.md) (pre-pilot scan), [08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md) (F3, F4, F6 use this data)
+- Related: [01_M1_Research_Problem.md](01_M1_Research_Problem.md) (pre-pilot scan), [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) (F3, F4, F6 use this data)
 - BUILD phase: BUILD_07 §survey portal
 - Code (when shipped): `backend/app/api/v1/m1_survey.py`, frontend `app/(portal)/portal/m1/survey/page.tsx`, `m1_survey_attempts` + `m1_survey_qualitative_responses` tables

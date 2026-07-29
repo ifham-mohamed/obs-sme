@@ -2,7 +2,7 @@
 
 > **Cross-references:** [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) · [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) · [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) for where Stage-G (lag measurement) code lives in the project tree.
-> **Sub-step companion:** [01_M1_1_Research_Motivation_Evidence.md](01_M1_1_Research_Motivation_Evidence.md) — expanded IRD/EPF awareness-gap evidence + SME pre-pilot survey data.
+> **Sub-step companion:** [01_M1_Research_Problem.md](01_M1_Research_Problem.md) — expanded IRD/EPF awareness-gap evidence + SME pre-pilot survey data.
 
 ---
 
@@ -153,7 +153,7 @@ Understanding the research problem requires mapping the full information diffusi
 
 ### 8.1 Lag-measurement methodology preview
 
-Each lag is computed from concrete event timestamps emitted by the pipeline (see [03_M1_Data_Collection.md](03_M1_Data_Collection.md) for the timestamp sources) and aggregated nightly via the `v_m1_regulation_lag_summary` view ([02_M1_Data_Requirements.md §3.5](02_M1_Data_Requirements.md)). The full measurement procedure — sample-size requirement, statistical test, expected effect size, and the four research notebooks that consume the data — is detailed in [08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md). Monitoring of the lag-measurement pipeline (data-source uptime, view refresh latency, RSS publish-delay calibration) lives in [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md). The point at which a measurement becomes statistically defensible (sample size ≥ 50 per channel, IAA-validated survey responses ≥ 100 SMEs) is documented in the success-metrics table above.
+Each lag is computed from concrete event timestamps emitted by the pipeline (see [03_M1_Data_Collection.md](03_M1_Data_Collection.md) for the timestamp sources) and aggregated nightly via the `v_m1_regulation_lag_summary` view ([02_M1_Data_Requirements.md §3.5](02_M1_Data_Requirements.md)). The full measurement procedure — sample-size requirement, statistical test, expected effect size, and the four research notebooks that consume the data — is detailed in [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md). Monitoring of the lag-measurement pipeline (data-source uptime, view refresh latency, RSS publish-delay calibration) lives in [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md). The point at which a measurement becomes statistically defensible (sample size ≥ 50 per channel, IAA-validated survey responses ≥ 100 SMEs) is documented in the success-metrics table above.
 
 ---
 
@@ -176,13 +176,13 @@ Each mitigation pins one **implementation hook** — a concrete file path or mon
 
 | Risk | Probability | Impact | Mitigation + implementation hook |
 |---|---|---|---|
-| Older gazettes are scanned PDFs with no extractable text | High (pre-2018) | Medium — reduces training corpus quality | Tesseract OCR fallback ([03_M1_1_PDF_Extraction_Chain.md](03_M1_1_PDF_Extraction_Chain.md)); accept ≤ 10% CER; manual spot-check 5% of OCR output. **Hook:** `backend/app/tasks/m1/analytics.py` logs daily `extraction_method` distribution; Prometheus alert if scanned share exceeds 2× the 30-day baseline. |
-| Sinhala/Tamil OCR quality insufficient for classification | Medium | High — degrades multilingual F1 | Tesseract 5.3.x LSTM mode with `sin`/`tam` packs ([10_M1_2_OCR_Wijesekara_Conversion.md](10_M1_2_OCR_Wijesekara_Conversion.md)); quantify CER in thesis limitations. **Hook:** quarterly CER recalibration via 50-doc hand-checked sample; results stored in `storage/models/m1/v<X>/model_registry.json:ocr_cer_per_language`. |
+| Older gazettes are scanned PDFs with no extractable text | High (pre-2018) | Medium — reduces training corpus quality | Tesseract OCR fallback ([03_M1_Data_Collection.md](03_M1_Data_Collection.md)); accept ≤ 10% CER; manual spot-check 5% of OCR output. **Hook:** `backend/app/tasks/m1/analytics.py` logs daily `extraction_method` distribution; Prometheus alert if scanned share exceeds 2× the 30-day baseline. |
+| Sinhala/Tamil OCR quality insufficient for classification | Medium | High — degrades multilingual F1 | Tesseract 5.3.x LSTM mode with `sin`/`tam` packs ([10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md)); quantify CER in thesis limitations. **Hook:** quarterly CER recalibration via 50-doc hand-checked sample; results stored in `storage/models/m1/v<X>/model_registry.json:ocr_cer_per_language`. |
 | Government gazette portal changes URL structure | Low | High — breaks entire ingestion pipeline | Spider health-check job; manual URL override table. **Hook:** `backend/app/tasks/m1/portal_watcher.py` writes per-source HTTP status to `m1_sources.last_check_status`; alert on consecutive non-200 for any source. |
 | Survey response rate too low for lag measurement (< 100 SMEs) | Medium | High — RQ3 underpowered | Bundle survey with M2/M3 questionnaires; partner with NEDA and Chamber of Commerce. **Hook:** dashboard widget at `/admin/m1/survey-coverage` shows running count by sector; flag below-target sectors weekly. |
 | News scrapers blocked by paywalls | Medium | Low — RSS headlines sufficient for first-mention timestamp | RSS feeds + headline-only scraping; document as methodology limitation. **Hook:** `m1_sources` rows for paywalled outlets carry `access_method='rss_headline_only'` to flag this caveat in research outputs. |
-| Classifier confused by long gazette PDFs (> 512 tokens) | High | Medium — truncation loses regulatory tail clauses | Section-aware chunking ([04_M1_3_Text_Chunking_Strategy.md](04_M1_3_Text_Chunking_Strategy.md)); classify per section, aggregate. **Hook:** `ml/m1/preprocessing/chunking.py` emits `chunks_per_gazette` metric; >10 chunks triggers a spot-check task. |
-| New regulatory category appears mid-project (taxonomy lock) | Low | Medium — new category misclassified as OTHER | Lock taxonomy by Week 5; `needs_review=true` path for low-confidence; re-label batch. **Hook:** when daily count of `needs_review=true` exceeds 15% of new gazettes, [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md) re-training trigger fires. |
+| Classifier confused by long gazette PDFs (> 512 tokens) | High | Medium — truncation loses regulatory tail clauses | Section-aware chunking ([04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md)); classify per section, aggregate. **Hook:** `ml/m1/preprocessing/chunking.py` emits `chunks_per_gazette` metric; >10 chunks triggers a spot-check task. |
+| New regulatory category appears mid-project (taxonomy lock) | Low | Medium — new category misclassified as OTHER | Lock taxonomy by Week 5; `needs_review=true` path for low-confidence; re-label batch. **Hook:** when daily count of `needs_review=true` exceeds 15% of new gazettes, [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) re-training trigger fires. |
 
 ---
 
@@ -245,7 +245,7 @@ This is an evidence-curation step, not a software step — the "technology" choi
 | Google Forms (chosen) | Free, fast, anonymous, exports to CSV | ✅ Used for the 40-respondent informal scan. Single channel, lowest friction. | If targeted respondent counts pass 200; Google Forms response throttling becomes a pain point above that. |
 | Typeform | Better UX, branching logic | ❌ Cost ($35/mo) + brand confusion (looks too "polished" for an academic scan) | If we ever need conditional branching for the full BUILD_07 instrument. |
 | SurveyCTO / KoboToolbox | Field-research-grade, offline mobile collection | ❌ Massive overkill for 40 respondents on email | If we run physical-visit SME interviews in BUILD_07's regional survey phase. |
-| Custom Enigmatrix portal form | Native integration, captures `sme_profile_id` | 🔲 **Will be chosen for the full BUILD_07 survey** ([09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md)) — but the chicken-and-egg problem (no SMEs onboarded yet) made it unsuitable for the pre-pilot. | When ≥ 100 SMEs are onboarded; the embedded form replaces Google Forms. |
+| Custom Enigmatrix portal form | Native integration, captures `sme_profile_id` | 🔲 **Will be chosen for the full BUILD_07 survey** ([09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)) — but the chicken-and-egg problem (no SMEs onboarded yet) made it unsuitable for the pre-pilot. | When ≥ 100 SMEs are onboarded; the embedded form replaces Google Forms. |
 
 The pre-pilot intentionally accepted methodological compromises (self-selected respondents, no demographic stratification, English-only) because its job was to *triangulate* the IRD/EPF numbers, not to *replace* them. The formal RQ3 survey will go through the portal form with proper stratification.
 
@@ -272,11 +272,11 @@ Three signals from this single response shape Module 1's design: (a) the gap bet
 - **Reproducibility of Stream 1 figures.** Reviewer can re-derive the 34 % / 61 % / 76 % numbers by opening the cited reports. The PDF page numbers are pinned in `research/citations.bib`.
 - **Inter-source consistency check.** The 30 % / 34 % / 38 % range across three independent sources is reported as evidence of robustness; if any new source falls outside 20–45 %, flag for re-investigation.
 - **Pre-pilot data retention.** The 40 Google Forms responses are exported as `research/data/prepilot_2025-09.csv` (PII redacted; sector + district kept). Stored alongside the survey instrument.
-- **Hand-off to BUILD_07.** The 40 free-text Q3 responses are the seed for the question-bank of the full instrument; thematic coding produces the channel categories used in [09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md).
+- **Hand-off to BUILD_07.** The 40 free-text Q3 responses are the seed for the question-bank of the full instrument; thematic coding produces the channel categories used in [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md).
 
 ## Cross-references
 
 - Parent: [01_M1_Research_Problem.md](01_M1_Research_Problem.md) §1.2 (motivation), §8 (diffusion timeline)
-- Related: [09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md) — full BUILD_07 survey
+- Related: [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) — full BUILD_07 survey
 - BUILD phase: BUILD_07 §SME Survey (deferred)
 - Code (when shipped): `research/data/prepilot_2025-09.csv`, `research/citations.bib`

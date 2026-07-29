@@ -2,7 +2,7 @@
 
 > **Cross-references:** [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) · [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) · [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/shared/drift.py`, `backend/app/tasks/m1/analytics.py`, `model_registry.json`.
-> **Sub-step companions:** [12_M1_1_Performance_Monitoring_Alerting.md](12_M1_1_Performance_Monitoring_Alerting.md) · [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md)
+> **Sub-step companions:** [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) · [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md)
 
 ---
 
@@ -212,7 +212,7 @@ Day 5   [full rollout + backfill]
         rollback reason.
 ```
 
-The detailed per-step code, the canary traffic-split implementation, and the A/B testing measurement protocol live in [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md).
+The detailed per-step code, the canary traffic-split implementation, and the A/B testing measurement protocol live in [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md).
 
 ---
 
@@ -275,7 +275,7 @@ Each alert produced by the monitoring tasks above flows through a defined escala
 | `error` | Two or more `warn` thresholds crossed simultaneously, or any SLA target missed | Slack `#enigmatrix-alerts` + immediate email + PagerDuty *low-urgency* | < 4 h | M1 on-call (no overnight page) |
 | `critical` | Production F1 drops > 5 pp in 24 h, or any pipeline stage stops processing > 1 h | Slack `#enigmatrix-alerts` + PagerDuty *high-urgency* | < 30 min | M1 on-call (24×7) + engineering manager |
 
-`info` and `warn` are debounced (re-alerts suppressed for 6 h on the same metric). `error` and `critical` are not debounced — every threshold crossing pages. The Prometheus → Alertmanager routing rules are in `infra/prometheus/alert_rules.yml`. The per-severity runbook (what the on-call actually does for each kind of alert) is in [12_M1_1_Performance_Monitoring_Alerting.md](12_M1_1_Performance_Monitoring_Alerting.md).
+`info` and `warn` are debounced (re-alerts suppressed for 6 h on the same metric). `error` and `critical` are not debounced — every threshold crossing pages. The Prometheus → Alertmanager routing rules are in `infra/prometheus/alert_rules.yml`. The per-severity runbook (what the on-call actually does for each kind of alert) is in [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md).
 
 ---
 
@@ -548,7 +548,7 @@ JSON definition stored at `infra/grafana/dashboards/m1_classifier_health.json` �
 **`critical` runbook.**
 1. PagerDuty fires *high urgency*; on-call gets paged.
 2. On-call acknowledges within 30 minutes.
-3. **Immediate action:** if F1 dropped > 5 pp in 24 h, *automatic rollback* fires (per [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md)) — confirm rollback succeeded.
+3. **Immediate action:** if F1 dropped > 5 pp in 24 h, *automatic rollback* fires (per [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md)) — confirm rollback succeeded.
 4. If rollback didn't fire (manual mode), execute: `fly secrets set M1_MODEL_VERSION=<previous> M1_MODEL_CANARY_PCT=0`.
 5. Engineering manager paged at 30-minute mark if not acknowledged.
 6. Post-mortem within 48 h, written to `research/incidents/`.
@@ -631,7 +631,7 @@ A typical `warn` alert flow:
 ## Cross-references
 
 - Parent: [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) §3, §4.4
-- Related: [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md), [06_M1_2_Slice_Analysis_Framework.md](06_M1_2_Slice_Analysis_Framework.md)
+- Related: [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md), [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md)
 - BUILD phase: BUILD_12 §monitoring stack
 - Code (when shipped): `infra/prometheus/`, `infra/grafana/dashboards/`, `backend/app/tasks/m1/analytics.py`
 
@@ -796,7 +796,7 @@ The retraining-run row is annotated with the rollback reason; post-mortem in `re
 
 | Option | Trade-off | Decision | When to reconsider |
 |---|---|---|---|
-| Canary by gazette-id hash (chosen) | Sticky; idempotent | ✅ See [07_M1_2_Fly_io_Deployment_Operations.md](07_M1_2_Fly_io_Deployment_Operations.md) | If a feature-flag service (GrowthBook) is adopted, switch. |
+| Canary by gazette-id hash (chosen) | Sticky; idempotent | ✅ See [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) | If a feature-flag service (GrowthBook) is adopted, switch. |
 | 10/50/100 rollout (chosen) | Conservative; 24h dwell time per stage | ✅ Matches the SLA reliability requirements | If we need faster iteration (rare). |
 | Auto-rollback (chosen) | Fast recovery from bad deploys | ✅ < 60s rollback time; no humans in the loop | If false-positive rate exceeds 5 % (no real F1 drop but rollback fires). |
 | 5 pp auto-rollback threshold | Conservative — small drops don't roll back | ✅ Empirical — tighter triggers cause too many rollbacks during noisy weeks | Re-tune after 6 months of production data. |
@@ -865,6 +865,6 @@ A retraining cycle from trigger to full rollout:
 ## Cross-references
 
 - Parent: [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) §3
-- Related: [07_M1_2_Fly_io_Deployment_Operations.md](07_M1_2_Fly_io_Deployment_Operations.md), [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §9 (versioning)
+- Related: [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md), [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §9 (versioning)
 - BUILD phase: BUILD_11 §retraining pipeline, BUILD_12 §auto-rollback
 - Code (when shipped): `scripts/retrain.py`, `scripts/deploy_canary.py`, `backend/app/tasks/m1/analytics.py:check_auto_rollback`

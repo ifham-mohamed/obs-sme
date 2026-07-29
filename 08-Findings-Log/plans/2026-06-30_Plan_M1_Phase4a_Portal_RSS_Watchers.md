@@ -13,7 +13,7 @@ features: F-229 (portal_watcher) · F-230 (rss_watcher) · F-231 (m1_propagation
 >
 > **Why:** the information lag `gazette → portal → news → SME` (RQ3/RQ4) can only be measured if each downstream appearance of a regulation is **timestamped**. This is the data source for Findings F1/F2/F4.
 
-## Approach — 2-step matching (per 03_M1_3_Secondary_Source_Integration.md)
+## Approach — 2-step matching (per 03_M1_Data_Collection.md)
 1. **Exact gazette-number match** — if a portal block / news item mentions a gazette number that matches a known regulation → confidence 1.0, `match_method='exact_gazette'`.
 2. **Fuzzy title/act match** — otherwise, `difflib` similarity between the normalised item text and the regulation title + principal act; if ≥ **0.78** → `match_method='fuzzy_title'`, confidence = the ratio. (Embedding match ≥ 0.78 is a later upgrade; difflib keeps this dependency-free and testable now.)
 

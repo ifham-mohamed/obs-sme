@@ -2,7 +2,7 @@
 
 > **Cross-references:** [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) · [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md) · [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `scraper/`, `ml/m1/extraction/`, and Stage-A/B Celery task boundaries.
-> **Sub-step companions:** [03_M1_1_PDF_Extraction_Chain.md](03_M1_1_PDF_Extraction_Chain.md) · [03_M1_2_Gazette_Segmentation.md](03_M1_2_Gazette_Segmentation.md) · [03_M1_3_Secondary_Source_Integration.md](03_M1_3_Secondary_Source_Integration.md)
+> **Sub-step companions:** [03_M1_Data_Collection.md](03_M1_Data_Collection.md) · [03_M1_Data_Collection.md](03_M1_Data_Collection.md) · [03_M1_Data_Collection.md](03_M1_Data_Collection.md)
 
 ---
 
@@ -200,7 +200,7 @@ def classify_pdf(path) -> dict:
 | 220 | 35 | 92.0% | 98% | 91% | ~1 |
 | 250 | 40 | 88.0% | 99% | 88% | ~0 |
 
-The full calibration procedure (rebuilding the curve when extraction tooling versions change) is in [03_M1_1_PDF_Extraction_Chain.md](03_M1_1_PDF_Extraction_Chain.md). The thresholds are stored as environment variables (`M1_PDF_TEXT_THRESHOLD`, `M1_PDF_SCANNED_THRESHOLD`) so a recalibration doesn't need a code deploy.
+The full calibration procedure (rebuilding the curve when extraction tooling versions change) is in [03_M1_Data_Collection.md](03_M1_Data_Collection.md). The thresholds are stored as environment variables (`M1_PDF_TEXT_THRESHOLD`, `M1_PDF_SCANNED_THRESHOLD`) so a recalibration doesn't need a code deploy.
 
 The `classify_pdf()` result is stored in `m1_regulations.extraction_method` for later slice analysis (see [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) Section 5).
 
@@ -407,7 +407,7 @@ stmt = insert(M1PropagationEvent).values(
 await db.execute(stmt)
 ```
 
-The matcher uses **earliest-wins** semantics: if a regulation has already been seen on `news_daily_ft` at T+23 days and a later watcher invocation re-observes it at T+25 days, the second is silently dropped (preserving the *first-seen* timestamp that the lag analyses depend on). To intentionally backdate a wrongly-detected event, the admin uses `POST /api/v1/m1/regulations/{id}/propagation-events/{event_id}/correct` rather than a delete + re-insert. Detailed matching tiers + the 3-tier confidence handling live in [03_M1_3_Secondary_Source_Integration.md](03_M1_3_Secondary_Source_Integration.md).
+The matcher uses **earliest-wins** semantics: if a regulation has already been seen on `news_daily_ft` at T+23 days and a later watcher invocation re-observes it at T+25 days, the second is silently dropped (preserving the *first-seen* timestamp that the lag analyses depend on). To intentionally backdate a wrongly-detected event, the admin uses `POST /api/v1/m1/regulations/{id}/propagation-events/{event_id}/correct` rather than a delete + re-insert. Detailed matching tiers + the 3-tier confidence handling live in [03_M1_Data_Collection.md](03_M1_Data_Collection.md).
 
 ---
 
@@ -528,7 +528,7 @@ def run_gazette_spider(self: Task) -> dict:
     return {"crawled": result.count, "duration_s": result.duration}
 ```
 
-**The rule:** anything that Scrapy can retry (HTTP-layer errors) stays inside Scrapy. Anything Scrapy cannot retry (DB connection lost, disk full, Celery worker killed mid-task) is a hard task-level failure where Celery's retry kicks in. The matching pattern for `extract_gazette` and `classify_gazette` Celery tasks is documented in their respective task modules. The full failure-mode → handler table for the extraction Celery chord lives in [08_M1_2_Edge_Cases_Failure_Modes.md](08_M1_2_Edge_Cases_Failure_Modes.md).
+**The rule:** anything that Scrapy can retry (HTTP-layer errors) stays inside Scrapy. Anything Scrapy cannot retry (DB connection lost, disk full, Celery worker killed mid-task) is a hard task-level failure where Celery's retry kicks in. The matching pattern for `extract_gazette` and `classify_gazette` Celery tasks is documented in their respective task modules. The full failure-mode → handler table for the extraction Celery chord lives in [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md).
 
 ---
 
@@ -718,7 +718,7 @@ Total runtime: ~ 8 s (PyMuPDF) + ~ 9 s (Tesseract on 3 pages) = ~ 17 s. Single-s
 ## Cross-references
 
 - Parent: [03_M1_Data_Collection.md](03_M1_Data_Collection.md) §2 (PDF extraction)
-- Related: [10_M1_2_OCR_Wijesekara_Conversion.md](10_M1_2_OCR_Wijesekara_Conversion.md) (Wijesekara conversion + Tesseract config)
+- Related: [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) (Wijesekara conversion + Tesseract config)
 - BUILD phase: BUILD_07 §Extraction pipeline
 - Code (when shipped): `ml/m1/extraction/pdf_classifier.py`, `text_extractors.py`, `ocr.py`
 
@@ -748,7 +748,7 @@ Used on ~70 % of gazettes. Patterns from the parent doc are the seed set; the li
 |---|---|---|
 | Single-section gazette | Only one notice; the regex matches once, yielding one section (correct — but boundary count = 0, falls through to B). | Detect: `len(sections) == 1` AND `len(text) > 5000` → trust the single section. |
 | Embedded "Part I" inside a notice body | Some notices quote previous gazettes ("amending Part I of the principal Act"). Regex false-matches → over-segmentation. | Require boundary patterns to be at line start (`re.MULTILINE`) + preceded by at least one blank line. |
-| Sinhala-only gazette | The regex set is English. | Add Sinhala/Tamil equivalents to `NOTICE_BOUNDARY_RE` per [10_M1_1_Language_Detection_Routing.md](10_M1_1_Language_Detection_Routing.md). |
+| Sinhala-only gazette | The regex set is English. | Add Sinhala/Tamil equivalents to `NOTICE_BOUNDARY_RE` per [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md). |
 | Hand-typed legacy gazette | Inconsistent capitalisation, OCR errors. | Try strategy B; if B also fails, fall through to C. |
 
 ### Strategy B — Block-gap (fallback)
@@ -831,7 +831,7 @@ The signature line is treated as a *boundary marker* but not its own section —
 ## Cross-references
 
 - Parent: [03_M1_Data_Collection.md](03_M1_Data_Collection.md) §3.3 (segmentation), §3.4 (NOT_REGULATORY filter)
-- Related: [04_M1_3_Text_Chunking_Strategy.md](04_M1_3_Text_Chunking_Strategy.md) (downstream chunking)
+- Related: [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md) (downstream chunking)
 - BUILD phase: BUILD_07 §Segmentation
 - Code (when shipped): `ml/m1/extraction/segmenter.py`
 
@@ -954,6 +954,6 @@ Grounded against the live matcher; several spec details map differently:
 ## Cross-references
 
 - Parent: [03_M1_Data_Collection.md](03_M1_Data_Collection.md) §3.5 (matching), §3.6 (de-dup contract)
-- Related: [02_M1_1_Data_Sources_Catalogue.md](02_M1_1_Data_Sources_Catalogue.md), [08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md) (F2/F5 use this data)
+- Related: [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md), [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) (F2/F5 use this data)
 - BUILD phase: BUILD_07 §news watchers, BUILD_12 §portal watchers
 - Code (when shipped): `backend/app/tasks/m1/portal_watcher.py`, `rss_watcher.py`, `ml/shared/embeddings.py`

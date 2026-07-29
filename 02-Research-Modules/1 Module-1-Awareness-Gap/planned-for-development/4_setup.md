@@ -142,5 +142,5 @@ The Step 2c surface (`extract_with_chain(pdf_path)`) still works after rollback 
 - Plan: [4.md](4.md)
 - Predecessor setup: [3_setup.md](3_setup.md) (Step 2c)
 - Successor setup: [5_setup.md](5_setup.md) (Step 2e)
-- Spec: [../10_M1_1_Language_Detection_Routing.md](../10_M1_1_Language_Detection_Routing.md) + [../10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md)
+- Spec: [../10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md) + [../10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md)
 - Tracker: F-153 in `c:\sme\08-Findings-Log\FEATURES.md`; Session 30 in `SESSIONS.md`.

@@ -59,6 +59,6 @@ None. Step 2e is complete with all DoD-required fields populated on the worked e
 
 - Related session: [Session 31 — 2026-05-17](../../../08-Findings-Log/SESSIONS.md)
 - Predecessor: [Session 30 / F-153 — Step 2d language detection + Wijesekara + per-page OCR fallback](../../../08-Findings-Log/SESSIONS.md) — provides the cleaned Unicode text + per-line language router that Step 2e reuses.
-- Spec docs: [04_M1_Preprocessing_Pipeline](../04_M1_Preprocessing_Pipeline.md), [04_M1_1_Gazette_Noise_Removal](../04_M1_1_Gazette_Noise_Removal.md), [04_M1_2_Metadata_Extraction_Patterns](../04_M1_2_Metadata_Extraction_Patterns.md), [04_M1_3_Text_Chunking_Strategy](../04_M1_3_Text_Chunking_Strategy.md)
-- Future cross-ref: [03_M1_2_Gazette_Segmentation](../03_M1_2_Gazette_Segmentation.md) — shared section-detection regex (when that module ships, `NOTICE_BOUNDARY_RE` moves out of `chunking.py`)
+- Spec docs: [04_M1_Preprocessing_Pipeline](../04_M1_Preprocessing_Pipeline.md), [04_M1_1_Gazette_Noise_Removal](../04_M1_Preprocessing_Pipeline.md), [04_M1_2_Metadata_Extraction_Patterns](../04_M1_Preprocessing_Pipeline.md), [04_M1_3_Text_Chunking_Strategy](../04_M1_Preprocessing_Pipeline.md)
+- Future cross-ref: [03_M1_2_Gazette_Segmentation](../03_M1_Data_Collection.md) — shared section-detection regex (when that module ships, `NOTICE_BOUNDARY_RE` moves out of `chunking.py`)
 - Feature: F-154 in [FEATURES](../../../08-Findings-Log/FEATURES.md)

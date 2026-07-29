@@ -2,7 +2,7 @@
 
 > Where every M1 file lives, what it owns, when it lands, and how the same shape extends to M2/M3/M4.
 > **Implementation status (2026-07-24):** 🟢 Largely built. Phase-2 ingest + the full `enigmatrix-ml/m1/` extraction/preprocessing/evaluation stack, the `model/` scaffolds, and the Phase-3 labelling surface (sampler + Label Studio config + calibration set + `batch_01` + runbook) are shipped. Remaining: alerts/schedulers (BUILD_12), summarisation, and the findings notebooks.
-> **Path note:** the short names below (`ml/`, `backend/`, `scraper/`) map to the real roots `enigmatrix-ml/`, `enigmatrix-backend/` (which also hosts the Scrapy scraper), and the top-level `research/` · `data/` · `mydata/` · `scripts/` · `storage/`. Labelling operation: see [15_M1_4](15_M1_4_Research_Folder_Guide.md) + `research/data/PHASE3_ANNOTATION_RUNBOOK.md`.
+> **Path note:** the short names below (`ml/`, `backend/`, `scraper/`) map to the real roots `enigmatrix-ml/`, `enigmatrix-backend/` (which also hosts the Scrapy scraper), and the top-level `research/` · `data/` · `mydata/` · `scripts/` · `storage/`. Labelling operation: see the research folder section in [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) plus `research/data/PHASE3_ANNOTATION_RUNBOOK.md`.
 
 ---
 
@@ -10,7 +10,7 @@
 
 The 12 numbered M1 docs describe **what** the gazette-classifier system does. This doc describes **where in the project tree** each piece lives once BUILD_07/11/12 ship. It also locks the per-module shape so M2 (Knowledge), M3 (Vulnerability), and M4 (Misinformation) can copy the layout without re-litigating decisions.
 
-> Current state (2026-07-24): far beyond the original admin-CRUD slice. Shipped now includes the Phase-2 Scrapy spiders + Celery ingest/extract chain (`enigmatrix-backend/`), the whole `enigmatrix-ml/m1/` extraction → preprocessing → evaluation → model stack, and the Phase-3 labelling surface (`enigmatrix-ml/m1/data/samplers.py`, `research/data/label_studio_config.xml`, `calibration_set_v1.csv`, `labeling/batch_01.csv`, the live `mydata/` Label Studio instance, and `research/data/PHASE3_ANNOTATION_RUNBOOK.md`). The tree below is still the canonical *target* layout; each sub-step doc + the 15_M1_* folder guides carry current status badges.
+> Current state (2026-07-29): far beyond the original admin-CRUD slice. Shipped now includes the Phase-2 Scrapy spiders + Celery ingest/extract chain (`enigmatrix-backend/`), the whole `enigmatrix-ml/m1/` extraction → preprocessing → evaluation → model stack, and the Phase-3 labelling surface (`enigmatrix-ml/m1/data/samplers.py`, `research/data/label_studio_config.xml`, `calibration_set_v1.csv`, `labeling/batch_01.csv`, the live `mydata/` Label Studio instance, and `research/data/PHASE3_ANNOTATION_RUNBOOK.md`). The tree below is still the canonical *target* layout; the numbered parent docs and the consolidated 15_M1 folder guide carry current status badges.
 
 ---
 
@@ -42,7 +42,7 @@ Adding M2 means copying `ml/m1/` to `ml/m2/`, copying `app/tasks/m1_*` to `app/t
 
 ## M1 folder map
 
-> **See also:** for per-folder *build instructions* (what every file owns + how to start building it + dependencies + acceptance) see [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) and its 6 sub-folder guides ([ml/](15_M1_1_ML_Folder_Guide.md) · [backend/](15_M1_2_Backend_Folder_Guide.md) · [scraper/](15_M1_3_Scraper_Folder_Guide.md) · [research/](15_M1_4_Research_Folder_Guide.md) · [storage/](15_M1_5_Storage_Folder_Guide.md) · [docs/](15_M1_6_Docs_Folder_Guide.md)). For the *sequenced order* in which to build these folders see the [16_M1_Development_Roadmap.md](16_M1_Development_Roadmap.md). This doc remains the *spec* (what every file owns); those docs are the *how to ship it*.
+> **See also:** for per-folder *build instructions* (what every file owns + how to start building it + dependencies + acceptance) see [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) and its 6 sub-folder guides ([ml/](15_M1_Folder_Reference.md) · [backend/](15_M1_Folder_Reference.md) · [scraper/](15_M1_Folder_Reference.md) · [research/](15_M1_Folder_Reference.md) · [storage/](15_M1_Folder_Reference.md) · [docs/](15_M1_Folder_Reference.md)). For the *sequenced order* in which to build these folders see the [16_M1_Development_Roadmap.md](16_M1_Development_Roadmap.md). This doc remains the *spec* (what every file owns); those docs are the *how to ship it*.
 
 This is the full tree once BUILD_07 + BUILD_11 + BUILD_12 have all shipped. Folders marked 🟡 are partially implemented today (admin-CRUD only); 🔲 are wholly deferred; ✅ are shipped.
 
@@ -194,9 +194,12 @@ xyz/                                          # repo root
 │               └── vocabulary.pkl
 │
 └── enigmatrix-docs/m1/                        # this folder — docs only
+    ├── 00_INDEX.md
     ├── 01_M1_*.md … 12_M1_*.md
     ├── 13_M1_Folder_Structure_and_Implementation_Flow.md
-    └── NN_M1_N_*.md                           # 29 sub-step companions
+    ├── 14_M1_Tracking_Workflows.md
+    ├── 15_M1_Folder_Reference.md
+    └── 16_M1_Development_Roadmap.md
 ```
 
 ---
@@ -264,7 +267,7 @@ Adding a new module = mechanical copy of M1's tree. The exact recipe:
 2. **Create the backend task folder:** `cp -r backend/app/tasks/m1/ backend/app/tasks/m2/` and rename Celery task names (must be globally unique — `m1.classify_gazette` → `m2.classify_knowledge_unit`).
 3. **Create the service:** `backend/app/services/m2_<name>_service.py`. Re-use `services/shared/audit_service.py` for audit; **do not duplicate audit logic per module.**
 4. **Create the DB models + migrations:** `backend/app/models/m2_*.py` + Alembic migration `<timestamp>_create_m2_tables.py`. Module-table names start with `m2_` to keep the namespace clean.
-5. **Create the docs:** `cp -r enigmatrix-docs/m1/ enigmatrix-docs/m2/` and adapt the 12 numbered docs + this folder-structure doc. The sub-step companions are module-specific; M2's set will be different from M1's (different stages, different tech choices) but the *skeleton* (Purpose → Detailed process → Tech choices → Worked example → Failure modes → Validation → Cross-refs) is identical.
+5. **Create the docs:** `cp -r enigmatrix-docs/m1/ enigmatrix-docs/m2/` and adapt the consolidated numbered docs. Keep deep-dives inside the parent document section they explain, and add a separate file only for a genuinely new top-level topic.
 6. **Cross-module utilities:** put shared embedding code, drift detectors, and rate-limiting helpers in `ml/shared/` (NOT `ml/m2/utils/`). Same for `backend/app/services/shared/`.
 
 > **The cardinal rule:** if M2 needs to *import* anything from `ml/m1/`, that thing belongs in `ml/shared/`. No M2 file imports from `ml/m1/`; no M1 file imports from `ml/m2/`. Module isolation is enforced by convention — a future linter rule will check this.

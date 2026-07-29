@@ -2,7 +2,7 @@
 
 > **Cross-references:** [01_M1_Research_Problem.md](01_M1_Research_Problem.md) · [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) · [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — the full code tree this doc's architecture maps to.
-> **Sub-step companions:** [08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md) · [08_M1_2_Edge_Cases_Failure_Modes.md](08_M1_2_Edge_Cases_Failure_Modes.md)
+> **Sub-step companions:** [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) · [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md)
 
 ---
 
@@ -90,9 +90,9 @@ The Next.js 14 App Router frontend provides the following routes for Module 1:
 | `/admin/regulations/[id]/authoring` | `(admin)/admin/regulations/[id]/authoring/page.tsx` | ✅ Shipped | 3-step guided wizard (Session-11 quick-start) |
 | `/admin/surveys/awareness/responses` | `(admin)/admin/surveys/awareness/responses/page.tsx` | ✅ Shipped | M1 awareness response browser |
 | `/admin/activity-log` | `(admin)/admin/activity-log/page.tsx` | ✅ Shipped | Audit-log viewer (Session 14) |
-| `/admin/m1/review-queue` | — | 🔲 Deferred (BUILD_13) | Needs-review queue triage — see [14_M1_2](14_M1_2_Admin_Review_Queue_Triage.md) |
-| `/admin/m1/analytics` | — | 🔲 Deferred (BUILD_13) | Lag dashboard + propagation tracker — see [14_M1_4](14_M1_4_Admin_Lag_Analytics.md) |
-| `/admin/m1/pipeline` | — | 🔲 Deferred (BUILD_13) | Stage A–F dashboard — see [14_M1_1](14_M1_1_Admin_Pipeline_State_Tracking.md) |
+| `/admin/m1/review-queue` | — | 🔲 Deferred (BUILD_13) | Needs-review queue triage — see [14_M1_2](14_M1_Tracking_Workflows.md) |
+| `/admin/m1/analytics` | — | 🔲 Deferred (BUILD_13) | Lag dashboard + propagation tracker — see [14_M1_4](14_M1_Tracking_Workflows.md) |
+| `/admin/m1/pipeline` | — | 🔲 Deferred (BUILD_13) | Stage A–F dashboard — see [14_M1_1](14_M1_Tracking_Workflows.md) |
 
 ### 4.2 SME Routes (`/` and `/surveys/*`)
 
@@ -107,8 +107,8 @@ The Next.js 14 App Router frontend provides the following routes for Module 1:
 | `/surveys/awareness` | `(app)/surveys/awareness/page.tsx` | ✅ Shipped | Standalone awareness instrument |
 | `/surveys/history` | `(app)/surveys/history/page.tsx` | ✅ Shipped | Session history with status pills |
 | `/profile` | `(app)/profile/page.tsx` | 🟡 View-only | Sector/region profile (editing deferred) |
-| `/portal/m1/my-regulations` | — | 🔲 Deferred (BUILD_13) | Compliance/action-taken tracker — see [14_M1_7](14_M1_7_SME_Compliance_Action_Tracking.md) |
-| `/portal/m1/deadlines` | — | 🔲 Deferred (BUILD_13) | Deadline countdown + alert history — see [14_M1_8](14_M1_8_SME_Deadline_Alert_History.md) |
+| `/portal/m1/my-regulations` | — | 🔲 Deferred (BUILD_13) | Compliance/action-taken tracker — see [14_M1_7](14_M1_Tracking_Workflows.md) |
+| `/portal/m1/deadlines` | — | 🔲 Deferred (BUILD_13) | Deadline countdown + alert history — see [14_M1_8](14_M1_Tracking_Workflows.md) |
 
 ### 4.3 Workflow reference
 
@@ -116,15 +116,15 @@ The verb-level workflow for each route — what an admin or SME *does* on the pa
 
 | Surface | Workflow doc |
 |---|---|
-| Admin pipeline-state tracking | [SETUP/14_M1_1_Admin_Pipeline_State_Tracking.md](14_M1_1_Admin_Pipeline_State_Tracking.md) |
-| Admin review queue | [SETUP/14_M1_2_Admin_Review_Queue_Triage.md](14_M1_2_Admin_Review_Queue_Triage.md) |
-| Admin verification | [SETUP/14_M1_3_Admin_Expert_Verification.md](14_M1_3_Admin_Expert_Verification.md) |
-| Admin lag analytics | [SETUP/14_M1_4_Admin_Lag_Analytics.md](14_M1_4_Admin_Lag_Analytics.md) |
-| SME discovery | [SETUP/14_M1_5_SME_Regulation_Discovery.md](14_M1_5_SME_Regulation_Discovery.md) |
-| SME awareness survey | [SETUP/14_M1_6_SME_Awareness_Survey.md](14_M1_6_SME_Awareness_Survey.md) |
-| SME compliance tracking | [SETUP/14_M1_7_SME_Compliance_Action_Tracking.md](14_M1_7_SME_Compliance_Action_Tracking.md) |
-| SME deadlines + alerts | [SETUP/14_M1_8_SME_Deadline_Alert_History.md](14_M1_8_SME_Deadline_Alert_History.md) |
-| Category × Sector reference | [SETUP/14_M1_9_Category_Sector_Workflows.md](14_M1_9_Category_Sector_Workflows.md) |
+| Admin pipeline-state tracking | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| Admin review queue | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| Admin verification | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| Admin lag analytics | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| SME discovery | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| SME awareness survey | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| SME compliance tracking | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| SME deadlines + alerts | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| Category × Sector reference | [SETUP/14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
 
 ---
 
@@ -300,7 +300,7 @@ The pipeline generates the empirical dataset from which Module 1's academic find
 
 These findings require only SQL queries against the production database; no additional data collection is needed beyond the pipeline's normal operation and the SME awareness survey.
 
-**Measurement error in F2 and F5 (RSS first-mention).** F2 (gazette → news media first mention) and F5 (language lag, which depends on F2 disaggregated by language) both rely on RSS-feed `published_at` timestamps. RSS is *not* the same as a news article's actual web publication time — outlets typically push RSS items 15 minutes to several hours after the article is first published, and archived articles can appear in RSS days late. The mitigation is a **per-source publish-delay calibration**: each row in `m1_sources` for a news outlet carries `publish_delay_p50_minutes` and `publish_delay_p95_minutes`, measured against a quarterly hand-validated sample of 30 articles per outlet. The lag computation subtracts the p50 delay to estimate true publication time; the p95 is reported as a confidence interval. Outlets where the p95 exceeds 12 hours are flagged "low-precision" and treated as a coarse lower bound only. Detailed methodology in [08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md).
+**Measurement error in F2 and F5 (RSS first-mention).** F2 (gazette → news media first mention) and F5 (language lag, which depends on F2 disaggregated by language) both rely on RSS-feed `published_at` timestamps. RSS is *not* the same as a news article's actual web publication time — outlets typically push RSS items 15 minutes to several hours after the article is first published, and archived articles can appear in RSS days late. The mitigation is a **per-source publish-delay calibration**: each row in `m1_sources` for a news outlet carries `publish_delay_p50_minutes` and `publish_delay_p95_minutes`, measured against a quarterly hand-validated sample of 30 articles per outlet. The lag computation subtracts the p50 delay to estimate true publication time; the p95 is reported as a confidence interval. Outlets where the p95 exceeds 12 hours are flagged "low-precision" and treated as a coarse lower bound only. Detailed methodology in [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md).
 
 ---
 
@@ -379,7 +379,7 @@ The following checklist must be fully satisfied before Module 1 is considered co
 - [ ] **API:** All endpoints in [11_M1_API_Reference.md](11_M1_API_Reference.md) return correct responses; Swagger docs published
 - [ ] **Backfill:** `POST /api/v1/m1/regulations/backfill` run to completion; zero rows remain with `change_category IS NULL` **OR** flagged for manual review (see edge case below)
 
-> **Failed-classification edge case.** A gazette can resist automatic classification for reasons unrelated to model quality — a corrupted PDF, an OCR failure that produced an empty string, a non-regulatory document that slipped past the NOT_REGULATORY filter. After the backfill pass, rows with `change_category IS NULL` are split into two buckets: (a) `status='extraction_failed'` → routed to the admin **manual-label queue** with a "missing-PDF" / "OCR-empty" tag; the Definition of Done is satisfied if these are *triaged* (decided to be manually labelled, manually re-extracted, or marked permanently `is_active=false` with a documented reason) — **not** if they sit in NULL purgatory. (b) `status='classified' AND confidence < 0.30` → also routed to manual review (same queue). The "zero NULLs after backfill" bar is therefore "zero un-triaged NULLs", not "zero NULLs". The full 20-edge-case catalogue with detection + resolution paths is in [08_M1_2_Edge_Cases_Failure_Modes.md](08_M1_2_Edge_Cases_Failure_Modes.md).
+> **Failed-classification edge case.** A gazette can resist automatic classification for reasons unrelated to model quality — a corrupted PDF, an OCR failure that produced an empty string, a non-regulatory document that slipped past the NOT_REGULATORY filter. After the backfill pass, rows with `change_category IS NULL` are split into two buckets: (a) `status='extraction_failed'` → routed to the admin **manual-label queue** with a "missing-PDF" / "OCR-empty" tag; the Definition of Done is satisfied if these are *triaged* (decided to be manually labelled, manually re-extracted, or marked permanently `is_active=false` with a documented reason) — **not** if they sit in NULL purgatory. (b) `status='classified' AND confidence < 0.30` → also routed to manual review (same queue). The "zero NULLs after backfill" bar is therefore "zero un-triaged NULLs", not "zero NULLs". The full 20-edge-case catalogue with detection + resolution paths is in [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md).
 
 ---
 
@@ -547,7 +547,7 @@ The number is reported in the thesis as: "SMEs in urban districts learn of new r
 ## Cross-references
 
 - Parent: [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) §10, §11
-- Related: [02_M1_Data_Requirements.md §3.3](02_M1_Data_Requirements.md) (`v_m1_*` views), [09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md)
+- Related: [02_M1_Data_Requirements.md §3.3](02_M1_Data_Requirements.md) (`v_m1_*` views), [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
 - BUILD phase: BUILD_07 §research notebooks
 - Code (when shipped): `research/notebooks/findings_*.ipynb`
 
@@ -599,7 +599,7 @@ The catalogue below is sorted by pipeline stage. For each: trigger (how it appea
 | # | Edge case | Trigger | Detection | Resolution | Monitoring |
 |---|---|---|---|---|---|
 | 15 | Classifier confidence < 0.30 | Confidence floor in `classify_gazette.py` | Auto-`needs_review=true`; alert NOT dispatched | Admin manually reclassifies in dashboard | `needs_review` count + low-confidence histogram |
-| 16 | Long PDF — category in tail (chunk N) | Classifier picked chunk 0, mis-classified | Caught only by admin verification (manual signal) | Open ticket; logit-aggregation rollout per [06_M1_2_Slice_Analysis_Framework.md](06_M1_2_Slice_Analysis_Framework.md) | Length-cliff dashboard |
+| 16 | Long PDF — category in tail (chunk N) | Classifier picked chunk 0, mis-classified | Caught only by admin verification (manual signal) | Open ticket; logit-aggregation rollout per [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) | Length-cliff dashboard |
 | 17 | Category drift — new gazette type | > 5 `needs_review=true` rows with same keyword | Per-week pattern detector in `analytics.py` | Admin triggers retraining + taxonomy update | Drift alert |
 
 ### Stage E — Summarisation

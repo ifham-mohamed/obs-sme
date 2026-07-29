@@ -16,15 +16,15 @@ The M1 backend docs (`enigmatrix-docs/m1/`) describe a regulation's life as a st
 
 | #   | Surface                                               | Audience | Status      | Detail in                                                                              |
 | --- | ----------------------------------------------------- | -------- | ----------- | -------------------------------------------------------------------------------------- |
-| A1  | Pipeline-state tracking (Stage A→F status machine)    | Admin    | 🟡 Partial  | [14_M1_1_Admin_Pipeline_State_Tracking.md](14_M1_1_Admin_Pipeline_State_Tracking.md)   |
-| A2  | Needs-review queue triage                             | Admin    | 🔲 Deferred | [14_M1_2_Admin_Review_Queue_Triage.md](14_M1_2_Admin_Review_Queue_Triage.md)           |
-| A3  | Expert-verification ledger                            | Admin    | ✅ Shipped   | [14_M1_3_Admin_Expert_Verification.md](14_M1_3_Admin_Expert_Verification.md)           |
-| A4  | Lag analytics + propagation tracker                   | Admin    | 🔲 Deferred | [14_M1_4_Admin_Lag_Analytics.md](14_M1_4_Admin_Lag_Analytics.md)                       |
-| S1  | Regulation discovery (sector + region filter)         | SME      | 🟡 Partial  | [14_M1_5_SME_Regulation_Discovery.md](14_M1_5_SME_Regulation_Discovery.md)             |
-| S2  | Awareness survey participation (Q1–Q8)                | SME      | ✅ Shipped   | [14_M1_6_SME_Awareness_Survey.md](14_M1_6_SME_Awareness_Survey.md)                     |
-| S3  | Compliance / action-taken status per regulation       | SME      | 🟡 Partial  | [14_M1_7_SME_Compliance_Action_Tracking.md](14_M1_7_SME_Compliance_Action_Tracking.md) |
-| S4  | Deadline + alert delivery history                     | SME      | 🔲 Deferred | [14_M1_8_SME_Deadline_Alert_History.md](14_M1_8_SME_Deadline_Alert_History.md)         |
-| X9  | Category × Sector workflows (cross-cutting reference) | Both     | Reference   | [14_M1_9_Category_Sector_Workflows.md](14_M1_9_Category_Sector_Workflows.md)           |
+| A1  | Pipeline-state tracking (Stage A→F status machine)    | Admin    | 🟡 Partial  | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)   |
+| A2  | Needs-review queue triage                             | Admin    | 🔲 Deferred | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)           |
+| A3  | Expert-verification ledger                            | Admin    | ✅ Shipped   | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)           |
+| A4  | Lag analytics + propagation tracker                   | Admin    | 🔲 Deferred | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)                       |
+| S1  | Regulation discovery (sector + region filter)         | SME      | 🟡 Partial  | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)             |
+| S2  | Awareness survey participation (Q1–Q8)                | SME      | ✅ Shipped   | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)                     |
+| S3  | Compliance / action-taken status per regulation       | SME      | 🟡 Partial  | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) |
+| S4  | Deadline + alert delivery history                     | SME      | 🔲 Deferred | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)         |
+| X9  | Category × Sector workflows (cross-cutting reference) | Both     | Reference   | [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)           |
 
 `✅` = the workflow runs end-to-end in the UI today. `🟡` = the data + some UI exists but a key surface is missing. `🔲` = backend-only today; the companion describes the *intended* UI for when BUILD_07/13 lands it.
 
@@ -82,7 +82,7 @@ S1 + S2 are shipped (with S1 missing the sector-applicability filter). S3 is cap
 
 - **Screen map**: [12_UI_Screens_and_Loading.md](../frontend/SETUP/12_UI_Screens_and_Loading.md) — every M1 screen this workflow doc references is documented there.
 - **Backend state machine + tables**: [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) (pipeline-state status enum), [08_M1_Full_System_Architecture.md §4](08_M1_Full_System_Architecture.md) (route table).
-- **Research findings the analytics surfaces produce**: [08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md).
+- **Research findings the analytics surfaces produce**: [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md).
 - **Frontend components catalogue**: [12_UI_Screens_and_Loading.md §4](../frontend/SETUP/12_UI_Screens_and_Loading.md) (`<RegulationCard>`, `<VerificationBadge>`, `<SurveyWizard>`, `<FlowCanvas>`, etc.).
 - **Build phases that ship the deferred surfaces**: [../BUILD_PLAN/BUILD_13_Admin_and_Annotation.md](../frontend/BUILD_PLAN/BUILD_13_Admin_and_Annotation.md) (admin), BUILD_07 (ingest pipeline that feeds A1/A4), BUILD_12 (schedulers that feed A4/S4).
 
@@ -94,7 +94,7 @@ The companion files mix two reader roles — the *user* (admin or SME going thro
 
 - **"Detailed process"** is the user procedure (verbs, no jargon).
 - **"Technology choices"** + **"Validation & acceptance criteria"** are for the implementer (component picks, loading-state contracts, a11y notes).
-- **"Worked example"** is a concrete walkthrough using the seeded demo regulations (`VAT_2024_AMD`, `EPF_2024_RATE`, the multi-pin adapter case from [m1/02_M1_4_Worked_Examples_All_Tables.md](02_M1_4_Worked_Examples_All_Tables.md)).
+- **"Worked example"** is a concrete walkthrough using the seeded demo regulations (`VAT_2024_AMD`, `EPF_2024_RATE`, the multi-pin adapter case from [m1/02_M1_Data_Requirements.md](02_M1_Data_Requirements.md)).
 
 When a surface is 🔲 deferred, the "Detailed process" describes the *intended* workflow drawn from the backend M1 docs; the section header marks it explicitly so a reader doesn't mistake an intended UI for a shipped one.
 
@@ -252,7 +252,7 @@ This loop currently takes the admin ~30 minutes via the regulation-bank filter w
 - Screen reference (current workaround): [12_UI_Screens_and_Loading.md §3.1](../frontend/SETUP/12_UI_Screens_and_Loading.md)
 - Backend confidence floor + `needs_review`: [02_M1_Data_Requirements.md §2.1](02_M1_Data_Requirements.md)
 - Backend triage trigger (the retraining linkage): [12_M1_Monitoring_Maintenance.md §3.3](12_M1_Monitoring_Maintenance.md)
-- Backend retraining/rollback: [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md)
+- Backend retraining/rollback: [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md)
 - BUILD phase: BUILD_13 §admin tracking dashboards
 - Code (when shipped): `frontend/app/(admin)/admin/m1/review-queue/page.tsx`, `frontend/components/forms/review-queue-drawer.tsx`
 
@@ -359,7 +359,7 @@ Throughout, [m1/02_M1_Data_Requirements.md §2.1](02_M1_Data_Requirements.md)'s 
 
 ## Purpose
 
-The four lag findings F1–F4 ([m1/08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md)) are the platform's empirical research contribution. The admin lag dashboard is the *operational* surface for the same data: per-channel median lag, propagation traces per regulation, drill-down into which regulations are missing channel coverage, and trend lines week-on-week.
+The four lag findings F1–F4 ([m1/08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md)) are the platform's empirical research contribution. The admin lag dashboard is the *operational* surface for the same data: per-channel median lag, propagation traces per regulation, drill-down into which regulations are missing channel coverage, and trend lines week-on-week.
 
 The dashboard is the deferred surface that, once shipped, lets the project answer in 30 seconds questions that today require a Jupyter notebook session.
 
@@ -448,13 +448,13 @@ The dashboard makes the same numbers the research notebook computes available wi
 - **Loading state.** Each card streams via `loading.tsx`; `<AnimatedLoadingSkeleton>` while data fetches.
 - **Empty state.** Per card, per drill-down — never blank canvas.
 - **CSV format.** UTF-8, RFC 4180 quoted, columns documented in the page footer.
-- **Sample-size disclaimers.** Any chart with N < 30 per slice renders an amber "low-confidence" banner referencing [m1/08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md).
+- **Sample-size disclaimers.** Any chart with N < 30 per slice renders an amber "low-confidence" banner referencing [m1/08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md).
 - **Filter persistence.** All filters in URL state for shareable deep-links.
 
 ## Cross-references
 
 - Parent: [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)
-- Backend findings + statistical tests: [08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md)
+- Backend findings + statistical tests: [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md)
 - Backend lag views: [02_M1_Data_Requirements.md §3.3](02_M1_Data_Requirements.md) (`v_m1_regulation_lag_summary`, `v_m1_channel_effectiveness`)
 - Backend monitoring of lag pipeline: [12_M1_Monitoring_Maintenance.md §5](12_M1_Monitoring_Maintenance.md)
 - BUILD phase: BUILD_13 §lag dashboard, BUILD_12 §schedulers (the nightly view refresh feeding this UI)
@@ -567,7 +567,7 @@ Click card → same /surveys/regulation/[id] flow
 
 ## Purpose
 
-The awareness survey is the *only* data-collection workflow in M1 today, and the entire RQ3 / RQ4 / F3 / F4 research relies on it. The instrument (Q1–Q8) is defined in [m1/09_M1_Annotation_Guidelines.md §9](09_M1_Annotation_Guidelines.md) and [m1/09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md): 7 sector-tailored regulations + 2 universal regulations = 9 question blocks per session, each capturing awareness date, channel, action taken.
+The awareness survey is the *only* data-collection workflow in M1 today, and the entire RQ3 / RQ4 / F3 / F4 research relies on it. The instrument (Q1–Q8) is defined in [m1/09_M1_Annotation_Guidelines.md §9](09_M1_Annotation_Guidelines.md) and [m1/09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md): 7 sector-tailored regulations + 2 universal regulations = 9 question blocks per session, each capturing awareness date, channel, action taken.
 
 This companion documents what the SME experiences end-to-end, the resume-mid-session behaviour, and how the frontend threads `regulation_id` into the session-based survey engine.
 
@@ -636,7 +636,7 @@ Wizard renders thank-you state; "Back to dashboard" CTA
   session_id, mode=regulation, questions_answered=11, completed_at=NOW, status=completed
 ```
 
-The full instrument (Q1–Q8) is defined in [m1/09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md).
+The full instrument (Q1–Q8) is defined in [m1/09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md).
 
 ## Failure modes & edge cases
 
@@ -659,8 +659,8 @@ The full instrument (Q1–Q8) is defined in [m1/09_M1_3_SME_Survey_Instrument.md
 - Parent: [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)
 - Screen reference: [12_UI_Screens_and_Loading.md §2 (surveys hub / regulation flow / awareness / history)](../frontend/SETUP/12_UI_Screens_and_Loading.md)
 - Survey engine internals: [13_Unified_Survey_Configuration.md](../frontend/SETUP/13_Unified_Survey_Configuration.md)
-- Backend instrument definition: [09_M1_Annotation_Guidelines.md §9](09_M1_Annotation_Guidelines.md), [09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md)
-- Backend survey-attempts schema: [09_M1_3_SME_Survey_Instrument.md §5](09_M1_3_SME_Survey_Instrument.md)
+- Backend instrument definition: [09_M1_Annotation_Guidelines.md §9](09_M1_Annotation_Guidelines.md), [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
+- Backend survey-attempts schema: [09_M1_Annotation_Guidelines.md §5](09_M1_Annotation_Guidelines.md)
 - BUILD phase: BUILD_05 (survey wizard), BUILD_07 (server-side flow engine) — both shipped
 - Code (shipped): `frontend/app/(app)/surveys/regulation/[id]/page.tsx`, `frontend/app/(app)/surveys/awareness/page.tsx`, `frontend/app/(app)/surveys/history/page.tsx`, `frontend/components/forms/survey-wizard.tsx`, `frontend/components/forms/survey-form.tsx`, `frontend/components/surveys/survey-launcher.tsx`
 
@@ -680,7 +680,7 @@ Today that data lives in `m1_sme_awareness_responses.action_taken` ([m1/02_M1_Da
 
 ### Today (✅ partial)
 
-1. **Capture.** During a per-regulation flow ([14_M1_6](14_M1_6_SME_Awareness_Survey.md)), Q7 asks "Did your business take the required action?" with four options: `yes_complied`, `yes_in_progress`, `no_not_aware_of_deadline`, `no_not_applicable`. The answer writes one row to `m1_sme_awareness_responses` keyed by `(sme_profile_id, regulation_id)`.
+1. **Capture.** During a per-regulation flow ([14_M1_6](14_M1_Tracking_Workflows.md)), Q7 asks "Did your business take the required action?" with four options: `yes_complied`, `yes_in_progress`, `no_not_aware_of_deadline`, `no_not_applicable`. The answer writes one row to `m1_sme_awareness_responses` keyed by `(sme_profile_id, regulation_id)`.
 2. **Recall via history.** `/surveys/history` shows every session; clicking a completed session opens a summary panel listing each question + answer. The SME can scroll for the Q7 answer per regulation.
 3. **Recall via dashboard.** The "Pending regulations" widget excludes regulations where the SME has already completed the awareness survey. So a fully-pending list = "regulations I haven't dealt with yet" — implicit compliance state.
 
@@ -694,8 +694,8 @@ Today that data lives in `m1_sme_awareness_responses.action_taken` ([m1/02_M1_Da
    - `<ActionStatusPill>` showing `yes_complied` (green) / `yes_in_progress` (amber) / `no_not_aware` (red) / `no_not_applicable` (grey)
    - last-updated timestamp ("answered 3 weeks ago")
    - severity + effective date
-   - upcoming deadline indicator (when applicable — see [14_M1_8](14_M1_8_SME_Deadline_Alert_History.md))
-3. **Update the status.** Click a row → opens a slim drawer (similar to [14_M1_2](14_M1_2_Admin_Review_Queue_Triage.md)'s drawer pattern) → SME picks a new status → `PATCH /api/v1/m1/sme/compliance/{regulation_id} { action_taken: "yes_complied" }`. The drawer surfaces the regulation summary + the original Q7 answer for comparison.
+   - upcoming deadline indicator (when applicable — see [14_M1_8](14_M1_Tracking_Workflows.md))
+3. **Update the status.** Click a row → opens a slim drawer (similar to [14_M1_2](14_M1_Tracking_Workflows.md)'s drawer pattern) → SME picks a new status → `PATCH /api/v1/m1/sme/compliance/{regulation_id} { action_taken: "yes_complied" }`. The drawer surfaces the regulation summary + the original Q7 answer for comparison.
 4. **Filter by status.** Chips at the top: "Show all", "Still pending", "In progress", "Completed".
 5. **Sort by severity, effective date, or "needs attention".** The "needs attention" sort surfaces regulations where the status is stale (> 30 days since last update) AND the deadline is approaching.
 
@@ -707,7 +707,7 @@ Today that data lives in `m1_sme_awareness_responses.action_taken` ([m1/02_M1_Da
 | Dedicated `/portal/m1/my-regulations` tracker (target) | Single-purpose surface for compliance management | 🟡 Target — BUILD_13 or earlier if SMEs request | Ship when ≥ 5 SMEs have completed > 3 surveys (real signal of need) |
 | Inline status edit on `/regulations` cards | Cheap to add | ❌ Mixes browsing (find a regulation) with managing (update my status) — bad UX | Never |
 | Per-status counts on the dashboard ("3 in progress, 1 needs action") | Tiny stat that motivates return visits | 🟡 Easy add when the tracker page ships | Ship together |
-| Reminders / scheduled checks | Push behaviour | ❌ Out of scope — handled by alerts ([14_M1_8](14_M1_8_SME_Deadline_Alert_History.md)) |  |
+| Reminders / scheduled checks | Push behaviour | ❌ Out of scope — handled by alerts ([14_M1_8](14_M1_Tracking_Workflows.md)) |  |
 
 ## Worked example
 
@@ -760,7 +760,7 @@ The intended flow takes ~30 s vs the workaround's ~5 min.
 
 - Parent: [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)
 - Screen reference (today's path): [12_UI_Screens_and_Loading.md §2 (/surveys/history)](../frontend/SETUP/12_UI_Screens_and_Loading.md)
-- Survey companion: [14_M1_6_SME_Awareness_Survey.md](14_M1_6_SME_Awareness_Survey.md)
+- Survey companion: [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)
 - Backend response schema: [02_M1_Data_Requirements.md §2.4](02_M1_Data_Requirements.md) (`m1_sme_awareness_responses`)
 - BUILD phase: BUILD_13 §SME tracker page
 - Code (shipped — Q7 capture): `frontend/components/forms/survey-wizard.tsx`, the awareness survey questions
@@ -787,7 +787,7 @@ Today the SME receives alerts but has no UI to confirm receipt, see upcoming dea
 ### Entry point — `/portal/m1/deadlines` (intended)
 
 1. **Open the page.** Two cards stacked top-to-bottom:
-   - **Card 1 — Upcoming deadlines:** sorted by `effective_date` ASC. Each row: regulation short code + locale-aware title + `<DeadlineCountdown>` ("12 days left" / "5 hours left" / "passed 3 days ago"). Click → opens [14_M1_7](14_M1_7_SME_Compliance_Action_Tracking.md)'s status drawer.
+   - **Card 1 — Upcoming deadlines:** sorted by `effective_date` ASC. Each row: regulation short code + locale-aware title + `<DeadlineCountdown>` ("12 days left" / "5 hours left" / "passed 3 days ago"). Click → opens [14_M1_7](14_M1_Tracking_Workflows.md)'s status drawer.
    - **Card 2 — Alert history table:** paginated; columns = regulation, channel (email / SMS / portal), sent_at, status (`delivered` / `opened` / `failed`).
 2. **Filter deadlines.** Chips: "Next 7 days" / "Next 30 days" / "Past due" (rare — only if the SME ignored alerts).
 3. **Resend / unsubscribe.** Per-row actions in the alert history:
@@ -808,7 +808,7 @@ A condensed version of Card 1 appears on `/dashboard` — a single banner: "1 de
 | Real-time countdown vs polling | Countdown re-renders every minute via `setInterval` (cheap) | ✅ `setInterval` per minute | If sub-minute precision needed, switch to a `requestAnimationFrame` updater |
 | Alert history paginated server-side | Standard for unbounded history | ✅ `?page=&size=` URL state | Never client-side fetch for unbounded data |
 | Resend / unsubscribe per-row | Power features without cluttering MVP | 🟡 Add post-MVP; observe whether SMEs ask for them | Survey users after 3 months in production |
-| Deadline filter chips | URL state shareable | ✅ Same pattern as [14_M1_5](14_M1_5_SME_Regulation_Discovery.md) | Never |
+| Deadline filter chips | URL state shareable | ✅ Same pattern as [14_M1_5](14_M1_Tracking_Workflows.md) | Never |
 
 ## Worked example
 
@@ -859,7 +859,7 @@ SME notes the SMS arrived 0 days after gazette publication → confirms the syst
 - Backend alert dispatch (Stage F): [02_M1_Data_Requirements.md §3.5](02_M1_Data_Requirements.md)
 - Backend alert-batching contract: [08_M1_Full_System_Architecture.md §8.1](08_M1_Full_System_Architecture.md)
 - Backend propagation event schema: [02_M1_Data_Requirements.md §2.3](02_M1_Data_Requirements.md) (`m1_propagation_events`)
-- Sibling tracker: [14_M1_7_SME_Compliance_Action_Tracking.md](14_M1_7_SME_Compliance_Action_Tracking.md)
+- Sibling tracker: [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)
 - BUILD phase: BUILD_07 (alert dispatch backend), BUILD_13 (this UI)
 - Code (when shipped): `frontend/app/(app)/portal/m1/deadlines/page.tsx`, `frontend/components/regulations/deadline-countdown.tsx`, `frontend/components/regulations/alert-history-table.tsx`
 
@@ -1007,7 +1007,7 @@ Result: 12 cards, each showing:
 
 - Parent: [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)
 - Backend taxonomy: [09_M1_Annotation_Guidelines.md §2 + §3](09_M1_Annotation_Guidelines.md)
-- Worked examples per category: [09_M1_1_Category_Taxonomy_Examples.md](09_M1_1_Category_Taxonomy_Examples.md)
+- Worked examples per category: [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
 - Frontend component primitives: [12_UI_Screens_and_Loading.md §4](../frontend/SETUP/12_UI_Screens_and_Loading.md)
 - Code: `frontend/components/ui/domain-badge.tsx`, `frontend/components/ui/sector-badge.tsx`, `frontend/components/ui/severity-badge.tsx`, `frontend/components/ui/module-badge.tsx`
 - Translation keys: `frontend/messages/{en,si,ta}.json` under `m1.category.*` + `m1.sector.*`

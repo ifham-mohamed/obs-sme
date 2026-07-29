@@ -2,7 +2,7 @@
 
 > **Cross-references:** [03_M1_Data_Collection.md](03_M1_Data_Collection.md) · [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) · [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/m1/preprocessing/` ownership + chunking output shape.
-> **Sub-step companions:** [04_M1_1_Gazette_Noise_Removal.md](04_M1_1_Gazette_Noise_Removal.md) · [04_M1_2_Metadata_Extraction_Patterns.md](04_M1_2_Metadata_Extraction_Patterns.md) · [04_M1_3_Text_Chunking_Strategy.md](04_M1_3_Text_Chunking_Strategy.md)
+> **Consolidation note (2026-07-29):** this document now carries the full content previously split across `04_M1_1_Gazette_Noise_Removal`, `04_M1_2_Metadata_Extraction_Patterns`, and `04_M1_3_Text_Chunking_Strategy`. Those three files have been retired; every cleaning rule, metadata regex, chunking decision, worked example, and validation check from them lives below.
 > **Implementation status:** ✅ Shipped Session 31 / F-154 (Step 2e — `ml/m1/preprocessing/{cleaning,metadata_extractor,chunking}.py` + orchestrator `preprocess_gazette()`). Backend persistence + Celery wiring shipped Session 32 / F-155 (Step 2f).
 
 ---
@@ -148,7 +148,7 @@ def route_lines_by_language(text: str) -> dict[str, str]:
     return {lang: "\n".join(lines) for lang, lines in buckets.items() if lines}
 ```
 
-The English bucket feeds the XLM-R classifier (Stage D); the Sinhala and Tamil buckets feed the MarianMT summariser (Stage E). The `mixed` bucket is logged and inspected — production data shows < 2 % of lines fall into `mixed` (typically table cells with bilingual labels). The per-script token-length implications (Sinhala consumes 2.3× the tokens of English) are documented inline in §3.4 and detailed in [04_M1_3_Text_Chunking_Strategy.md](04_M1_3_Text_Chunking_Strategy.md).
+The English bucket feeds the XLM-R classifier (Stage D); the Sinhala and Tamil buckets feed the MarianMT summariser (Stage E). The `mixed` bucket is logged and inspected — production data shows < 2 % of lines fall into `mixed` (typically table cells with bilingual labels). The per-script token-length implications (Sinhala consumes 2.3× the tokens of English) are documented inline in §3.4 and detailed in [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md).
 
 ### 3.3 Step 3 — Metadata Extraction
 
@@ -197,7 +197,7 @@ def extract_all_penalties(text: str) -> list[dict]:
     return matches
 ```
 
-The legacy single-string column `m1_regulations.penalty_range_lkr` is kept as a denormalized convenience (the lowest min, the highest max — for quick sort + filter), but the authoritative source is now `m1_regulation_penalties` rows. Edge cases — alternative penalty clauses ("fine OR imprisonment"), tiered penalties by offence-count, future-dated penalty effective dates — are detailed in [04_M1_2_Metadata_Extraction_Patterns.md](04_M1_2_Metadata_Extraction_Patterns.md).
+The legacy single-string column `m1_regulations.penalty_range_lkr` is kept as a denormalized convenience (the lowest min, the highest max — for quick sort + filter), but the authoritative source is now `m1_regulation_penalties` rows. Edge cases — alternative penalty clauses ("fine OR imprisonment"), tiered penalties by offence-count, future-dated penalty effective dates — are detailed in [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md).
 
 ### 3.4 Step 4 — Text Chunking
 
@@ -212,7 +212,7 @@ XLM-R accepts a maximum of 512 tokens per input. Gazette documents average 3,000
 
 **Selected strategy:** Section-aware chunking (primary) + first 512 tokens for classifier input (the regulatory category is almost always stated in the first 300 tokens of a gazette). Section-aware chunking is used for the summarisation stage (Stage E) where full coverage is needed.
 
-**Hybrid §-aware + sliding-window algorithm.** "Section-aware + first-512" hides two boundary conditions: (a) some sections are themselves > 512 tokens (long EPF rate-change tables); (b) the regulatory verdict sometimes lives in the *last* section (effective-date clauses near the end). The hybrid below detects sections via the same `NOTICE_BOUNDARY_RE` patterns from [03_M1_2_Gazette_Segmentation.md](03_M1_2_Gazette_Segmentation.md), then for each section emits one or more 512-token windows with 64-token overlap. The result is the input for both stages: the classifier picks the *first* window (head bias is OK — the regulatory category is in the head 95% of the time), while the summariser consumes the *full* chunk list.
+**Hybrid §-aware + sliding-window algorithm.** "Section-aware + first-512" hides two boundary conditions: (a) some sections are themselves > 512 tokens (long EPF rate-change tables); (b) the regulatory verdict sometimes lives in the *last* section (effective-date clauses near the end). The hybrid below detects sections via the same `NOTICE_BOUNDARY_RE` patterns from [03_M1_Data_Collection.md](03_M1_Data_Collection.md), then for each section emits one or more 512-token windows with 64-token overlap. The result is the input for both stages: the classifier picks the *first* window (head bias is OK — the regulatory category is in the head 95% of the time), while the summariser consumes the *full* chunk list.
 
 ```python
 from transformers import AutoTokenizer
@@ -259,7 +259,7 @@ def classification_input(chunks: list[dict]) -> str:
 | Sinhala | ~1.8 | ~920 characters (≈ 80–120 Sinhala words) | A typical notice spans 2–3 windows |
 | Tamil | ~2.1 | ~1,070 characters (≈ 90–140 Tamil words) | A typical notice spans 2 windows |
 
-The exit criterion for chunking (when to stop emitting windows) and the §-aware section-boundary regex set live in [04_M1_3_Text_Chunking_Strategy.md](04_M1_3_Text_Chunking_Strategy.md).
+The exit criterion for chunking (when to stop emitting windows) and the §-aware section-boundary regex set live in [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md).
 
 ### 3.5 Step 5 — Final Preprocessing Output
 

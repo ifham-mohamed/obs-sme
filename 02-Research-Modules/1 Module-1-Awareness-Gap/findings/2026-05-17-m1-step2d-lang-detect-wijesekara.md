@@ -13,9 +13,9 @@ module: m1
 
 ## What I did
 
-- Built `m1/extraction/language_detection.py` with the two-layer detection from [10_M1_1_Language_Detection_Routing.md](../10_M1_1_Language_Detection_Routing.md): fastText `lid.176.bin` document-level (top-3 with 0.70 confidence threshold, 500-char window) + Unicode-range per-line router (`is_sinhala_char` / `is_tamil_char` / `is_latin_char` / `line_language` / `route_lines_by_language` / `primary_language_by_line_count`) from [04_M1_Preprocessing_Pipeline.md §3.2](../04_M1_Preprocessing_Pipeline.md).
+- Built `m1/extraction/language_detection.py` with the two-layer detection from [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md): fastText `lid.176.bin` document-level (top-3 with 0.70 confidence threshold, 500-char window) + Unicode-range per-line router (`is_sinhala_char` / `is_tamil_char` / `is_latin_char` / `line_language` / `route_lines_by_language` / `primary_language_by_line_count`) from [04_M1_Preprocessing_Pipeline.md §3.2](../04_M1_Preprocessing_Pipeline.md).
 - Downloaded `lid.176.bin` (125.2 MB) to `enigmatrix-ml/storage/models/m1/baseline/lid.176.bin` via an idempotent `scripts/download_lid_model.py`. Path matches the verbatim directive `storage/models/m1/baseline/`.
-- Built `m1/extraction/wijesekara.py` + 87-entry `wijesekara_map.yaml` per [10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md). Heuristic `is_wijesekara_encoded` (0.40 indicator-char ratio, min 50 ASCII-alpha chars) + greedy longest-match `convert_wijesekara` (4→3→2→1 chars; unmapped passes through). Replaced the `wijesekara_to_unicode` `NotImplementedError` stub with a thin delegate.
+- Built `m1/extraction/wijesekara.py` + 87-entry `wijesekara_map.yaml` per [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md). Heuristic `is_wijesekara_encoded` (0.40 indicator-char ratio, min 50 ASCII-alpha chars) + greedy longest-match `convert_wijesekara` (4→3→2→1 chars; unmapped passes through). Replaced the `wijesekara_to_unicode` `NotImplementedError` stub with a thin delegate.
 - Wired per-page OCR fallback into `extract_with_chain` — new signature with `enable_ocr_fallback=True` default. Low-yield pages get rasterised, language-detected, Tesseract'd with the right `--lang`, Wijesekara-converted if heuristic triggers, spliced back as `PageResult(method='tesseract')`. Document-level method becomes `'hybrid'` when any page was OCR'd.
 - Wrote 31 new tests (`test_language_detection.py` + `test_wijesekara.py`) and updated 2 existing files (`test_ocr.py` + `test_text_extractors.py`).
 
@@ -62,6 +62,6 @@ None — Step 2d is complete with apparatus in place. The DoD datasets are resea
 
 - Related session: [Session 30 — 2026-05-17](../../../08-Findings-Log/SESSIONS.md)
 - Predecessor: [Session 28 / F-149 — Step 2c canonical extraction chain](../../../08-Findings-Log/SESSIONS.md) (Wijesekara stub + per-page OCR fallback explicitly deferred to Step 2d in Session 28's "Risks / open follow-ups")
-- Spec docs: [10_M1_1_Language_Detection_Routing](../10_M1_1_Language_Detection_Routing.md), [10_M1_2_OCR_Wijesekara_Conversion](../10_M1_2_OCR_Wijesekara_Conversion.md), [04_M1_Preprocessing_Pipeline §3.2](../04_M1_Preprocessing_Pipeline.md)
-- Related: [03_M1_1_PDF_Extraction_Chain](../03_M1_1_PDF_Extraction_Chain.md) (PyMuPDF/pdfplumber/Tesseract chain that this hooks into)
+- Spec docs: [10_M1_1_Language_Detection_Routing](../10_M1_Sinhala_Tamil_NLP.md), [10_M1_2_OCR_Wijesekara_Conversion](../10_M1_Sinhala_Tamil_NLP.md), [04_M1_Preprocessing_Pipeline §3.2](../04_M1_Preprocessing_Pipeline.md)
+- Related: [03_M1_1_PDF_Extraction_Chain](../03_M1_Data_Collection.md) (PyMuPDF/pdfplumber/Tesseract chain that this hooks into)
 - Feature: F-153 in [FEATURES](../../../08-Findings-Log/FEATURES.md)

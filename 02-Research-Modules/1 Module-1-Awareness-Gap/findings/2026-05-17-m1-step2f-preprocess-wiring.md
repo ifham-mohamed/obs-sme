@@ -13,7 +13,7 @@ module: m1
 
 ## What I did
 
-- Added Alembic migration `202605240001_m1_preprocessing_columns_and_penalties.py`: 2 new columns on `m1_regulations` (`cleaned_text` TEXT, `amendment_type` VARCHAR(20) with CHECK enum), extended the `ck_m1_regulations_status` CHECK to include a new `'preprocessed'` state, and created the `m1_regulation_penalties` junction table per the [04_M1_2 §3.3](../04_M1_2_Metadata_Extraction_Patterns.md) spec.
+- Added Alembic migration `202605240001_m1_preprocessing_columns_and_penalties.py`: 2 new columns on `m1_regulations` (`cleaned_text` TEXT, `amendment_type` VARCHAR(20) with CHECK enum), extended the `ck_m1_regulations_status` CHECK to include a new `'preprocessed'` state, and created the `m1_regulation_penalties` junction table per the [04_M1_2 §3.3](../04_M1_Preprocessing_Pipeline.md) spec.
 - Created `M1RegulationPenalty` ORM model at `enigmatrix-backend/app/models/m1_regulation_penalty.py` and registered it in `app/models/__init__.py` for Alembic autogenerate visibility.
 - Created `M1RegulationPenaltyOut` Pydantic v2 schema at `app/schemas/m1_regulation_penalty.py` (`from_attributes=True`; not exposed in any router this slice).
 - Extended `M1Regulation` with `cleaned_text` + `amendment_type` columns and `penalties: Mapped[list[M1RegulationPenalty]]` relationship (`cascade="all, delete-orphan"`, `order_by="M1RegulationPenalty.sequence_idx"`).
@@ -62,6 +62,6 @@ None code-side. Backend runtime tests not run in this environment (no `uv` on PA
 - Related session: [Session 32 — 2026-05-17](../../../08-Findings-Log/SESSIONS.md)
 - Predecessor: [Session 31 / F-154 — Step 2e preprocessing ml-package](2026-05-17-m1-step2e-preprocessing-pipeline.md). Provides the `preprocess_gazette()` orchestrator + `PreprocessedGazette` dataclass that this slice persists.
 - Other predecessors: [Session 26 / F-148 — Step 2b Celery + Stage-B PDF extraction](../../../08-Findings-Log/SESSIONS.md) (the `extract_gazette` task this one chains from); [Session 30 / F-153 — Step 2d language detection + Wijesekara](2026-05-17-m1-step2d-lang-detect-wijesekara.md) (the `preprocess_gazette()` call uses Step 2d's `detect_document_language` internally).
-- Spec docs: [02_M1_Data_Requirements §2.1](../02_M1_Data_Requirements.md) (status enum — needs amendment), [04_M1_2 §3.3](../04_M1_2_Metadata_Extraction_Patterns.md) (junction table schema), [04_M1_Preprocessing_Pipeline §3.3](../04_M1_Preprocessing_Pipeline.md) (per-field extraction rules).
+- Spec docs: [02_M1_Data_Requirements §2.1](../02_M1_Data_Requirements.md) (status enum — needs amendment), [04_M1_2 §3.3](../04_M1_Preprocessing_Pipeline.md) (junction table schema), [04_M1_Preprocessing_Pipeline §3.3](../04_M1_Preprocessing_Pipeline.md) (per-field extraction rules).
 - Roadmap milestone: closes [Phase 2 overall DoD](../16_M1_Development_Roadmap.md#phase-2-ingest--extraction-build_07-ab) ("invoking the pipeline on a fresh `gazette.lk` URL ends with `m1_regulations` row at `status='extracted'`, all metadata fields populated"). With Step 2f, the pipeline now goes further — through `'preprocessed'` — with all 4 DoD metadata fields filled.
 - Feature: F-155 in [FEATURES](../../../08-Findings-Log/FEATURES.md)

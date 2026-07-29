@@ -54,4 +54,4 @@ DATABASE_URL=postgresql://… uv run jupyter lab   # then Run-All
 - Preregister on the supervisor's sign-off before unblinding.
 
 ## Cross-refs
-`08_M1_1_Research_Findings_Extraction.md` · `06_M1_2_Slice_Analysis_Framework.md` · roadmap §Phase 5 5b.
+`08_M1_Full_System_Architecture.md` · `06_M1_Training_Evaluation.md` · roadmap §Phase 5 5b.

@@ -57,4 +57,4 @@ async function downloadReport(runId: string, token: string) {
 - `app/api/v1/m1_measurements.py` carries pre-existing 3.11/3.12 syntax that a 3.10 interpreter can't parse (unrelated to this change) — run `ruff`/`py_compile` in the 3.11+ env to confirm the new endpoint.
 
 ## Cross-refs
-`06_M1_2_Slice_Analysis_Framework.md` · Phase-2 Upgrade Plan slices 5–6 (measurement + comparison UI) · Session 53 pipeline UX audit.
+`06_M1_Training_Evaluation.md` · Phase-2 Upgrade Plan slices 5–6 (measurement + comparison UI) · Session 53 pipeline UX audit.

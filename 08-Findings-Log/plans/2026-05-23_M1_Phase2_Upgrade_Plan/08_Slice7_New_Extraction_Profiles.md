@@ -264,4 +264,4 @@ After all three are shipped or deferred, drop a `08_Slice7_Outcome.md` in this v
 - [06_Slice5_Measurement_Engine](06_Slice5_Measurement_Engine.md) — the engine that decides whether a profile passes its gate.
 - [07_Slice6_Comparison_UI](07_Slice6_Comparison_UI.md) — the dashboard you use to read those decisions.
 - [03_Slice2_RawText_Golden_Set](03_Slice2_RawText_Golden_Set.md) — the CER reference for gate 2 of `wijesekara_routing_v1`.
-- `enigmatrix-docs/m1/10_M1_2_OCR_Wijesekara_Conversion.md` — spec for the Wijesekara module being expanded.
+- `enigmatrix-docs/m1/10_M1_Sinhala_Tamil_NLP.md` — spec for the Wijesekara module being expanded.

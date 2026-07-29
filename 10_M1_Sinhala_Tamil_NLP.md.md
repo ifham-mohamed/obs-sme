@@ -2,7 +2,7 @@
 
 > **Cross-references:** [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md) · [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) · [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/m1/extraction/ocr.py` (Wijesekara) + `extraction/language_detection.py`.
-> **Sub-step companions:** [10_M1_1_Language_Detection_Routing.md](10_M1_1_Language_Detection_Routing.md) · [10_M1_2_OCR_Wijesekara_Conversion.md](10_M1_2_OCR_Wijesekara_Conversion.md)
+> **Sub-step companions:** [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) · [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md)
 
 ---
 
@@ -355,7 +355,7 @@ When document-level `primary='mixed'` (fastText confidence < 0.70), the pipeline
 
 ### Step 5 — Code-switching detection
 
-Sri Lankan government documents code-switch within a single sentence (e.g. "The VAT රටක්කරම් must be filed monthly"). The router classifies these lines as `mixed` because no single script dominates. The classifier *can* still handle them because XLM-R's SentencePiece tokeniser handles mixed-script tokens — but the per-language slice analysis ([06_M1_2_Slice_Analysis_Framework.md](06_M1_2_Slice_Analysis_Framework.md)) groups them into the `mixed` slice.
+Sri Lankan government documents code-switch within a single sentence (e.g. "The VAT රටක්කරම් must be filed monthly"). The router classifies these lines as `mixed` because no single script dominates. The classifier *can* still handle them because XLM-R's SentencePiece tokeniser handles mixed-script tokens — but the per-language slice analysis ([06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md)) groups them into the `mixed` slice.
 
 ## Technology choices
 
@@ -522,7 +522,7 @@ is_wijesekara_encoded(raw_text)?
    ↓ if yes
 convert_wijesekara(raw_text) → Unicode Sinhala
    ↓
-NFKD normalise (per 04_M1_1_Gazette_Noise_Removal.md)
+NFKD normalise (per 04_M1_Preprocessing_Pipeline.md)
    ↓
 Join pages → final cleaned text → m1_regulations.raw_text
 ```
@@ -579,6 +579,6 @@ In production the converted text is what's stored in `m1_regulations.raw_text`; 
 ## Cross-references
 
 - Parent: [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) §4, §5
-- Related: [03_M1_1_PDF_Extraction_Chain.md](03_M1_1_PDF_Extraction_Chain.md), [04_M1_1_Gazette_Noise_Removal.md](04_M1_1_Gazette_Noise_Removal.md) (NFKD downstream)
+- Related: [03_M1_Data_Collection.md](03_M1_Data_Collection.md), [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md) (NFKD downstream)
 - BUILD phase: BUILD_07 §OCR
 - Code (when shipped): `ml/m1/extraction/ocr.py`, `wijesekara.py`, `wijesekara_map.yaml`

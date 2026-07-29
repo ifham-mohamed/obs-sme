@@ -1,7 +1,7 @@
 # Phase 2 · Data Requirements — Schema Validation + Governance: Analysis
 
 > Group: `PHASE2_INGEST_EXTRACTION / data_validation_governance`. Companion: [[PHASE2_DATA_VALIDATION_GOVERNANCE_PLAN]].
-> Builds the two deferred data-contract docs [[02_M1_2_Database_Schema_Validation]] + [[02_M1_3_Data_Governance_Retention]] into code. **Status: implemented 2026-07-23 (verification deferred — sandbox VHDX down).**
+> Builds the two deferred data-contract docs [[02_M1_Data_Requirements|02_M1_2_Database_Schema_Validation]] + [[02_M1_Data_Requirements|02_M1_3_Data_Governance_Retention]] into code. **Status: implemented 2026-07-23 (verification deferred — sandbox VHDX down).**
 
 ## 1. What was deferred
 

@@ -2,7 +2,7 @@
 
 > **Cross-references:** [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) · [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) · [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `backend/app/api/v1/m1_regulations.py` + `services/m1_regulation_service.py`.
-> **Sub-step companions:** [11_M1_1_API_Authentication_Authorization.md](11_M1_1_API_Authentication_Authorization.md) · [11_M1_2_API_Integration_Examples.md](11_M1_2_API_Integration_Examples.md)
+> **Sub-step companions:** [11_M1_API_Reference.md](11_M1_API_Reference.md) · [11_M1_API_Reference.md](11_M1_API_Reference.md)
 
 ---
 
@@ -49,7 +49,7 @@ The full matrix by endpoint group, with the role-specific HTTP responses. `R` = 
 | `GET /analytics/channel-effectiveness` | R | R | `403` | `401` |
 | `GET /admin/audit-logs/m1` | A | `403` | `403` | `401` |
 
-Note `(none)` = no token at all yields `401 Unauthorized`; an authenticated user *with the wrong role* yields `403 Forbidden`. The distinction is enforced by separate FastAPI dependencies (`require_auth` for any valid token vs `require_role('admin')` for elevation). Public endpoints accept missing tokens. A worked permission-failure example is in [11_M1_1_API_Authentication_Authorization.md](11_M1_1_API_Authentication_Authorization.md).
+Note `(none)` = no token at all yields `401 Unauthorized`; an authenticated user *with the wrong role* yields `403 Forbidden`. The distinction is enforced by separate FastAPI dependencies (`require_auth` for any valid token vs `require_role('admin')` for elevation). Public endpoints accept missing tokens. A worked permission-failure example is in [11_M1_API_Reference.md](11_M1_API_Reference.md).
 
 ### 1.2 Standard Error Response Schema
 
@@ -1161,6 +1161,6 @@ TAX_RATE_CHANGE        31.0
 ## Cross-references
 
 - Parent: [11_M1_API_Reference.md](11_M1_API_Reference.md) §2–§8
-- Related: [11_M1_1_API_Authentication_Authorization.md](11_M1_1_API_Authentication_Authorization.md)
+- Related: [11_M1_API_Reference.md](11_M1_API_Reference.md)
 - BUILD phase: BUILD_07 §integration tests
 - Code: `tests/m1/integration/`, Postman collection at `tests/m1/integration/postman.json`

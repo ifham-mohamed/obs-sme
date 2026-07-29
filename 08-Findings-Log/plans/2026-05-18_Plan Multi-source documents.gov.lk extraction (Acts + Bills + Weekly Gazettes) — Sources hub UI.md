@@ -6,7 +6,7 @@
 
   
 
-The M1 pipeline currently ingests only **Extra-Gazettes** from `documents.gov.lk/view/egz/`, even though `02_M1_1_Data_Sources_Catalogue.md` registers four primary sources on the same portal (EGZ, GZ, BILL, ACT) and the live site exposes additional categories (Forms, Notices, Calendar). The current `GazetteSpider` hardcodes the EGZ start-URL template and the pipeline hardcodes `document_type="extraordinary_gazette"`, so anything other than Extra-Gazettes silently disappears.
+The M1 pipeline currently ingests only **Extra-Gazettes** from `documents.gov.lk/view/egz/`, even though `02_M1_Data_Requirements.md` registers four primary sources on the same portal (EGZ, GZ, BILL, ACT) and the live site exposes additional categories (Forms, Notices, Calendar). The current `GazetteSpider` hardcodes the EGZ start-URL template and the pipeline hardcodes `document_type="extraordinary_gazette"`, so anything other than Extra-Gazettes silently disappears.
 
   
 

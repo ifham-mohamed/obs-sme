@@ -8,7 +8,7 @@ module: m1
 # Phase 2 Step 2b — Celery + Stage-B PDF extraction (local dev)
 
 > **Shipped:** Session 26 / F-148 (Celery infra + `extract_gazette` task + PyMuPDF/pdfplumber/Tesseract chain).
-> **Spec**: [planned-for-development/2_setup.md](../planned-for-development/2_setup.md) · [03_M1_1_PDF_Extraction_Chain](../03_M1_1_PDF_Extraction_Chain.md) §2.
+> **Spec**: [planned-for-development/2_setup.md](../planned-for-development/2_setup.md) · [03_M1_1_PDF_Extraction_Chain](../03_M1_Data_Collection.md) §2.
 
 ## 1 · What this step does
 
@@ -159,4 +159,4 @@ graphify update C:\sme
 - [phase2_step2a_scrapy_spider](phase2_step2a_scrapy_spider.md) — predecessor
 - [phase2_step2c_extraction_chain](phase2_step2c_extraction_chain.md) — canonical extraction module location
 - [phase2_step2f_celery_wiring](phase2_step2f_celery_wiring.md) — downstream auto-chain
-- [03_M1_1_PDF_Extraction_Chain](../03_M1_1_PDF_Extraction_Chain.md) — chain rationale + thresholds
+- [03_M1_1_PDF_Extraction_Chain](../03_M1_Data_Collection.md) — chain rationale + thresholds

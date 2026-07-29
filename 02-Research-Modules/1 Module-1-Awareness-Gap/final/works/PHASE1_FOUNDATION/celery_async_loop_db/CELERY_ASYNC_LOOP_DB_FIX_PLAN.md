@@ -45,7 +45,7 @@ Every async task already carried an `await engine.dispose()` in its `finally` as
 
 ## 5. Docs updated
 
-- `enigmatrix-docs/m1/08_M1_2_Edge_Cases_Failure_Modes.md` — new failure mode entry.
+- `enigmatrix-docs/m1/08_M1_Full_System_Architecture.md` — new failure mode entry.
 - `AI_WORK_LOG.md` — session entry.
 
 ## 6. Verification (deferred — sandbox VHDX down)

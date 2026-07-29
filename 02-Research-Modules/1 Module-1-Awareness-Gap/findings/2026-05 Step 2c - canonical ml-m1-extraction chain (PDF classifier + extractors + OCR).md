@@ -7,9 +7,9 @@
 
 Session 26 (Step 2b) shipped a working PDF-extraction chain at `enigmatrix-backend/app/extraction/{pdf_classifier,text_extractors}.py`. That code is the **runtime MVP** — enough for the Celery `extract_gazette` task to flip rows from `status='ingested'` to `status='extracted'`.
 
-Step 2c moves the implementation to its **canonical home** per doc 13 + [15_M1_1_ML_Folder_Guide.md](../15_M1_1_ML_Folder_Guide.md): `ml/m1/extraction/` (which on this monorepo's filesystem is `enigmatrix-ml/m1/extraction/`). It also adds the **research-grade rigour** that the runtime MVP deliberately deferred:
+Step 2c moves the implementation to its **canonical home** per doc 13 + [15_M1_Folder_Reference.md](../15_M1_Folder_Reference.md): `ml/m1/extraction/` (which on this monorepo's filesystem is `enigmatrix-ml/m1/extraction/`). It also adds the **research-grade rigour** that the runtime MVP deliberately deferred:
 
-- The full Tesseract 5.3.x flag set from [03_M1_1_PDF_Extraction_Chain.md §5](../03_M1_1_PDF_Extraction_Chain.md) (`--oem 1 --psm 6 --lang eng+sin+tam`, `tessdata-dir` pin, `dpi=300`).
+- The full Tesseract 5.3.x flag set from [03_M1_Data_Collection.md §5](../03_M1_Data_Collection.md) (`--oem 1 --psm 6 --lang eng+sin+tam`, `tessdata-dir` pin, `dpi=300`).
 - Per-page hybrid routing (some pages PyMuPDF, some Tesseract — vs Session 26's whole-document routing).
 - A `_threshold_calibration(audit_set)` helper that runs the quarterly recalibration procedure from `03_M1_1 §2` (5 candidate threshold pairs, confusion matrix, pick the pair maximising `min(text_pdf_recall, scanned_precision)`).
 - `character_error_rate(pred, gold)` for the OCR CER acceptance metric (≤ 10 % per `03_M1_1 §validation`).
@@ -23,7 +23,7 @@ The Celery task in `enigmatrix-backend/app/tasks/m1/extract_gazette.py` stays by
 - **Packaging = uv workspace** if uv supports it cleanly on the user's machine; **editable install** (`uv add --editable ../enigmatrix-ml`) as the fallback. A `sys.path` shim is the third-line fallback if both fail. Picked at execution time.
 - **50-PDF audit set = harness only, no dataset this turn.** We ship the calibration script + a placeholder `tests/m1/fixtures/audit/` directory + the procedure documented in [3_setup.md](3_setup.md) §6 telling future-us how to populate it. Today's tests use the Session-23 fixture PDF + 2 synthetic fixtures (one rasterised, one empty).
 - **OCR CER ≤ 10 % = test is parametrised + skipped today** (no gold corpus). The `character_error_rate` calculator ships with unit tests against synthetic gold strings; the real metric becomes binding once research delivers the corpus.
-- **Wijesekara table = stub.** `ocr.py` exports a `wijesekara_to_unicode(text)` function that raises `NotImplementedError("see Step 2d / [10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md)")`. Step 2d ships the greedy longest-match table.
+- **Wijesekara table = stub.** `ocr.py` exports a `wijesekara_to_unicode(text)` function that raises `NotImplementedError("see Step 2d / [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md)")`. Step 2d ships the greedy longest-match table.
 - **Session-26 `app/extraction/` becomes a thin re-export adapter.** Local `pdf_classifier.py` + `text_extractors.py` are deleted; `__init__.py` re-exports the same symbols from `enigmatrix_ml.m1.extraction`. Zero source-code churn in `extract_gazette.py`.
 - **`language_detection.py` is out of scope.** Per the 15_M1_1 guide it's a sibling file in `extraction/`, but the roadmap places it in Step 2c.5 / Step 2d (consumes raw_text from Step 2b). Step 2c sticks to the 3 files the user named.
 
@@ -108,9 +108,9 @@ The Celery task in `enigmatrix-backend/app/tasks/m1/extract_gazette.py` stays by
 
 ## Cross-references
 
-- Parent spec: [03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md) — the deep-dive driving every numeric parameter here.
-- Folder guide: [15_M1_1_ML_Folder_Guide.md](../15_M1_1_ML_Folder_Guide.md) `ml/m1/extraction/` rows — the canonical file list.
+- Parent spec: [03_M1_Data_Collection.md](../03_M1_Data_Collection.md) — the deep-dive driving every numeric parameter here.
+- Folder guide: [15_M1_Folder_Reference.md](../15_M1_Folder_Reference.md) `ml/m1/extraction/` rows — the canonical file list.
 - Predecessor: [2.md](2026-05%20Step%202b%20-%20Celery%20task%20wiring%20+%20Stage-B%20extraction%20(M1%20Phase%202).md) (Session 26 Step 2b — runtime MVP at `app/extraction/`).
 - Successor companions: [3_setup.md](3_setup.md) (user-facing setup + verification).
 - Roadmap: [16_M1_Development_Roadmap.md](../16_M1_Development_Roadmap.md) Phase 2 Step 2c.
-- Deferred to Step 2d: [10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md), [10_M1_1_Language_Detection_Routing.md](../10_M1_1_Language_Detection_Routing.md).
+- Deferred to Step 2d: [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md), [10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md).

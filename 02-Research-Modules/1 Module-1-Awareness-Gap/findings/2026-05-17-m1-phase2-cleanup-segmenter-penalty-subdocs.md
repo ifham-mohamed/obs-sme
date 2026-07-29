@@ -20,7 +20,7 @@ module: m1
 - Created `m1_sub_documents` junction table via migration `202605260001` per doc 02 §2.10. New `M1SubDocument` ORM, `M1SubDocumentOut` Pydantic schema, `M1Regulation.sub_documents` relationship.
 - Extended `PreprocessedGazette.sections: list[SectionInfo]` and wired the orchestrator to populate it. `preprocess_gazette_task` now persists sub-documents via DELETE-then-INSERT.
 - Updated doc 02 §5 mermaid to show the Stage B+ Preprocessing sub-node with all three writes (UPDATE m1_regulations + INSERT m1_regulation_penalties + INSERT m1_sub_documents).
-- Flipped `03_M1_2_Gazette_Segmentation.md` (vault + code) from `⚠️ Partial` to `✅ Shipped Session 34 / F-157`.
+- Flipped `03_M1_Data_Collection.md` (vault + code) from `⚠️ Partial` to `✅ Shipped Session 34 / F-157`.
 
 ## What I found
 
@@ -61,7 +61,7 @@ module: m1
 | `enigmatrix-backend/app/tasks/m1/preprocess_gazette.py` | Penalty DELETE filtered by is_admin_set=FALSE + sequence_idx renumbering; new sub-documents DELETE-then-INSERT |
 | `enigmatrix-backend/app/tests/integration/test_celery_preprocess_gazette.py` | 2 new tests — admin-set preservation + sub-docs persistence |
 | `02_M1_Data_Requirements.md` (vault + code) | §5 mermaid gains Stage B+; §2.8 status flipped + Shipped-subset DDL updated for 7-value enum + is_admin_set; new §2.10 m1_sub_documents schema; existing §2.10 renumbered to §2.11 |
-| `03_M1_2_Gazette_Segmentation.md` (vault + code) | Status flipped ⚠️ Partial → ✅ Shipped Session 34 / F-157 |
+| `03_M1_Data_Collection.md` (vault + code) | Status flipped ⚠️ Partial → ✅ Shipped Session 34 / F-157 |
 
 ## What's next
 
@@ -79,5 +79,5 @@ None code-side. Backend runtime tests gated on `uv` + Docker testcontainer Postg
 
 - Related session: [Session 34 — 2026-05-17](../../../08-Findings-Log/SESSIONS.md)
 - Predecessor: [Session 33 / F-156 — doc catch-up](../../../08-Findings-Log/SESSIONS.md) — flagged the 5 carry-forwards this lap closes.
-- Spec docs: [02_M1_Data_Requirements §2.8 + §2.10 + §5 mermaid](../02_M1_Data_Requirements.md), [03_M1_2_Gazette_Segmentation](../03_M1_2_Gazette_Segmentation.md), [04_M1_2_Metadata_Extraction_Patterns §3.3](../04_M1_2_Metadata_Extraction_Patterns.md).
+- Spec docs: [02_M1_Data_Requirements §2.8 + §2.10 + §5 mermaid](../02_M1_Data_Requirements.md), [03_M1_2_Gazette_Segmentation](../03_M1_Data_Collection.md), [04_M1_2_Metadata_Extraction_Patterns §3.3](../04_M1_Preprocessing_Pipeline.md).
 - Feature: F-157 in [FEATURES](../../../08-Findings-Log/FEATURES.md)

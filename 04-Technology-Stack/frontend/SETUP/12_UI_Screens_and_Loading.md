@@ -40,7 +40,7 @@ Both layouts render the same chrome — a sticky left **`<Sidebar>`** + a **`<To
 - **Key components**: `<PageHeader>`, a gradient welcome-banner `<Card>` with CTAs (Continue the unified survey → `/surveys`; View risk profile → `/risk`; admins also get Manage regulations), four stat `<Card>`s (Knowledge score / Risk signals / Survey progress / Regulations-or-Last-update) with tinted circular icon badges, a **Regulations awaiting your assessment** widget (up to 3 `<RegulationCard>`s from `/api/v1/dashboard/pending-regulations`; "View all" → `/surveys?view=regulation`; hides itself when empty), and two lower panels (Pending tasks · Recent activity).
 - **Why**: an SME owner opens this once a week — it has to answer "am I OK?" and "what should I do next?" without scrolling. Parallel `Promise.all` fetches (knowledge score, risk signals, flow state, pending regulations) with graceful per-call fallbacks so a missing SME profile (admin user) doesn't blank the page.
 - **You see**: "Welcome back, {name}" banner; coloured stat cards; a row of regulation cards if any are pending; pending-tasks/recent-activity.
-- **Workflow:** see [14_M1_5_SME_Regulation_Discovery.md](../../m1/14_M1_5_SME_Regulation_Discovery.md) — the pending-regulations widget is the today path; the deferred deadline banner is in [14_M1_8_SME_Deadline_Alert_History.md](../../m1/14_M1_8_SME_Deadline_Alert_History.md).
+- **Workflow:** see [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md) — the pending-regulations widget is the today path; the deferred deadline banner is in [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md).
 
 ### `/surveys` — the surveys hub (two tabs)
 - **File**: `surveys/page.tsx` (server component) · streaming fallback `surveys/loading.tsx`.
@@ -55,7 +55,7 @@ Both layouts render the same chrome — a sticky left **`<Sidebar>`** + a **`<To
 - **Key components**: a header (instrument label + `regulation_short_code` + title + summary) then `<SurveyWizard>` (`components/forms/survey-wizard.tsx`) given `regulationId`. The wizard renders one question at a time, swaps its accent class as the flow crosses modules, shows a `<RegulationContextCard>` above any question that carries a `linked_regulation`, and a "this follows up on your earlier answer" cross-module hint when `module_number` changes. It threads `regulation_id` into every `SurveyFlowApi.answer` call so the engine stays scoped (see `11_Survey_System.md` §10.8).
 - **Why**: the SME shouldn't have to context-switch between three separate surveys to understand one rule — the engine stitches the relevant M1/M2/M3 questions into a single guided run.
 - **You see**: one question per screen, a sticky progress bar, the regulation context card, then a thank-you state with CTAs when `flow_status === "completed"`.
-- **Workflow:** see [14_M1_6_SME_Awareness_Survey.md](../../m1/14_M1_6_SME_Awareness_Survey.md) (per-regulation flow path); follow-on compliance tracking is [14_M1_7_SME_Compliance_Action_Tracking.md](../../m1/14_M1_7_SME_Compliance_Action_Tracking.md).
+- **Workflow:** see [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md) (per-regulation flow path); follow-on compliance tracking is [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md).
 
 ### `/surveys/module/[id]` — per-module session-based survey
 - **File**: `surveys/module/[id]/page.tsx` (server).
@@ -72,7 +72,7 @@ Both layouts render the same chrome — a sticky left **`<Sidebar>`** + a **`<To
 - **File**: `surveys/history/page.tsx` (server).
 - **Purpose**: SME reviews their past survey runs.
 - **Key components**: fetches `GET /api/v1/survey-sessions/my-history`; renders a table of sessions (session_id, mode, questions_answered, completed_at, status). Empty state links to `/surveys`.
-- **Workflow:** see [14_M1_7_SME_Compliance_Action_Tracking.md](../../m1/14_M1_7_SME_Compliance_Action_Tracking.md) — survey-history is the today-stand-in for the deferred "My Regulations" tracker.
+- **Workflow:** see [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md) — survey-history is the today-stand-in for the deferred "My Regulations" tracker.
 
 ### `/surveys/awareness` · `/surveys/knowledge` · `/surveys/vulnerability` — standalone per-module surveys
 - **Files**: `surveys/awareness/page.tsx`, `surveys/knowledge/page.tsx`, `surveys/vulnerability/page.tsx` (all server components, `dynamic = "force-dynamic"`).
@@ -92,7 +92,7 @@ Both layouts render the same chrome — a sticky left **`<Sidebar>`** + a **`<To
 
 ### `/regulations` — surveys-hub alias / SME regulation list
 - **File**: `regulations/page.tsx`. Sidebar's "Surveys hub" link historically points here; functionally overlaps with `/surveys`. (Consolidation candidate — see `tracker/SESSIONS.md`.)
-- **Workflow:** see [14_M1_5_SME_Regulation_Discovery.md](../../m1/14_M1_5_SME_Regulation_Discovery.md) (covers the discovery flow today + the sector-applicability filter target).
+- **Workflow:** see [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md) (covers the discovery flow today + the sector-applicability filter target).
 
 ### `/qa` ("Ask") and `/verify` ("Verify a claim") — Coming-soon stubs
 - **Files**: `qa/page.tsx`, `verify/page.tsx`. Render the shared `<ComingSoon>` card — these modules (RAG QA = BUILD_08, M4 misinformation verifier = BUILD_10) are documented in the BUILD plan but not wired in the current MVP slice. *Why keep the nav entries*: they signal the product surface without pretending the feature exists.
@@ -109,13 +109,13 @@ Both layouts render the same chrome — a sticky left **`<Sidebar>`** + a **`<To
 - **Purpose**: browse / filter / verify / archive the admin-curated regulation rows.
 - **Key components**: `<PageHeader>`, a vertical filter rail (Verification / Domain / Sector groups — click-to-toggle, reflected in the URL), a search `<Input>` (matches code + title), a polished `<Table>` (avatar+code cells, hover-row highlight, severity dots, responsive column hiding), `<Pagination>` (page numbers + prev/next + page-size changer + quick-jump + "Total N items", state in the URL `?page=&size=`), a bulk-verify action bar (select rows → "Verify selected" with a CA name), per-row `<RowActions>` (Edit / Duplicate / Archive ↔ Restore), `<ConfirmDialog>` on archive. **Loading**: while React Query is `isLoading`, the table area shows `<AnimatedLoadingSkeleton>` (chrome-stripped to sit inside the table border) instead of a "Loading…" string.
 - **Why a filter rail (not a top filter bar)**: the regulation bank gets long; a persistent left rail keeps filters visible while you scroll the table.
-- **Workflow:** see [14_M1_1_Admin_Pipeline_State_Tracking.md](../../m1/14_M1_1_Admin_Pipeline_State_Tracking.md) (pipeline-state triage flow); the verification flow is [14_M1_3_Admin_Expert_Verification.md](../../m1/14_M1_3_Admin_Expert_Verification.md); the deferred review-queue page is [14_M1_2_Admin_Review_Queue_Triage.md](../../m1/14_M1_2_Admin_Review_Queue_Triage.md).
+- **Workflow:** see [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md) (pipeline-state triage flow); the verification flow is [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md); the deferred review-queue page is [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md).
 
 ### `/admin/regulations/new` and `/admin/regulations/[id]/edit` — the regulation form
 - **Files**: `regulations/new/page.tsx`, `regulations/[id]/edit/page.tsx` (server component, `dynamic = "force-dynamic"`) · edit has a streaming fallback `regulations/[id]/edit/loading.tsx`.
 - **Key components**: `<RegulationForm>` (`components/forms/regulation-form.tsx`) — four numbered `<Card>` sections (Identity & classification / Dates / Affected sectors / Localised content), EN/SI/TA `<Tabs>` for the trilingual fields, a sticky save bar (`sticky bottom-0 backdrop-blur`), and a live "Preview as SME" panel powered by `useWatch` + `<RegulationContextCard>` so the author sees the card the SME will see. Edit mode disables `regulation_short_code` (immutable). On the edit page only: a `<LinkedQuestionsPanel>` (`components/forms/linked-questions-panel.tsx`) Card grouping linked questions by module (M1/M2/M3) with deep-links into `/admin/questions/[code]/edit`, plus an **"Open flow canvas"** CTA in the header and the verification badge. **Loading**: `<LinkedQuestionsPanel>` shows `<AnimatedLoadingSkeleton>` inside its Card while fetching.
 - **Why the live preview**: the regulation summary becomes an SME-facing context card; authors need to see it rendered, not imagine it from form fields.
-- **Workflow:** see [14_M1_3_Admin_Expert_Verification.md](../../m1/14_M1_3_Admin_Expert_Verification.md) — the Verify button on this page is the canonical sign-off action.
+- **Workflow:** see [14_M1_Tracking_Workflows.md](../../m1/14_M1_Tracking_Workflows.md) — the Verify button on this page is the canonical sign-off action.
 
 ### `/admin/regulations/[id]/flow` — the visual flow canvas
 - **File**: `regulations/[id]/flow/page.tsx` (server component) · streaming fallback `regulations/[id]/flow/loading.tsx`.

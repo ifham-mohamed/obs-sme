@@ -2,7 +2,7 @@
 
 > **Pairs with** [2_setup.md](2_setup.md).
 > **Predecessor:** [1.md](2026-05%20Step%202a%20—%20Scrapy%20gazette%20spider%20(M1%20Phase%202%20—%20Ingest%20+%20extraction,%20MVP%20slice).md) (the Scrapy spider that lands `m1_regulations` rows in `status='ingested'`).
-> **Reference:** [../16_M1_Development_Roadmap.md](../16_M1_Development_Roadmap.md) Phase 2 Step 2b; [../03_M1_Data_Collection.md §6.1](../03_M1_Data_Collection.md) (Celery retry interaction); [../03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md).
+> **Reference:** [../16_M1_Development_Roadmap.md](../16_M1_Development_Roadmap.md) Phase 2 Step 2b; [../03_M1_Data_Collection.md §6.1](../03_M1_Data_Collection.md) (Celery retry interaction); [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md).
 
 ## Context
 
@@ -14,8 +14,8 @@ After Session 23 (Step 2a), `m1_regulations` rows land at `status='ingested'` wi
 
 1. **Broker = Redis.** Standard for Celery on Python; cheap to run locally (`brew services start redis`) and free-tier on Upstash for the Fly.io production worker. RabbitMQ rejected — adds operational surface area we don't need at MVP scale.
 2. **Worker host = local (dev) + Fly.io (prod).** Vercel cannot run Celery workers (no long-lived processes). The production worker lands on a Fly.io machine per [../07_M1_Deployment_Integration.md](../07_M1_Deployment_Integration.md); the dev loop runs locally. Worker hosting deployment is **out of scope for this slice** — Step 2b ships the *code*; the deploy spec is its own follow-up.
-3. **Real extraction chain shipped this slice (not stubbed).** The roadmap's DoD says "row advances to status='extracted'" with cleaned text — that requires the real PyMuPDF → pdfplumber → Tesseract chain from [../03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md). Tesseract OCR is a system dep; `2_setup.md` documents `brew install tesseract tesseract-lang`.
-4. **Language detection + Wijesekara conversion deferred to Step 2c.** The extraction here just produces *cleaned text*; the per-line language routing + Sinhala glyph remapping land later. See [../10_M1_1_Language_Detection_Routing.md](../10_M1_1_Language_Detection_Routing.md) + [../10_M1_2_OCR_Wijesekara_Conversion.md](../10_M1_2_OCR_Wijesekara_Conversion.md).
+3. **Real extraction chain shipped this slice (not stubbed).** The roadmap's DoD says "row advances to status='extracted'" with cleaned text — that requires the real PyMuPDF → pdfplumber → Tesseract chain from [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md). Tesseract OCR is a system dep; `2_setup.md` documents `brew install tesseract tesseract-lang`.
+4. **Language detection + Wijesekara conversion deferred to Step 2c.** The extraction here just produces *cleaned text*; the per-line language routing + Sinhala glyph remapping land later. See [../10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md) + [../10_M1_Sinhala_Tamil_NLP.md](../10_M1_Sinhala_Tamil_NLP.md).
 5. **`raw_text` column added now**, since the DoD requires it. Migration `202605230001` adds `m1_regulations.raw_text` (TEXT nullable) + `extraction_method` (VARCHAR(20) nullable: `'pymupdf' | 'pdfplumber' | 'tesseract'`) + `extracted_at` timestamp.
 6. **Celery retry pattern follows [03_M1_Data_Collection.md §6.1](../03_M1_Data_Collection.md).** Spider-side retries stay inside Scrapy; Celery only retries on infrastructure failures (DB lost, disk full). `autoretry_for=()` — no implicit retry; explicit `self.retry(exc=exc, countdown=60)` where appropriate.
 
@@ -36,14 +36,14 @@ After Session 23 (Step 2a), `m1_regulations` rows land at `status='ingested'` wi
 | `enigmatrix-backend/app/tasks/__init__.py` | Package marker + re-export of the celery app (`from app.celery_config import celery_app`). |
 | `enigmatrix-backend/app/tasks/m1/__init__.py` | Package marker + re-exports `gazette_scraper`, `extract_gazette` so other modules can `from app.tasks.m1 import extract_gazette`. |
 | `enigmatrix-backend/app/tasks/m1/gazette_scraper.py` | Celery task `gazette_scraper` — wraps the Scrapy spider in a `CrawlerRunner` per [03_M1_Data_Collection.md §1.2](../03_M1_Data_Collection.md). Returns `{"crawled": n, "duration_s": d}`. Celery Beat fires it on `0 */6 * * *`. |
-| `enigmatrix-backend/app/tasks/m1/extract_gazette.py` | Celery task `extract_gazette(regulation_id)` — loads the row → reads `raw_pdf_path` → runs `classify_pdf()` → dispatches to PyMuPDF / pdfplumber / Tesseract extractor → writes `raw_text` + `extraction_method` + `extracted_at` → flips `status` to `'extracted'`. On failure: status → `'extraction_failed'`. The full extraction-chain logic + threshold sensitivity is in [../03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md). |
+| `enigmatrix-backend/app/tasks/m1/extract_gazette.py` | Celery task `extract_gazette(regulation_id)` — loads the row → reads `raw_pdf_path` → runs `classify_pdf()` → dispatches to PyMuPDF / pdfplumber / Tesseract extractor → writes `raw_text` + `extraction_method` + `extracted_at` → flips `status` to `'extracted'`. On failure: status → `'extraction_failed'`. The full extraction-chain logic + threshold sensitivity is in [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md). |
 
 ### NEW — Extraction helpers (3 files)
 
 | Path | Purpose |
 |---|---|
 | `enigmatrix-backend/app/extraction/__init__.py` | Package marker. Lives in `app/extraction/` (not `ml/m1/extraction/`) for now to stay inside the backend repo; the `ml/` split is a future reorg per doc 13. |
-| `enigmatrix-backend/app/extraction/pdf_classifier.py` | `classify_pdf(path: str) -> dict` returning `{"type": "text_pdf" | "hybrid" | "scanned", "method": ...}`. Thresholds from env vars `M1_PDF_TEXT_THRESHOLD` (default 200) + `M1_PDF_SCANNED_THRESHOLD` (default 30). Spec: [../03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md). |
+| `enigmatrix-backend/app/extraction/pdf_classifier.py` | `classify_pdf(path: str) -> dict` returning `{"type": "text_pdf" | "hybrid" | "scanned", "method": ...}`. Thresholds from env vars `M1_PDF_TEXT_THRESHOLD` (default 200) + `M1_PDF_SCANNED_THRESHOLD` (default 30). Spec: [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md). |
 | `enigmatrix-backend/app/extraction/text_extractors.py` | Three callables: `extract_pymupdf(path)`, `extract_pdfplumber(path)`, `extract_tesseract(path)`. Each returns `(text, method)`. `extract_gazette` calls the chain in order, picking the first non-empty result. |
 
 ### NEW — Alembic migration (1 file)
@@ -106,7 +106,7 @@ When Step 2b is executed: a new Session entry (Session 26 / F-148 or whichever n
 - **PyMuPDF wheels for Apple Silicon.** Recent versions ship wheels; `uv sync` handles it. If wheel install fails, fallback is `pip install --no-binary :all:` (slow but works).
 - **Celery + asyncio bridge.** The pipelines use `async def process_item` (Session 23). When the pipeline calls `extract_gazette.delay(...)`, the dispatch is synchronous Celery API — fine to call from async context (Celery client is sync but non-blocking for the message send). Documented.
 - **Worker concurrency.** Default Celery prefork = `CPU_COUNT`. For local dev, `--concurrency=2` is plenty. Production tuning is in doc 13 (Fly.io machine sizing).
-- **6-hour Beat schedule** matches the spider's per-source scrape frequency in [02_M1_1_Data_Sources_Catalogue.md](../02_M1_1_Data_Sources_Catalogue.md). Override via Celery Beat config if needed.
+- **6-hour Beat schedule** matches the spider's per-source scrape frequency in [02_M1_Data_Requirements.md](../02_M1_Data_Requirements.md). Override via Celery Beat config if needed.
 - **Tesseract data race.** Multiple workers running `pytesseract` against the same temp dir can collide. Solution: `tempfile.TemporaryDirectory()` per task invocation.
 
 ## Cross-references
@@ -114,5 +114,5 @@ When Step 2b is executed: a new Session entry (Session 26 / F-148 or whichever n
 - **Predecessor:** [1.md](2026-05%20Step%202a%20—%20Scrapy%20gazette%20spider%20(M1%20Phase%202%20—%20Ingest%20+%20extraction,%20MVP%20slice).md) + [1_setup.md](1_setup.md) (Step 2a — the spider).
 - **Setup guide for this:** [2_setup.md](2_setup.md).
 - **Roadmap step:** [../16_M1_Development_Roadmap.md](../16_M1_Development_Roadmap.md) Phase 2 Step 2b.
-- **Detail docs:** [../03_M1_Data_Collection.md §6.1](../03_M1_Data_Collection.md), [../03_M1_1_PDF_Extraction_Chain.md](../03_M1_1_PDF_Extraction_Chain.md), [../03_M1_2_Gazette_Segmentation.md](../03_M1_2_Gazette_Segmentation.md) (segmentation is Step 2c).
+- **Detail docs:** [../03_M1_Data_Collection.md §6.1](../03_M1_Data_Collection.md), [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md), [../03_M1_Data_Collection.md](../03_M1_Data_Collection.md) (segmentation is Step 2c).
 - **What comes after:** Step 2c (language detection + per-line routing) + Step 2d (preprocessing for classification).

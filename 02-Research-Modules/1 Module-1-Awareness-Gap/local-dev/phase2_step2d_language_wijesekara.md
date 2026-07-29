@@ -8,7 +8,7 @@ module: m1
 # Phase 2 Step 2d — fastText language detection + Wijesekara + per-page OCR fallback (local dev)
 
 > **Shipped:** Session 30 / F-153.
-> **Spec**: [planned-for-development/4_setup.md](../planned-for-development/4_setup.md) · [10_M1_1_Language_Detection_Routing](../10_M1_1_Language_Detection_Routing.md) · [10_M1_2_OCR_Wijesekara_Conversion](../10_M1_2_OCR_Wijesekara_Conversion.md).
+> **Spec**: [planned-for-development/4_setup.md](../planned-for-development/4_setup.md) · [10_M1_1_Language_Detection_Routing](../10_M1_Sinhala_Tamil_NLP.md) · [10_M1_2_OCR_Wijesekara_Conversion](../10_M1_Sinhala_Tamil_NLP.md).
 
 ## 1 · What this step does
 
@@ -170,5 +170,5 @@ graphify update C:\Reasearch\xyz
 - [planned-for-development/4_setup.md](../planned-for-development/4_setup.md) — Step 2d setup spec
 - [phase2_step2c_extraction_chain](phase2_step2c_extraction_chain.md) — predecessor
 - [phase2_step2e_preprocessing](phase2_step2e_preprocessing.md) — successor (consumes the cleaned + routed text)
-- [10_M1_1_Language_Detection_Routing](../10_M1_1_Language_Detection_Routing.md)
-- [10_M1_2_OCR_Wijesekara_Conversion](../10_M1_2_OCR_Wijesekara_Conversion.md)
+- [10_M1_1_Language_Detection_Routing](../10_M1_Sinhala_Tamil_NLP.md)
+- [10_M1_2_OCR_Wijesekara_Conversion](../10_M1_Sinhala_Tamil_NLP.md)

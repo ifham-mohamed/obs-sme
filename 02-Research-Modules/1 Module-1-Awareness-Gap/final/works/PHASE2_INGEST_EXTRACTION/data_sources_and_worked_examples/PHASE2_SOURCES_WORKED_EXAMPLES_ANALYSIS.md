@@ -1,7 +1,7 @@
 # Phase 2 · Data Requirements — Source Catalogue + Worked Examples: Analysis
 
 > Group: `PHASE2_INGEST_EXTRACTION / data_sources_and_worked_examples`. Companion: [[PHASE2_SOURCES_WORKED_EXAMPLES_PLAN]].
-> Builds [[02_M1_1_Data_Sources_Catalogue]] + [[02_M1_4_Worked_Examples_All_Tables]] into code. Sibling build: [[PHASE2_DATA_VALIDATION_GOVERNANCE_ANALYSIS]] (02_2 + 02_3). **Status: implemented 2026-07-23 (verification deferred — sandbox VHDX down).**
+> Builds [[02_M1_Data_Requirements|02_M1_1_Data_Sources_Catalogue]] + [[02_M1_Data_Requirements|02_M1_4_Worked_Examples_All_Tables]] into code. Sibling build: [[PHASE2_DATA_VALIDATION_GOVERNANCE_ANALYSIS]] (02_2 + 02_3). **Status: implemented 2026-07-23 (verification deferred — sandbox VHDX down).**
 
 ## 1. 02_M1_1 — what already existed vs the real gap
 

@@ -8,7 +8,7 @@ module: m1
 # Phase 2 Session 34 cleanup — segmenter promotion + penalty enum widen + is_admin_set + m1_sub_documents (local dev)
 
 > **Shipped:** Session 34 / F-157.
-> **Spec**: [findings/2026-05-17-m1-phase2-cleanup-segmenter-penalty-subdocs](../findings/2026-05-17-m1-phase2-cleanup-segmenter-penalty-subdocs.md) · [02_M1_Data_Requirements §2.8 + §2.10](../02_M1_Data_Requirements.md) · [03_M1_2_Gazette_Segmentation](../03_M1_2_Gazette_Segmentation.md).
+> **Spec**: [findings/2026-05-17-m1-phase2-cleanup-segmenter-penalty-subdocs](../findings/2026-05-17-m1-phase2-cleanup-segmenter-penalty-subdocs.md) · [02_M1_Data_Requirements §2.8 + §2.10](../02_M1_Data_Requirements.md) · [03_M1_2_Gazette_Segmentation](../03_M1_Data_Collection.md).
 
 ## 1 · What this step does
 
@@ -196,5 +196,5 @@ graphify update C:\sme
 - [findings/2026-05-17-m1-phase2-cleanup-segmenter-penalty-subdocs](../findings/2026-05-17-m1-phase2-cleanup-segmenter-penalty-subdocs.md) — Session 34 finding entry
 - [phase2_step2f_celery_wiring](phase2_step2f_celery_wiring.md) — predecessor (the wiring this cleanup extends)
 - [02_M1_Data_Requirements §2.8 + §2.10](../02_M1_Data_Requirements.md) — m1_regulation_penalties + m1_sub_documents schemas
-- [03_M1_2_Gazette_Segmentation](../03_M1_2_Gazette_Segmentation.md) — segmentation strategy spec
+- [03_M1_2_Gazette_Segmentation](../03_M1_Data_Collection.md) — segmentation strategy spec
 - Next milestone: **Phase 3 Step 3a** — Label Studio + 20-doc calibration test ([16_M1_Development_Roadmap](../16_M1_Development_Roadmap.md) §Phase-3).

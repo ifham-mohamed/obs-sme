@@ -60,7 +60,7 @@ Each re-extract now commits `extracted` → auto-chains to preprocess → the ru
 
 ## 6. Docs updated
 
-- `enigmatrix-docs/m1/08_M1_2_Edge_Cases_Failure_Modes.md` — new failure-mode row.
+- `enigmatrix-docs/m1/08_M1_Full_System_Architecture.md` — new failure-mode row.
 - `AI_WORK_LOG.md` — session entry.
 
 ## 7. Verification (deferred — sandbox VHDX down)

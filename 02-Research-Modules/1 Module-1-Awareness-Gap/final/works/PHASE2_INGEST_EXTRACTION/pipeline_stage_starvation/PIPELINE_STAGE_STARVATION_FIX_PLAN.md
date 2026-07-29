@@ -41,7 +41,7 @@ Left as ops guidance so it doesn't fight however the operator launches the worke
 
 ## 5. Docs updated
 
-- `enigmatrix-docs/m1/08_M1_2_Edge_Cases_Failure_Modes.md` — failure-mode row.
+- `enigmatrix-docs/m1/08_M1_Full_System_Architecture.md` — failure-mode row.
 - `AI_WORK_LOG.md` — session entry.
 
 ## 6. Verification (deferred — sandbox VHDX down)

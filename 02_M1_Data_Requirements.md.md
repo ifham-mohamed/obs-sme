@@ -2,7 +2,7 @@
 
 > **Cross-references:** [01_M1_Research_Problem.md](01_M1_Research_Problem.md) · [03_M1_Data_Collection.md](03_M1_Data_Collection.md) · [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md)
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) for where each of the 9 `m1_*` tables is owned in the project tree.
-> **Sub-step companions:** [02_M1_1_Data_Sources_Catalogue.md](02_M1_1_Data_Sources_Catalogue.md) · [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md) · [02_M1_3_Data_Governance_Retention.md](02_M1_3_Data_Governance_Retention.md) · [02_M1_4_Worked_Examples_All_Tables.md](02_M1_4_Worked_Examples_All_Tables.md)
+> **Sub-step companions:** [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) · [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) · [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) · [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md)
 
 ---
 
@@ -348,7 +348,7 @@ CREATE INDEX ix_m1_sub_documents_regulation_id ON m1_sub_documents (regulation_i
 
 **Idempotency semantics:** mirror of the `m1_regulation_penalties` rebuild — `preprocess_gazette_task` runs `DELETE WHERE regulation_id=?` before re-inserting the new section set. No `is_admin_set` flag yet because admins don't curate sub-document boundaries today; future admin UI for segmentation override would add one.
 
-**Section type classifier:** see [03_M1_2_Gazette_Segmentation.md §2](03_M1_2_Gazette_Segmentation.md) for the regex patterns. `section_type='preamble'` is assigned to the leading text before the first boundary marker — distinguishes "no boundaries detected at all" (single preamble row spanning full document) from "boundaries detected, but the head is also a section".
+**Section type classifier:** see [03_M1_Data_Collection.md §2](03_M1_Data_Collection.md) for the regex patterns. `section_type='preamble'` is assigned to the leading text before the first boundary marker — distinguishes "no boundaries detected at all" (single preamble row spanning full document) from "boundaries detected, but the head is also a section".
 
 ### 2.11 Indexing Strategy
 
@@ -376,7 +376,7 @@ CREATE INDEX idx_m1_court_outcome_sector   ON m1_court_cases (judgment_outcome, 
 CREATE INDEX idx_m1_reg_text_trgm          ON m1_regulations USING gin (raw_text gin_trgm_ops);
 ```
 
-Validation of each index's actual benefit (with `EXPLAIN ANALYZE` traces) lives in [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md).
+Validation of each index's actual benefit (with `EXPLAIN ANALYZE` traces) lives in [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md).
 
 ---
 
@@ -476,7 +476,7 @@ These views feed the `/api/v1/m1/analytics/lag` and `/api/v1/m1/analytics/channe
 | `change_category` confidence floor | confidence ≥ 0.70 OR `needs_review = true` | Pydantic validator on classification output | Stage-D inference task (`classify_gazette.py`) sets `needs_review` automatically                    |
 | Survey-response sector balance     | each sector has ≥ 5 SME respondents        | COUNT per sector_code                       | Survey-coverage dashboard; M1 lag findings flagged as "underpowered" if any sector below threshold  |
 
-The enforcement column makes it clear *where each check lives*: SQL constraints handle uniqueness; Pydantic validators handle shape + magnitude; Celery validation tasks handle distributional / cross-row checks. Three-layer defense — no single layer is allowed to be the sole guardrail. The full validation flow including SQL CHECK constraints, Pydantic schemas, and `m1_validate_pipeline.py` is detailed in [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md).
+The enforcement column makes it clear *where each check lives*: SQL constraints handle uniqueness; Pydantic validators handle shape + magnitude; Celery validation tasks handle distributional / cross-row checks. Three-layer defense — no single layer is allowed to be the sole guardrail. The full validation flow including SQL CHECK constraints, Pydantic schemas, and `m1_validate_pipeline.py` is detailed in [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md).
 
 ---
 
@@ -527,7 +527,7 @@ flowchart TD
 - Survey responses (`m1_sme_awareness_responses`): anonymised after 5 years (PDPA compliance)
 - Audit logs: retained 7 years (IRD audit requirements)
 
-**Retention costing.** At ~500 new gazettes/year × ~2 MB/gazette (PDF + extracted text + metadata) = ~1 GB/year. At 10-year archive (2025 → 2035) = ~10 GB on disk. Postgres row overhead adds ~30% → ~13 GB total. This fits comfortably in a Supabase Pro tier ($25/mo for 8 GB DB + S3 cold archive for PDFs >2 years old reduces hot storage to ~3 GB). The S3 lifecycle policy (move to Glacier Deep Archive after 2 years) drops effective per-month storage cost from $0.023/GB to $0.001/GB — a 23× reduction. Cold-archive PDFs are retrievable in 12 h, acceptable for research re-extraction but **not** for live alerts; the live alert path only ever touches the last 90 days of `raw_pdf_path` rows. Detailed cost projections + S3 lifecycle YAML in [02_M1_3_Data_Governance_Retention.md](02_M1_3_Data_Governance_Retention.md).
+**Retention costing.** At ~500 new gazettes/year × ~2 MB/gazette (PDF + extracted text + metadata) = ~1 GB/year. At 10-year archive (2025 → 2035) = ~10 GB on disk. Postgres row overhead adds ~30% → ~13 GB total. This fits comfortably in a Supabase Pro tier ($25/mo for 8 GB DB + S3 cold archive for PDFs >2 years old reduces hot storage to ~3 GB). The S3 lifecycle policy (move to Glacier Deep Archive after 2 years) drops effective per-month storage cost from $0.023/GB to $0.001/GB — a 23× reduction. Cold-archive PDFs are retrievable in 12 h, acceptable for research re-extraction but **not** for live alerts; the live alert path only ever touches the last 90 days of `raw_pdf_path` rows. Detailed cost projections + S3 lifecycle YAML in [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md).
 
 ### 6.2 Privacy Considerations
 - Gazette PDFs are public documents; no consent required for collection
@@ -634,7 +634,7 @@ This section traces Extraordinary Gazette **2486/22** (2026-04-15) — mandating
 ]
 ```
 
-All 19 rows together let a single SQL query reconstruct the full amendment impact for any sector — e.g. `SELECT change_summary_en, old_value, new_value FROM m1_regulation_changes WHERE regulation_id = $1 AND applies_to ILIKE '%VAT-registered%'` returns the eight clauses that touch every registered business. The complete VAT + EPF rate-change worked examples (all 9 tables × 3 regulations populated) live in [02_M1_4_Worked_Examples_All_Tables.md](02_M1_4_Worked_Examples_All_Tables.md).
+All 19 rows together let a single SQL query reconstruct the full amendment impact for any sector — e.g. `SELECT change_summary_en, old_value, new_value FROM m1_regulation_changes WHERE regulation_id = $1 AND applies_to ILIKE '%VAT-registered%'` returns the eight clauses that touch every registered business. The complete VAT + EPF rate-change worked examples (all 9 tables × 3 regulations populated) live in [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md).
 
 **`m1_real_world_examples` row:**
 ```json
@@ -1161,7 +1161,7 @@ Settings added: `M1_RETENTION_DRY_RUN`, `M1_SURVEY_RETENTION_YEARS`, `M1_PIPELIN
 ## Cross-references
 
 - Parent: [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §6 (governance), §3.2 (storage growth)
-- Related: [09_M1_3_SME_Survey_Instrument.md](09_M1_3_SME_Survey_Instrument.md) (consent collection), [12_M1_2_Retraining_Deployment_Rollback.md](12_M1_2_Retraining_Deployment_Rollback.md) (audit-log archive interaction)
+- Related: [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) (consent collection), [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) (audit-log archive interaction)
 - BUILD phase: BUILD_07 §retention crons, BUILD_12 §S3 lifecycle
 - Code (when shipped): `backend/app/scripts/anonymise_aged_survey_responses.py`, `archive_old_audit_logs.py`; `infra/aws/s3_m1_lifecycle.yaml`
 
@@ -1362,7 +1362,7 @@ A reader who can write each of those nine inserts for a *new* regulation has ful
 ## Validation & acceptance criteria
 
 - **Round-trip test.** For each of the three examples, a unit test in `tests/m1/test_worked_examples.py` inserts all rows, runs the two views, and asserts the expected lag values.
-- **Constraint coverage.** Each example exercises at least one `CHECK` constraint from [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md) (e.g. EPF example tests the `chk_category_when_classified` constraint).
+- **Constraint coverage.** Each example exercises at least one `CHECK` constraint from [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) (e.g. EPF example tests the `chk_category_when_classified` constraint).
 - **Sector coverage.** Across the three examples, all 3 study sectors and a spread of the 8 domains are exercised at least once.
 
 ## Build note (2026-07-23) — as shipped
@@ -1374,6 +1374,6 @@ A reader who can write each of those nine inserts for a *new* regulation has ful
 ## Cross-references
 
 - Parent: [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §7 (parent's worked example), §2 (schema)
-- Related: [02_M1_2_Database_Schema_Validation.md](02_M1_2_Database_Schema_Validation.md), [08_M1_1_Research_Findings_Extraction.md](08_M1_1_Research_Findings_Extraction.md)
+- Related: [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md), [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md)
 - BUILD phase: BUILD_07 (data ingestion fills these tables for real)
 - Code (when shipped): `backend/app/scripts/seed_regulations.py` (currently seeds 5 demo rows — to be extended in BUILD_07)
