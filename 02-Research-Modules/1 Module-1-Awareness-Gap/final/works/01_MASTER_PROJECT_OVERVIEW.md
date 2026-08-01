@@ -175,7 +175,7 @@ Migrations: linear Alembic chain `202605080001` … `202606300005` (the last fiv
 5. **Survey fieldwork** (5a): ≥100 SME respondents; then run the F1–F6 notebooks on real data.
 6. **Re-extract clean SI/TA text** — the `(cid:…)` glyph issue is a known RQ2 risk flagged in Session 62.
 
-Secondary follow-ups: FE accuracy-report download button + CSV export (Session-72 audit list), `/alerts` middleware + nav wiring, SME phone field for SMS, production regulation summarization plus NLLB Sinhala/Tamil title/summary backfill, SI/TA i18n for newest strings, git tag `m1-phase2-complete`, real Docker digests, `graphify update .` (graph is ~6 weeks stale).
+Secondary follow-ups: FE accuracy-report download button + CSV export (Session-72 audit list), `/alerts` middleware + nav wiring, SME phone field for SMS, summary human-review/evaluation after the 2026-08-01 Stage-E backend slice, SI/TA i18n for newest strings, git tag `m1-phase2-complete`, real Docker digests, `graphify update .` (graph is ~6 weeks stale).
 
 ---
 

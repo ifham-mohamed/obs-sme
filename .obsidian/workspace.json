@@ -69,12 +69,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md",
+                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/20_M1_Multitask_Classifier_Upgrade.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "19_M1_Regulation_Summarization"
+              "title": "20_M1_Multitask_Classifier_Upgrade"
             }
           },
           {
@@ -301,9 +301,13 @@
   },
   "active": "942cd4de1a311543",
   "lastOpenFiles": [
-    "02-Research-Modules/1 Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.23656.7665b207a62c",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/20_M1_Multitask_Classifier_Upgrade.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/20_M1_Multitask_Classifier_Upgrade.md.tmp.23656.9506e8835294",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/RESEARCH_DESIGN/SME_SECTOR_AND_REGULATION_SCOPE_PLAN.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.24084.5a2f285bddc4",
     "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md.tmp.24084.1689b3076ffe",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/00_WORKS_ORGANIZATION_INDEX.md.tmp.19296.8d56e72ee404",
@@ -312,8 +316,6 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/00_WORKS_ORGANIZATION_INDEX.md.tmp.19296.c1c687af1c36",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.19296.fd8a8fa4bd7b",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.19296.ac9a692b1605",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.19296.b187a4328dc2",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.19296.75450ad5a56d",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/observability_console/OBSERVABILITY_CONSOLE_ANALYSIS.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_model_training/CLASSIFIER_MODEL_SELECTION_ANALYSIS.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE5_RESEARCH_FINDINGS/PHASE5_GAP_CLOSURE_PLAN.md",
@@ -334,9 +336,6 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/log and works/06_M1_FULL_WORK_SESSION_CHRONOLOGY_2026-07-31.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/06_M1_FULL_WORK_SESSION_CHRONOLOGY_2026-07-31.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/00_FINAL_REPORT_CONTEXT_INDEX.md",
-    "Final-Report/06_M1_FULL_WORK_SESSION_CHRONOLOGY_2026-07-31.md",
-    "Final-Report/00_FINAL_REPORT_CONTEXT_INDEX.md",
-    "graphify-out/GRAPH_REPORT.md",
     "Interim/report/Attachments/SMEs Interim 1.jpeg",
     "Interim/report/Attachments/SMEs Interim.jpeg",
     "Interim/report/Attachments/SMEs Interim.png",

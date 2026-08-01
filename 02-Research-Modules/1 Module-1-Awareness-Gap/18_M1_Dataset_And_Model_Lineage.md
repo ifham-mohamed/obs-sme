@@ -34,8 +34,13 @@ gold_standard.csv  (research/data/labeling/)
            │  fixed reporting split established: 777 / 166 / 167
            ▼
            V6  m1_regulations_v6_1110_clean_fixedsplit   ◄── FROZEN, current
-              + 4 EPF/ETF label corrections (all in train split)
-              split preserved byte-for-byte from V5
+           │  + 4 EPF/ETF label corrections (all in train split)
+           │  split preserved byte-for-byte from V5
+           ▼
+           V7  m1_regulations_v7_1110_multitask_fixedsplit   ◄── PLANNED, not built
+              + is_sme_relevant recovered from gold_standard_v3_1128  (1110/1110)
+              + sector_vector, category_id, relevance_label, explicit split
+              V6 labels, text and split unchanged
 ```
 
 Three rules keep the lineage clean:
@@ -116,6 +121,42 @@ C:\Reasearch\xyz\kaggle_bundle\m1_v6_epf_etf_corrections\extracted\
 | `m1_regulations_v6_1110_clean_fixedsplit.zip` | `66EF4CF6FB187146641173BBB71628AD711C635FCEADE34CAB01AADDD99F35F0` |
 | `m1_regulations_v5_1110_clean_fixedsplit.zip` | `E1CA910E690F59C77F9859F57BE15069E48CBC6DF9C952BC8B28106C5A25FB29` |
 | `m1_v6_epf_etf_corrections_bundle.zip` | `2C9169B54C99B21241354E378172DEF8BC8071AC8FF40AAA22ED9551BD386597` |
+
+### V7 — `m1_regulations_v7_1110_multitask_fixedsplit` (planned, not built)
+
+Derived from V6 **without modifying it**, to carry multitask labels. Preserves all 1110 keys, the 777/166/167 split, every V6 category label, text, date and language. Adds `is_sme_relevant`, `sector_vector`, `category_id`, `relevance_label` and an explicit `split` column.
+
+**`is_sme_relevant` has to be recovered, because V6 does not carry it.** The V6 parquet columns are exactly `key · text · category · sectors · language · date` — the relevance field was dropped at export. It is recovered by joining `research/data/labeling/gold_standard_v3_1128.csv` on `regulation_key`. Audited 2026-08-01:
+
+| Check | Result |
+|---|---|
+| Join coverage | **1110 / 1110** |
+| V6 `sectors` == gold `affected_sectors` | **1110 / 1110** |
+| Duplicate keys · cross-split overlap · empty text | 0 · 0 · 0 |
+| Unknown categories · unknown sectors | none · none |
+| `is_sme_relevant == bool(affected_sectors)` | **1109 / 1110** |
+| **Total consistency errors** | **1** |
+
+V6 lost the relevance column and nothing else.
+
+**The single violation is a reasoned annotation, not an error.** `GZT_2492_10` (train, `IMPORT_EXPORT`) is marked SME-relevant with an empty sector list, and both annotators independently recorded the same reason at confidence 1.0: *"Export-proceeds rule affects SME exporters, but it is outside the three shop-focused study sectors; affected_sectors left blank."* Adopting `is_sme_relevant = any(sectors)` therefore **narrows** the field to *"affects at least one of the three study sectors"*. V7 relabels this row to `false` and preserves the note; the narrowing belongs in the limitations section, not in a silent flip.
+
+**Sector label shape (all 1110 rows)** — the finding that most constrains what the sector head can claim:
+
+| Combination | Train | Val | Test | Total | Share |
+|---|---:|---:|---:|---:|---:|
+| `[]` | 574 | 121 | 117 | 812 | **73.2 %** |
+| all three | 172 | 36 | 42 | 250 | **22.5 %** |
+| `grocery + food` | 25 | 7 | 5 | 37 | 3.3 % |
+| `general` | 4 | 1 | 2 | 7 | 0.6 % |
+| `food` | 2 | 0 | 0 | 2 | 0.2 % |
+| `general + grocery` | 0 | 1 | 1 | 2 | 0.2 % |
+
+84 % of sector-bearing rows carry all three; genuine partial structure is 48 rows (4.3 %). `general + grocery` has **zero training examples** and `food_service` alone has **zero validation and test examples**.
+
+**Measured class weights (train split)** — `pos_weight` = neg/pos: `grocery_retail` 2.944 · `food_service` 2.905 · `general_retail` 3.415 · relevance 2.809.
+
+Consequences for thresholds and promotion gates: [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) §1.4 and §6.2. Audit artifacts: `documentation/m1/analysis/multitask_dataset_audit.json` · `multitask_label_distribution.csv` · `multitask_consistency_errors.csv`.
 
 ### Legacy L1 — `enigmatrix-ml\datasets\m1_regulations`
 
@@ -224,6 +265,8 @@ The frozen primary model also has **no sector head**; it returns `"sectors": []`
 2. **`EPF_ETF_CHANGE` needs real data, not resampling.** 4 train / 1 test rows. The next annotation round should target genuine EPF/ETF regulations before any per-class claim is made about this category.
 3. **Do not rename or move `datasets/` or `models/`.** Their paths are recorded inside `model_registry.json`, `SHA256SUMS.json`, `local_windows_verification.json` and the frozen record.
 4. **Re-derive, don't hand-edit.** Every table here is regenerable from the record generator; if a number changes, change the source and regenerate.
+5. **The sector label space is nearly degenerate.** 73.2 % of rows carry no sector and 84 % of the remainder carry all three. Collecting **partial-sector** regulations — ones affecting one or two of the three study sectors — is now a higher-value annotation target than general volume, because it is the only thing that turns the sector head from a relevance detector into a sector classifier.
+6. **`CATEGORIES` and `SECTORS` index order is a contract.** `SECTORS = ["grocery_retail", "food_service", "general_retail"]` is frozen. A `sector_vector` written under one order and read under another is silently wrong, so the order ships in `labels.json` *and* in `model_registry.json`, and is asserted at load.
 
 ---
 

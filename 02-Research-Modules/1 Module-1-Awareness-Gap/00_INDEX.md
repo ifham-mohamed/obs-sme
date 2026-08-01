@@ -9,7 +9,8 @@
 | Dimension                      | Target                             | Status                  |
 | ------------------------------ | ---------------------------------- | ----------------------- |
 | Category classifier F1 (macro) | ≥ 0.92                             | **PASSED** — V6 TF-IDF LinearSVC = **0.9472** (temporal test), frozen as primary |
-| Sector assignment F1 (macro)   | ≥ 0.88                             | **No sector model in production** — the frozen classifier is category-only (`sectors: []`) |
+| Sector assignment F1 (macro)   | ≥ 0.88                             | **No sector model in production** — the frozen classifier is category-only (`sectors: []`). V7 multitask specified, not built |
+| Sector label coverage          | usable multi-label structure       | **Weak** — 73.2% of gold rows carry no sector, 84% of the rest carry all three; only 48 rows (4.3%) are partial |
 | Labeled gazette documents      | ≥ 800                              | 1128 resolved v3 gold rows → 1110 after artifact exclusion; IAA gate passed |
 | Propagation data points        | ≥ 800 (200 regulations × 4 stages) | Data collection         |
 | SME awareness survey responses | ≥ 100 unique SMEs                  | Survey instrument ready |
@@ -72,6 +73,7 @@ Full record: [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FR
 | 17 | [17_M1_Repo_Structure_Map.md](17_M1_Repo_Structure_Map.md) | **The workspace as measured** (against doc 13's designed tree) — top-level inventory with sizes, the root tidy of 2026-08-01, `documentation/` layout, why `scripts/` was deliberately left flat (26 files reference those paths), the vault-vs-repo doc fork and which copy is canonical, and where new files go. |
 | 18 | [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) | **V4 → V5 → V6 dataset lineage and every model trained on them** — per-version label changes, class distribution, per-split SHA256, the five-model comparison table, why the transformer lost, the frozen LinearSVC artifact and its hashes, the confidence contract, and four standing constraints. |
 | 19 | [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) | **Stage-E summarisation method** — the input contract (raw text + the 6 Stage-C metadata fields + classifier context), a measured diagnostic showing the extractors return a *wrong* gazette number on 31.1% of test rows, a 5-way approach comparison (decisive-constraint table + scored matrix + one real gazette walked through every approach), and the selected **field-grounded constrained generation** design with four faithfulness invariants, a reference-free evaluation protocol, and the novelty claim it supports. |
+| 20 | [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) | **V7 multitask upgrade** — one shared XLM-R encoder emitting regulation domain (8-way softmax), affected SME sectors (3 sigmoids) and SME relevance **derived** from the sector output so the two can never contradict. Contains the Step-41 V6 audit: `is_sme_relevant` is absent from the V6 parquet and must be recovered from gold (1110/1110); the derivation rule holds 1109/1110; and 73.2% of rows carry no sector while 84% of the rest carry all three, which makes the sector gate gameable and per-sector thresholds unsupportable. Dataset schema, losses, thresholds, promotion gates including the hybrid outcome, and steps 41–53. |
 
 ---
 
@@ -100,8 +102,9 @@ The former sub-step companion files have been merged into their matching parent 
 | [17_M1_Repo_Structure_Map.md](17_M1_Repo_Structure_Map.md) | Measured workspace/repository inventory; companion to doc 13's design |
 | [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) | Dataset versions, model comparison, frozen artifact hashes, confidence contract |
 | [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) | Stage-E summarisation: input contract, approach comparison, faithfulness invariants, evaluation |
+| [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) | V7 multitask: domain + sectors + derived relevance, V6 audit, gates, steps 41–53 |
 
-**File counts:** 19 numbered main docs + this README = **20 canonical Markdown files** at the Module 1 root. Historical implementation notes remain in `final/`, `findings/`, `local-dev/`, and `planned-for-development/`, but root companion files have been retired.
+**File counts:** 20 numbered main docs + this README = **21 canonical Markdown files** at the Module 1 root. Historical implementation notes remain in `final/`, `findings/`, `local-dev/`, and `planned-for-development/`, but root companion files have been retired.
 
 ---
 

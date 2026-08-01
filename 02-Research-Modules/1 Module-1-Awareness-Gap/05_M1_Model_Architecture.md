@@ -327,13 +327,20 @@ Given cleaned gazette text $x$, predict domain $k \in \{k_1, \ldots, k_{8}\}$:
 
 Given the same text $x$, predict $S \subseteq \{s_1, s_2, s_3\}$ over the three shop-focused study sectors (economy-wide regulations carry all three):
 
-| Code | Sector | Expected Positive Rate |
-|---|---|---|
-| `grocery_retail` | Grocery / food retail — kade, mini-marts, small supermarkets | 55 % |
-| `food_service` | Food service — restaurants, cafés, bakeries, take-aways | 45 % |
-| `general_retail` | General-goods retail — textile/apparel, electronics/mobile, hardware | 50 % |
+| Code | Sector | *Projected* positive rate | **Measured on V6 train (2026-08-01)** |
+|---|---|---|---|
+| `grocery_retail` | Grocery / food retail — kade, mini-marts, small supermarkets | 55 % | **25.4 %** (197/777) · `pos_weight` 2.944 |
+| `food_service` | Food service — restaurants, cafés, bakeries, take-aways | 45 % | **25.6 %** (199/777) · `pos_weight` 2.905 |
+| `general_retail` | General-goods retail — textile/apparel, electronics/mobile, hardware | 50 % | **22.7 %** (176/777) · `pos_weight` 3.415 |
 
-The positive rates sum to 150 %, which is the point: they are per-sector marginals over a multi-label target, not a distribution. Rates near 50 % mean each sector head is a well-balanced binary classifier — the opposite of the domain head's problem, and the reason the sector task needs no augmentation.
+> [!warning] Corrected 2026-08-01 — the projected column was wrong, and its conclusion was wrong with it.
+> The projection assumed rates near 50 % summing to 150 %, and concluded that "each sector head is a well-balanced binary classifier … the reason the sector task needs no augmentation." The measured marginals sum to **73.7 %**, not 150 %, and every sector is roughly **1 : 3** positive-to-negative. Each sector head therefore needs a `pos_weight`, and the claim that no imbalance handling is required does not hold.
+>
+> **The larger correction is the shape of the label set, not its marginals.** Across all 1110 rows: **812 (73.2 %) carry no sector at all**, **250 (22.5 %) carry all three**, and only **48 rows (4.3 %)** carry a genuine partial combination. Of the 298 sector-bearing rows, **84 % are all-three**. So the multi-label target is, empirically, close to binary — "no sectors" or "every sector" — with a thin partial layer.
+>
+> This does not invalidate the three-sigmoid design, which remains the right shape for the task as defined. It does mean a model that learns only "relevant → all three" will score well on sector macro-F1 while having learned nothing about sectors, so the promotion gates must separate the two. Full audit and consequences: [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) §1.4.
+
+The rates are per-sector marginals over a multi-label target, not a distribution — that part of the original reasoning stands.
 
 ---
 
@@ -612,6 +619,20 @@ flowchart TD
 ```
 
 **Why one encoder and two heads rather than two models.** A single forward pass produces both predictions, halving inference latency against two separate models — which is what keeps the 1.8 s CPU figure inside the 2 s budget. The shared encoder also carries a training benefit: sector supervision propagates gradients back through the encoder, and those gradients are useful for the domain task too, since "this text is about food retail" and "this text is a Food Act regulation" are correlated signals.
+
+#### 4.7.1 V7 — a third head, and why it is never served
+
+The V7 upgrade ([20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md)) keeps this design and adds a **1-unit sigmoid relevance head**. That head is **auxiliary supervision only**. The served value is derived:
+
+```python
+is_sme_relevant = any(predicted_sectors)
+```
+
+**The reason is a class of bug the derivation makes unrepresentable.** Two independent heads can disagree, and a response like `{"is_sme_relevant": false, "sectors": ["grocery_retail"]}` is not merely odd — it is unfixable at the consumer, because nothing tells a client which field to believe. Deriving one from the other removes the possibility rather than validating it away afterwards, which is the same principle as the anchor-bound slot contract in [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) §5.2.
+
+The auxiliary head keeps exactly one production role: when it **disagrees** with the sector-derived answer, that row is flagged for review. A disagreement is a useful uncertainty signal; it is never an override.
+
+One consequence to state in the write-up: because the three study sectors are the only sectors modelled, `is_sme_relevant` after derivation means **"affects at least one of the three study sectors"**, which is narrower than the field as annotated. The corpus contains a documented case — `GZT_2492_10`, an export-proceeds rule — where both annotators marked the regulation SME-relevant *and* left the sector list empty precisely because the affected SMEs are outside the three studied sectors. See §1.3 of doc 20.
 
 **Head dimensions and the taxonomy revision.** The heads are `768 → 8` and `768 → 3`, matching the 8 domains in §2.1 and the 3 sectors in §2.2. Earlier drafts of this document carried `768 → 12` and `768 → 10`, which were the dimensions of the pre-revision taxonomy; those numbers are stale and have been corrected here and in §4.8. The shop-focused 8-domain revision and the four retired domains are documented in [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §2.10. Any checkpoint trained against the old dimensions is not loadable against this definition — which is the concrete form of the "one-way door" warning in §0.
 

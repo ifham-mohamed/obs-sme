@@ -34,7 +34,7 @@ Nothing was deleted. Docs 05, 06 and 11 are **annotated, not rewritten** — the
 
 ## 2026-08-01 Implementation Update
 
-This update records the V6 dataset correction, the model bake-off that ended Phase 3 model selection, the inference integration, and the workspace/documentation reorganization.
+This update records the V6 dataset correction, the model bake-off that ended Phase 3 model selection, the inference integration, the Stage-E summary implementation slice, and the workspace/documentation reorganization.
 
 | Area | Current state | Evidence / next use |
 |---|---|---|
@@ -48,6 +48,8 @@ This update records the V6 dataset correction, the model bake-off that ended Pha
 | scikit-learn version pin | **Pinned** / environment not yet rebuilt | The frozen pipeline was fitted under scikit-learn **1.5.2**; the workspace `.venv` has **1.8.0** and emits `InconsistentVersionWarning` on unpickle. Validation accuracy still reproduced exactly (0.9457831325301205), so this artifact is unaffected in practice. `enigmatrix-ml/pyproject.toml` now pins `scikit-learn>=1.5.2,<1.6` in **both** the `serving` and `training` extras (a model trained under one line must be loadable by the other), and `serving` now declares `joblib` explicitly. The existing `.venv` still holds 1.8.0 — run `uv sync --extra serving` before trusting a deploy. |
 | Confidence contract | Decided | LinearSVC margins are **not** calibrated probabilities. The adapter returns `confidence: null` with `confidence_type: "not_available_uncalibrated_linearsvc"` plus `decision_score`, `decision_margin`, `second_category`, `class_scores`. These may drive ranking and review-queue priority but **must not be displayed as percentages**. Any calibrated probability needs a separately trained and evaluated calibration layer. |
 | Sector prediction | Unchanged / deferred | The frozen primary model has no sector head — it returns `sectors: []`. Sector output still belongs to the ONNX dual-head model. Decide whether to retrain a sector head or keep the split-model arrangement. |
+| **Stage-E constrained summaries** | **Backend slice shipped** / evaluation pending | Commit `ee36ce7` adds `app/m1/services/summary_service.py`, `app/m1/tasks/summarise_gazette.py`, migration `202608010002_m1_summary_metadata.py`, and backfill scripts `scripts/generate_regulation_summaries.py` + `scripts/enqueue_missing_m1_translations.py`. The first slice is intentionally non-LLM: `summary_source="anchor_bound_slots"`, `summary_model_version="m1_anchor_bound_summary_v1"`, short English summaries only from source-anchored slots, with `summary_status`, `summary_quality_flags`, and `summary_source_sha256` stored for review. Focused tests: **13 passed**. |
+| Summary backfill and translation evidence | **Partially completed on live DB** | Read-only DB verification after the first write run: `generated=380`, `review_required=11`, `pending=751`; pipeline status now includes `summarized=380`. Summary translation queue was drained for generated summaries: `done/si=388`, `done/ta=388`, and `generated summaries missing SI/TA = 0`. Treat SI/TA as machine-generated draft translations pending human review. |
 | End-to-end research record | Completed | `documentation/m1/records/ENIGMATRIX_M1_COMPLETE_END_TO_END_RECORD_2026-07-31_2313_IST.md` — 5,642 lines / 299,967 B, regenerable via `scripts/build_enigmatrix_m1_complete_record.py`. Contains the full chronology, every epoch, all failures and recoveries, live artifact hashes, live git state, and 13 source appendices. |
 | Workspace reorganization | Completed | Root planning docs moved into `documentation/{plans,manuals,_archive}` via `git mv`; generated records and audits consolidated under `documentation/m1/`. `scripts/` deliberately left flat — 26 files reference those paths. Map: [[17_M1_Repo_Structure_Map]] and `C:\Reasearch\xyz\STRUCTURE.md`. |
 | Vault `works/` reorganization | Completed | `PROGRAM_READINESS/log and works/` → `LOG_AND_WORKS/`; the byte-identical duplicate `M1_PROGRAM_READINESS_MASTER_INDEX.md` demoted to `_archive/duplicates/`; `_REORGANIZE_works.ps1` → `_tooling/`. Rules now written down in `00_WORKS_ORGANIZATION_INDEX.md`. |
@@ -69,6 +71,7 @@ Documents created in this pass:
 ```text
 17_M1_Repo_Structure_Map.md
 18_M1_Dataset_And_Model_Lineage.md
+20_M1_Multitask_Classifier_Upgrade.md
 final/works/00_WORKS_ORGANIZATION_INDEX.md
 C:\Reasearch\xyz\STRUCTURE.md
 
@@ -107,7 +110,7 @@ This update records the work completed during the latest Phase 3 labeling and do
 | CPU LoRA smoke test | Completed / not promotable | The first CPU attempt on the full `datasets/m1_regulations` split downloaded the model but wrote no registry, so it is not counted. The valid smoke ran `xlm-roberta-base` for 1 seed and 1 epoch on `datasets/m1_regulations_smoke` (train 16, val 8, test 8). It wrote `storage/models/m1/xlmr_lora_smoke/model_registry.json` and `model.pt`; `gate_pass=false`, val macro-F1 = 0.1111, test macro-F1 = 0.0. This proves the training loop runs, not model quality. See `PROGRAM_READINESS/M1_TRAINING_PREPARATION_AND_SMOKE_TEST_RUNBOOK.md`. |
 | Full LoRA training | Pending GPU | CUDA check returned `cuda=False`, CPU only. Full 3-seed LoRA training/evaluation/export should run on a CUDA machine after the rare-domain strategy is accepted. |
 | Rare-domain coverage | Still weak | Current gold counts are dominated by `SECTOR_SPECIFIC` (671/800); `EPF_ETF_CHANGE` has 0 rows, and product/business/penalty/import domains remain under target. The remaining sampled pool has few/no candidates for several rare domains. |
-| Trilingual regulation summary | Pending implementation | DB/schema fields and NLLB title-translation helper exist, but a production summarizer/backfill workflow for `summary_en`, `summary_si`, and `summary_ta` still needs to be built. See `PROGRAM_READINESS/M1_SUMMARIZATION_TRANSLATION_READINESS_PLAN.md`. |
+| Trilingual regulation summary | **Superseded by 2026-08-01 implementation** | At this 2026-07-30 checkpoint the summarizer was pending. It is now replaced by the Stage-E backend slice above: `summary_en` generation, summary provenance metadata, backfill scripts, and NLLB queueing for `summary_si`/`summary_ta` are built. Remaining gate is not code existence; it is human quality review and full coverage of remaining pipeline rows. |
 | Batch 06 rare-domain top-up | Completed / review caveat | `collect_rare_domain_topup.py` generated 200 official rare-domain candidates and `batch_06_annotations_full.json` was reduced into the gold set. Batch 06 agreement passed strongly: category kappa 0.980485, mean sector kappa 0.995844, SME relevance kappa 0.974012. Annotation was assisted/direct, so manually audit if strict independent evidence is required. |
 | Batch 07 PDF rare-domain top-up | Completed / review caveat | `collect_pdf_rare_topup.py` generated 128 PDF-backed official candidates and `batch_07_annotations_full.json` was reduced into the gold set. Batch 07 agreement passed strongly: category kappa 0.989611, mean sector kappa 0.992982, SME relevance kappa 0.977977. Annotation was assisted/direct, so manually audit if strict independent evidence is required. |
 | Frozen v3 gold dataset | Completed | `gold_standard_v3_1128.csv`, `iaa_report_v3_1128.json`, `iaa_report_summary_v3_1128.csv`, and `disagreements_v3_1128.csv` preserve the 1128-row gold state. Overall IAA: category kappa 0.947215, mean sector kappa 0.965567, SME relevance kappa 0.914637. |
@@ -149,7 +152,7 @@ Relevant parent-document mapping:
 | Label Studio calibration, Batch 02-05 annotation, IAA, manual resolution, gold export, split, baseline, CPU smoke | `05_M1_Model_Architecture.md`, `06_M1_Training_Evaluation.md`, `09_M1_Annotation_Guidelines.md`, `14_M1_Tracking_Workflows.md`, `16_M1_Development_Roadmap.md` | Completed through the 800-row gold gate, deterministic key split, TF-IDF baselines, and CPU LoRA smoke. Full LoRA still requires GPU and rare-domain limitation handling. |
 | Rare-domain top-up, Batches 06-07, v3 gold, v3 stratified baseline | `03_M1_Data_Collection.md`, `05_M1_Model_Architecture.md`, `06_M1_Training_Evaluation.md`, `09_M1_Annotation_Guidelines.md`, `15_M1_Folder_Reference.md`, `16_M1_Development_Roadmap.md` | Completed through the 1128-row v3 gold gate. LinearSVC now reaches 0.9080 macro-F1, close to the target but still not a final pass. |
 | Extraction accuracy measurement, Excel upload, sealed dataset versions, DB snapshots, measurement dashboard/report | `02_M1_Data_Requirements.md`, `03_M1_Data_Collection.md`, `08_M1_Full_System_Architecture.md`, `11_M1_API_Reference.md`, `12_M1_Monitoring_Maintenance.md`, `14_M1_Tracking_Workflows.md` | Code paths exist; collect one real production measurement run and screenshots. |
-| Trilingual title/summary storage and NLLB readiness | `02_M1_Data_Requirements.md`, `04_M1_Preprocessing_Pipeline.md`, `07_M1_Deployment_Integration.md`, `10_M1_Sinhala_Tamil_NLP.md`, `11_M1_API_Reference.md`, `14_M1_Tracking_Workflows.md` | Storage/translation queue exists; summary generator and NLLB summary backfill scripts are still missing. |
+| Trilingual title/summary storage and NLLB readiness | `02_M1_Data_Requirements.md`, `04_M1_Preprocessing_Pipeline.md`, `07_M1_Deployment_Integration.md`, `10_M1_Sinhala_Tamil_NLP.md`, `11_M1_API_Reference.md`, `14_M1_Tracking_Workflows.md`, [[19_M1_Regulation_Summarization]] | Storage/translation queue exists; summary generator and NLLB summary backfill scripts now exist. Next use: show `summary_status`, `summary_quality_flags`, SI/TA draft status, and manual review/edit evidence in the admin/SME surfaces. |
 
 ## 00 · Index & Orientation — [[00_INDEX]]
 
@@ -437,7 +440,7 @@ Relevant parent-document mapping:
 
 ## 19 · Regulation Summarization (Stage E) — [[19_M1_Regulation_Summarization]]
 
-**Parent task:** [ ] Turn a gazette's raw text and extracted fields into a short, correct, SME-readable English summary that can be safely translated. **Nothing is built** — there is no `summarise_gazette` task, no `summary_service.py`, and `summary_en` is written by nothing today. The document is the *method*, and its §3 measurement moved the critical path upstream into extraction.
+**Parent task:** [~] Turn a gazette's raw text and extracted fields into a short, correct, SME-readable English summary that can be safely translated. **First backend slice is built and live-tested** — `summary_service.py`, `summarise_gazette` task, summary metadata migration, dry-run/write backfill script, translation-enqueue script, and NLLB summary queueing now exist. The implementation is deliberately conservative: no LLM, no free-form OCR summarisation, and no write unless source literals pass the grounding gate. Remaining gates are human review, full-row coverage, and final evaluation.
 
 | Status | Linked subtask | Task breakdown and downstream use |
 |---|---|---|
@@ -446,11 +449,46 @@ Relevant parent-document mapping:
 | [x] | [[19_M1_Regulation_Summarization#4. Approach Comparison\|Approach comparison]] | Five approaches — extractive, template, fine-tuned seq2seq, zero-shot LLM, field-grounded constrained — with a decisive-constraint table, a scored matrix carrying its own honesty caveat, and `GZT_2487_02` walked through all five. Used to justify the selection to an examiner. |
 | [x] | [[19_M1_Regulation_Summarization#5. Selected Design — Field-Grounded Constrained Generation\|Selected design]] | Slot contract (`value + source_span + anchor + verified`), four invariants F1–F4, deterministic verifier, optional gated rewrite, GPU on Colab/Kaggle reusing the translation lease pattern. |
 | [x] | [[19_M1_Regulation_Summarization#6. The Novelty Claim\|Novelty claim]] | States what is claimable (anchor binding as a *necessary* condition, established empirically; omission as a first-class output; faithfulness with zero reference summaries) **and what is not** (constrained generation, slot-filling, faithfulness metrics, every third-party model). Used in the thesis and the viva. |
-| [ ] | [[19_M1_Regulation_Summarization#10. Implementation Plan\|Rate/amount extraction]] | **Step 1 and the true blocker.** `GZT_2487_02` imposes `Rs. 50.00 per kg` and **no field captures it** — the schema has penalties, dates, acts and amendment types, and nothing for rates, levies, duties or thresholds. A summariser cannot state the most decision-relevant number in the document until this exists. |
-| [ ] | [[19_M1_Regulation_Summarization#10. Implementation Plan\|gazette_number and effective_date fixes]] | Take identity from ingest metadata; bind body-text occurrences to a *cross-reference* slot; add anchor-bound `effective_date`. Turns a 31% error into a correctly-typed field. |
-| [ ] | [[19_M1_Regulation_Summarization#5.3 The verifier\|Verifier]] | stdlib-only, DB-free, unit-testable — same constraint that makes `promotion.decide` and `build_alert` testable in isolation. Rejects on grounding, anchor coverage, sector containment, relevance, figure preservation, length and OCR damage. |
+| [x] | [[19_M1_Regulation_Summarization#10. Implementation Plan\|Stage-E backend slice]] | Implemented in `enigmatrix-backend`: `summary_service.py`, `summarise_gazette.py`, migration `202608010002`, `generate_regulation_summaries.py`, `enqueue_missing_m1_translations.py`, and `test_m1_summary_service.py`. Summary statuses are `pending/generated/review_required/manual/skipped`; quality flags preserve why a row was generated or refused. |
+| [~] | [[19_M1_Regulation_Summarization#10. Implementation Plan\|Rate/amount extraction]] | Minimal source-figure extraction is built: money/percentage literals such as `Rs. 50.00 per kg` can appear as grounded `source_figure` slots if present in source text. **Gate:** this is not yet a dedicated structured rate/levy/threshold slot family with schedule-row anchors, so do not claim full rate extraction. |
+| [~] | [[19_M1_Regulation_Summarization#10. Implementation Plan\|gazette_number and effective_date fixes]] | Summary-side mitigation is built: gazette identity comes from ingest/document metadata; effective dates are emitted only when one of the accepted date forms is literally present in source text. **Gate:** upstream metadata extraction still needs repair; this prevents summary hallucination but does not fix the extractor's original 31% gazette-number error. |
+| [~] | [[19_M1_Regulation_Summarization#5.3 The verifier\|Verifier]] | First deterministic verifier is built and unit-tested: source-literal grounding, maximum length/sentence count, non-SME action-word guard, source hash, and named hard flags. **Gate:** the broader planned verifier still needs evaluated sector-containment/OCR-damage checks and a human-reviewed error set. |
 | [ ] | [[19_M1_Regulation_Summarization#7. Evaluation Without Reference Summaries\|Evaluation protocol]] | Reference-free by necessity — no human-written summaries exist. Literal grounding = 1.00 and relevance violations = 0 are **gates**; omission/rejection rates are diagnostics. 80-document human eval with harm reported as a raw count, plus the E vs E′ verifier ablation. |
-| [ ] | [[19_M1_Regulation_Summarization#11. Validation and Acceptance Criteria\|Acceptance criteria]] | Extraction prerequisites, generation gates, human evaluation, trilingual numeric preservation, operational provenance. Nothing here is met yet. |
+| [~] | [[19_M1_Regulation_Summarization#11. Validation and Acceptance Criteria\|Acceptance criteria]] | Operational provenance and translation queueing are met for the first slice: 380 generated summaries, 11 review-required rows, 388 SI and 388 TA summary translations done, 0 generated summaries missing SI/TA. **Gate:** human quality review, trilingual numeric-preservation audit, and full-row coverage are still open. |
+
+## 20 · Multitask Classifier Upgrade (V7) — [[20_M1_Multitask_Classifier_Upgrade]]
+
+**Parent task:** [~] Specify the additive V7 classifier line that can emit category, affected study sectors, and derived SME relevance without modifying the frozen `linearsvc_v6_primary`. **Step 41 audit is complete; implementation is not started.** This is deliberately separate from the frozen primary classifier: V7 may be promoted later, rejected, or used only as a sector head beside LinearSVC.
+
+| Status | Linked subtask | Task breakdown and downstream use |
+|---|---|---|
+| [x] | [[20_M1_Multitask_Classifier_Upgrade#1. Step 41 — the V6 audit, and what it changed\|Step 41 V6 audit]] | Read-only audit over V6 parquets and v3 gold found the missing `is_sme_relevant` export column, verified 1110/1110 gold join coverage, found one deliberate relevance/sector mismatch, and measured the near-degenerate sector distribution. |
+| [x] | [[20_M1_Multitask_Classifier_Upgrade#1.4 The finding that most changes the plan — the sector task is nearly degenerate\|Sector degeneracy finding]] | 812/1110 rows carry no sector, 250/1110 carry all three, and only 48/1110 carry a genuine partial sector combination. This changes the gates: sector macro-F1 alone is gameable by a relevance detector. |
+| [x] | [[20_M1_Multitask_Classifier_Upgrade#1.5 Measured class weights — use these, do not assume balance\|Measured class weights]] | V6 train split gives sector `pos_weight` values 2.944 / 2.905 / 3.415 and derived relevance `pos_weight=2.809`. Used to correct docs 05/06 and avoid the earlier false "balanced sector head" claim. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#2. Step 42 — the V7 dataset\|V7 dataset]] | Build `m1_regulations_v7_1110_multitask_fixedsplit` from frozen V6, preserving keys/splits/categories and adding recovered/derived relevance plus sector vectors. Must write `dataset_manifest_v7.json`. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#3. Steps 43–44 — label contract and architecture\|Label contract and architecture]] | Add frozen category/sector orders, encode/decode helpers, consistency checks, batch contract, three-head architecture, `pos_weight` losses, and category-only sampler. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#4. Steps 45–49 — training protocol\|Training protocol]] | Train/evaluate the V7 multitask line without tuning on the spent V6 test split. Keep frozen LinearSVC untouched. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#6. Step 50 — evaluation and promotion\|Evaluation and promotion]] | Add the extra gates that prevent degenerate sector promotion: partial-sector exact-set reporting, individual sector floor, derived relevance consistency, and a legitimate hybrid outcome if category does not beat LinearSVC. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#7. Steps 51–53 — export, inference, freeze\|Export, inference, freeze]] | Build export/inference/registry only after promotion decision. Served `is_sme_relevant` is derived from sectors, never taken from the auxiliary relevance head. |
+
+## 20 · Multitask Classifier Upgrade (V7) — [[20_M1_Multitask_Classifier_Upgrade]]
+
+**Parent task:** [~] Upgrade Stage D from a category-only classifier to one shared encoder emitting domain + sectors + derived relevance, **without modifying the frozen `linearsvc_v6_primary`**. Step 41 (audit) is complete and changed three things in the plan; steps 42–53 are not started.
+
+| Status | Linked subtask | Task breakdown and downstream use |
+|---|---|---|
+| [x] | [[20_M1_Multitask_Classifier_Upgrade#1. Step 41 — the V6 audit, and what it changed\|Step 41 audit]] | **Run against the real parquets, not planned.** V6 columns are `key · text · category · sectors · language · date` — **`is_sme_relevant` is absent** and must be recovered from `gold_standard_v3_1128.csv` (join coverage 1110/1110; V6 sectors match gold on 1110/1110). Integrity otherwise clean: 0 duplicate keys, 0 cross-split overlap, 0 empty text, 0 unknown labels. Artifacts in `documentation/m1/analysis/`. |
+| [x] | [[20_M1_Multitask_Classifier_Upgrade#1.3 The one derivation-rule violation is not a data error\|Derivation rule]] | `is_sme_relevant == bool(affected_sectors)` holds **1109/1110**. The exception `GZT_2492_10` is a *reasoned* annotation — both annotators agreed at confidence 1.0 that an export-proceeds rule affects SMEs outside the three study sectors. Deriving relevance therefore **narrows** the field to "affects a studied sector"; that must appear in the limitations, not be flipped silently. |
+| [x] | [[20_M1_Multitask_Classifier_Upgrade#1.4 The finding that most changes the plan — the sector task is nearly degenerate\|Sector label shape]] | **The finding that most changes the plan.** 812 rows (73.2%) carry no sector; 250 (22.5%) carry all three; only 48 (4.3%) are partial. `general+grocery` has **0 training rows**; `food_service` alone has **0 val and 0 test rows**. Consequence: the ≥0.88 sector gate is gameable, and per-sector thresholds are unsupportable. |
+| [x] | [[20_M1_Multitask_Classifier_Upgrade#1.5 Measured class weights — use these, do not assume balance\|Measured class weights]] | `pos_weight` from train: grocery 2.944 · food 2.905 · general 3.415 · relevance 2.809. Doc 05 §2.2 projected ~50% sector positive rates; measured is ~25%. That projection and its "needs no augmentation" conclusion are corrected there. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#2. Step 42 — the V7 dataset\|Step 42 · V7 dataset]] | Build `m1_regulations_v7_1110_multitask_fixedsplit` from V6 without touching it. **Gate:** builder must assert 1110 rows, the 777/166/167 split, V6 category parity row-for-row, `sector_vector` round-trip, and `relevance_label == int(any(sector_vector))` on every row. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#3. Steps 43–44 — label contract and architecture\|Steps 43–44 · contracts + heads]] | `derive_sme_relevance`, encoders that **reject** unknown sectors rather than dropping them, batch shapes `[]`/`[3]`/`[]`, and the tri-head module. Frozen index order for `CATEGORIES` and `SECTORS` shipped in `labels.json` **and** the registry. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#3.5 One sampler, not three\|Loss + sampler]] | 0.65/0.30/0.05 with measured `pos_weight`s. **One sampler on category rarity only** — three compounding samplers would duplicate the 4 `EPF_ETF_CHANGE` rows until they are memorised. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#4. Steps 45–49 — training protocol\|Steps 45–49 · training]] | Smoke → one-seed diagnostic → loss-weight comparison → three seeds (42, 1, 2), mean ± std. **Test split untouched until the configuration is frozen** — it has already carried four model comparisons. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#5. Step 48 — thresholds\|Step 48 · thresholds]] | **One global threshold**, stored in the registry with `threshold_mode: "global"`. Per-sector values computed as a diagnostic only: 729 grid combinations against 9 informative validation rows is overfitting by construction. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#6. Step 50 — evaluation and promotion\|Step 50 · gates]] | Category ≥0.92 **and** regression ≤0.01 vs 0.947220 · sector ≥0.88 · no sector F1 <0.80 · relevance recall ≥0.90 · consistency =100% · **partial-sector exact-set match on the 8 test rows reported separately**. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#6.3 The hybrid is a legitimate outcome\|Promotion decision]] | Three permitted outcomes, including **hybrid** — LinearSVC keeps category, V7 serves sectors and derived relevance. A hybrid means one row carries a calibrated probability for sectors and none for category; the response contract must say so. |
+| [ ] | [[20_M1_Multitask_Classifier_Upgrade#7. Steps 51–53 — export, inference, freeze\|Steps 51–53 · ship]] | ONNX with three outputs + parity check; `MultitaskGazetteInference` added **without changing** `GazetteInference` or `LinearSVCGazetteInference`; freeze to the V6 standard — hash, package, download, re-score, reproduce exactly. |
 
 ---
 
@@ -488,11 +526,18 @@ Every `[~]` and `[ ]` above, with the one thing that would close it. If a row is
 | 16 | Phase 5 | Fieldwork not started | `/portal/m1/survey` + recruitment |
 | 17 | Doc-set fork | Manual one-way sync, no drift check | Automate the sync or schedule the check |
 | 18 | Standing constraints | `EPF_ETF_CHANGE` scarcity | Same as 06 |
-| 19 | Rate / amount extraction | **No field captures a levy rate** — the most decision-relevant figure in a tax gazette | New slot family with schedule-row and `at the rate of` anchors |
-| 19 | `gazette_number` identity | 31.1% of test rows get a *wrong* number, scored 0.95, `needs_review=False` | Take identity from ingest metadata; bind body occurrences to a cross-reference slot |
-| 19 | `effective_date` recall | 0 of 11 rows that state a date | Anchor-bound extraction on `with effect from` / `effective commencing from` |
-| 19 | Verifier, task, migration, review surface | Nothing built | Steps 4–7 of the implementation plan |
-| 19 | Evaluation | No summaries exist to evaluate | 80-document human eval + E vs E′ ablation, after step 5 |
+| 19 | Rate / amount extraction | Minimal source-figure extraction exists, but there is no dedicated structured rate/levy/threshold slot family | Add typed rate/amount slots with schedule-row and `at the rate of` anchors |
+| 19 | `gazette_number` / `effective_date` identity | Summary-side mitigation exists; upstream extraction can still produce wrong or absent metadata | Repair upstream extraction and keep source/body occurrences typed separately from identity metadata |
+| 19 | Verifier and review surface | First verifier exists; no dedicated summary-review UI or evaluated review workflow yet | Add admin review/edit surface for `summary_status='review_required'` and sampled generated summaries |
+| 19 | Evaluation | 380 generated summaries exist, but no human evaluation exists | 80-document human eval + E vs E′ ablation, plus SI/TA numeric-preservation audit |
+| 20 | V7 dataset (step 42) | Not built; `is_sme_relevant` is absent from the V6 parquet | Build from V6 + gold join with the builder assertions in doc 20 §2.3 |
+| 20 | Sector multi-label claim | **Only 48 of 1110 rows carry a partial sector set**; `general+grocery` has 0 training rows and `food_service` alone has 0 val/test rows | Targeted annotation of partial-sector regulations — now the highest-value labelling target |
+| 20 | Per-sector thresholds | A 729-combination grid against 9 informative validation rows | Serve one global threshold; revisit when partial-sector data grows |
+| 20 | Steps 43–53 | Nothing built | Sequential; each step's gate is listed in doc 20 §9 |
+| 20 | Promotion | Category benchmark is 0.947220 and V7 must not regress by more than 0.01 | Three permitted outcomes including hybrid — doc 20 §6.3 |
+| 20 | V7 dataset | Step 41 audit exists; no V7 parquet/manifest exists | Build V7 from frozen V6 with explicit relevance recovery, sector vectors, and parent hashes |
+| 20 | V7 trainer/inference | Spec exists; no multitask trainer, inference class, or registry exists | Implement Steps 43–53, then evaluate without touching the spent V6 test split for tuning |
+| 20 | Sector evidence | Only 48/1110 rows carry partial sector combinations | Report partial-sector exact-set match with denominator; collect more partial-sector evidence before claiming a robust three-way sector classifier |
 
 **Two unblocked items with no gate at all** — do these first, they are cheap: the `promotion.decide()` rollback unit test (4 assertions), and writing F6 against the frozen model's recorded numbers.
 
@@ -528,7 +573,7 @@ What lives in this folder and whether it is current.
 | Parent docs contain former companion concepts | [x] Represented as linked subtasks in this checklist |
 | Root companion Markdown files | [x] Retired after merge |
 | Checklist links | [x] Point to canonical parent docs and parent-doc headings |
-| Checklist covers the whole numbered series | [x] Sections 00–18 present; 17 and 18 added 2026-08-01 |
+| Checklist covers the whole numbered series | [x] Sections 00–20 present; 17/18 added in the documentation gap-closure pass, 19/20 added as Stage-E and V7 work became explicit |
 | Wikilink pipes escaped inside tables | [x] 136 cells corrected; 7 headers normalised to 3 columns |
 | 09 annotation content | [x] Taxonomy examples, IAA protocol, annotation workflow, and SME survey instrument are all inside [[09_M1_Annotation_Guidelines]] |
 | 2026-07-30 labeling update | [x] Calibration, Batches 02-05 gold resolution, 800-row gate, IAA metrics, frozen v1 dataset, split, TF-IDF baselines, CPU LoRA smoke, and remaining GPU/rare-domain gates recorded |
@@ -536,10 +581,13 @@ What lives in this folder and whether it is current.
 | 2026-08-01 model freeze | [x] V6 correction, three rejected XLM-R runs, frozen LinearSVC 0.947220, local reproduction, inference wiring, migration `202608010001`, margin threshold shipped unset |
 | Confidence-contract fallout traced | [x] Recorded against 05, 06, 07, 11, 12, 14 — every surface that assumed a probability |
 | Extraction measurement documentation | [x] Added program-readiness manual for Excel upload, dataset sealing, DB snapshot, measurement runs, and report export |
-| Summarization/translation gap | [x] Readiness plan **plus** the shipped NLLB pipeline in [[12_TRILINGUAL_TRANSLATION_PIPELINE]]; summariser still pending |
+| Summarization/translation gap | [x] Readiness plan, shipped NLLB pipeline in [[12_TRILINGUAL_TRANSLATION_PIPELINE]], and first Stage-E backend summary slice now recorded. Remaining gap is evaluation and review, not missing implementation. |
 | Observability workstream | [x] Session-101 console rebuild documented in `PHASE2_INGEST_EXTRACTION/observability_console/` |
 | Every phase has an analysis **and** a gap-closure plan | [x] Phase 5's plan added 2026-08-01 |
-| Summarization method specified | [x] Doc 19 added — input contract, measured extraction diagnostic, 5-way comparison, selected design, novelty claim, reference-free evaluation |
+| Multitask upgrade specified | [x] Doc 20 added — Step-41 audit run against the real parquets, V7 schema, tri-head design with relevance derived from sectors, corrected thresholds and gates, steps 41–53 |
+| Doc 05 sector projection corrected | [x] Projected ~50% sector positive rates replaced with measured ~25% plus `pos_weight`s; the "sector task needs no augmentation" conclusion withdrawn |
+| Summarization method specified and first slice built | [x] Doc 19 added — input contract, measured extraction diagnostic, 5-way comparison, selected design, novelty claim, reference-free evaluation; backend slice now implements anchor-bound slots, hard review flags, summary provenance, and SI/TA queueing. |
+| V7 multitask classifier upgrade tracked | [x] Doc 20 added — Step 41 audit, measured sector imbalance, relevance derivation decision, V7 dataset/trainer/evaluation/export plan, and explicit "frozen LinearSVC remains untouched" boundary |
 | Every `[~]` names its gate | [x] Inline or in the Blocking-Gate Ledger |
 
 ### Status Roll-Up
@@ -548,14 +596,15 @@ What lives in this folder and whether it is current.
 |---|---|---|---|
 | Orientation & structure | 00, 13, 16, **17** | 15 | — |
 | Data, extraction, preprocessing, trilingual | 04, 10 | 02, 03 | — |
-| Model & training | **05**, **18** | 06 | — |
+| Model & training | **05**, **18** | 06, **20** *(V7 spec/audit)* | — |
 | Deployment & ops | — | 07 | 12 |
 | Research, annotation, architecture | — | 01, 08, 09 | — |
-| Summarization (Stage E) | **19** *(method)* | — | 19 *(build)* |
+| Summarization (Stage E) | **19** *(method + first backend slice)* | 19 *(human eval, review UI, full coverage)* | — |
+| Multitask classifier (V7) | **20** *(step 41 audit)* | 20 *(steps 42–53)* | — |
 | API & tracking UI | — | 11, 14 | — |
 
-**What moved this pass:** 05 `[~]` → `[x]` (model selection closed, though not with the architecture it selected) · 18 and 17 added as `[x]` · 07 `[ ]` → `[~]` (backend integration shipped; ONNX/Fly.io path not taken) · 16 Phase 5 `[ ]` → `[~]` (two items unblocked) · **19 added** — its method is `[x]`, its build is `[ ]`, and its §3 measurement moved the Stage-E critical path upstream into field extraction.
+**What moved this pass:** 05 `[~]` → `[x]` (model selection closed, though not with the architecture it selected) · 18 and 17 added as `[x]` · 07 `[ ]` → `[~]` (backend integration shipped; ONNX/Fly.io path not taken) · 16 Phase 5 `[ ]` → `[~]` (two items unblocked) · **19 added** — its method is `[x]`, and the later 2026-08-01 sync moves its build from `[ ]` to `[~]`: the first backend slice is shipped and live-tested, while human evaluation/review remains open · **20 added** — Step 41 audit/spec is `[~]`; V7 implementation is explicitly not started.
 
-**The single most important open item is not on any of these rows:** no gazette has yet been classified by the frozen model in the live system. Everything downstream — backfill, the review queue, drift, F6, the production evidence for the viva — waits on that one run.
+**The previous highest-value open item is partly closed:** gazettes have now been classified by the frozen model, and the first summary/translation backfill wrote live data. The highest-value remaining evidence task is quality review: inspect the 11 `review_required` summaries, sample at least 80 generated summaries for English faithfulness, and audit Sinhala/Tamil numeric preservation before making final claims.
 
 *This checklist is intentionally more detailed than the index: it shows the parent task, the subtask breakdown, why each subtask exists, which downstream stage consumes the output, and — for anything unfinished — the specific gate that would close it.*

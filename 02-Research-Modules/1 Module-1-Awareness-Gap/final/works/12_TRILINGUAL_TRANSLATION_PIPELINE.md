@@ -155,9 +155,9 @@ Extraction run page → **Batch pipeline control** → tick *"Translate title/su
 
 1. **MT quality is unmeasured.** There is no BLEU/chrF reference set. Per-job `model_name`, `device` and `latency_ms` are stored so a sampled human evaluation can be attributed later, but that evaluation has not been done. **Treat SI/TA as draft-until-reviewed in any claim made from this data.**
 2. **Domain terminology is generic.** NLLB carries no Sri Lankan legal-register signal, so statutory terms come back literal rather than in established Sinhala/Tamil legal usage. Glossary-constrained decoding is the natural next step, and is the honest answer if asked.
-3. **Summaries are mostly empty today.** `summary_en` is written by the Phase-4 Stage-E summariser, which has not shipped — so in practice this currently translates **titles**. The enqueue already handles summaries the moment they exist.
+3. **Summary translation now has live data.** The 2026-08-01 Stage-E backend slice writes conservative `summary_en` values and enqueues `summary` jobs for SI/TA. First verification found 380 generated summaries, 11 review-required rows, 388 Sinhala summary jobs done, 388 Tamil summary jobs done, and 0 generated summaries missing SI/TA. These are still machine-generated draft translations pending human review.
 4. **`MAX_SOURCE_CHARS = 8000`.** Longer text is skipped with a warning rather than half-translated; NLLB's ~512-token window means long inputs are sentence-chunked by the worker.
-5. **Nothing in this workstream was verified by execution at ship time.** The sandbox VM was unavailable for the whole of Session 102 — no import check, no migration run, no typecheck. Verification was by reading. The migration has since been applied (2026-08-01, alongside `202608010001` — see [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §6.3), but **the first end-to-end translation run is still outstanding**: `make migrate`, then a single-row `/advance?translate=true`.
+5. **Execution has now been verified, but quality is still unmeasured.** The migration has been applied, the Colab/NLLB worker path has completed jobs, and the summary queue drained for generated summaries. This closes the "does it run" question for the first slice; it does **not** close MT quality, domain-terminology, or numeric-preservation evidence.
 
 ---
 
@@ -198,7 +198,7 @@ The key grants exactly three narrow operations — lease, submit, heartbeat — 
 | 1 | Run the first end-to-end translation: `make migrate` → single-row `/advance?translate=true` | Nothing in this workstream has been executed (§6.5) |
 | 2 | Build a sampled human-evaluation set (≥ 100 title pairs per language, rated by a fluent reader) | Turns "unmeasured" into a number the viva can be given |
 | 3 | Decide whether SI/TA appear in the SME-facing survey before evaluation, and label them as machine-translated if so | An unlabelled draft translation in front of a research respondent is a validity problem, not just a UX one |
-| 4 | Revisit once the Stage-E summariser ships | Summaries are the field this pipeline was actually built for |
+| 4 | Review summary translations now that the Stage-E summariser has shipped | Summaries are the field this pipeline was actually built for; the next evidence task is sampled SI/TA quality and numeric-preservation review |
 
 ---
 
@@ -207,6 +207,6 @@ The key grants exactly three narrow operations — lease, submit, heartbeat — 
 - **Trilingual NLP background, detection, OCR, and §10 pipeline summary:** [[10_M1_Sinhala_Tamil_NLP]]
 - **Full engineering spec (schema, API, file list):** `enigmatrix-docs/m1/10_M1_3_NLLB_Translation_Pipeline.md`
 - **Migration applied alongside the classifier migration:** [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §6.3
-- **Summarisation dependency:** `PROGRAM_READINESS/M1_SUMMARIZATION_TRANSLATION_READINESS_PLAN.md`
+- **Stage-E summarisation implementation and remaining gates:** [[19_M1_Regulation_Summarization]] · `PROGRAM_READINESS/M1_SUMMARIZATION_TRANSLATION_READINESS_PLAN.md`
 - **Pipeline stage map (Stage E / E2):** [[00_INDEX]] · [[10_PIPELINE_STAGING_AND_MANUAL_STEPPING]]
 - **Status ledger:** [[03_FEATURE_CHECKLIST]]

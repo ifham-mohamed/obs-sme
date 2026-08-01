@@ -70,7 +70,7 @@ F1-gate reconciled to 0.92 everywhere; MASTER_CONTEXT + dossier/Excel regenerate
 | 8 | Frontend: `/alerts` middleware public-route + nav link; accuracy-report download button + CSV export; remaining Session-72 audit items (empty states, a11y, confidence surfacing) | Snippets ready in the audit doc |
 | 9 | SI/TA translations for newest i18n keys (`[TODO]` placeholders) | Sessions 58–59, 67 strings |
 | 10 | Integration tests: auto-v2 routing path, date-scoped measurement run, alert dispatch end-to-end | Unit coverage exists; integration gaps flagged |
-| 11 | Regulation summarization + NLLB translation workflow: generate `summary_en` from raw/classified text, translate `title_en`/`summary_en` to Sinhala and Tamil, and store `summary_si`/`summary_ta` with quality checks | DB fields and admin translation queue exist; production summarizer/backfill script still needs implementation |
+| 11 | Regulation summarization + NLLB translation workflow: generate `summary_en` from raw/classified text, translate `title_en`/`summary_en` to Sinhala and Tamil, and store `summary_si`/`summary_ta` with quality checks | **Backend slice shipped 2026-08-01.** `summary_service.py`, `summarise_gazette`, summary metadata migration, and backfill/enqueue scripts exist; first live verification showed 380 generated summaries, 11 review-required rows, and 0 generated summaries missing SI/TA. Remaining gate: human quality review and final evaluation. |
 
 ### LOW
 | # | Task | Notes |

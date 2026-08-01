@@ -581,6 +581,29 @@ Soft-delete a regulation (`is_active = false`).
 >
 > Margins may legitimately drive ranking and review-queue priority. A calibrated probability requires a separately trained and evaluated calibration layer — do not transform margins. Full contract: [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §7 · lineage: [[18_M1_Dataset_And_Model_Lineage]] §4.
 
+> [!note] Planned third shape — the V7 multitask backend (`m1_xlmr_v7_multitask`), not yet built.
+> When promoted, a classification response gains `sectors`, `sector_probs`, `is_sme_relevant`, `relevance_probability`, `sector_thresholds`, `model_type` and `model_version`, and `category_confidence` becomes a **calibrated softmax probability**:
+>
+> ```json
+> {
+>   "category": "IMPORT_EXPORT",
+>   "category_confidence": 0.9341,
+>   "category_probs": { "TAX_RATE_CHANGE": 0.0112, "IMPORT_EXPORT": 0.9341, "...": "..." },
+>   "sectors": ["general_retail", "grocery_retail"],
+>   "sector_probs": { "grocery_retail": 0.7124, "food_service": 0.1831, "general_retail": 0.9437 },
+>   "is_sme_relevant": true,
+>   "relevance_probability": 0.9712,
+>   "relevance_source": "derived_from_sector_predictions",
+>   "sector_thresholds": { "grocery_retail": 0.48, "food_service": 0.46, "general_retail": 0.51 },
+>   "model_type": "xlmr_lora_multitask",
+>   "model_version": "m1_xlmr_v7_multitask"
+> }
+> ```
+>
+> **`is_sme_relevant` is a function of `sectors`, not an independent prediction.** `relevance_source: "derived_from_sector_predictions"` says so explicitly, and it is why `{"is_sme_relevant": false, "sectors": ["grocery_retail"]}` cannot occur. A client must not treat the two as separate evidence. `relevance_probability` comes from an auxiliary head whose only production role is flagging a row for review when it disagrees with the derivation.
+>
+> ⚠ **Three confidence semantics will coexist and are not interchangeable.** ONNX dual-head returns a calibrated probability; the frozen LinearSVC returns `null` plus an uncalibrated margin; V7 returns a calibrated softmax. Read `model_name` — persisted per row — before comparing any two confidence values, and never rank rows classified by different backends against each other. Design: [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) §7.2.
+
 ### `POST /api/v1/m1/regulations/{id}/classify`
 
 Trigger on-demand reclassification of a specific regulation using the ONNX inference engine described in [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) §3.

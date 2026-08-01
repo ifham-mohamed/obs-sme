@@ -97,6 +97,21 @@ Current split limitation:
 - `EPF_ETF_CHANGE` is no longer zero in v3, but still has only 11 total examples.
 - `PENALTY_ENFORCEMENT` is the weakest LinearSVC class and needs error review — still true on V6 (test F1 0.857).
 
+**Measured V7 multitask class weights (V6 train split, 2026-08-01)** — use these rather than assuming balance:
+
+```text
+sector pos_weight = negative_count / positive_count
+  grocery_retail   pos=197  neg=580  pos_weight=2.944
+  food_service     pos=199  neg=578  pos_weight=2.905
+  general_retail   pos=176  neg=601  pos_weight=3.415
+relevance (derived)
+  relevant=204  irrelevant=573  pos_weight=2.809
+```
+
+Doc 05 §2.2 projected sector positive rates near 50 %; the measured rates are near 25 %. Each sector head needs a `pos_weight`, and the earlier claim that the sector task requires no imbalance handling has been corrected there.
+
+**One sampler, not three.** Build the training sampler from category rarity alone. `EPF_ETF_CHANGE` has 4 training rows; a sampler that additionally up-weights rare sector patterns and the minority relevance class would compound and duplicate a handful of rows until the model memorises them. Sector and relevance imbalance is handled by `pos_weight` in the loss, where it does not interact with sampling.
+
 Baseline evidence:
 
 ```text
@@ -562,11 +577,19 @@ def train_model(model, train_loader, val_loader, num_epochs=10, patience=3):
 | Metric | Formula | Target | Task |
 |---|---|---|---|
 | Macro-averaged F1 (domain) | Mean F1 across the 8 domains | ≥ 0.92 | Domain classification |
-| Macro-averaged F1 (sector) | Mean F1 across 3 study sectors | ≥ 0.88 | Sector assignment |
+| Macro-averaged F1 (sector) | Mean F1 across 3 study sectors | ≥ 0.88 | Sector assignment — **necessary but not sufficient, see below** |
+| Partial-sector exact-set match | Exact set match restricted to test rows carrying 1 or 2 sectors (n = 8) | reported, not thresholded | The metric that distinguishes a sector model from a relevance detector |
+| Sector/relevance consistency | `is_sme_relevant == bool(predicted_sectors)` | **= 100 %** | Structural, by derivation — a failure means a serving bug, not a model weakness |
+| SME relevance recall | Recall on the derived relevance boolean | ≥ 0.90 | Asymmetric cost: a missed relevant regulation is never seen by the SME |
 | Per-class F1 | Per-domain F1 score | ≥ 0.80 for each | Both |
 | Top-1 accuracy (domain) | % correct argmax predictions | ≥ 0.95 | Domain classification |
 | Micro-F1 (sector) | Pooled TP/FP/FN across sectors | ≥ 0.90 | Sector assignment |
 | Expected Calibration Error (ECE) | Calibration of softmax probabilities | ≤ 0.05 | Domain confidence |
+
+> [!important] Why sector macro-F1 ≥ 0.88 cannot stand alone as the V7 gate.
+> On the measured V6 label distribution, **73.2 %** of rows carry no sector and **84 %** of the rest carry all three. A model that learns only *"is this SME-relevant?"* and emits all three sectors whenever the answer is yes will score well on sector macro-F1 — while having learned nothing about sectors. The gate is therefore gameable by a degenerate solution.
+>
+> Two additions close it. Report **partial-sector exact-set match** on the 8 test rows that carry one or two sectors, separately and never folded into an average; and require **no individual sector F1 below 0.80**, so a model cannot carry a weak sector on the strength of two strong ones. Eight rows is far too few to threshold on, which is exactly why it is *reported* rather than gated — an examiner should see the number and its denominator together. Audit: [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) §1.4.
 
 **Why both macro and micro, and why ECE is not optional.** Macro-F1 is the headline because it refuses to let the 2 %-prevalence domain be ignored; top-1 accuracy is reported alongside it precisely so the gap between the two makes the imbalance visible. ECE earns its place because confidence is not decorative here — the `needs_review` routing in [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) thresholds on it, so a model that is 95 % confident and 80 % correct sends the wrong documents to human review and lets the wrong ones through. Calibration is fitted post hoc by temperature scaling in `ml/m1/model/calibration.py` (§7.8).
 
@@ -664,6 +687,13 @@ def tune_sector_threshold(model, val_loader, thresholds=None):
 ```
 
 **Why this must be tuned on validation and shipped as a config value.** The threshold is not a property of the model weights — it is a decision boundary applied *after* the model, so it can be tuned without retraining and must therefore be recorded alongside the checkpoint (`sector_threshold` in §11's registry) and read by the serving code in [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md). A model evaluated at 0.48 and served at 0.50 is a different classifier from the one the thesis reports. Note also that the sweep runs from 0.30, not 0.50: the asymmetric-cost argument in [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §4 — missing an affected SME is worse than sending a slightly off-topic alert — makes a threshold *below* 0.50 entirely plausible, and the search space has to allow it.
+
+> [!warning] V7 constraint added 2026-08-01 — **tune ONE global threshold, not three.**
+> The obvious refinement is a per-sector threshold. The V6 label audit says it is not supportable: the three sectors co-occur in **84 %** of sector-bearing rows, and the validation split contains only **9 rows** carrying a partial sector combination. A 9-point grid across three sectors is 729 combinations selected against 9 informative rows — the values would fit validation noise and not survive the test split.
+>
+> Two combinations are worse than thin. `food_service` alone has **0 validation and 0 test rows**, so a threshold for it cannot be evaluated at all; `general_retail + grocery_retail` has **0 training rows**, so no threshold recovers it.
+>
+> Compute the per-sector variant and record it as a **diagnostic**. Serve the global one, and set `threshold_mode: "global"` in the registry so the served configuration is explicit rather than inferred. Revisit only when the corpus carries materially more partial-sector examples. Audit: [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) §1.4.
 
 ---
 
