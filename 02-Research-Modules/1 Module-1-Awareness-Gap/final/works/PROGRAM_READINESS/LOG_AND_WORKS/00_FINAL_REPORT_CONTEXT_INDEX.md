@@ -1,6 +1,6 @@
 # Enigmatrix Final Report — Context Index
 
-Updated: 2026-07-31 (third pass - rare-domain v3 evidence added)
+Updated: 2026-08-01 (fourth pass - V6 dataset and frozen LinearSVC evidence added)
 Project: Enigmatrix — SME Regulatory Intelligence Platform
 Group: G28
 Module 1 owner: Mohomed M.R.I (215075J) — working name Ifham Mohamed
@@ -46,9 +46,9 @@ The report follows the faculty template exactly. Deviations would cost marks.
 | Appendix A — Individual Contribution | A.1 written in full; A.2–A.4 placeholders |
 | Appendix B — Additional Implementation Details | Artefact inventory, annotation guideline, evaluation assumptions, checklists |
 
-## Numbers Verified Against Artefacts
+## Historical V1 Numbers Verified Against Artefacts
 
-Do not change these without re-running the corresponding command in §7.2.1.9 of the report.
+These are still valid for the original 800-row V1 annotation/training milestone, but they are no longer the latest classifier evidence. Do not use them as the final model-selection result.
 
 | Fact | Value | Source artefact |
 |---|---|---|
@@ -67,21 +67,26 @@ Do not change these without re-running the corresponding command in §7.2.1.9 of
 
 ## Latest Module 1 Evidence Addendum
 
-The earlier report pack records the 800-row v1 dataset and Kaggle LoRA v1 diagnostic. The latest active dataset is now the 1128-row rare-domain v3 gold set:
+The earlier report pack records the 800-row V1 dataset, the 1128-row rare-domain V3 baseline, and the Kaggle LoRA diagnostics. The latest classifier-evidence dataset is now **V6**:
 
 | Fact | Value | Source artefact |
 |---|---:|---|
-| Current gold dataset rows | 1128 | `research\data\labeling\gold_standard_v3_1128.csv` |
-| Current annotation count | 2256 | `research\data\labeling\iaa_report_v3_1128.json` |
-| Current category Cohen's kappa | 0.947215 | same |
-| Current mean sector kappa | 0.965567 | same |
-| Current SME-relevance kappa | 0.914637 | same |
-| Current disagreement rows | 44 | `research\data\labeling\disagreements_v3_1128.csv` |
-| Current split | 790 / 169 / 169 | `enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified` |
-| Current TF-IDF LogReg macro-F1 | 0.862652 | `storage\models\m1\baselines_v3_1128_stratified\baselines.json` |
-| Current TF-IDF LinearSVC macro-F1 | 0.908012 | same |
+| Current classifier dataset | `m1_regulations_v6_1110_clean_fixedsplit` | `C:\Reasearch\xyz\datasets\m1_regulations_v6_1110_clean_fixedsplit` |
+| Current split | 777 / 166 / 167 | `dataset_manifest_v6.json` |
+| V6 total rows | 1110 | same |
+| V6 label correction | 4 EPF/ETF incidental-mention rows relabelled to `SECTOR_SPECIFIC`; all in train | `applied_label_changes_v6.csv` |
+| Cross-split key leakage | 0 | `dataset_manifest_v6.json` |
+| Frozen primary model | `m1_linearsvc_v6_primary` | `C:\Reasearch\xyz\models\m1\linearsvc_v6_primary` |
+| Validation macro-F1 | 0.924476 | `validation_summary.json` |
+| Temporal test macro-F1 | 0.947220 | `test_summary.json` |
+| Test accuracy | 0.958084, 160/167 correct | `test_summary.json` |
+| Gate result | passed, threshold 0.92 | `model_registry.json` |
+| Reproduced on Windows | 0.9472199858964565 macro-F1, exact match to Kaggle | `local_windows_verification.json` |
+| XLM-R V6 comparison | test macro-F1 0.743563, not promoted | `model_registry.json` |
+| Dataset ZIP SHA256 | `66EF4CF6FB187146641173BBB71628AD711C635FCEADE34CAB01AADDD99F35F0` | `C:\Reasearch\xyz\kaggle_bundle\m1_regulations_v6_1110_clean_fixedsplit.zip` |
+| Model bundle SHA256 | `2F80BEFE494F1275DCB14FCB5352902A8BF98C1CC3FA86F919D53B7958C5F11B` | `C:\Reasearch\xyz\models\m1\linearsvc_v6_primary_bundle.zip` |
 
-Use [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] for the latest Batch 06/07 evidence, v3 distribution, current baseline, and limitations. Keep [[04_M1_KAGGLE_TRAINING_RESULTS_V1]] as historical evidence that the 800-row v1 LoRA checkpoint was not promotable.
+Use [[18_M1_Dataset_And_Model_Lineage]] for the active dataset/model lineage, hashes, Kaggle paths, and recovery commands. Use [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] as the predecessor evidence that explains why V3 was insufficient (`LinearSVC` macro-F1 0.908012). Keep [[04_M1_KAGGLE_TRAINING_RESULTS_V1]] as historical evidence that the 800-row V1 LoRA checkpoint was not promotable.
 
 ## Standing Corrections
 
@@ -89,8 +94,10 @@ Use [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] for the latest Batch 06/07 evide
 2. `gold_standard_v1_800.csv` has no usable `gazette_published_date`, so the split is **deterministic on `regulation_key`, not temporal**. Do not describe it as temporal until dates are backfilled.
 3. The local XLM-R LoRA run is a **CPU smoke test**. It proves the pipeline runs; it is not model-quality evidence.
 4. The F1 ≈ 6.8 d / F2 ≈ 21.8 d / F6 ≈ −19.9 d figures are **synthetic demo output** from the notebooks, not empirical findings.
-5. `EPF_ETF_CHANGE` is no longer zero after rare-domain top-up, but it is still sparse: v3 has 11 total rows and only 2 test rows.
-6. Summarisation and Sinhala/Tamil translation exist at schema, helper and review-queue level only. The batch summariser and bulk backfill are not done.
+5. `EPF_ETF_CHANGE` is still sparse after V6: 4 train, 2 validation, 1 test. The reported EPF/ETF test F1 of 1.000 is one correctly classified test document, not stable per-class evidence.
+6. The production classifier is category-only. Sectors remain in the expert/manual sector ledger; do not claim that the frozen LinearSVC predicts sectors.
+7. The frozen classifier exposes margins, not probabilities. `classifier_confidence` is nullable and margins must not be displayed or written as percentages.
+8. Summarisation and Sinhala/Tamil translation exist at schema, queue, worker, and review-surface level. Final report claims still need completed backfill screenshots and human review evidence.
 
 ## Figures Already Embedded
 
@@ -127,5 +134,6 @@ All are highlighted yellow in the Word document. Table B.5 lists where each valu
 - [[03_M1_EVIDENCE_EVALUATION_AND_COMMANDS]] — evidence pack, formulas, reproducibility commands
 - [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] — latest rare-domain Batch 06/07 evidence and v3 baseline
 - [[06_M1_FULL_WORK_SESSION_CHRONOLOGY_2026-07-31]] — full chat/workflow chronology from calibration through v3 baseline
+- [[18_M1_Dataset_And_Model_Lineage]] — active V6 dataset, frozen LinearSVC model, hashes, and Kaggle/local recovery commands
 - [[01_CHAPTER_1_INTRODUCTION_DRAFT]] — superseded first-pass draft
 - [[02_CHAPTER_2_RELATED_WORK_DRAFT]] — superseded first-pass draft

@@ -90,9 +90,35 @@ All four are in the **train** split, so the test set is untouched between V5 and
 | `test.parquet` | `83583F15E95FA28795DDDBA16D5BECEDCCD1649271ADFFC879466FD7614224F9` |
 | dataset ZIP | `66EF4CF6FB187146641173BBB71628AD711C635FCEADE34CAB01AADDD99F35F0` |
 
+**Local artifact map (verified 2026-08-01):**
+
+```text
+C:\Reasearch\xyz\datasets\m1_regulations_v6_1110_clean_fixedsplit\
+C:\Reasearch\xyz\kaggle_bundle\m1_regulations_v6_1110_clean_fixedsplit.zip
+C:\Reasearch\xyz\kaggle_bundle\m1_regulations_v5_1110_clean_fixedsplit.zip
+C:\Reasearch\xyz\kaggle_bundle\m1_v6_epf_etf_corrections\m1_v6_epf_etf_corrections_bundle.zip
+C:\Reasearch\xyz\kaggle_bundle\m1_v6_epf_etf_corrections\extracted\
+```
+
+| Archive | SHA256 |
+|---|---|
+| `m1_regulations_v6_1110_clean_fixedsplit.zip` | `66EF4CF6FB187146641173BBB71628AD711C635FCEADE34CAB01AADDD99F35F0` |
+| `m1_regulations_v5_1110_clean_fixedsplit.zip` | `E1CA910E690F59C77F9859F57BE15069E48CBC6DF9C952BC8B28106C5A25FB29` |
+| `m1_v6_epf_etf_corrections_bundle.zip` | `2C9169B54C99B21241354E378172DEF8BC8071AC8FF40AAA22ED9551BD386597` |
+
 ### Legacy sets inside `enigmatrix-ml/datasets/`
 
 `m1_regulations`, `m1_regulations_smoke`, `m1_regulations_v2_1000`, `m1_regulations_v2_1000_stratified`, `m1_regulations_v3_1128_stratified` — the pre-V4 generations, still untracked in git (`?? datasets/`). They are the sets the module docstrings use as `--data` examples. Left in place deliberately; superseded for any result that will be reported.
+
+Verified legacy split inventory:
+
+| Folder | Split rows | Role now |
+|---|---:|---|
+| `enigmatrix-ml\datasets\m1_regulations` | 560 / 120 / 120 | V1 deterministic/key split; historical only |
+| `enigmatrix-ml\datasets\m1_regulations_smoke` | 16 / 8 / 8 | CPU smoke-test fixture only |
+| `enigmatrix-ml\datasets\m1_regulations_v2_1000` | 700 / 150 / 150 | superseded |
+| `enigmatrix-ml\datasets\m1_regulations_v2_1000_stratified` | 700 / 150 / 150 | superseded |
+| `enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified` | 790 / 169 / 169 | rare-domain baseline predecessor; superseded by V6 for final model claims |
 
 ---
 
@@ -149,7 +175,102 @@ The frozen primary model also has **no sector head**; it returns `"sectors": []`
 
 ---
 
-## 6. Cross-references
+## 6. Kaggle and local recovery commands
+
+Use this section when the final report needs the exact dataset/model metric evidence from Kaggle or the local downloaded bundle.
+
+### Kaggle input locations
+
+```text
+Original Kaggle project dataset:
+/kaggle/input/datasets/ifhammohamed1/m1-training-v1/enigmatrix-ml
+
+V6 Kaggle input dataset:
+/kaggle/input/datasets/ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split/m1_regulations_v6_1110_clean_fixedsplit
+
+Kaggle working model artifact:
+/kaggle/working/storage/models/m1/linearsvc_v6_primary
+```
+
+### Print the frozen model metrics in Kaggle
+
+```bash
+python - <<'PY'
+import json
+from pathlib import Path
+
+model_dir = Path("/kaggle/working/storage/models/m1/linearsvc_v6_primary")
+for name in ["model_registry.json", "validation_summary.json", "test_summary.json"]:
+    path = model_dir / name
+    print(f"\n== {path} ==")
+    print(json.dumps(json.loads(path.read_text()), indent=2))
+PY
+```
+
+### Print the V6 dataset split distribution in Kaggle
+
+```bash
+python - <<'PY'
+from pathlib import Path
+import pandas as pd
+
+base = Path("/kaggle/working/enigmatrix-ml/datasets/m1_regulations_v6_1110_clean_fixedsplit")
+if not base.exists():
+    base = Path("/kaggle/input/datasets/ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split/m1_regulations_v6_1110_clean_fixedsplit")
+
+for split in ["train", "val", "test"]:
+    df = pd.read_parquet(base / f"{split}.parquet")
+    print(f"\n{split}: {len(df)} rows")
+    print(df["category"].value_counts().sort_index().to_string())
+PY
+```
+
+### Re-score the frozen LinearSVC locally after downloading from Kaggle
+
+```powershell
+cd C:\Reasearch\xyz\enigmatrix-ml
+uv run python - <<'PY'
+from pathlib import Path
+import joblib
+import pandas as pd
+from sklearn.metrics import classification_report, f1_score, accuracy_score
+
+model_path = Path(r"C:\Reasearch\xyz\models\m1\linearsvc_v6_primary\linearsvc_pipeline.joblib")
+test_path = Path(r"C:\Reasearch\xyz\datasets\m1_regulations_v6_1110_clean_fixedsplit\test.parquet")
+
+model = joblib.load(model_path)
+df = pd.read_parquet(test_path)
+pred = model.predict(df["text"].fillna("").astype(str))
+y = df["category"].astype(str)
+
+print("rows", len(df))
+print("macro_f1", f1_score(y, pred, average="macro"))
+print("accuracy", accuracy_score(y, pred))
+print(classification_report(y, pred, digits=6))
+PY
+```
+
+Expected local result: macro-F1 `0.9472199858964565`, accuracy `0.9580838323353293`, 160/167 correct.
+
+### Kaggle CLI recovery commands
+
+Run these on Windows only if Kaggle API credentials are configured.
+
+```powershell
+kaggle datasets download ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split `
+  -p C:\Reasearch\xyz\kaggle_bundle `
+  --unzip
+
+kaggle datasets download ifhammohamed1/m1-training-v1 `
+  -p C:\Reasearch\xyz\kaggle_bundle\m1-training-v1 `
+  --unzip
+```
+
+If a future correction bundle is uploaded as its own Kaggle dataset, download it the same way and verify its SHA256 before deriving a new dataset version.
+
+---
+
+## 7. Cross-references
 
 - **Training method and metrics:** [[06_M1_Training_Evaluation]]
 - **Architecture and sampling:** [[05_M1_Model_Architecture]]
