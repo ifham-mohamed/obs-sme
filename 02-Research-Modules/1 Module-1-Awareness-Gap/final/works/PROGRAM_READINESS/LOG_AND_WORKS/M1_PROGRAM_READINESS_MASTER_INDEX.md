@@ -110,7 +110,7 @@ Completed:
 
 ## 3.1 2026-07-31 Rare-Domain V3 Addendum
 
-The v1 800-row dataset remains a historical milestone, but the current active training dataset is now v3:
+The v1 800-row dataset remains a historical milestone. V3 became the rare-domain predecessor dataset, and V6 is now the active classifier-evidence dataset:
 
 ```text
 gold rows            = 1128
@@ -129,7 +129,7 @@ Batch 06 = 200 rare-domain metadata/workbook candidates
 Batch 07 = 128 PDF-backed rare-domain candidates
 ```
 
-Current v3 category distribution:
+V3 predecessor category distribution:
 
 ```text
 SECTOR_SPECIFIC          695
@@ -142,7 +142,7 @@ BUSINESS_REGISTRATION     36
 EPF_ETF_CHANGE            11
 ```
 
-Current v3 model-preparation evidence:
+V3 predecessor model-preparation evidence:
 
 ```text
 split path                 = C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified
@@ -154,6 +154,26 @@ baseline report             = C:\Reasearch\xyz\storage\models\m1\baselines_v3_11
 
 Important caveat: Batch 06 and Batch 07 used assisted/direct Label Studio annotation. They are acceptable as development evidence, but manually audit them if strict independent human annotation evidence is required for the final submission.
 
+2026-08-01 V6 classifier freeze update:
+
+```text
+current classifier dataset = C:\Reasearch\xyz\datasets\m1_regulations_v6_1110_clean_fixedsplit
+train / val / test          = 777 / 166 / 167
+V6 total rows               = 1110
+V6 correction               = 4 incidental ETF mentions relabelled EPF_ETF_CHANGE -> SECTOR_SPECIFIC
+frozen model                = C:\Reasearch\xyz\models\m1\linearsvc_v6_primary
+model                       = TF-IDF + LinearSVC(class_weight="balanced")
+validation macro-F1         = 0.924476
+temporal test macro-F1      = 0.947220
+test accuracy               = 0.958084 (160/167)
+XLM-R V6 test macro-F1      = 0.743563, not promoted
+dataset ZIP                 = C:\Reasearch\xyz\kaggle_bundle\m1_regulations_v6_1110_clean_fixedsplit.zip
+model bundle ZIP            = C:\Reasearch\xyz\models\m1\linearsvc_v6_primary_bundle.zip
+lineage and commands        = 18_M1_Dataset_And_Model_Lineage.md
+```
+
+This supersedes the V3 baseline as the active classifier result. V3 remains the predecessor evidence showing why the extra correction/model-selection pass was needed.
+
 ## 4. Parent Document Mapping
 
 | Parent document | Status after this session | Next edit/use |
@@ -163,9 +183,9 @@ Important caveat: Batch 06 and Batch 07 used assisted/direct Label Studio annota
 | `02_M1_Data_Requirements.md` | Dataset/gold/summary fields are relevant. | Add final summary metadata fields after summarization implementation. |
 | `03_M1_Data_Collection.md` | Extraction and snapshot evidence remain important. | Add final real measurement run details after Excel-vs-DB measurement. |
 | `04_M1_Preprocessing_Pipeline.md` | Chunking/cleaning supports classification and future summarization. | Add summarizer input selection once implemented. |
-| `05_M1_Model_Architecture.md` | Labeling, active-learning data, rare-domain top-up, baseline evidence, and smoke-test evidence are now concrete. | Reference v1 as historical and v3 as the active training dataset. Keep the Batch 06/07 assisted-annotation caveat. |
-| `06_M1_Training_Evaluation.md` | V3 stratified split and baseline are complete; full LoRA promotion remains pending. | Add final dataset hash, split fingerprint, future GPU LoRA results, per-slice metrics, and export evidence only after a model beats the v3 LinearSVC baseline. |
-| `07_M1_Deployment_Integration.md` | Still blocked by trained model and summary stage. | Add summarization latency budget and ONNX export only after training. |
+| `05_M1_Model_Architecture.md` | Updated with the actual outcome: production is TF-IDF + LinearSVC, not XLM-R. | Treat XLM-R as the rejected architecture study; cite V6/LinearSVC as the deployed classifier. |
+| `06_M1_Training_Evaluation.md` | V6 temporal split and frozen LinearSVC evidence close the model-selection gate. | Use V6 hashes, split fingerprint, per-class metrics, and caveats from `18_M1_Dataset_And_Model_Lineage.md`. |
+| `07_M1_Deployment_Integration.md` | Classifier integration is no longer blocked by model training; LinearSVC backend is active. | Do not describe ONNX as the active model path. Add translation/summarization evidence separately when complete. |
 | `08_M1_Full_System_Architecture.md` | Dataset measurement and annotation flows are now clearer. | Add end-to-end gold dataset and measurement evidence diagrams if needed. |
 | `09_M1_Annotation_Guidelines.md` | Annotation gate is complete through Batch 07. | Add final IAA table, rare-domain top-up method, and assisted-annotation caveat. |
 | `10_M1_Sinhala_Tamil_NLP.md` | NLLB title translation exists; summary translation plan is pending. | Add NLLB summary backfill after implementation. |
@@ -173,19 +193,18 @@ Important caveat: Batch 06 and Batch 07 used assisted/direct Label Studio annota
 | `12_M1_Monitoring_Maintenance.md` | Monitoring still not complete. | Add measurement-run health, summary completeness, translation completeness, and model-drift checks. |
 | `13_M1_Folder_Structure_and_Implementation_Flow.md` | Folder ownership remains valid. | Add final gold artifacts and Program Readiness docs to folder examples. |
 | `14_M1_Tracking_Workflows.md` | Annotation and dataset-measurement workflows are documented. | Add screenshots for dataset upload, DB snapshot, measurement dashboard, and trilingual summaries. |
-| `15_M1_Folder_Reference.md` | Research artifact paths are now important. | Add Batch 02-07 exports, v3 frozen gold-standard files, and v3 baseline outputs. |
-| `16_M1_Development_Roadmap.md` | Phase 3 gold labeling plus rare-domain v3 training-prep pass are complete. | Move LoRA promotion behind the v3 LinearSVC baseline and rare-class error-review gate. |
+| `15_M1_Folder_Reference.md` | Includes workspace-root `datasets/` V4-V6 and `models/m1/linearsvc_v6_primary/`. | Keep `enigmatrix-ml\datasets` as legacy/predecessor only. |
+| `16_M1_Development_Roadmap.md` | Phase 3 model selection is closed by V6 LinearSVC. | Any future model work is a new evidence cycle, not continuation of the V6 test selection. |
 
 ## 5. What Is Still Missing
 
-### Must Do Before Final LoRA Claim
+### Must Do Before Stronger Classifier Claims
 
-- Use the v3 stratified split for current classifier evidence. The older deterministic `--by key` split remains historical v1 evidence only.
-- Decide whether to collect more `EPF_ETF_CHANGE` examples. It is no longer zero, but v3 still has only 11 total rows.
-- Review `PENALTY_ENFORCEMENT` errors because it is the weakest current LinearSVC class.
-- Record dataset hash and split fingerprint.
-- Run full XLM-R + LoRA training on a CUDA machine. The CPU smoke test is only a pipeline proof and must not be promoted.
-- Run final evaluation, slice analysis, error analysis, and ONNX export only after full training.
+- Do **not** tune again on the V6 test split; it is spent for model selection.
+- Collect more genuine `EPF_ETF_CHANGE` examples before making robust EPF/ETF performance claims. V6 has 4 train, 2 validation, and 1 test example.
+- Review `PENALTY_ENFORCEMENT` errors because it is the weakest measured V6 LinearSVC class.
+- Keep V6 hashes, split fingerprint, model registry, test reports, and local reproduction JSON attached to the final evidence pack.
+- Treat XLM-R LoRA as tested and rejected for the current corpus. A future transformer retry needs a fresh split/external holdout.
 
 ### Must Do Before Extraction Accuracy Claim
 
@@ -207,12 +226,12 @@ Important caveat: Batch 06 and Batch 07 used assisted/direct Label Studio annota
 
 ```text
 1. Keep v1 as historical 800-row evidence. [done]
-2. Use v3 1128-row gold as the active training dataset. [done]
-3. Use the v3 stratified split and LinearSVC 0.9080 baseline as the current model gate. [done]
+2. Use v3 1128-row gold as the rare-domain predecessor evidence. [done]
+3. Use V6 1110-row fixed temporal split and LinearSVC 0.947220 as the current classifier result. [done]
 4. Review or manually audit Batch 06/07 if strict independent annotation evidence is required.
 5. Improve `EPF_ETF_CHANGE` and `PENALTY_ENFORCEMENT` before claiming robust rare-domain performance.
-6. Retry XLM-R + LoRA only if the diagnostic plan can beat the v3 LinearSVC baseline.
-7. Evaluate/export/promote only after passing the 0.92 macro-F1 target and slice checks.
+6. Do not retune on V6 test; any new model selection needs fresh validation/external evidence.
+7. Keep LinearSVC as the frozen primary unless a new evidence cycle beats it without using the spent V6 test for selection.
 8. Run extraction accuracy measurement evidence workflow.
 9. Build trilingual summary + NLLB translation backfill.
 10. Update parent M1 docs with final screenshots, metrics, and run IDs.

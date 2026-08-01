@@ -14,24 +14,35 @@ Label Studio batches 01–07
         │  2 annotations per task · 1128 tasks · 2256 annotations
         ▼
 gold_standard.csv  (research/data/labeling/)
-        │  freeze
-        ▼
-V4  m1_regulations_v4_1128            ── 1128 rows, raw gold freeze
-        │  drop 18 OCR/page-number artifacts (ML use only — gold history keeps them)
-        ▼
-V5  m1_regulations_v5_1110_clean_fixedsplit
-        │  + 3 PDF-adjudicated category corrections (all in test split)
-        │  fixed split established: 777 / 166 / 167
-        ▼
-V6  m1_regulations_v6_1110_clean_fixedsplit   ◄── FROZEN, current
-           + 4 EPF/ETF label corrections (all in train split)
-           split preserved byte-for-byte from V5
+        │
+        ├─ Legacy experiment branch inside enigmatrix-ml/datasets/
+        │
+        │  L1      m1_regulations                     800 rows · 560 / 120 / 120
+        │  Smoke   m1_regulations_smoke                32 rows · 16 / 8 / 8
+        │  L2      m1_regulations_v2_1000             1000 rows · 700 / 150 / 150
+        │  L2s     m1_regulations_v2_1000_stratified  1000 rows · 700 / 150 / 150
+        │  L3      m1_regulations_v3_1128_stratified  1128 rows · 790 / 169 / 169
+        │
+        └─ Fixed reporting branch
+           │
+           ▼
+           V4  m1_regulations_v4_1128            ── 1128 rows, raw gold freeze
+           │  drop 18 OCR/page-number artifacts (ML use only — gold history keeps them)
+           ▼
+           V5  m1_regulations_v5_1110_clean_fixedsplit
+           │  + 3 PDF-adjudicated category corrections (all in test split)
+           │  fixed reporting split established: 777 / 166 / 167
+           ▼
+           V6  m1_regulations_v6_1110_clean_fixedsplit   ◄── FROZEN, current
+              + 4 EPF/ETF label corrections (all in train split)
+              split preserved byte-for-byte from V5
 ```
 
-Two rules held across every version and are what make the model comparisons valid:
+Three rules keep the lineage clean:
 
-1. **The split never moved.** 777 train / 166 validation / 167 test from V4 onward, so a V5-vs-V6 score difference is a labelling effect, never a split effect.
-2. **Nothing was deleted from the gold history.** The 18 excluded artifacts are excluded from *ML training and evaluation only*; they remain in the adjudicated gold record.
+1. **Legacy datasets are provenance only.** They explain how early baselines were produced, but they are not used for final model claims.
+2. **The reporting split never moved from V5 to V6.** 777 train / 166 validation / 167 test, so a V5-vs-V6 score difference is a labelling effect, never a split effect.
+3. **Nothing was deleted from the gold history.** The 18 excluded artifacts are excluded from *ML training and evaluation only*; they remain in the adjudicated gold record.
 
 ---
 
@@ -106,9 +117,27 @@ C:\Reasearch\xyz\kaggle_bundle\m1_v6_epf_etf_corrections\extracted\
 | `m1_regulations_v5_1110_clean_fixedsplit.zip` | `E1CA910E690F59C77F9859F57BE15069E48CBC6DF9C952BC8B28106C5A25FB29` |
 | `m1_v6_epf_etf_corrections_bundle.zip` | `2C9169B54C99B21241354E378172DEF8BC8071AC8FF40AAA22ED9551BD386597` |
 
-### Legacy sets inside `enigmatrix-ml/datasets/`
+### Legacy L1 — `enigmatrix-ml\datasets\m1_regulations`
 
-`m1_regulations`, `m1_regulations_smoke`, `m1_regulations_v2_1000`, `m1_regulations_v2_1000_stratified`, `m1_regulations_v3_1128_stratified` — the pre-V4 generations, still untracked in git (`?? datasets/`). They are the sets the module docstrings use as `--data` examples. Left in place deliberately; superseded for any result that will be reported.
+800 rows with a deterministic/key split of 560 / 120 / 120. This is the earliest retained ML split and is historical only. It is not comparable with V6 because `EPF_ETF_CHANGE` is absent from train and test, while the test split is dominated by `SECTOR_SPECIFIC` (115 of 120 rows).
+
+### Legacy smoke — `enigmatrix-ml\datasets\m1_regulations_smoke`
+
+32 rows with a 16 / 8 / 8 split. This is a CPU smoke-test fixture only. It is not a research dataset and must not be used for reported model quality.
+
+### Legacy L2 — `enigmatrix-ml\datasets\m1_regulations_v2_1000`
+
+1000 rows with a 700 / 150 / 150 split. Superseded. The split is not well balanced by category: `SECTOR_SPECIFIC` has 583 training rows but only 16 test rows, while some rarer categories appear mostly in validation/test. Keep only as an early experiment record.
+
+### Legacy L2-stratified — `enigmatrix-ml\datasets\m1_regulations_v2_1000_stratified`
+
+1000 rows with a 700 / 150 / 150 stratified split. Superseded by the larger 1128-row set, but useful as the first retained stratified classical-baseline comparison.
+
+### Legacy L3 — `enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified`
+
+1128 rows with a 790 / 169 / 169 stratified split. This is the rare-domain baseline predecessor: it includes all eight categories, including 7 / 2 / 2 `EPF_ETF_CHANGE` rows. It is superseded by V6 for final model claims because V6 removes known artifacts, applies adjudicated corrections, and freezes the final reporting split.
+
+All legacy folders are currently retained inside `enigmatrix-ml/datasets/`, still untracked in git (`?? datasets/`). They are the sets the module docstrings use as `--data` examples. Left in place deliberately; superseded for any result that will be reported.
 
 Verified legacy split inventory:
 
@@ -124,13 +153,36 @@ Verified legacy split inventory:
 
 ## 3. Models trained on these datasets
 
-| Model | Dataset | Val macro-F1 | Test macro-F1 | Verdict |
-|---|---|---:|---:|---|
-| XLM-R LoRA, category-only, unweighted | V5 | ~0.0946 | ~0.0936 | Collapsed to majority class |
-| XLM-R LoRA, balanced (seed 42, 16 ep) | V5 | 0.596014 | 0.685348 | Rejected — 0 EPF predictions |
-| XLM-R LoRA, underfit-fix (seed 42, 20 ep) | V6 | 0.902693 | 0.743563 | Experimental only — failed the gate |
-| **TF-IDF + balanced LinearSVC** | **V6** | **0.924476** | **0.947220** | **Primary — frozen** |
-| TF-IDF + Logistic Regression | V6 | — | 0.882481 | Baseline reference |
+### Current/final model evidence
+
+| Model                                     | Dataset | Val macro-F1 | Test macro-F1 | Verdict                             |
+| ----------------------------------------- | ------- | -----------: | ------------: | ----------------------------------- |
+| XLM-R LoRA, category-only, unweighted     | V5      |      ~0.0946 |       ~0.0936 | Collapsed to majority class         |
+| XLM-R LoRA, balanced (seed 42, 16 ep)     | V5      |     0.596014 |      0.685348 | Rejected — 0 EPF predictions        |
+| XLM-R LoRA, underfit-fix (seed 42, 20 ep) | V6      |     0.902693 |      0.743563 | Experimental only — failed the gate |
+| **TF-IDF + balanced LinearSVC**           | **V6**  | **0.924476** |  **0.947220** | **Primary — frozen**                |
+| TF-IDF + Logistic Regression              | V6      |            — |      0.882481 | Baseline reference                  |
+
+### Historical legacy model records
+
+These rows explain the path to the frozen model. They should not be mixed into final claims about production performance because the data versions, splits and label corrections differ from V6.
+
+| Model | Dataset / run | Val macro-F1 | Test macro-F1 | Record source | Status |
+|---|---|---:|---:|---|---|
+| TF-IDF + Logistic Regression | V1 deterministic/key | — | 0.498039 | archived Kaggle `baselines_v1/baselines.json` | historical |
+| TF-IDF + balanced LinearSVC | V1 deterministic/key | — | 0.616745 | archived Kaggle `baselines_v1/baselines.json` | historical |
+| TF-IDF + Logistic Regression | V1 stratified archived run | — | 0.771087 | archived Kaggle `baselines_v1_stratified/baselines.json` | historical |
+| TF-IDF + balanced LinearSVC | V1 stratified archived run | — | 0.789365 | archived Kaggle `baselines_v1_stratified/baselines.json` | historical |
+| TF-IDF + Logistic Regression | V2 1000 | — | 0.294196 | local `baselines_v2_1000/baselines.json` | superseded |
+| TF-IDF + balanced LinearSVC | V2 1000 | — | 0.210263 | local `baselines_v2_1000/baselines.json` | superseded |
+| TF-IDF + Logistic Regression | V2 1000 stratified | — | 0.698545 | local `baselines_v2_1000_stratified/baselines.json` | superseded |
+| TF-IDF + balanced LinearSVC | V2 1000 stratified | — | 0.808523 | local `baselines_v2_1000_stratified/baselines.json` | superseded |
+| TF-IDF + Logistic Regression | V3 1128 stratified | — | 0.862652 | local `baselines_v3_1128_stratified/baselines.json` | rare-domain predecessor |
+| TF-IDF + balanced LinearSVC | V3 1128 stratified | — | 0.908012 | local `baselines_v3_1128_stratified/baselines.json` | rare-domain predecessor |
+
+Archived V1 GPU records also exist under `storage/models/m1/kaggle_v1/kaggle/working/storage/models/m1/`: `xlmr_lora_v1_seed42_diag` (val 0.154762, test 0.155556), `xlmr_lora_v1_fixed_seed42` (val 0.266328, test 0.487084), and `xlmr_lora_v1_catonly_seed42_e16` (val 0.403285, test 0.641471). All failed the gate and are retained for chronology only.
+
+There is also a separate local `baselines_v1/baselines.json` rerun with LogReg 0.743363 and LinearSVC 0.872826. Do not cite it as the archived Kaggle V1 result unless the rerun command and local dataset state are included.
 
 ### Why the transformer lost
 
@@ -185,11 +237,171 @@ Use this section when the final report needs the exact dataset/model metric evid
 Original Kaggle project dataset:
 /kaggle/input/datasets/ifhammohamed1/m1-training-v1/enigmatrix-ml
 
+Legacy V1 dataset inside original Kaggle project dataset:
+/kaggle/input/datasets/ifhammohamed1/m1-training-v1/enigmatrix-ml/datasets/m1_regulations
+
 V6 Kaggle input dataset:
 /kaggle/input/datasets/ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split/m1_regulations_v6_1110_clean_fixedsplit
 
 Kaggle working model artifact:
 /kaggle/working/storage/models/m1/linearsvc_v6_primary
+```
+
+Current Kaggle inputs verified from the notebook expose V1, V5 and V6. V2, V2-stratified and V3 will print as missing unless those legacy folders are attached/uploaded as a Kaggle dataset.
+
+### Discover attached legacy datasets in Kaggle
+
+Run this first. It finds the dataset folders wherever Kaggle mounted them and prints exact split counts, class distributions and Parquet hashes.
+
+```python
+from pathlib import Path
+import hashlib
+import json
+import pandas as pd
+
+SPLITS = ("train", "val", "test")
+LEGACY_NAMES = [
+    "m1_regulations",
+    "m1_regulations_smoke",
+    "m1_regulations_v2_1000",
+    "m1_regulations_v2_1000_stratified",
+    "m1_regulations_v3_1128_stratified",
+]
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest().upper()
+
+def find_dataset_dir(name: str) -> Path | None:
+    for path in Path("/kaggle/input").rglob(name):
+        if path.is_dir() and all((path / f"{split}.parquet").exists() for split in SPLITS):
+            return path
+    return None
+
+report = {}
+for name in LEGACY_NAMES:
+    base = find_dataset_dir(name)
+    if base is None:
+        report[name] = {"status": "missing_from_attached_kaggle_inputs"}
+        continue
+
+    report[name] = {"status": "found", "path": str(base), "splits": {}}
+    for split in SPLITS:
+        parquet = base / f"{split}.parquet"
+        df = pd.read_parquet(parquet)
+        report[name]["splits"][split] = {
+            "rows": int(len(df)),
+            "sha256": sha256_file(parquet),
+            "category_counts": {
+                str(k): int(v)
+                for k, v in df["category"].value_counts().sort_index().items()
+            },
+        }
+
+print(json.dumps(report, indent=2))
+```
+
+### Rebuild legacy classical baseline scores in Kaggle
+
+Run this only after the discovery cell. It copies the codebase into `/kaggle/working`, then runs the project baseline command against every attached legacy dataset.
+
+```python
+from pathlib import Path
+import json
+import shutil
+import subprocess
+import sys
+
+SPLITS = ("train", "val", "test")
+LEGACY_NAMES = [
+    "m1_regulations",
+    "m1_regulations_smoke",
+    "m1_regulations_v2_1000",
+    "m1_regulations_v2_1000_stratified",
+    "m1_regulations_v3_1128_stratified",
+]
+
+def find_dataset_dir(name: str) -> Path | None:
+    for path in Path("/kaggle/input").rglob(name):
+        if path.is_dir() and all((path / f"{split}.parquet").exists() for split in SPLITS):
+            return path
+    return None
+
+CODE_INPUT = Path("/kaggle/input/datasets/ifhammohamed1/m1-training-v1/enigmatrix-ml")
+CODE_WORK = Path("/kaggle/working/enigmatrix-ml")
+
+if CODE_WORK.exists():
+    shutil.rmtree(CODE_WORK)
+shutil.copytree(CODE_INPUT, CODE_WORK)
+
+subprocess.run(
+    [sys.executable, "-m", "pip", "install", "-q", "pandas", "pyarrow", "scikit-learn"],
+    check=True,
+)
+
+baseline_results = {}
+for name in LEGACY_NAMES:
+    base = find_dataset_dir(name)
+    if base is None or name == "m1_regulations_smoke":
+        continue
+
+    out = Path("/kaggle/working/storage/models/m1") / f"baselines_{name}"
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "m1.model.baselines",
+            "--data",
+            str(base),
+            "--report",
+            str(out),
+        ],
+        cwd=CODE_WORK,
+        check=True,
+    )
+    baseline_results[name] = json.loads((out / "baselines.json").read_text())
+
+print(json.dumps(baseline_results, indent=2))
+```
+
+Expected locally verified legacy score records:
+
+| Dataset | LogReg test macro-F1 | LinearSVC test macro-F1 |
+|---|---:|---:|
+| V1 deterministic/key, archived Kaggle | 0.498039 | 0.616745 |
+| V1 stratified archived run | 0.771087 | 0.789365 |
+| V2 1000 | 0.294196 | 0.210263 |
+| V2 1000 stratified | 0.698545 | 0.808523 |
+| V3 1128 stratified | 0.862652 | 0.908012 |
+
+### Find any saved metric JSON files in Kaggle
+
+Use this instead of opening one hard-coded path. It avoids `FileNotFoundError` when the model artifact is not present in the current Kaggle session.
+
+```python
+from pathlib import Path
+import json
+
+patterns = ["baselines.json", "metrics.json", "model_registry.json", "validation_summary.json", "test_summary.json"]
+roots = [Path("/kaggle/working"), Path("/kaggle/input")]
+
+found = []
+for root in roots:
+    for pattern in patterns:
+        found.extend(root.rglob(pattern))
+
+print("FOUND FILES:", len(found))
+for path in sorted(set(found)):
+    print("\n" + "=" * 100)
+    print(path)
+    print("=" * 100)
+    try:
+        print(json.dumps(json.loads(path.read_text()), indent=2))
+    except Exception as exc:
+        print(f"Could not parse JSON: {exc}")
 ```
 
 ### Print the frozen model metrics in Kaggle

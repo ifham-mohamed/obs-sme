@@ -86,7 +86,7 @@ The earlier report pack records the 800-row V1 dataset, the 1128-row rare-domain
 | Dataset ZIP SHA256 | `66EF4CF6FB187146641173BBB71628AD711C635FCEADE34CAB01AADDD99F35F0` | `C:\Reasearch\xyz\kaggle_bundle\m1_regulations_v6_1110_clean_fixedsplit.zip` |
 | Model bundle SHA256 | `2F80BEFE494F1275DCB14FCB5352902A8BF98C1CC3FA86F919D53B7958C5F11B` | `C:\Reasearch\xyz\models\m1\linearsvc_v6_primary_bundle.zip` |
 
-Use [[../02-Research-Modules/1 Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage|18_M1_Dataset_And_Model_Lineage]] for the active dataset/model lineage, hashes, Kaggle paths, and recovery commands. Use [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] as the predecessor evidence that explains why V3 was insufficient (`LinearSVC` macro-F1 0.908012). Keep [[04_M1_KAGGLE_TRAINING_RESULTS_V1]] as historical evidence that the 800-row V1 LoRA checkpoint was not promotable.
+Use [18_M1_Dataset_And_Model_Lineage](../02-Research-Modules/1%20Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage.md) for the active dataset/model lineage, hashes, Kaggle paths, and recovery commands. Use [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] as the predecessor evidence that explains why V3 was insufficient (`LinearSVC` macro-F1 0.908012). Keep [[04_M1_KAGGLE_TRAINING_RESULTS_V1]] as historical evidence that the 800-row V1 LoRA checkpoint was not promotable.
 
 ## Standing Corrections
 
@@ -134,6 +134,6 @@ All are highlighted yellow in the Word document. Table B.5 lists where each valu
 - [[03_M1_EVIDENCE_EVALUATION_AND_COMMANDS]] — evidence pack, formulas, reproducibility commands
 - [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] — latest rare-domain Batch 06/07 evidence and v3 baseline
 - [[06_M1_FULL_WORK_SESSION_CHRONOLOGY_2026-07-31]] — full chat/workflow chronology from calibration through v3 baseline
-- [[../02-Research-Modules/1 Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage]] — active V6 dataset, frozen LinearSVC model, hashes, and Kaggle/local recovery commands
+- [18_M1_Dataset_And_Model_Lineage](../02-Research-Modules/1%20Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage.md) — active V6 dataset, frozen LinearSVC model, hashes, and Kaggle/local recovery commands
 - [[01_CHAPTER_1_INTRODUCTION_DRAFT]] — superseded first-pass draft
 - [[02_CHAPTER_2_RELATED_WORK_DRAFT]] — superseded first-pass draft

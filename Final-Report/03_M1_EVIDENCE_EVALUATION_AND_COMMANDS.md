@@ -1,6 +1,6 @@
 # Module 1 Evidence, Evaluation, and Commands
 
-Generated: 2026-07-30 · still current  
+Generated: 2026-07-30 · updated 2026-08-01 with V6 classifier freeze
 Module: Module 1 - Regulatory Change Awareness Gap  
 Owner: Mohomed M.R.I (215075J) — working name Ifham Mohamed
 
@@ -8,6 +8,166 @@ Owner: Mohomed M.R.I (215075J) — working name Ifham Mohamed
 > This pack was written against the first-pass 7-chapter draft. The report now follows the official B21 FYP template, so the evaluation content lives in **Chapter 7**, not Chapter 6: metrics are §7.1, Module 1 results are §7.2.1, and the reproducibility commands are §7.2.1.9. The evidence, formulas and commands below are unchanged and remain the working source. See [[04_OFFICIAL_TEMPLATE_STRUCTURE_MAP]].
 
 This file is the working evidence pack for writing the final report sections related to Module 1. It separates what is already supported by the codebase and artifacts from what still needs additional evidence before final submission.
+
+## 0. 2026-08-01 V6 Supersession
+
+The V1 and V3 sections below remain useful historical evidence, but they are no longer the latest classifier result. The current final classifier evidence is:
+
+| Evidence | Current value |
+|---|---|
+| Dataset | `m1_regulations_v6_1110_clean_fixedsplit` |
+| Local dataset path | `C:\Reasearch\xyz\datasets\m1_regulations_v6_1110_clean_fixedsplit` |
+| Kaggle input path | `/kaggle/input/datasets/ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split/m1_regulations_v6_1110_clean_fixedsplit` |
+| Split | 777 train / 166 validation / 167 temporal test |
+| Frozen model | `m1_linearsvc_v6_primary` |
+| Local model path | `C:\Reasearch\xyz\models\m1\linearsvc_v6_primary` |
+| Model bundle | `C:\Reasearch\xyz\models\m1\linearsvc_v6_primary_bundle.zip` |
+| Validation macro-F1 | 0.924476 |
+| Temporal test macro-F1 | 0.947220 |
+| Test accuracy | 0.958084, 160/167 correct |
+| XLM-R V6 comparison | 0.743563 test macro-F1, not promoted |
+| Decision | TF-IDF + balanced LinearSVC is the frozen primary classifier |
+
+Use this wording for the current completed classifier work:
+
+> Module 1's final promoted classifier is a TF-IDF word uni/bi-gram pipeline with `LinearSVC(class_weight="balanced")`, trained on the frozen V6 temporal split. It achieved validation macro-F1 0.9245 and temporal-test macro-F1 0.9472, passing the 0.92 gate. XLM-R LoRA was trained and debugged but not promoted because its V6 temporal-test macro-F1 was 0.7436. The promoted model is category-only and emits an uncalibrated decision margin, not calibrated probability confidence.
+
+Do not claim:
+
+> The production classifier is XLM-R/ONNX, predicts sectors, or produces calibrated confidence percentages.
+
+### 0.1 Verify Current Local Artifacts
+
+```powershell
+Get-ChildItem C:\Reasearch\xyz\datasets\m1_regulations_v6_1110_clean_fixedsplit
+Get-ChildItem C:\Reasearch\xyz\models\m1\linearsvc_v6_primary
+
+Get-FileHash -Algorithm SHA256 `
+  C:\Reasearch\xyz\kaggle_bundle\m1_regulations_v6_1110_clean_fixedsplit.zip, `
+  C:\Reasearch\xyz\models\m1\linearsvc_v6_primary_bundle.zip
+```
+
+Expected hashes:
+
+```text
+66EF4CF6FB187146641173BBB71628AD711C635FCEADE34CAB01AADDD99F35F0  m1_regulations_v6_1110_clean_fixedsplit.zip
+2F80BEFE494F1275DCB14FCB5352902A8BF98C1CC3FA86F919D53B7958C5F11B  linearsvc_v6_primary_bundle.zip
+```
+
+### 0.2 Print Current Dataset Distribution
+
+```powershell
+cd C:\Reasearch\xyz\enigmatrix-ml
+@'
+from pathlib import Path
+import pandas as pd
+
+base = Path(r"C:\Reasearch\xyz\datasets\m1_regulations_v6_1110_clean_fixedsplit")
+for split in ["train", "val", "test"]:
+    df = pd.read_parquet(base / f"{split}.parquet")
+    print(f"\n{split}: {len(df)} rows")
+    print(df["category"].value_counts().sort_index().to_string())
+'@ | python -
+```
+
+Expected headline counts:
+
+```text
+train / val / test = 777 / 166 / 167
+EPF_ETF_CHANGE     = 4 / 2 / 1
+total rows         = 1110
+```
+
+### 0.3 Re-score The Frozen Model Locally
+
+```powershell
+cd C:\Reasearch\xyz\enigmatrix-ml
+@'
+from pathlib import Path
+import joblib
+import pandas as pd
+from sklearn.metrics import accuracy_score, classification_report, f1_score
+
+model_path = Path(r"C:\Reasearch\xyz\models\m1\linearsvc_v6_primary\linearsvc_pipeline.joblib")
+test_path = Path(r"C:\Reasearch\xyz\datasets\m1_regulations_v6_1110_clean_fixedsplit\test.parquet")
+
+model = joblib.load(model_path)
+df = pd.read_parquet(test_path)
+y_true = df["category"].astype(str)
+y_pred = model.predict(df["text"].fillna("").astype(str))
+
+print("rows:", len(df))
+print("macro_f1:", f1_score(y_true, y_pred, average="macro"))
+print("accuracy:", accuracy_score(y_true, y_pred))
+print(classification_report(y_true, y_pred, digits=6))
+'@ | python -
+```
+
+Expected result:
+
+```text
+rows: 167
+macro_f1: 0.9472199858964565
+accuracy: 0.9580838323353293
+```
+
+### 0.4 Kaggle Metric Recovery Commands
+
+Use this inside the Kaggle notebook where the V6 model artifact exists:
+
+```bash
+python - <<'PY'
+import json
+from pathlib import Path
+
+model_dir = Path("/kaggle/working/storage/models/m1/linearsvc_v6_primary")
+for name in ["model_registry.json", "validation_summary.json", "test_summary.json"]:
+    path = model_dir / name
+    print(f"\n== {name} ==")
+    print(json.dumps(json.loads(path.read_text()), indent=2))
+PY
+```
+
+Use this to print the V6 dataset distribution from Kaggle input:
+
+```bash
+python - <<'PY'
+from pathlib import Path
+import pandas as pd
+
+base = Path("/kaggle/input/datasets/ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split/m1_regulations_v6_1110_clean_fixedsplit")
+for split in ["train", "val", "test"]:
+    df = pd.read_parquet(base / f"{split}.parquet")
+    print(f"\n{split}: {len(df)} rows")
+    print(df["category"].value_counts().sort_index().to_string())
+PY
+```
+
+Use this to preserve Kaggle model evidence before leaving the notebook:
+
+```bash
+zip -r /kaggle/working/linearsvc_v6_primary_bundle.zip /kaggle/working/storage/models/m1/linearsvc_v6_primary
+zip -r /kaggle/working/linearsvc_v6_diagnostics.zip /kaggle/working/storage/reports/m1/linearsvc_v6_diagnostics
+```
+
+Use this on Windows if Kaggle API credentials are configured:
+
+```powershell
+kaggle datasets download ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split `
+  -p C:\Reasearch\xyz\kaggle_bundle `
+  --unzip
+
+kaggle datasets download ifhammohamed1/m1-training-v1 `
+  -p C:\Reasearch\xyz\kaggle_bundle\m1-training-v1 `
+  --unzip
+```
+
+### 0.5 Current Caveats For Final Writing
+
+- The V6 test split is spent for model selection. Further tuning must use fresh validation evidence or a new external split.
+- `EPF_ETF_CHANGE` still has only one temporal-test row. Report its correct classification as a note, not as robust per-class performance.
+- LinearSVC does not predict sectors. Sector applicability remains in the expert/manual sector ledger.
+- LinearSVC emits margins, not calibrated probabilities. Do not render margins as percentages.
 
 ## 1. Final Report Position For Module 1
 
@@ -675,7 +835,7 @@ data/thesis/RUN_PROVENANCE.md
 
 ## 9. Rare-Domain V3 Addendum
 
-The 800-row v1 evidence remains useful as the first completed gold-labeling gate, but it has been superseded for current model work by the rare-domain v3 dataset.
+The 800-row V1 evidence remains useful as the first completed gold-labeling gate. The rare-domain V3 dataset then became the predecessor evidence that lifted LinearSVC to 0.9080 macro-F1, but V3 is now superseded for final classifier claims by the V6 dataset and frozen LinearSVC model described in §0.
 
 Current accepted v3 files:
 
@@ -686,7 +846,7 @@ C:\Reasearch\xyz\research\data\labeling\iaa_report_summary_v3_1128.csv
 C:\Reasearch\xyz\research\data\labeling\disagreements_v3_1128.csv
 ```
 
-Current v3 IAA:
+V3 IAA:
 
 ```text
 tasks                = 1128
@@ -698,7 +858,7 @@ SME relevance kappa  = 0.914637
 disagreement rows    = 44
 ```
 
-Current v3 category distribution:
+V3 category distribution:
 
 ```text
 SECTOR_SPECIFIC          695
@@ -711,7 +871,7 @@ BUSINESS_REGISTRATION     36
 EPF_ETF_CHANGE            11
 ```
 
-Current v3 baseline:
+V3 baseline:
 
 ```text
 split path                 = C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified
@@ -720,7 +880,7 @@ TF-IDF LogReg macro-F1     = 0.862652
 TF-IDF LinearSVC macro-F1  = 0.908012
 ```
 
-Interpretation: the v3 rare-domain top-up made the dataset much stronger and moved the LinearSVC baseline close to the 0.92 gate. It still does not pass the final target. The current weak spots are `EPF_ETF_CHANGE` support and `PENALTY_ENFORCEMENT` boundary errors. See [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] for the complete artifact map and commands.
+Interpretation: the V3 rare-domain top-up made the dataset much stronger and moved the LinearSVC baseline close to the 0.92 gate. It still did not pass the final target. V6 then corrected four EPF/ETF incidental-mention labels, preserved the fixed split, and produced the promoted LinearSVC test macro-F1 of 0.947220. See [[05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE]] for the V3 artifact map and [18_M1_Dataset_And_Model_Lineage](../02-Research-Modules/1%20Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage.md) for the active V6 lineage.
 
 ## 10. Final Report Replacement Checklist
 
@@ -729,7 +889,8 @@ Before submission, replace or verify:
 | Placeholder | Required final evidence |
 |---|---|
 | Transformer v1 final decision | Done: LoRA was tested on Kaggle GPU and was not promoted because best macro-F1 = 0.6415, below stratified LinearSVC = 0.7894 |
-| Current v3 baseline decision | Done: rare-domain v3 LinearSVC reached 0.9080 macro-F1; close to 0.92 but not final pass |
+| V3 predecessor baseline decision | Done: rare-domain V3 LinearSVC reached 0.9080 macro-F1; close to 0.92 but superseded by V6 |
+| V6 final classifier decision | Done: frozen TF-IDF + LinearSVC reached 0.947220 temporal-test macro-F1 and passed the 0.92 gate |
 | Per-category F1 | Done for v3 LinearSVC baseline in `storage\models\m1\baselines_v3_1128_stratified\linsvc_per_class_report.csv`; still needed for any future promoted LoRA model |
 | Sector F1 | Still needed because current LoRA eval reports category macro-F1 only |
 | Per-language metrics | Only if `primary_language` is fixed in final split |
@@ -741,4 +902,4 @@ Before submission, replace or verify:
 
 ## 11. Short Copy-Ready Module 1 Evaluation Paragraph
 
-The Module 1 dataset was created through a dual-annotation workflow followed by disagreement resolution. The initial v1 gold dataset contained 800 labelled regulation records. After identifying rare-domain scarcity, two top-up batches were added, producing the current v3 gold dataset of 1128 resolved regulation records. The v3 annotation evidence is strong: category Cohen's kappa is 0.9472, mean sector kappa is 0.9656, and SME relevance kappa is 0.9146. On the v3 stratified split, TF-IDF Logistic Regression reached 0.8627 macro-F1 and TF-IDF LinearSVC reached 0.9080 macro-F1. This is close to the 0.92 classifier target but does not yet pass it. Earlier XLM-R LoRA diagnostics on Kaggle improved after imbalance-focused trainer changes but remained below the baseline, so no LoRA checkpoint has been promoted. The current evidence supports TF-IDF LinearSVC as the strongest classifier baseline while `EPF_ETF_CHANGE` and `PENALTY_ENFORCEMENT` remain the main data-quality and error-analysis targets.
+The Module 1 dataset was created through a dual-annotation workflow followed by disagreement resolution. The initial V1 gold dataset contained 800 labelled regulation records. After identifying rare-domain scarcity, two top-up batches produced the V3 1128-row resolved gold set, with category Cohen's kappa 0.9472, mean sector kappa 0.9656, and SME relevance kappa 0.9146. V3 lifted TF-IDF LinearSVC to 0.9080 macro-F1, close to but below the 0.92 gate. The final V6 correction preserved the fixed split, removed four incidental EPF/ETF labels from training, and produced the frozen TF-IDF + balanced LinearSVC primary classifier with temporal-test macro-F1 0.947220. XLM-R LoRA was trained and debugged but not promoted because its V6 temporal-test macro-F1 was 0.7436. The remaining caveats are that `EPF_ETF_CHANGE` has only one test record and `PENALTY_ENFORCEMENT` is the weakest measured class.

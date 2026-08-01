@@ -69,12 +69,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
+                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03_FEATURE_CHECKLIST"
+              "title": "19_M1_Regulation_Summarization"
             }
           },
           {
@@ -299,10 +299,12 @@
       "obsidian-extract-pdf-highlights:PDF Highlights": false
     }
   },
-  "active": "22d18590d71c8738",
+  "active": "942cd4de1a311543",
   "lastOpenFiles": [
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.24084.5a2f285bddc4",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.24084.5a2f285bddc4",
     "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md.tmp.24084.1689b3076ffe",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/00_WORKS_ORGANIZATION_INDEX.md.tmp.19296.8d56e72ee404",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/00_WORKS_ORGANIZATION_INDEX.md.tmp.19296.ca16e9e3fc44",
@@ -312,13 +314,11 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.19296.ac9a692b1605",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.19296.b187a4328dc2",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.19296.75450ad5a56d",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md.tmp.19296.f4b6ac079716",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE2_INGEST_EXTRACTION/observability_console/OBSERVABILITY_CONSOLE_ANALYSIS.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE3_ANNOTATION_CLASSIFICATION/classifier_model_training/CLASSIFIER_MODEL_SELECTION_ANALYSIS.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PHASE5_RESEARCH_FINDINGS/PHASE5_GAP_CLOSURE_PLAN.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/12_TRILINGUAL_TRANSLATION_PIPELINE.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/18_M1_Dataset_And_Model_Lineage.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_EXTRACTION_ACCURACY_AND_DATASET_MANAGEMENT_MANUAL.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/LOG_AND_WORKS/M1_PROGRAM_READINESS_MASTER_INDEX.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/PROGRAM_READINESS/M1_MODEL_INTEGRATION_AND_REORGANIZATION_SESSION_RECORD_2026-08-01.md",

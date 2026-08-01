@@ -14,7 +14,7 @@ Stage E of the A–G pipeline. It runs **after** classification and **before** t
 A ingest → B extract → C preprocess → D classify → [E SUMMARISE] → E2 translate → F alert → G measure
                           │                │              │
                      cleaned_text     change_category   summary_en
-                     + 6 metadata     + sectors         │
+                     + 6 metadata     + sector ledger   │
                        fields         + relevance       └──▶ NLLB → summary_si / summary_ta
 ```
 
@@ -30,7 +30,37 @@ This document specifies **field-grounded constrained generation**: the summary i
 
 The claimed contribution is **faithfulness by construction** — hallucination of regulatory figures is prevented structurally rather than detected statistically. §3 gives the measurement that motivates it, including the finding that verbatim-presence checking alone would catch **0 of 52** observed field errors, which is why the design needs anchor binding and not just span grounding.
 
-**Implementation status:** 📋 **Specified, not built.** No summariser exists in the codebase — there is no `summarise_gazette` task in `app/m1/tasks/`, no `summary_service.py`, and `summary_en` is written by nothing today. Every number in §3 is measured; every design element in §5 onward is a specification. This document is the method the readiness plan asks for, not a record of shipped work.
+**Implementation status:** 🟡 **First conservative backend slice built, not final evidence-complete.** As of 2026-08-01 the codebase has `app/m1/services/summary_service.py`, `app/m1/tasks/summarise_gazette.py`, `scripts/generate_regulation_summaries.py`, `scripts/enqueue_missing_m1_translations.py`, Alembic migration `202608010002_m1_summary_metadata.py`, and unit tests for the core verifier contract. `summary_en` is now written only by the constrained service or left empty with `summary_status='review_required'`. Every number in §3 remains measured; the first implementation follows the selected method but still needs the production `cleaned_text` diagnostic, review workflow, and human evaluation before this feature is final-ready.
+
+### 0.1 Current decision
+
+The correct implementation path is:
+
+```text
+extract better anchored facts first
+→ assemble a controlled English evidence summary
+→ verify every literal and every role
+→ persist summary_en with provenance and review flags
+→ queue NLLB translation for summary_si / summary_ta
+→ optionally add a fluency rewrite only after the verifier exists
+```
+
+The best first version is therefore **not** an LLM summariser and not a plain template. It is a deterministic, anchor-bound, evidence-card summariser whose output can be rejected before it reaches SMEs. The optional neural layer may improve style later, but it must never become the source of regulatory facts.
+
+### 0.2 2026-08-01 backend slice
+
+The first built slice implements the safe part of this design:
+
+| Area | Status |
+|---|---|
+| Pure summary service | Added at `enigmatrix-backend/app/m1/services/summary_service.py`. |
+| DB provenance | Added summary status/source/model/version/flags/hash fields via Alembic revision `202608010002`. |
+| Per-row task | Added `summarise_gazette_task`; rows at `classified` can advance to `summarized`. |
+| Batch backfill | Added `scripts/generate_regulation_summaries.py`; dry-run unless `--write` is supplied. |
+| Translation handoff | Added `scripts/enqueue_missing_m1_translations.py`; reuses `m1_translation_jobs`. |
+| Tests | Added `app/tests/unit/test_m1_summary_service.py`. |
+
+The service currently emits short controlled English evidence summaries using classification context, sector ledger values, ingest gazette identity, anchored effective-date phrases, and simple anchored figure/legal-reference slots. If a hard gate fails — missing source text, missing category, low-margin model row under the configured threshold, ungrounded output literal, unsafe non-SME wording, or length failure — it does **not** write `summary_en`; it records review flags instead.
 
 ---
 
@@ -38,14 +68,14 @@ The claimed contribution is **faithfulness by construction** — hallucination o
 
 Six requirements, each of which rules out at least one otherwise-reasonable approach:
 
-| # | Requirement | What it rules out |
-|---|---|---|
-| R1 | State **what changed** in one clause a non-lawyer can act on | Extractive sentence selection — gazette prose is not written in summary-shaped sentences |
-| R2 | Preserve every rate, amount, date, threshold and legal citation **exactly** | Any free-running abstractive model without a verifier |
-| R3 | Never assert an obligation the source does not create | Zero-shot LLM prompting with no grounding contract |
-| R4 | Say nothing SME-facing when `is_sme_relevant = false` | Summarising before classification |
-| R5 | Survive OCR damage without propagating it as fact | Trusting extracted fields uncritically (§3) |
-| R6 | Be translatable into Sinhala and Tamil without losing figures | Idiomatic or elliptical English |
+| #   | Requirement                                                                 | What it rules out                                                                        |
+| --- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| R1  | State **what changed** in one clause a non-lawyer can act on                | Extractive sentence selection — gazette prose is not written in summary-shaped sentences |
+| R2  | Preserve every rate, amount, date, threshold and legal citation **exactly** | Any free-running abstractive model without a verifier                                    |
+| R3  | Never assert an obligation the source does not create                       | Zero-shot LLM prompting with no grounding contract                                       |
+| R4  | Say nothing SME-facing when `is_sme_relevant = false`                       | Summarising before classification                                                        |
+| R5  | Survive OCR damage without propagating it as fact                           | Trusting extracted fields uncritically (§3)                                              |
+| R6  | Be translatable into Sinhala and Tamil without losing figures               | Idiomatic or elliptical English                                                          |
 
 **R2 and R3 are the load-bearing ones.** A summary that says a levy is "Rs. 5.00 per kg" when the gazette says "Rs. 50.00 per kg" is worse than no summary at all: it is confidently actionable and wrong, and the SME has no way to detect it. This is the same failure class as the FLORES-200 language-code trap in [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) §10.3 and the Wijesekara ordering constraint in §5 of that document — **a confident wrong answer with nothing downstream to flag it.** The module has now met this failure three times in three different subsystems, which is itself an argument for handling it structurally.
 
@@ -86,15 +116,15 @@ The `Penalty.context` field deserves note: it already carries a ±40-character e
 
 ### 2.2 What Stage D adds
 
-| Field | Note |
-|---|---|
-| `change_category` | One of the frozen 8 (V6 taxonomy) |
-| `affected_sectors` | `grocery_retail` / `food_service` / `general_retail` |
-| `is_sme_relevant` | The gate for R4 |
-| `classifier_confidence` | **`NULL` on the production backend** |
+| Field                        | Note                                                                  |
+| ---------------------------- | --------------------------------------------------------------------- |
+| `change_category`            | One of the frozen 8 (V6 taxonomy)                                     |
+| `sector ledger`              | Sector applicability from `m1_regulation_sectors` / expert routing. The frozen LinearSVC model does **not** emit sectors. |
+| `is_sme_relevant`            | Derived from category + sector/manual routing; this is the gate for R4 |
+| `classifier_confidence`      | **`NULL` on the production backend**                                  |
 | `classifier_decision_margin` | An uncalibrated margin — rankable, not thresholdable as a probability |
 
-The confidence contract from [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §7 reaches directly into this design. A summariser cannot gate on "classifier confidence ≥ 0.8" because **there is no calibrated confidence**. Routing must instead use `expert_verified`, `classification_source`, and — when a threshold is eventually set — `classifier_decision_margin` as a *rank*, not a probability.
+The confidence and sector contracts from [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §7 reach directly into this design. A summariser cannot gate on "classifier confidence ≥ 0.8" because **there is no calibrated confidence**. It also cannot say "for grocery retail" because the classifier predicted that sector: the frozen primary is category-only. Routing must instead use `expert_verified`, `classification_source`, the sector ledger, and — when a threshold is used — `classifier_decision_margin` as a *rank*, not a probability.
 
 ### 2.3 Source priority
 
@@ -194,13 +224,13 @@ Three conclusions, each load-bearing:
 
 Following the convention used in [03_M1_Data_Collection.md](03_M1_Data_Collection.md), [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) and [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md): the choice is named by **one decisive constraint**, not by an aggregate score.
 
-| | Faithful by construction? | Needs reference summaries? | Runs offline? | Handles OCR noise | **The one thing that decides it** |
-|---|---|---|---|---|---|
-| **A** Extractive | Yes — output is source text | No | Yes | Propagates it verbatim | **Gazette sentences are 60–120 words of statutory subordinate clause.** Selecting three of them is not a summary a shop owner can act on. Fails R1 outright. |
-| **B** Template | **No** — see §3 | No | Yes | Propagates field errors as fact | **It inherits the extractor's 31% wrong-gazette rate and presents it in fluent prose.** Determinism is not faithfulness. |
-| **C** Fine-tuned seq2seq | No | **Yes — and none exist** | Yes (Colab/Kaggle for training) | Learns to imitate it | **There is no training set.** Building one means hand-writing ~1,000 reference summaries — larger than the annotation effort that produced the classifier. |
-| **D** Zero/few-shot LLM | No | No | **No** | Silently "corrects" it, inventing text | **It fabricates plausible regulatory figures**, which is the one failure this domain cannot absorb. Also breaks the module's offline-operation rule, held for fastText, Tesseract and NLLB alike. |
-| **E** **Field-grounded constrained** | **Yes — by verifier** | No | Yes | Routes to review instead of asserting | **It is the only option where "the output contains no figure absent from the source" is a checkable property rather than a hope.** ✅ **Selected** |
+|                                      | Faithful by construction?   | Needs reference summaries? | Runs offline?                   | Handles OCR noise                      | **The one thing that decides it**                                                                                                                                                                 |
+| ------------------------------------ | --------------------------- | -------------------------- | ------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A** Extractive                     | Yes — output is source text | No                         | Yes                             | Propagates it verbatim                 | **Gazette sentences are 60–120 words of statutory subordinate clause.** Selecting three of them is not a summary a shop owner can act on. Fails R1 outright.                                      |
+| **B** Template                       | **No** — see §3             | No                         | Yes                             | Propagates field errors as fact        | **It inherits the extractor's 31% wrong-gazette rate and presents it in fluent prose.** Determinism is not faithfulness.                                                                          |
+| **C** Fine-tuned seq2seq             | No                          | **Yes — and none exist**   | Yes (Colab/Kaggle for training) | Learns to imitate it                   | **There is no training set.** Building one means hand-writing ~1,000 reference summaries — larger than the annotation effort that produced the classifier.                                        |
+| **D** Zero/few-shot LLM              | No                          | No                         | **No**                          | Silently "corrects" it, inventing text | **It fabricates plausible regulatory figures**, which is the one failure this domain cannot absorb. Also breaks the module's offline-operation rule, held for fastText, Tesseract and NLLB alike. |
+| **E** **Field-grounded constrained** | **Yes — by verifier**       | No                         | Yes                             | Routes to review instead of asserting  | **It is the only option where "the output contains no figure absent from the source" is a checkable property rather than a hope.** ✅ **Selected**                                                 |
 
 ### 4.3 Scored matrix
 
@@ -220,9 +250,27 @@ Weights: Faithfulness ×5 (R2/R3 are the requirements that can harm a user), Act
 
 > **This table did not make the decision, and should not be presented as though it did.** The weights were chosen after the constraints in §4.2 were understood, and different defensible weights change the A/B ordering. Its honest value is narrower: it shows that E does not win by trading away everything else — it is not first on fluency and does not need to be. **The decision rests on §4.2 and §3.**
 
-### 4.4 Worked example — one real gazette through all five
+### 4.4 Practical build options
 
-**Source:** `GZT_2487_02`, V6 temporal test split, category `TAX_RATE_CHANGE`, sectors `grocery_retail` + `food_service`. Abridged, with the real OCR noise retained:
+The implementation choice is slightly narrower than the research comparison above. In practice there are five ways to ship something in this codebase:
+
+| Option | What would be built | Strength | Blocking weakness | Use it? |
+|---|---|---|---|---|
+| **P0: no generated summary** | Keep title/category only; send users to raw text | Honest and fastest | Does not meet the trilingual summary claim | Only as fallback |
+| **P1: template from current fields** | Fill sentences from `gazette_number`, `effective_date`, `penalties`, `principal_act_amended` | Easy to build | Known to cite wrong gazettes and miss rates/dates | **No** |
+| **P2: raw-text LLM prompt** | Prompt an LLM with cleaned text and ask for SME summary | Fluent | Fabricates plausible rates, prior values, and audiences | **No for production claim** |
+| **P3: anchor-bound evidence summary** | Extract verified slots from `section_chunks`, assemble controlled English, reject on verifier failure | Correct by construction; no reference summaries needed | Less fluent; requires extraction work first | **Yes — first shipped version** |
+| **P4: P3 + optional rewrite** | Rewrite only the verified P3 summary, then re-run verifier | Better readability | Adds GPU/model complexity but no new facts | Later, after P3 passes |
+
+**Best option:** build **P3** first. It is the smallest version that can be defended as a technology contribution and as a safe SME-facing product. P4 is a usability enhancement, not the core method. P1 and P2 should appear only as baselines in evaluation, not as deployed approaches.
+
+The phrase to use in the thesis is therefore:
+
+> The system uses anchor-bound evidence summarisation, not open-ended abstractive summarisation. The generated English is a controlled evidence statement whose numbers, dates, citations and sector claims are mechanically verified before translation.
+
+### 4.5 Worked example — one real gazette through all five
+
+**Source:** `GZT_2487_02`, V6 temporal test split, category `TAX_RATE_CHANGE`; sector applicability shown here is from the sector ledger / manual routing (`grocery_retail` + `food_service`), not from the LinearSVC classifier. Abridged, with the real OCR noise retained:
 
 > `...LEVY ACT, No. 48 oF 2007 Order under Section 2 1. BY virtue of the powers vested in me under Section 2 of the Special CommodityLevy Act, No. 48 of 2007, I, [Minister], ... do by this Order impose in respect of the commodity specified in Colunm (I) of the Schedule hereto a Special Commodity Levy at the rate specified in corresponding entry in Colunm (II)... Schedule Column (I) Column (II) Commodity ... H. S. Code ... 1. 10.05 1005.90 Other – maize Rs. 50.00 per kg 2. The Order ... published in the Extraordinary Gazette Notification No. 2469/12 of December 31, 2025, in respect of Maize (HS Code 1005.90) is rescinded with effect from May 05, 2026. 1A - PG 7686 - 428 (05/2026) ... 2A I fldgi ( ^I& fPoh - YS% ,xld ... 3. This Order shall be effective commencing from May 05, 2026 to December 31, 2026...`
 
@@ -276,7 +324,7 @@ Every literal is anchor-verified. `Rs. 50.00 per kg` is bound by the schedule-ro
 flowchart TD
     A[cleaned_text + section_chunks] --> B[Anchor-bound slot extraction]
     M[Stage-C metadata fields] --> B
-    D[change_category · sectors · is_sme_relevant] --> G
+    D[change_category · sector ledger · relevance gate] --> G
     B --> V{Anchor verified?}
     V -- no --> O[Slot omitted + review flag]
     V -- yes --> S[Verified slot: value + span + anchor]
@@ -327,7 +375,7 @@ Deterministic, stdlib-only, unit-testable in isolation — the same design const
 |---|---|
 | Literal grounding | Any number, date, percentage or currency amount in the output is absent from the source after normalisation |
 | Anchor coverage | Any slot filled without a verified anchor |
-| Sector containment | A sector named that is not in `affected_sectors` |
+| Sector containment | A sector named that is not in the expert/manual sector ledger for the regulation |
 | Relevance | SME-action wording present while `is_sme_relevant = false` |
 | Figure preservation | A figure present in the title or schedule is silently dropped |
 | Length | Outside 1–3 sentences |
@@ -335,7 +383,25 @@ Deterministic, stdlib-only, unit-testable in isolation — the same design const
 
 A rejection is not an error. It routes the row to the admin review queue with the failed check named.
 
-### 5.4 The optional abstractive layer, and where it runs
+### 5.4 Correct Stage-E procedure
+
+The production procedure should be deterministic up to the optional rewrite:
+
+| Step | Procedure | Output |
+|---|---|---|
+| **E0** | Load the regulation row, `cleaned_text`, all `section_chunks`, extracted metadata, penalties/sub-documents, `change_category`, `classification_source`, `classifier_decision_margin`, and sector ledger rows. | Complete source bundle |
+| **E1** | Refuse automatic summarisation when the row is not classified/verified enough for the selected policy. Low-margin rows can still be queued, but with `summary_status='review_required'`. | Eligibility decision |
+| **E2** | Build candidate slots from `section_chunks`, not only `classification_chunk`. The classifier head chunk is allowed only as a fallback for very short notices. | Candidate slots |
+| **E3** | Bind each slot to a role-specific anchor: identity gazette, cross-referenced gazette, effective-from date, effective-to date, rate/levy/duty, penalty, principal act, affected commodity/product, sector applicability. | `VerifiedSlot` list |
+| **E4** | Compose a controlled English summary from verified slots and category-specific frames. Missing slots produce omitted clauses and named quality flags. | Draft `summary_en` |
+| **E5** | Run the verifier: literal grounding, anchor coverage, sector containment, relevance gate, figure preservation, length, OCR damage. | Pass/reject |
+| **E6** | Persist only passing summaries. For rejected summaries, leave `summary_en=NULL`, store the failed checks, and show the row in admin review. | DB write or review item |
+| **E7** | When `summary_en` is written, enqueue `summary -> si` and `summary -> ta` through the existing `m1_translation_jobs` pull queue. | NLLB jobs |
+| **E8** | Human review can approve, edit, or force re-generation. Manual edits must win over later machine output unless the admin explicitly requests retranslation. | Reviewed summary |
+
+This procedure is intentionally conservative. It makes "not enough verified evidence to summarise" a valid system output. That is better than producing a fluent paragraph whose legal facts cannot be defended.
+
+### 5.5 The optional abstractive layer, and where it runs
 
 The assembled output is correct but stilted. A **local, offline** seq2seq model may rewrite it for fluency — under two rules:
 
@@ -487,6 +553,21 @@ Failure 10 is a deliberate choice: **a NULL summary is honest and a contentless 
 | **9** | *(Optional)* local seq2seq rewrite on Colab/Kaggle via a `m1_summary_jobs` lease table | Fluency, never a dependency |
 
 Steps 1–3 are extraction work, not summarisation work. **That ordering is the finding of §3**: the summariser is not the bottleneck; the fields it would have to trust are.
+
+Current implementation note: steps 4–6 now exist as a conservative first slice. Steps 0–3 and 7–9 are still required before this becomes final programme evidence.
+
+### 10.1 Build gates
+
+| Gate | Can proceed when | Do not claim yet |
+|---|---|---|
+| **G0 — diagnostic confirmed** | The §3 measurement has been rerun on production `cleaned_text` with `published_date` supplied. | Production field accuracy |
+| **G1 — slot extraction ready** | Identity gazette, cross-reference gazette, effective dates, rates/levies/duties/thresholds, principal act and penalty slots carry spans and anchors. | Automated summaries |
+| **G2 — constrained summary ready** | `summary_service.py` can produce `summary_en` or a named rejection without DB access, with literal grounding and anchor coverage tests. | Trilingual summary feature |
+| **G3 — backend integration ready** | A Celery/backfill command writes `summary_en`, provenance, status and quality flags, then marks status `summarized` only on verifier pass. | Production pipeline completion |
+| **G4 — translation ready** | Existing `m1_translation_jobs` drains `summary -> si/ta`; numeric preservation EN→SI/TA passes. | Verified Sinhala/Tamil summaries |
+| **G5 — evaluation ready** | The 80-document human protocol and E/E′ ablation are complete. | Technology novelty as evidence, rather than design |
+
+This gate order is the answer to "what should I work on next?" Build G0–G2 before any UI polish for summaries. A UI showing unsafe summaries is worse evidence than no summary UI.
 
 ---
 
