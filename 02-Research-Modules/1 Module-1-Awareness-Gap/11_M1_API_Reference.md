@@ -562,6 +562,25 @@ Soft-delete a regulation (`is_active = false`).
 
 ## 4. Classification and Verification
 
+> [!warning] Contract change 2026-08-01 — **`confidence` is nullable, and every example below is written for the ONNX path.**
+> The default backend is now `linearsvc` (`M1_CLASSIFIER_BACKEND`), serving the frozen TF-IDF + LinearSVC pipeline. On that path a classification response carries:
+>
+> ```json
+> {
+>   "confidence": null,
+>   "confidence_type": "not_available_uncalibrated_linearsvc",
+>   "decision_score": 1.84,
+>   "decision_margin": 0.97,
+>   "second_category": "TAX_RATE_CHANGE",
+>   "class_scores": { "…": "…" },
+>   "sectors": []
+> }
+> ```
+>
+> **Three rules for any client.** Treat `confidence` as nullable — a numeric literal like `0.947` in the samples below is an ONNX-path illustration, not the current default. **Never render `decision_margin` as a percentage**: it is a signed distance from a decision hyperplane, not a probability, and 0.5 does not mean "50% sure". Expect `sectors: []` — the frozen model is category-only; sector prediction remains with the ONNX dual-head engine.
+>
+> Margins may legitimately drive ranking and review-queue priority. A calibrated probability requires a separately trained and evaluated calibration layer — do not transform margins. Full contract: [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §7 · lineage: [[18_M1_Dataset_And_Model_Lineage]] §4.
+
 ### `POST /api/v1/m1/regulations/{id}/classify`
 
 Trigger on-demand reclassification of a specific regulation using the ONNX inference engine described in [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) §3.
@@ -1093,6 +1112,7 @@ Batch inference endpoint for classifying all regulations whose `change_category`
 1. Queries `SELECT id FROM m1_regulations WHERE change_category IS NULL AND status != 'FAILED'`
 2. Batches rows in groups of 32
 3. Runs ONNX-exported XLM-R dual-head forward pass for each batch
+   - **Backend change 2026-08-01:** the default classifier backend is now `linearsvc` (`M1_CLASSIFIER_BACKEND`), loading the frozen TF-IDF + LinearSVC pipeline. It returns **`confidence: null`** with `confidence_type: "not_available_uncalibrated_linearsvc"`, plus `decision_score`, `decision_margin`, `second_category` and `class_scores`, and returns **empty `sectors`** (no sector head). Clients must treat `confidence` as nullable and must not render margins as percentages. The ONNX dual-head path described here remains available via `M1_CLASSIFIER_BACKEND=onnx` and is still the only engine that predicts sectors. See [[18_M1_Dataset_And_Model_Lineage]] §4.
 4. Writes `change_category`, `sector_tags`, `classification_confidence` to each row
 5. Sets `needs_review=true` for any row where `classification_confidence < 0.80`
 

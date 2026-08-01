@@ -612,11 +612,75 @@ However, for the full production pipeline, the Sinhala and Tamil text sections a
 | `m1_regulations.language_distribution_json` + `is_mixed` | ✅ Shipped | `m1_regulations` |
 | XLM-R base selection + per-language F1 measurement | 🔲 BUILD_11 | `model_registry.json:metrics_per_language` |
 | Quarterly CER audit set (5 docs) | 🟡 Partial — process defined, set not frozen | `research/data/ocr_audit/` |
-| Sinhala/Tamil summary translation | 🔲 Deferred | summariser stage |
+| Sinhala/Tamil title + summary translation (NLLB-200 queue) | ✅ Shipped 2026-07-31 — see §10 | `backend/app/m1/services/translation_service.py` · `backend/app/m1/api/translation.py` · `backend/app/m1/colab/nllb_translation_worker.py` |
 
 ---
 
-## 10. Conclusion
+## 10. Machine Translation Pipeline (NLLB-200, EN → SI/TA)
+
+**Shipped 2026-07-31.** Supersedes the MarianMT plan recorded against Stage E in [00_INDEX.md](00_INDEX.md).
+
+### 10.1 The gap this closes
+
+`m1_regulations` has carried `title_si` / `title_ta` / `summary_si` / `summary_ta` / `real_world_example_si` / `real_world_example_ta` since the initial schema, and the SME survey flow renders regulation context cards in whichever locale the respondent picked. Until now those columns were filled only by hand, through the Session-12 manual queue. At ~180 gazettes per ingest window that is not a workable path, so the trilingual promise in the research design was in practice an English-only product.
+
+**Why this is a research point and not just a feature.** The awareness gap this module measures is not evenly distributed across languages. An SME owner who reads only Sinhala or Tamil cannot act on a gazette published in English — and that is part of the barrier under study (RQ2, and the channel analysis behind RQ4). A platform that surfaces regulatory change in English only would be *measuring* the gap while reproducing it.
+
+### 10.2 Architecture: the backend never calls the GPU
+
+NLLB-200 runs in Google Colab — free GPU capacity, and also: no stable public URL, disconnects on idle, sessions reclaimed without warning. So the direction is inverted. The backend writes rows to a queue table; Colab **pulls** them.
+
+```mermaid
+flowchart LR
+    E[extract_gazette] -->|enqueue| Q[(m1_translation_jobs<br/>pending)]
+    C[Colab notebook] -->|POST /worker/lease| Q
+    Q -->|batch + lease token| C
+    C -->|NLLB-200 on T4| C
+    C -->|POST /worker/submit| W[write-back]
+    W --> R[(m1_regulations<br/>title_si / title_ta / …)]
+```
+
+| Property | Why it follows from pulling rather than pushing |
+|---|---|
+| No tunnel / ngrok / inbound port | A push design needs a Colab URL re-pasted into settings every session. |
+| A reclaimed session loses nothing | A lease is a *visibility timeout*, not a lock. Jobs return to `pending` after 300 s and the next worker takes them. |
+| Translation can never fail an extraction | The pipeline's only interaction is an `INSERT`, after the extraction has committed, inside its own `try`. |
+| Two Colab sessions can run concurrently | `SELECT … FOR UPDATE SKIP LOCKED` — each transaction claims a disjoint set. |
+
+The failure mode this accepts: with no worker attached, nothing is translated. That is why the UI treats *pending > 0 with zero online workers* as a warning state rather than a statistic.
+
+### 10.3 The language-code trap
+
+NLLB does **not** take ISO-639-1. It takes FLORES-200 codes carrying the script — `si` → `sin_Sinh`, `ta` → `tam_Taml`, source `eng_Latn`. This fails *silently*: given a wrong `forced_bos_token_id` the model does not error, it produces fluent output in the wrong language. So the mapping lives in exactly one place server-side and **the server sends the code to the worker on every job**. The notebook never guesses.
+
+This is the same class of error as the ordering constraint in §5: a wrong answer delivered confidently, with nothing downstream to flag it.
+
+### 10.4 Machine translation cannot clobber a human
+
+- Jobs queued by the pipeline (`origin='pipeline'`) write **only into an empty column**. A Sinhala title a CA reviewer has already typed survives every later automatic run; the machine's output is recorded on the job row only.
+- Jobs queued by the explicit *Retranslate* button (`origin='manual'`) overwrite — there the human is the one asking for the machine's version.
+
+This is why the new queue and the pre-existing manual queue never fight, with no coordination between the two surfaces. The admin page labels each SI/TA value **MT** or **Human**, inferred by comparing the column against the completed job's output rather than stored in a provenance column — deliberately, so it reads correctly for values hand-entered long before this queue existed.
+
+### 10.5 Operator flow
+
+1. Backend `.env`: `M1_TRANSLATION_WORKER_KEY=$(openssl rand -hex 32)`, then `make migrate` (revision `202607310001`). The key is **empty by default on purpose** — with none set the worker endpoints 503, so a deployment nobody thought about cannot expose an unauthenticated write path into `m1_regulations`.
+2. Colab → T4 GPU runtime → paste `app/m1/colab/nllb_translation_worker.py` → set `BACKEND_URL` + `WORKER_KEY` → run, leave the tab open.
+3. Extraction run page → tick **"Translate title/summary → සිංහල / தமிழ்"** → Extract all / Run all steps as normal. An inline hint reports whether a GPU is actually attached — the failure this prevents is ticking the box, watching extraction succeed, and assuming translation happened.
+4. `/admin/m1/translation` → queue health, backfill, and the per-regulation English / Sinhala / Tamil review panel.
+
+### 10.6 Limits worth stating before the viva
+
+1. **MT quality is unmeasured.** No BLEU/chrF against a reference set yet. Each job stores `model_name`, `device`, and `latency_ms` so a sampled human evaluation can be attributed later. Treat SI/TA as **draft until reviewed** in any claim made from this data.
+2. **Domain terminology is generic.** NLLB has no Sri Lankan legal-register training signal, so statutory terms come back literal rather than in established Sinhala/Tamil legal usage. Glossary-constrained decoding is the natural next step and is the honest answer if asked.
+3. **Summaries are mostly empty today** — `summary_en` is written by the Stage-E summariser, which has not shipped, so in practice this currently translates titles. The enqueue already handles summaries the moment they exist. The summarisation method — and the constraint it places on the English so that figures survive translation — is specified in [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md); its §7.4 makes **numeric preservation EN → SI/TA** the cheapest first measurement of the MT quality that §10.6.1 records as unmeasured.
+4. **`MAX_SOURCE_CHARS = 8000`.** Longer text is skipped with a warning rather than half-translated; NLLB's ~512-token window means long inputs are sentence-chunked by the worker.
+
+> **Full engineering spec:** `enigmatrix-docs/m1/10_M1_3_NLLB_Translation_Pipeline.md` in the code repo — schema table, API surface, and the complete file list.
+
+---
+
+## 11. Conclusion
 
 The Sinhala and Tamil NLP challenges in Sri Lankan gazette processing are addressed through three technology choices, each decided by a single constraint rather than an overall score. fastText was selected for language detection not because it is the most accurate library — the field is a near-tie — but because it is the only offline option that returns top-K probabilities, which is what makes the `mixed` verdict computable on bilingual gazettes. XLM-R was selected for classification because it is the only candidate that is not clearly worst on any of the three languages, an accident of its 8.1M Sinhala pre-training tokens against mBERT's 2.3M. Tesseract 5 LSTM was selected despite being ~4 pp behind the cloud OCR services, because offline operation is not negotiable for a corpus this size.
 

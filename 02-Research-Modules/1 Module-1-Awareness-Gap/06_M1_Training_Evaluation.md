@@ -56,7 +56,115 @@ This document specifies the complete training and evaluation protocol for the du
 
 Evaluation covers per-class F1, confusion matrix analysis, calibration (ECE ≤ 0.05), cross-lingual F1 disaggregation across English, Sinhala, and Tamil subsets, and a six-axis slice analysis with an explicit taxonomy of the four "cliff" patterns that indicate specific, actionable defects.
 
-**Implementation status:** 🔲 Deferred to BUILD_11. The protocol, hyperparameters, split rules, augmentation recipes, and slice framework are frozen. The training campaign, the augmentation ablation, and the LR grid land with BUILD_11. All F1 figures in this document are **projections or targets** until `model_registry.json` carries measured values; they are marked as such at each occurrence.
+**Implementation status:** ✅ Gate passed 2026-08-01 — **by TF-IDF + LinearSVC, not by XLM-R.** The protocol, hyperparameters, split rules, augmentation recipes and slice framework are frozen and were applied. Full GPU LoRA training ran in three configurations against the frozen V6 dataset and failed the ≥ 0.92 acceptance criterion on the temporal test split (best 0.743563); the TF-IDF + balanced LinearSVC baseline passed it at **0.947220** and was frozen as the primary classifier. See §13 for the recorded acceptance result.
+
+> [!warning] **Still open, and gated:** slice analysis (§7) and error analysis (§8) have **not** been re-run against the frozen model — and the confidence slice is impossible as written, because LinearSVC emits an uncalibrated margin rather than a probability. Augmentation ablation and ONNX export are moot for the model that shipped. Figures elsewhere in this document that describe expected XLM-R behaviour remain projections and should be read as design intent, not results.
+
+### 0.1 Measured Preparation Status — 2026-07-30 *(superseded 2026-08-01 — see §0.2)*
+
+Frozen dataset evidence:
+
+```text
+C:\Reasearch\xyz\research\data\labeling\gold_standard_v3_1128.csv
+C:\Reasearch\xyz\research\data\labeling\iaa_report_v3_1128.json
+C:\Reasearch\xyz\research\data\labeling\iaa_report_summary_v3_1128.csv
+```
+
+Current split evidence:
+
+```text
+C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations\train.parquet = 560 rows
+C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations\val.parquet   = 120 rows
+C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified\train.parquet = 790 rows
+C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified\val.parquet   = 169 rows
+C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified\test.parquet  = 169 rows
+```
+
+Current split note:
+
+```powershell
+# The v3 stratified split already exists at:
+C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified
+
+# For regeneration details, use:
+E:\Obsidian\sme\02-Research-Modules\1 Module-1-Awareness-Gap\final\works\PROGRAM_READINESS\M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE_MANUAL.md
+```
+
+Current split limitation:
+
+- This split is stratified for category balance, not temporal by `gazette_published_date`.
+- The older v1 deterministic key split is not strong enough for current rare-domain evaluation.
+- `EPF_ETF_CHANGE` is no longer zero in v3, but still has only 11 total examples.
+- `PENALTY_ENFORCEMENT` is the weakest LinearSVC class and needs error review — still true on V6 (test F1 0.857).
+
+Baseline evidence:
+
+```text
+TF-IDF LogReg test macro-F1    = 0.8627
+TF-IDF LinearSVC test macro-F1 = 0.9080
+Report                         = C:\Reasearch\xyz\storage\models\m1\baselines_v3_1128_stratified\baselines.json
+```
+
+### 0.2 Final Measured Result — 2026-08-01 (supersedes §0.1)
+
+The v3 stratified split above was replaced by the V6 **fixed temporal** split, and the gate was resolved:
+
+```text
+dataset                = m1_regulations_v6_1110_clean_fixedsplit
+split                  = 777 train / 166 validation / 167 test  (TEMPORAL, fixed since V4)
+                         V6 changed 4 train-split labels only, so the test split is
+                         byte-identical to V5 and V5-vs-V6 comparisons stay valid
+
+TF-IDF LinearSVC  val  = 0.924476
+TF-IDF LinearSVC  test = 0.947220     accuracy 0.958084 (160/167)   <-- FROZEN PRIMARY
+TF-IDF LogReg     test = 0.882481
+XLM-R LoRA best   test = 0.743563     (train 0.969340, val 0.902693)
+
+per-class test F1: LABOUR_LAW 1.000 | EPF_ETF_CHANGE 1.000 (n=1) | SECTOR_SPECIFIC 0.970
+                   IMPORT_EXPORT 0.970 | PRODUCT_STANDARD 0.941 | BUSINESS_REGISTRATION 0.923
+                   TAX_RATE_CHANGE 0.917 | PENALTY_ENFORCEMENT 0.857
+
+artifact  models/m1/linearsvc_v6_primary/linearsvc_pipeline.joblib
+SHA256    1D7F84754421A881EE1B5FA0F008A0CC3DB4E24F52CE6D97CE155CB4D1923CFA
+reproduced off-machine: 0.9472199858964565  (byte-identical to the Kaggle run)
+```
+
+**Three things this table must always be read with.** `EPF_ETF_CHANGE` 1.000 is **one test document**. The V6 test split is now **spent for model selection** — four models have been compared on it, so further tuning against it invalidates the 0.947220. And the frozen model emits **no calibrated probability**, so every metric here that depends on confidence (ECE, calibration, confidence-stratified slices) is currently uncomputable — see [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §7.
+
+CPU LoRA smoke evidence:
+
+```text
+CUDA availability      = false; CPU only
+Full-split CPU attempt = datasets/m1_regulations, no registry written, not counted
+Smoke split            = datasets/m1_regulations_smoke
+Smoke split rows       = train 16 / validation 8 / test 8
+Smoke output           = C:\Reasearch\xyz\storage\models\m1\xlmr_lora_smoke
+Base model             = xlm-roberta-base
+Seeds                  = 42
+Epochs                 = 1
+LoRA r                 = 8
+Validation macro-F1    = 0.1111
+Test macro-F1          = 0.0000
+Gate pass              = false
+```
+
+Smoke split class distribution:
+
+```text
+train: SECTOR_SPECIFIC=11, TAX_RATE_CHANGE=2, LABOUR_LAW=2, IMPORT_EXPORT=1
+val  : SECTOR_SPECIFIC=7, PRODUCT_STANDARD=1
+test : SECTOR_SPECIFIC=8
+```
+
+Interpretation:
+
+The baseline numbers are usable as the current non-neural floor. The full-split CPU attempt is not a result because it did not write a registry. The LoRA smoke output is only an engineering proof that dependencies, model loading, the LoRA training loop, and artifact writing work on this laptop. It is not a defensible RQ1 classifier result and must not be promoted to ONNX.
+
+Detailed runbook for the exact commands, warning interpretation, split distribution, and next GPU-training order:
+
+```text
+final\works\PROGRAM_READINESS\M1_TRAINING_PREPARATION_AND_SMOKE_TEST_RUNBOOK.md
+```
 
 ---
 
@@ -128,7 +236,7 @@ def temporal_split_with_window(df: pd.DataFrame, min_test_days: int = 30):
 
 The actual date-window achieved, and any fallback flag, are recorded in `model_registry.json` so reviewers can audit the temporal claim. Note the loop's lower guard at `int(0.70 * n)`: the window can eat into validation but never into training, because a shrinking training set changes what is being measured.
 
-> **Test set isolation:** The test split is stored in a separate Parquet file (`data/test_split.parquet`) and loaded only once — at final evaluation. No hyperparameter decisions are made based on test-set performance. Record the exact date boundary of each split in `model_registry.json`.
+> **Test set isolation:** The test split is stored in a separate Parquet file and loaded only once — at final evaluation. In the current v1 preparation run, this file is `C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations\test.parquet`; it was created by `--by key`, not by the ideal temporal window above. No hyperparameter decisions should be made based on test-set performance. Record the exact split method, boundaries, and hashes in the final `model_registry.json`.
 
 ### 1.3 Reproducibility and the Run Fingerprint
 
@@ -142,7 +250,7 @@ The actual date-window achieved, and any fallback flag, are recorded in `model_r
   "trained_at": "2026-05-14T03:17:42Z",
   "git_commit_sha": "ab12cd34ef56...",
   "dataset": {
-    "labeled_set_path": "research/data/test_split.parquet",
+    "labeled_set_path": "enigmatrix-ml/datasets/m1_regulations/test.parquet",
     "labeled_set_sha256": "9e7a4f...",
     "split_boundaries": {"train_end": "2024-06-30", "val_end": "2024-09-30",
                          "test_end": "2024-12-31", "test_window_days": 92}
@@ -1077,6 +1185,7 @@ Note also the `R -->|No| S` edge. It loops back into augmentation and threshold 
 - Macro-F1 ≥ 0.92 (domain), ≥ 0.88 (sector); per-class F1 ≥ 0.80; ECE ≤ 0.05.
 - Per-language targets met: EN ≥ 0.93, SI ≥ 0.88, TA ≥ 0.86 for domain classification.
 - XLM-R beats the TF-IDF+LR production baseline by ≥ 0.10 macro-F1 on the same temporal test split.
+  - **Result 2026-08-01: NOT MET, and the criterion decided the model.** On the frozen V6 temporal test split XLM-R + LoRA scored 0.7436 macro-F1 against LinearSVC's 0.9472 — the baseline won by 0.204. Training macro-F1 was 0.9693, so this was a generalization failure, not an optimization failure. Transformer tuning was stopped and **TF-IDF + balanced LinearSVC was frozen as the primary classifier** (validation 0.9245, test 0.9472, accuracy 0.9581). This acceptance criterion did its job: it prevented a worse model from being promoted on the strength of its validation score alone. See [[18_M1_Dataset_And_Model_Lineage]] §3.
 - Both mandatory baselines run on the identical split before any deep-learning result is reported.
 
 **Slice analysis**

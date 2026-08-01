@@ -55,7 +55,56 @@ This document specifies the classification model architecture for Module 1, whic
 
 Four architectural approaches are evaluated: **training from scratch**, **fine-tuning** a **pre-trained multilingual BERT-family model**, **zero-shot classification via large language models**, and **rule-based classification**. Fine-tuning `facebook/xlm-roberta-base` with **Low-Rank Adaptation** (LoRA) is selected based on its superior multilingual performance, reproducibility, offline inference capability, and cost-effectiveness. **A dual-head architecture shares a common XLM-R encoder with separate classification heads for domain prediction and sector prediction, enabling joint training with a combined loss function.**
 
-**Implementation status:** 🟡 Partial. The rule-based baseline and the 50-document zero-shot GPT-4 pilot **have been run** (Sep 2025) — the 0.60 and 0.72 F1 figures below are measurements, not estimates. The sampling pipeline lands with BUILD_07 + BUILD_11; the XLM-R fine-tune and the LoRA ablation grid land with BUILD_11. The ~0.92 F1 for the chosen approach is a **projection** whose derivation is given in §3.3; it is superseded by measured numbers the moment BUILD_11 writes `model_registry.json`.
+**Implementation status:** ✅ Decided — **and the decision went against the architecture this document selects.** The rule-based baseline and the 50-document zero-shot GPT-4 pilot were run (Sep 2025); the 0.60 and 0.72 F1 figures below are measurements. The XLM-R + LoRA fine-tune was then run in full on a GPU against the frozen V6 dataset, in three configurations, and **lost to the TF-IDF baseline on the temporal test split** — see the outcome callout in §4 and the acceptance result in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §13.
+
+> [!important] **The production classifier is TF-IDF + `LinearSVC(class_weight="balanced")`, frozen at `models/m1/linearsvc_v6_primary/`, temporal-test macro-F1 0.947220.** The ~0.92 projection in §3.3 was met — by a different model than the one projected. The LoRA ablation grid was deliberately not run (§8), and no ONNX artifact was exported. This section is retained as the design rationale that justified trying XLM-R, not as a description of what is serving. Full record: [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] and [[18_M1_Dataset_And_Model_Lineage]].
+
+### 0.1 Current Measured Inputs To This Architecture — 2026-07-31 *(superseded 2026-08-01 — see §0.2)*
+
+```text
+accepted gold rows       = 1128
+category kappa           = 0.947215
+mean sector kappa        = 0.965567
+SME relevance kappa      = 0.914637
+split                    = 790 train / 169 validation / 169 test, stratified v3 split
+TF-IDF LogReg macro-F1   = 0.862652
+TF-IDF LinearSVC macro-F1= 0.908012
+CPU LoRA smoke           = completed; gate_pass=false; not promotable
+CUDA on current laptop   = false
+```
+
+Architecture implication *(as understood on 2026-07-31)*:
+
+- The measured LinearSVC baseline is now the practical non-neural floor to beat on the current v3 split.
+- The v3 stratified split is better for rare-domain evaluation than the older deterministic key split, but it is still not a temporal split.
+- The current gold set improved rare-domain coverage, but `EPF_ETF_CHANGE` remains sparse with 11 total examples.
+- Full LoRA must run on a GPU environment and beat the v3 LinearSVC baseline before this architecture can be claimed as the production classifier.
+
+### 0.2 Outcome — 2026-08-01 (supersedes §0.1)
+
+The condition set by the last bullet above was tested and **not met**. The V6 dataset replaced v3 with a fixed *temporal* split, and the final numbers are:
+
+```text
+dataset                     = m1_regulations_v6_1110_clean_fixedsplit (777 / 166 / 167, temporal)
+TF-IDF LinearSVC val        = 0.924476
+TF-IDF LinearSVC test       = 0.947220     <-- FROZEN AS PRIMARY, gate >= 0.92 passed
+TF-IDF LogReg test          = 0.882481
+XLM-R LoRA (best of 3) test = 0.743563     <-- training macro-F1 0.969340, val 0.902693
+head-to-head on 167 rows    = both 150 / SVC-only 10 / XLM-R-only 3 / both wrong 4
+frozen artifact             = models/m1/linearsvc_v6_primary/linearsvc_pipeline.joblib
+SHA256                      = 1D7F84754421A881EE1B5FA0F008A0CC3DB4E24F52CE6D97CE155CB4D1923CFA
+```
+
+The transformer's failure was **generalization, not optimization** — it fit the training set (0.9693) and lost 0.16 macro-F1 between validation and the temporal test. At 777 training rows across 8 classes with a 4-row minority, a strongly regularized lexical model is the better estimator. That is the defensible form of the finding; "classical beats neural" is not.
+
+Two consequences that reach outside this document: the frozen model has **no sector head** (`sectors: []`), and it emits an **uncalibrated margin rather than a probability** (`confidence: null`). Both are contracts now — see [[11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §7.
+
+Detailed training-preparation and smoke-test runbook:
+
+```text
+final\works\PROGRAM_READINESS\M1_TRAINING_PREPARATION_AND_SMOKE_TEST_RUNBOOK.md
+final\works\PROGRAM_READINESS\M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE_MANUAL.md
+```
 
 ---
 
@@ -72,7 +121,7 @@ Four architectural approaches are evaluated: **training from scratch**, **fine-t
 | Stratified only | Easy to implement and explain | ❌ Misses topical coverage — tax dominates the corpus | If topical diversity is somehow guaranteed by the source distribution |
 | Active-learning only, no stratification | Maximally informative per label | ❌ Starts cold — the first 300 labels need stratification to produce a usable AL baseline at all | After the first 300 labels are in; this is exactly what §1.3 does |
 
-**Implementation status:** 🔲 Deferred (BUILD_07 + BUILD_11 — `ml/m1/data/samplers.py`, `scripts/sample_for_labeling.py`).
+**Implementation status:** 🟡 Implemented and executed through Batches 02-05. The accepted result is 800 gold rows, but rare-domain coverage is still below the original 50/domain target.
 
 ### 1.1 Step 1 — Stratified Random Sampling
 
@@ -379,7 +428,7 @@ A keyword-regex baseline achieves **0.60 macro-F1** on the domain classification
 
 This baseline is retained as `category_baseline` in the `m1_regulations` schema for the ablation study and confidence calibration. It is not used for production classification.
 
-**Why keep a 0.60 model at all.** It is the floor. The TF-IDF + LR *production baseline* does not appear as a row in §3.1 because it does not compete on the architectural axis — it is the ablation comparator in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §6. Its 0.60 on the 50-document pilot is the lower bound that fine-tuned XLM-R must beat **by ≥ 0.10** to justify the engineering effort at all. A deep model that beats regex by 4 pp is not a research result; it is an argument for shipping the regex.
+**Why keep a 0.60 model at all.** It is the historical floor. The TF-IDF baselines do not appear as rows in §3.1 because they do not compete on the architectural axis — they are the ablation comparators in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §6. The 2026-07-30 v1 split measured `tfidf_logreg=0.4980` and `tfidf_linsvc=0.6167` macro-F1, so the practical floor to beat is now the LinearSVC result. A deep model that does not convincingly exceed that number is not a research result; it is an argument for shipping the simpler baseline or collecting more labels.
 
 ### 3.6 Cost and Latency (Steady State, 30 Gazettes/Day)
 
@@ -408,6 +457,15 @@ Once fine-tuning is settled, four further choices remain open. These are the one
 ---
 
 ## 4. Selected Architecture: XLM-R Dual-Head with LoRA
+
+> [!warning] Outcome update — 2026-08-01: this architecture was built and trained, and **was not promoted**.
+> The design reasoning in this section stands and is why XLM-R + LoRA was the right thing to try. The empirical result went the other way. On the frozen V6 dataset the corrected trainer reached **0.9693 training** macro-F1 and **0.9027 validation**, but only **0.7436 on the temporal test split** — below the 0.92 gate, and 0.204 behind the TF-IDF + balanced LinearSVC baseline it was supposed to beat by ≥ 0.10.
+>
+> **The production classifier for M1 is therefore lexical, not neural:** TF-IDF word uni/bi-grams + `LinearSVC(class_weight="balanced")`, temporal-test macro-F1 **0.9472**, frozen at `models/m1/linearsvc_v6_primary/`.
+>
+> With 777 training rows over 8 classes and a 4-row minority, this is the expected regime for a strongly regularized lexical model to win. Read §4 onward as the architecture study that produced that finding — not as a description of what is deployed. Full evidence: [[18_M1_Dataset_And_Model_Lineage]].
+>
+> Note also that the category head here is sized to the taxonomy of the time; the frozen V6 dataset uses the **8**-category vocabulary fixed in `RESEARCH_DESIGN/SME_SECTOR_AND_REGULATION_SCOPE_PLAN.md` rev. 2.
 
 ### 4.1 Base Model Selection
 
@@ -680,18 +738,21 @@ torch.onnx.export(
 **Sampling**
 
 - **Per-cell coverage:** after 4 batches, every year-language cell has at least 5 labelled documents, or is documented as "no docs exist in corpus."
-- **Class coverage:** every domain has at least 50 labelled documents after 4 batches. This is the BUILD_11 entry criterion — training does not start until it is met.
+- **Class coverage:** target was every domain with at least 50 labelled documents. The v3 rare-domain top-up meets or approaches this for most minority classes. **On the frozen V6 set `EPF_ETF_CHANGE` ends at 4 train / 1 test rows** — its 1.000 test F1 is a one-sample estimate and must never be quoted without that qualifier. `PENALTY_ENFORCEMENT` is the weakest class with a real sample (V6 test F1 0.857). Only a targeted collection round fixes either; resampling four examples manufactures confidence.
 - **AL improvement:** mean uncertainty margin in batch N+1 exceeds batch N; a test asserts the monotonic increase.
 - **Determinism:** running `scripts/sample_for_labeling.py` twice with the same seed produces identical CSV output.
 
 **Architecture comparison**
 
 - **Pilot data retained.** The 50-document pilot CSV is at `research/data/architecture_pilot_2025-09.csv`; the GPT-4 prompt and run timestamps are at `research/sql/gpt4_pilot_log.txt`.
-- **Reproducibility of the XLM-R projection.** When BUILD_11 produces measured F1, it is written to `model_registry.json:metrics_per_language` and supersedes the §3.3 projection.
-- **Bound on the chosen-vs-projected gap.** Measured production F1 must land within ±5 pp of the projection; outside that band, §3.3 is revised.
-- **Margin over the floor.** Fine-tuned XLM-R must beat the 0.60 rule-based / TF-IDF+LR baseline by ≥ 0.10 macro-F1 to justify the approach.
+- **Reproducibility of the XLM-R projection.** ✅ Resolved 2026-08-01. Measured F1 exists: XLM-R best test macro-F1 0.743563, against the §3.3 projection of ~0.92. The projection was optimistic by ~0.18 for this corpus size.
+- **Bound on the chosen-vs-projected gap.** ❌ **Breached.** The measured XLM-R figure is far outside the ±5 pp band, which is exactly why §3.3's reasoning is annotated rather than quietly updated — the projection was wrong for a reason worth recording, not a number to retro-fit.
+- **Margin over the floor.** ❌ **Not met, and this criterion decided the model.** XLM-R had to beat the LinearSVC baseline by a clear margin; it lost to it by 0.204 on the V6 temporal test. The criterion did its job — it stopped a weaker model being promoted on the strength of its validation score alone.
 
-**LoRA configuration**
+**LoRA configuration** *(not exercised — see below)*
+
+> [!note] The 9-cell ablation grid was deliberately **not run**.
+> Ablating `r × alpha` on a configuration that loses by ~0.20 macro-F1 could not change the selection, so the compute was not spent. This is recorded as a decision so it is not later re-opened as an oversight. If a transformer is retried after the corpus grows, the grid below is still the right protocol.
 
 - **All 9 cells of the ablation grid completed**, stored as `research/data/lora_ablation_results.csv`.
 - **The chosen cell is within 1 pp of the grid maximum.** If a different cell is more than 1 pp better, switch to it and document the change here.
