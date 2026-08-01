@@ -438,21 +438,21 @@ One test that is easy to omit and worth having: **assert the frozen orders**. A 
 
 ## 9. Order of work
 
-| Step | Work | State |
-|---|---|---|
-| **41** | Audit V6 schema and sector/relevance labels | ✅ **done — §1** |
-| 42 | Build V7 without touching V6 | ⬜ next |
-| 43 | `labels.py` / `data.py` contracts + consistency tests | ⬜ |
-| 44 | Tri-head `GazetteClassifier` | ⬜ |
-| 45 | Three-loss training loop | ⬜ |
-| 46 | One-epoch Kaggle smoke | ⬜ |
-| 47 | One-seed diagnostic | ⬜ |
-| 48 | Threshold + loss-weight selection **on validation** | ⬜ |
-| 49 | Three-seed final | ⬜ |
-| 50 | Single evaluation on the untouched test split | ⬜ |
-| 51 | ONNX export + parity | ⬜ |
-| 52 | `MultitaskGazetteInference` + backend integration | ⬜ |
-| 53 | Freeze, hash, package, reproduce locally | ⬜ |
+| Step   | Work                                                  | State           |
+| ------ | ----------------------------------------------------- | --------------- |
+| **41** | Audit V6 schema and sector/relevance labels           | ✅ **done — §1** |
+| 42     | Build V7 without touching V6                          | ⬜ next          |
+| 43     | `labels.py` / `data.py` contracts + consistency tests | ⬜               |
+| 44     | Tri-head `GazetteClassifier`                          | ⬜               |
+| 45     | Three-loss training loop                              | ⬜               |
+| 46     | One-epoch Kaggle smoke                                | ⬜               |
+| 47     | One-seed diagnostic                                   | ⬜               |
+| 48     | Threshold + loss-weight selection **on validation**   | ⬜               |
+| 49     | Three-seed final                                      | ⬜               |
+| 50     | Single evaluation on the untouched test split         | ⬜               |
+| 51     | ONNX export + parity                                  | ⬜               |
+| 52     | `MultitaskGazetteInference` + backend integration     | ⬜               |
+| 53     | Freeze, hash, package, reproduce locally              | ⬜               |
 
 ---
 

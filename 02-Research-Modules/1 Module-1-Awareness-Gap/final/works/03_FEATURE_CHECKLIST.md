@@ -535,6 +535,9 @@ Every `[~]` and `[ ]` above, with the one thing that would close it. If a row is
 | 20 | Per-sector thresholds | A 729-combination grid against 9 informative validation rows | Serve one global threshold; revisit when partial-sector data grows |
 | 20 | Steps 43–53 | Nothing built | Sequential; each step's gate is listed in doc 20 §9 |
 | 20 | Promotion | Category benchmark is 0.947220 and V7 must not regress by more than 0.01 | Three permitted outcomes including hybrid — doc 20 §6.3 |
+| 09 | Golden workbook field truth | **708 of 1508 combined rows have no field-level ground truth** — that data exists only in the live DB | `scripts/export_gold_only_field_truth.py` then `merge_gold_only_field_truth.py --write` |
+| 09 | Measurement filter | A run that ignores `field_truth_verified` scores the extractor against blanks | Seal every measurement dataset version with `field_truth_verified = TRUE` |
+| 09 | `is_sme_relevant` conflicts | 151 rows where the workbook and gold disagreed, resolved gold-wins | Adjudicate the 12 FALSE→TRUE rows if the workbook flag is ever treated as evidence |
 | 20 | V7 dataset | Step 41 audit exists; no V7 parquet/manifest exists | Build V7 from frozen V6 with explicit relevance recovery, sector vectors, and parent hashes |
 | 20 | V7 trainer/inference | Spec exists; no multitask trainer, inference class, or registry exists | Implement Steps 43–53, then evaluate without touching the spent V6 test split for tuning |
 | 20 | Sector evidence | Only 48/1110 rows carry partial sector combinations | Report partial-sector exact-set match with denominator; collect more partial-sector evidence before claiming a robust three-way sector classifier |
@@ -585,6 +588,8 @@ What lives in this folder and whether it is current.
 | Observability workstream | [x] Session-101 console rebuild documented in `PHASE2_INGEST_EXTRACTION/observability_console/` |
 | Every phase has an analysis **and** a gap-closure plan | [x] Phase 5's plan added 2026-08-01 |
 | Multitask upgrade specified | [x] Doc 20 added — Step-41 audit run against the real parquets, V7 schema, tri-head design with relevance derived from sectors, corrected thresholds and gates, steps 41–53 |
+| Golden workbook combined | [x] `structured_v2_combined_1508_official.xlsx` — union of the 800-row extraction-truth workbook and the 1128-row gold standard (overlap only 420), 52 columns, summary/provenance snapshot values verified from the raw table, v1 left unmodified |
+| Workbook/gold `is_sme_relevant` conflict | [x] 151 disagreements resolved gold-wins, both values retained, all logged to `golden_workbook_gold_relevance_conflicts.csv` |
 | Doc 05 sector projection corrected | [x] Projected ~50% sector positive rates replaced with measured ~25% plus `pos_weight`s; the "sector task needs no augmentation" conclusion withdrawn |
 | Summarization method specified and first slice built | [x] Doc 19 added — input contract, measured extraction diagnostic, 5-way comparison, selected design, novelty claim, reference-free evaluation; backend slice now implements anchor-bound slots, hard review flags, summary provenance, and SI/TA queueing. |
 | V7 multitask classifier upgrade tracked | [x] Doc 20 added — Step 41 audit, measured sector imbalance, relevance derivation decision, V7 dataset/trainer/evaluation/export plan, and explicit "frozen LinearSVC remains untouched" boundary |
@@ -601,6 +606,7 @@ What lives in this folder and whether it is current.
 | Research, annotation, architecture | — | 01, 08, 09 | — |
 | Summarization (Stage E) | **19** *(method + first backend slice)* | 19 *(human eval, review UI, full coverage)* | — |
 | Multitask classifier (V7) | **20** *(step 41 audit)* | 20 *(steps 42–53)* | — |
+| Measurement corpus | **09** *(combined workbook built)* | 09 *(708 rows await field truth)* | — |
 | API & tracking UI | — | 11, 14 | — |
 
 **What moved this pass:** 05 `[~]` → `[x]` (model selection closed, though not with the architecture it selected) · 18 and 17 added as `[x]` · 07 `[ ]` → `[~]` (backend integration shipped; ONNX/Fly.io path not taken) · 16 Phase 5 `[ ]` → `[~]` (two items unblocked) · **19 added** — its method is `[x]`, and the later 2026-08-01 sync moves its build from `[ ]` to `[~]`: the first backend slice is shipped and live-tested, while human evaluation/review remains open · **20 added** — Step 41 audit/spec is `[~]`; V7 implementation is explicitly not started.

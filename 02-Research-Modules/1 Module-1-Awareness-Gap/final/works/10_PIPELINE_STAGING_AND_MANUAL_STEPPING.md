@@ -1,6 +1,6 @@
 # M1 Pipeline — Stages, Statuses, Manual Stepping & Known System Issues
 
-> Goal: document how a gazette moves through the pipeline (ingested → extracted → preprocessed → classified), how each stage maps onto the 39-column golden Excel format (`structured_v1_batches_1_2_3_4_5_6_7_8_official.xlsx`), the new **manual, one-stage-at-a-time** control that was added on 2026-07-26, and the two runtime issues currently surfaced in the Celery logs.
+> Goal: document how a gazette moves through the pipeline (ingested → extracted → preprocessed → classified), how each stage maps onto the 39-column golden Excel format (`structured_v1_batches_1_2_3_4_5_6_7_8_official.xlsx`, now superseded for measurement by the 1508-row `structured_v2_combined_1508_official.xlsx` — same 39 columns plus 13 provenance/label columns; filter `field_truth_verified = TRUE`), the new **manual, one-stage-at-a-time** control that was added on 2026-07-26, and the two runtime issues currently surfaced in the Celery logs.
 
 ---
 

@@ -3,7 +3,11 @@
 **Scope:** Accuracy measurement for the 4-stage pipeline (`ingested → extracted → preprocessed → classified`) against a sealed gold baseline.
 **Baselines in use:**
 
-- **Gold v1** — `C:\Reasearch\xyz\data\golden\structured_v1_batches_1_2_3_4_5_6_7_8_official.xlsx` (~800 manually curated rows, Jan–Apr 2026). Primary reference for field-level correctness.
+- **Gold v1** — `C:\Reasearch\xyz\data\golden\structured_v1_batches_1_2_3_4_5_6_7_8_official.xlsx` (800 manually curated rows, gazette issues 2468–2486). Unmodified, and still the field-level reference for those 800 rows.
+- **Gold v2 (combined, 2026-08-01)** — `C:\Reasearch\xyz\data\golden\structured_v2_combined_1508_official.xlsx` (**1508 rows, 52 columns**). Union of Gold v1 with the 1128-row classification gold standard; the two overlap on only 420 gazettes. Adds the frozen 8-class labels, sector sets and provenance columns.
+  - **`field_truth_verified` is the column that matters.** TRUE on 800 rows, FALSE on the 708 appended ones. **Every field-level accuracy measurement must filter on it.**
+  - `is_sme_relevant` was resolved **gold-wins** on the 151 rows where the two sources disagreed; both original values are retained and each conflict is flagged. Log: `documentation/m1/analysis/golden_workbook_gold_relevance_conflicts.csv`.
+  - `change_category` / `domain_code` (workbook vocabulary) and `gold_change_category` (frozen 8-class) are **different label spaces** — 0 of 420 agreement. Never join or average them.
 - **DB snapshot v2** — EGZ 2026-02-01..2026-02-28, ~204 rows, most at `status='preprocessed'`. Used for stage-coverage and regression checks.
 
 Sealed = the baseline is frozen, checksummed, and never edited by the evaluator. The evaluator reads it read-only and compares predictions produced by a fresh pipeline run.

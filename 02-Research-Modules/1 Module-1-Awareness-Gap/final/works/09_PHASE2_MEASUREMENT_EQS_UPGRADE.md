@@ -2,7 +2,11 @@
 
 > Goal: make extraction accuracy **task-selectable, tier-weighted, phase-separated, and visible in the admin UI** — without conflating classifier confidence with extraction accuracy. This document is the corrected updates plan plus the execution record of what was shipped on 2026-07-26.
 >
-> Scope: Module 1 (Awareness Gap), Phase-2 extraction measurement. Golden truth is now the 8-batch official workbook `data/golden/structured_v1_batches_1_2_3_4_5_6_7_8_official.xlsx` (sheet `regulations_raw_data`, 800 records, 39 columns).
+> Scope: Module 1 (Awareness Gap), Phase-2 extraction measurement.
+>
+> **Golden truth as of 2026-08-01 is `data/golden/structured_v2_combined_1508_official.xlsx`** (sheet `regulations_raw_data`, **1508 records, 52 columns**), which unions the original 8-batch workbook with the 1128-row classification gold standard. The v1 workbook is unmodified and remains the field-truth source for the 800 rows it contains.
+>
+> ⚠ **Filter `field_truth_verified = TRUE` in every extraction measurement.** Only 800 of the 1508 rows carry field-level ground truth. The 708 appended rows are gold-*labelled* but not field-verified — measuring against them scores the extractor against blank cells and reports failures that are really missing truth. See §6.
 
 ---
 
@@ -69,9 +73,9 @@ The EQS panel answers the plan's Step 6.3 ("Dashboard cards: Completeness %, EQS
 
 ### 2.1 Upload the golden workbook from the UI
 1. Go to `/admin/datasets/m1` → create (or open) the golden dataset.
-2. Upload `structured_v1_batches_1_2_3_4_5_6_7_8_official.xlsx` via the version-upload control (`POST /datasets/{id}/versions/upload`). The reader auto-detects the header row and canonicalises columns.
+2. Upload `structured_v2_combined_1508_official.xlsx` via the version-upload control (`POST /datasets/{id}/versions/upload`). The reader auto-detects the header row and canonicalises columns. **Seal the version with a `field_truth_verified = TRUE` filter**, or the candidate set silently gains 708 rows with no ground truth.
 3. **Seal** the version (`/versions/{id}/seal`) — only sealed versions are measurable.
-4. Later, a corrected/upgraded workbook in the **same 39-column format** uploads as a new version of the same dataset; version governance keeps the lineage. Re-run measurement against the new version — never overwrite an old baseline.
+4. Later, a corrected/upgraded workbook with the same base field contract uploads as a new version of the same dataset; version governance keeps the lineage. Re-run measurement against the new version — never overwrite an old baseline.
 
 ### 2.2 Run a measurement + read the EQS
 1. `/admin/datasets/m1/measurements/run` — pick baseline (golden) + candidate (extraction run, optionally scoped by `source_id` + date window).
@@ -118,3 +122,72 @@ Classifier confidence (Stage D softmax, ECE, review-queue at <0.70) stays **out 
 | `enigmatrix-frontend/app/(admin)/admin/datasets/m1/measurements/[runId]/page.tsx` | **edit** — mount `EqsPanel` (additive) |
 
 _Last updated: 2026-07-26._
+
+
+---
+
+## 6. The combined golden workbook (2026-08-01)
+
+The measurement corpus was rebuilt because the workbook and the classification gold standard had drifted apart — and the drift was much larger than assumed.
+
+### 6.1 They were never a subset of each other
+
+| | Rows | Gazette issue range |
+|---|---:|---|
+| Workbook `structured_v1_batches_…_official.xlsx` | 800 | **2468 – 2486** |
+| Gold standard `gold_standard_v3_1128.csv` | 1128 | **1656 – 2498** |
+| **Shared** | **420** | |
+
+The workbook covers a narrow ~3-week window. The gold standard spans nine years, because the rare-domain top-up (batches 06/07) reached back historically to find EPF/ETF, product-standard and penalty examples. So **708 labelled gazettes were absent from the workbook and 380 workbook gazettes were never labelled.** The union is **1508**, not 1110.
+
+### 6.2 Three label vocabularies, zero agreement
+
+| Column | Vocabulary | Top values |
+|---|---|---|
+| `change_category` (workbook) | 7 process-shape values | `procedural_change` 590 · `other` 100 · `rate_change` 83 |
+| `domain_code` (workbook) | subject areas | `lands` 449 · `general` 106 · `customs` 71 |
+| `gold_change_category` (new) | the frozen 8-class SME taxonomy | `SECTOR_SPECIFIC` 695 · `IMPORT_EXPORT` 112 · `TAX_RATE_CHANGE` 82 |
+
+Agreement between the workbook categories and the gold categories on the 420 shared rows is **0 of 420** — not because they disagree, but because they are **different label spaces**. They must never be joined, averaged or compared.
+
+### 6.3 `is_sme_relevant` disagreed on 36% of the shared rows
+
+151 of 420. The direction is one-sided and revealing:
+
+| Workbook | Gold | Count |
+|---|---|---:|
+| TRUE | FALSE | **139** |
+| FALSE | TRUE | 12 |
+
+The 139 are overwhelmingly land-acquisition notices that the workbook marked SME-relevant and the annotators did not — consistent with the workbook flag being a heuristic default rather than a considered judgement. **Gold wins**, because the gold standard is dual-annotated with adjudication and measured agreement (category κ 0.947215, mean sector κ 0.965567) while the workbook flag has no recorded agreement protocol. The original value is preserved in `workbook_is_sme_relevant`, each conflict is flagged in `is_sme_relevant_conflict`, and all 151 are logged in `documentation/m1/analysis/golden_workbook_gold_relevance_conflicts.csv`.
+
+### 6.4 What the combined workbook contains
+
+`data/golden/structured_v2_combined_1508_official.xlsx` — 1508 rows × 52 columns, four sheets (`README`, `regulations_raw_data`, `summary`, `merge_provenance`). The 39 original columns keep their names, order and values; 13 provenance/label columns are appended.
+
+| Column | Meaning |
+|---|---|
+| `row_source` | `workbook_and_gold` 420 · `workbook_only` 380 · `gold_only` 708 |
+| **`field_truth_verified`** | **TRUE on 800, FALSE on 708 — filter on this** |
+| `label_truth_source` | `gold_v3_1128` where a gold label exists |
+| `in_v6_dataset` / `v6_split` | 1110 rows, 777/166/167 — matches the frozen V6 exactly |
+| `gold_change_category` · `gold_affected_sectors` · `gold_sector_vector` | frozen 8-class label, pipe-separated sectors, 0/1 vector in the frozen order |
+| `gold_is_sme_relevant` · `workbook_is_sme_relevant` · `is_sme_relevant_conflict` | both sources plus the disagreement flag |
+
+The named table `m1_regulations_v6` was extended to `A1:AZ1509`. The `summary` and `merge_provenance` sheets are verified snapshots refreshed from that raw table; the raw `regulations_raw_data` table remains the source of truth for measurement and future recalculation.
+
+### 6.5 The 708 appended rows are not measurable yet
+
+They carry gazette number, raw text, relevance and the gold labels. `title_en`, `effective_date`, `principal_act_amended`, `extraction_method`, `summary_en` and the rest are **empty** — that data lives only in the live database.
+
+> **A measurement run that does not filter `field_truth_verified = TRUE` will score the extractor against blank ground truth and report failures that are really missing truth.** This is the single most likely way to misuse the combined workbook.
+
+To fill them:
+
+```powershell
+py -3 scripts\export_gold_only_field_truth.py            # read-only SELECT -> CSV
+py -3 scripts\merge_gold_only_field_truth.py             # dry run
+py -3 scripts\merge_gold_only_field_truth.py --write     # apply, with backup
+```
+
+The merge never overwrites a non-empty cell, never touches `is_sme_relevant`, and only flips `field_truth_verified` on rows where `title_en`, `gazette_published_date`, `raw_text` and `extraction_method` are all present. Rows the database does not have stay FALSE and stay excluded — which is correct, since a partially populated ground-truth row produces false extraction failures.
