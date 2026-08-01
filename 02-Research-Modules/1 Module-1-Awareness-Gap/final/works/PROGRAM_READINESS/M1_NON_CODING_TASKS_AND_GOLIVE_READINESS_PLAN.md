@@ -1,7 +1,7 @@
 # M1 — Non-Coding Tasks & Go-Live Readiness Plan
 
 > Group: `PROGRAM_READINESS` (cross-cutting; maps to PHASE1–4 below). Companion to the per-phase gap-closure plans and the doc set 00–04.
-> **Purpose.** Answer the standing question: *the code across docs 00–04 (and 05+) is largely built — so what's left, apart from coding, to actually reach the research target?* This is the operator / researcher / annotator runbook. Written 2026-07-24, grounded in AI_WORK_LOG Sessions 66–77 and the phase gap-closure plans.
+> **Purpose.** Answer the standing question: *the code across docs 00–04 (and 05+) is largely built — so what's left, apart from coding, to actually reach the research target?* This is the operator / researcher / annotator runbook. Written 2026-07-24, grounded in AI_WORK_LOG Sessions 66–77 and the phase gap-closure plans. Updated 2026-07-31 after the Batch 06/07 rare-domain top-up and v3 baseline run.
 
 ## 0. Where the code stands (honest snapshot)
 
@@ -16,10 +16,10 @@
 | 03_M1_2 Segmentation | **shipped** | — |
 | 03_M1_3 Secondary-source matching (3-tier) | **shipped** (202607230002) | *run* watchers to populate propagation events; embedding tier opt-in |
 | 04 Preprocessing (noise/metadata/chunking) | **shipped** | — |
-| **Phase 3 classifier (05+)** | **code present but INERT** — `no_model` | **the keystone: gold labels → train → export.** Human + GPU, not code |
+| **Phase 3 classifier (05+)** | **code present but INERT** — `no_model`; v3 gold set accepted; v3 split/baseline/CPU smoke complete | 1128 resolved gold rows exist from Batches 02-07 with category kappa 0.947215 and mean sector kappa 0.965567. V3 stratified split and TF-IDF baselines are done; LinearSVC macro-F1 is 0.908012. Next gate is Batch 06/07 audit if strict evidence is required, EPF/penalty review, and only then full GPU LoRA training/evaluation/export if it can beat the v3 baseline. |
 | Phase 4 schedulers/alerts | **shipped** | Beat on; alert creds optional (ops/config) |
 
-Bottom line: **ingest → extract → preprocess is code-complete and running.** The target (classified, SME-relevant regulatory alerts + the awareness-gap measurement for the thesis) is blocked not on more code but on **environment setup, operational runs, human annotation, and model training/evaluation.** Those are enumerated below in dependency order.
+Bottom line: **ingest → extract → preprocess is code-complete and running.** The target (classified, SME-relevant regulatory alerts + the awareness-gap measurement for the thesis) is blocked not on basic implementation but on **operational runs, annotation close-out, gold-set quality, model training/evaluation, and final research fieldwork.** Those are enumerated below in dependency order.
 
 ---
 
@@ -51,18 +51,21 @@ Turns the empty pipeline into a populated corpus. All code exists; these are *ru
 
 This is the **keystone** and the single biggest non-coding effort. No model can be trained without it (AI_WORK_LOG S70 runbook).
 
-1. **Label Studio** set up (happiest on Linux/venv) and connected to the preprocessed corpus.
-2. **Calibration round** — small shared batch, measure inter-annotator agreement; gate **κ ≥ 0.80** on the 8-domain scheme before scaling.
-3. **Dual-annotation batches** + adjudication; running **κ ≥ 0.75**.
-4. **Active-learning loop** — prioritise low-confidence / disagreement items.
-5. Reach **~800 gold labels**, drawn *excluding* the heuristic-seeded rows (use `classification_source` to exclude — Session 70) so train/eval isn't contaminated.
-6. Freeze a held-out test split (stratified, incl. SI/TA slices).
+1. **Label Studio** is set up locally at `C:\Reasearch\xyz\mydata` and connected to the preprocessed corpus.
+2. **Calibration is complete.** Ifham passed; Reezma and Ilham passed after retest. Keep the calibration exports as audit evidence.
+3. **Batches 02-05 are resolved.** Latest accepted output is 800 gold rows, 40 manual resolutions, category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518.
+4. **Batch 05 is complete.** It added 200 rows; its 3 disagreement/fallback rows were manually reviewed and the final gold file now has zero lead-annotator fallback rows.
+5. **Active-learning loop exists.** Batch 05 used hybrid active learning: active-learning uncertainty rows first, minority-domain candidates where available, then coverage top-up.
+6. **Rare-domain coverage is still short.** `SECTOR_SPECIFIC` dominates the set; `EPF_ETF_CHANGE` is 0, and product/business/penalty/import remain below the preferred 50/domain target.
+7. Current split exists at `C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations` with 560/120/120 rows, created by `m1.model.data --by key`. This is deterministic but not temporal/stratified; improve it only if the thesis needs stronger date-based or rare-domain claims.
+8. Baselines are complete: TF-IDF LogReg macro-F1 0.4980 and TF-IDF LinearSVC macro-F1 0.6167.
+9. CPU LoRA smoke is complete and wrote `C:\Reasearch\xyz\storage\models\m1\xlmr_lora_smoke\model_registry.json`, but it is not promotable because it used a tiny split, one seed, one epoch, and `gate_pass=false`.
 
 ## 4. Model training & evaluation — PHASE3 (owner: you, on GPU)
 
 Code path exists (in-process ONNX serving, health flips to `ready` when the artifact lands — Session 70). The *work* is training + gating.
 
-1. **Train XLM-R** on the gold set (pinned training extra + `TRAINING.md` + `Dockerfile.train` — Session 70 plan).
+1. **Train XLM-R on GPU** after accepting the rare-domain strategy. The local CPU smoke proved the path works, but this laptop reported `cuda=False`, so the final run should use a CUDA machine.
 2. **Gates:** 3-seed **macro-F1 ≥ 0.92**; **slice eval** incl. SI/TA + extraction-method watchpoints + chunk-contract A/B.
 3. **Export ONNX** (+ INT8 gate); **drop the artifact** to the storage volume (no image rebuild).
 4. Activation checklist flips `classifier_status()` → `ready` (reuses the health flag); `classify_gazette` starts populating `change_category` with `classification_source='model'`.
@@ -100,10 +103,21 @@ Not blocking the thesis, needed for a live alert demo.
 - Tier-3 propagation review-queue UI polish (03_M1_3 — backend + `m1_propagation_reviews` persisted 2026-07-23; admin surface exists).
 - View-assertion tests (02_M1_4).
 - Optional: exclude deterministic `IntegrityError` from `extract_gazette` autoretry (S75 follow-up).
+- Production regulation summarizer/backfill: generate `summary_en` from classified raw text, translate `title_en`/`summary_en` to Sinhala/Tamil with NLLB, and persist `summary_si`/`summary_ta` with quality flags.
+
+---
+
+## 9. Program-readiness manuals added 2026-07-30
+
+| Manual | Why it exists |
+|---|---|
+| `M1_PHASE3_ANNOTATION_AND_ACTIVE_LEARNING_USER_MANUAL.md` | Operator steps for Label Studio startup, calibration scoring, batch import/export, IAA reduction, manual disagreement review, and the accepted Batch 02-05 gold set. |
+| `M1_EXTRACTION_ACCURACY_AND_DATASET_MANAGEMENT_MANUAL.md` | User manual for Excel ground-truth upload, sealed dataset versions, DB snapshots, measurement runs, accuracy reports, and thesis artifacts. |
+| `M1_SUMMARIZATION_TRANSLATION_READINESS_PLAN.md` | Implementation plan for SME-facing summaries and NLLB Sinhala/Tamil translation of titles and summaries. |
 
 ---
 
 ## Critical path to the target (the short version)
 
-**setup (§1) → run extraction + watchers (§2) → annotate to 800 gold labels (§3) → train + gate XLM-R + interim eval (§4) → thesis analysis (§5).**
-Everything else is parallelisable. The long pole is **§3 annotation** — start it as soon as §2 has a preprocessed corpus, and start the **§2.3 watchers early** so propagation-lag data accrues over calendar time.
+**setup (§1) → run extraction + watchers (§2) → use the frozen 800-row v1 gold set or collect rare-domain top-up (§3) → run full GPU XLM-R + LoRA + interim eval (§4) → generate summaries/translations for SME-facing use → thesis analysis (§5).**
+Everything else is parallelisable. The long pole is now **§4 full GPU training/evaluation plus rare-domain coverage decisions**; start the **§2.3 watchers early** so propagation-lag data accrues over calendar time.

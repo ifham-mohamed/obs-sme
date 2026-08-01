@@ -1,0 +1,200 @@
+erDiagram
+    %% ============ A. IDENTITY & ACCESS ============
+    users ||--o{ refresh_tokens : "issues"
+    users ||--o{ password_reset_tokens : "requests"
+    users ||--|| sme_profiles : "has profile"
+    users ||--o{ m1_datasets : "owns"
+    users ||--o{ m1_extraction_runs : "queues"
+    users ||--o{ m1_measurement_runs : "triggers"
+    users ||--o{ m1_alerts : "receives"
+
+    %% ============ B. REFERENCE ============
+    regulatory_domains ||--o{ m1_regulations : "classifies"
+    regulatory_domains ||--o{ survey_questions : "categorises"
+    sectors ||--o{ m1_regulation_sectors : "targeted by"
+    sectors ||--o{ survey_questions : "scopes"
+    sectors ||--o{ admin_surveys : "scopes"
+
+    %% ============ C. M1 REGULATION CORE ============
+    m1_regulations ||--|| m1_gazette_items : "discovered as"
+    m1_regulations ||--o{ m1_regulation_sectors : "affects"
+    m1_regulations ||--o{ m1_regulation_penalties : "imposes"
+    m1_regulations ||--o{ m1_sub_documents : "segmented into"
+
+    %% ============ D. M1 PIPELINE & MLOPS ============
+    m1_regulations ||--o{ m1_propagation_events : "propagates via"
+    m1_regulations ||--o{ m1_propagation_reviews : "pending match"
+    m1_regulations ||--o{ m1_alerts : "notifies about"
+    m1_datasets ||--o{ m1_dataset_versions : "versioned as"
+    m1_datasets |o--|| m1_dataset_versions : "current pointer"
+    m1_dataset_versions ||--o{ m1_dataset_rows : "contains"
+    m1_dataset_versions ||--o{ m1_measurement_runs : "scored as baseline"
+    m1_dataset_versions ||--o{ m1_measurement_runs : "scored as candidate"
+    m1_measurement_runs ||--o{ m1_measurement_scores : "produces"
+    m1_extraction_runs ||--o{ m1_dataset_versions : "sources"
+    m1_extraction_profiles ||--o{ m1_dataset_versions : "extracted by"
+
+    %% ============ E. SURVEY + M2/M3 ============
+    m1_regulations ||--o{ survey_questions : "linked primary"
+    m1_regulations ||--o{ survey_question_regulations : "asked about"
+    m1_regulations ||--o{ survey_responses : "answered about"
+    survey_questions ||--o{ survey_question_regulations : "maps to"
+    survey_questions ||--o{ admin_survey_assignments : "assigned to"
+    admin_surveys ||--o{ admin_survey_assignments : "contains"
+    sme_profiles ||--o{ survey_sessions : "starts"
+    sme_profiles ||--o{ survey_responses : "answers"
+    sme_profiles ||--o{ m2_knowledge_scores : "scored"
+    sme_profiles ||--o{ m3_compliance_history : "history snapshot"
+    sme_profiles ||--o{ m3_behavioural_signals : "behaviour snapshot"
+    survey_sessions ||--o{ survey_responses : "groups"
+
+    %% ============ ENTITIES (keys only) ============
+    users {
+        uuid id PK
+    }
+    refresh_tokens {
+        uuid jti PK
+        uuid user_id FK
+    }
+    password_reset_tokens {
+        uuid id PK
+        uuid user_id FK
+    }
+    sme_profiles {
+        uuid sme_id PK
+        uuid user_id FK,UK
+    }
+    audit_log {
+        bigint log_id PK
+    }
+    sectors {
+        string sector_code PK
+    }
+    regulatory_domains {
+        string domain_code PK
+    }
+    survey_limits {
+        int id PK
+    }
+    m1_regulations {
+        uuid regulation_id PK
+        string regulation_short_code UK
+        string gazette_number UK
+        string domain_code FK
+    }
+    m1_gazette_items {
+        uuid item_id PK
+        uuid regulation_id FK,UK
+    }
+    m1_regulation_sectors {
+        uuid regulation_id PK,FK
+        string sector_code PK,FK
+    }
+    m1_regulation_penalties {
+        uuid penalty_id PK
+        uuid regulation_id FK
+    }
+    m1_sub_documents {
+        uuid sub_id PK
+        uuid regulation_id FK
+    }
+    m1_sources {
+        string source_id PK
+    }
+    m1_extraction_runs {
+        uuid run_id PK
+        string task_id UK
+        uuid queued_by_id FK
+    }
+    m1_extraction_profiles {
+        uuid profile_id PK
+        string name UK
+    }
+    m1_datasets {
+        uuid dataset_id PK
+        uuid owner_user_id FK
+        uuid current_version_id FK
+    }
+    m1_dataset_versions {
+        uuid version_id PK
+        uuid dataset_id FK
+        uuid extraction_profile_id FK
+        uuid extraction_run_id FK
+    }
+    m1_dataset_rows {
+        uuid row_id PK
+        uuid version_id FK
+    }
+    m1_measurement_runs {
+        uuid run_id PK
+        uuid baseline_version_id FK
+        uuid candidate_version_id FK
+        uuid triggered_by_id FK
+    }
+    m1_measurement_scores {
+        uuid score_id PK
+        uuid run_id FK
+    }
+    m1_propagation_events {
+        uuid event_id PK
+        uuid regulation_id FK
+    }
+    m1_propagation_reviews {
+        uuid review_id PK
+        uuid regulation_id FK
+    }
+    m1_alerts {
+        uuid alert_id PK
+        uuid regulation_id FK
+        uuid sme_id FK
+    }
+    m1_retraining_runs {
+        uuid run_id PK
+    }
+    m1_quality_probes {
+        uuid probe_id PK
+    }
+    m1_pipeline_audits {
+        bigint audit_id PK
+    }
+    survey_questions {
+        string question_code PK
+        string domain_code FK
+        string sector_code FK
+        uuid linked_regulation_id FK
+    }
+    survey_question_regulations {
+        string question_code PK,FK
+        uuid regulation_id PK,FK
+    }
+    survey_sessions {
+        uuid session_id PK
+        uuid sme_id FK
+    }
+    survey_responses {
+        uuid response_id PK
+        uuid sme_id FK
+        uuid session_id FK
+        uuid regulation_id FK
+        uuid linked_regulation_id FK
+    }
+    admin_surveys {
+        uuid survey_id PK
+        string sector_code FK
+    }
+    admin_survey_assignments {
+        uuid survey_id PK,FK
+        string question_code PK,FK
+    }
+    m2_knowledge_scores {
+        uuid score_id PK
+        uuid sme_id FK
+    }
+    m3_compliance_history {
+        uuid history_id PK
+        uuid sme_id FK
+    }
+    m3_behavioural_signals {
+        uuid signals_id PK
+        uuid sme_id FK
+    }

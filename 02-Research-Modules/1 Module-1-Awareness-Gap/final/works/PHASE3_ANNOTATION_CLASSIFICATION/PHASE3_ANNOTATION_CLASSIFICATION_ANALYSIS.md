@@ -2,13 +2,13 @@
 
 > Single-file analysis of **Phase 3 — Annotation + Classification (BUILD_07 §C–D + BUILD_11)** *only*: scope, technologies, what is actually built vs. not-yet-executed across annotation → training → export → inference, the full data journey, and the approaches missed. Grounded in the live codebase (`enigmatrix-ml/m1/model`, `m1/data`, backend `app/m1/tasks/classify_gazette.py` + `services/classifier_service.py`) and the vault (`E:\Obsidian\sme` — `16_M1_Development_Roadmap.md §Phase 3`, `FEATURES.md` F-199/F-216–F-243, STATUS 2026-06-28).
 >
-> Generated 2026-07-18; **gap-closure status refreshed 2026-07-21 (Session 70)**. **Honest status: Phase 3 is *code-complete but not executed*.** The whole train→eval→ONNX→classify chain is written and wired, but no model has been trained, so the classifier pipeline is a wired no-op. The code-addressable gaps around that inert core (#3, #4-measurement, #5, #6-backend) are now closed; the critical path (#1 train, #2 gold labels) is human/GPU work with a recorded-gate runbook. Details below.
+> Generated 2026-07-18; **gap-closure status refreshed 2026-07-21 (Session 70)** and **annotation/training-prep status refreshed 2026-07-30**. Honest status: the train→eval→ONNX→classify chain is written and wired, the annotation pipeline has produced 800 accepted gold rows from Batches 02-05, split/baseline prep is complete, and a CPU LoRA smoke test has passed as a pipeline check. No full LoRA model has been trained/exported yet, so the classifier remains `no_model` until the GPU training/export gate is completed.
 
 ---
 
 ## 0. The one-paragraph truth
 
-Every module of Phase 3 exists as **real code** — the XLM-R + LoRA dual-head model (`architecture.py`), the 3-seed training loop (`train_xlmr.py`), slice evaluation (`eval.py`), ONNX export (`export_onnx.py`), the inference engine (`inference.py`), and the backend `classify_gazette` task that auto-chains after preprocessing. But three things have **not happened**: (1) the gold-standard annotation set was never finished through Label Studio + IAA; (2) the model was never trained (no checkpoint, and `storage/models/m1/onnx/v1` does not exist); (3) nothing is deployed to Fly.io — and, per the Session-70 decision, **nothing should be**: serving is deliberately in-process ONNX. So a gazette flows `preprocessed → classify_gazette.delay() → classifier_service` and then **fails to load a model** — but that state is now *visible* (`classifier: no_model` in the health check) rather than silently swallowed. The 800-PDF corpus that exists (F-199) was classified by a **regex/heuristic** statute matcher, *not* the XLM-R model, and is now explicitly marked `classification_source='heuristic'`. Phase 3 is therefore ~"built, instrumented, not yet trained."
+Every module of Phase 3 exists as **real code** — the XLM-R + LoRA dual-head model (`architecture.py`), the 3-seed training loop (`train_xlmr.py`), slice evaluation (`eval.py`), ONNX export (`export_onnx.py`), the inference engine (`inference.py`), and the backend `classify_gazette` task that auto-chains after preprocessing. The annotation side is now real too: calibration was completed and Batches 02-05 were reduced into 800 gold rows. Training preparation is partially real: v1 gold files are frozen, a deterministic key split exists, TF-IDF baselines were run, and a one-epoch CPU LoRA smoke wrote a registry/checkpoint. What has **not happened** is full GPU LoRA training, ONNX artifact export, and model activation. A gazette can still flow `preprocessed → classify_gazette.delay() → classifier_service`, but the model state remains visible as `classifier: no_model` until an ONNX artifact exists. The earlier 800-PDF corpus (F-199) was classified by a **regex/heuristic** statute matcher, *not* the XLM-R model, and is now explicitly marked `classification_source='heuristic'`.
 
 ---
 
@@ -18,11 +18,11 @@ Every module of Phase 3 exists as **real code** — the XLM-R + LoRA dual-head m
 
 | Step | Deliverable | Real status |
 |---|---|---|
-| **3a** | Label Studio config + 20-doc calibration set; annotators pass κ ≥ 0.80 | 🟡 config + calibration built; annotation env stood up (`mydata/`, untracked, F-243); κ test not recorded → runbook Stage A |
-| **3b** | `sample_for_labeling.py` — 200 stratified + 40 k-means + 10 minority | 🟢 `m1/data/samplers.py` + script; `batch_01` demo produced |
-| **3c** | Iterate to 800 gold labels w/ active learning; IAA ≥ 0.75 κ | 🟡 AL baseline coded (`baselines.py`); 800-PDF corpus exists but **heuristically** classified (F-199), not gold-annotated → runbook Stage B |
-| **3d** | Train XLM-R + LoRA; 3-seed macro-F1 ≥ 0.92 | 🟡 **code complete** (`architecture.py`, `train_xlmr.py`) — **never trained** → runbook Stage C |
-| **3e** | Eval + slice analysis (lang/quarter/length/method) | 🟡 `eval.py` exists — **not run** (no model) → runbook Stage D |
+| **3a** | Label Studio config + 20-doc calibration set; annotators pass κ ≥ 0.80 | 🟢 calibration completed; failed/conditional attempts were retested before scale-up |
+| **3b** | `sample_for_labeling.py` — stratified, k-means, minority targeting, active learning | 🟢 Batches 02-05 generated/exported; Batch 05 uses hybrid active learning |
+| **3c** | Iterate to 800 gold labels w/ active learning; IAA ≥ 0.75 κ | 🟢 800 accepted gold rows from Batches 02-05; category kappa 0.871534 |
+| **3d** | Train XLM-R + LoRA; 3-seed macro-F1 ≥ 0.92 | 🟡 **code complete; CPU smoke passed** (`architecture.py`, `train_xlmr.py`) — full GPU training still pending → runbook Stage C |
+| **3e** | Eval + slice analysis (lang/quarter/length/method) | 🟡 `eval.py` exists — final evaluation not run because no promotable model exists → runbook Stage D |
 | **3f** | ONNX export + deploy; INT8 within 1.5 pp; p95 ≤ 2 s | 🟡 `export_onnx.py` + `inference.py` + backend wiring exist — **no artifact**; serving is local in-process ONNX (decided, not a divergence) → runbook Stage E |
 
 ---
@@ -40,8 +40,8 @@ Every module of Phase 3 exists as **real code** — the XLM-R + LoRA dual-head m
 | **transformers tokenizer** | ML/prep | XLM-R tokenizer (chunking + training) |
 | **pdfplumber + regex** | interim | F-199 one-shot heuristic classification of 800 PDFs (**not** the XLM-R model; now `classification_source='heuristic'`) |
 
-### Not yet exercised
-The actual **training run**, quantization validation, and the review-queue *UI* (backend is done). `torch/transformers/peft` are an optional `training` extra, imported lazily — the production API image doesn't ship them (correct and unchanged; see gap #7).
+### Not yet fully exercised
+The actual **full GPU training run**, quantization validation, and the review-queue *UI* (backend is done). A local CPU smoke test exercised tokenizer/model loading, LoRA initialization, the training loop, and registry/checkpoint writing only. `torch/transformers/peft` are an optional `training` extra, imported lazily — the production API image doesn't ship them (correct and unchanged; see gap #7).
 
 ---
 
@@ -56,8 +56,8 @@ Label Studio project XML + `research/data/calibration_set_v1.csv` (20 reference 
 ### 3c — 800 labels + active learning (🟡)
 AL baseline in `m1/model/baselines.py` (`ALBaseline`/`ProductionBaseline`, TF-IDF+LR). **The 800-PDF corpus that exists (F-199, Session 56) is heuristic** — `pdfplumber` + a regex/statute classifier (`outputs/build_csv.py`) wrote `m1_regulations` CSVs. That is **seed/interim data, not gold annotation** and not model output — now mechanically separable via `classification_source='heuristic'` (gap #3), so the gold exporter excludes it. True gold labeling (Label Studio + dual-annotation κ) is the runbook Stage B.
 
-### 3d — Train XLM-R + LoRA (🟡 code-complete, unrun)
-`m1/model/architecture.py` — `GazetteClassifier` (peft `get_peft_model` + `category_head` 12 + `sector_head` 10, `compute_loss`). `m1/model/train_xlmr.py` — real 3-seed loop: `_GazetteDS` DataLoader, `set_seed`, AdamW, `_macro_f1`, epochs/fp16, temporal split, writes model-registry hash. `data.py` (parquet splits), `config.py` (`ModelConfig`: LoRA r, lr, epochs), `labels.py` (taxonomy). **Never executed** — no gold data, no checkpoint.
+### 3d — Train XLM-R + LoRA (🟡 code-complete, smoke-run only)
+`m1/model/architecture.py` — `GazetteClassifier` (peft `get_peft_model` + `category_head` 12 + `sector_head` 10, `compute_loss`). `m1/model/train_xlmr.py` — real 3-seed loop: `_GazetteDS` DataLoader, `set_seed`, AdamW, `_macro_f1`, epochs/fp16, split input, writes `model_registry.json`. `data.py` (parquet splits), `config.py` (`ModelConfig`: LoRA r, lr, epochs), `labels.py` (taxonomy). A tiny CPU smoke run wrote `C:\Reasearch\xyz\storage\models\m1\xlmr_lora_smoke\model_registry.json` with val macro-F1 0.1111, test macro-F1 0.0, and `gate_pass=false`. This is not a real performance run; full 3-seed GPU training is still pending.
 
 ### 3e — Eval + slices (🟡 unrun)
 `m1/model/eval.py` (122 lines) — per-language / per-quarter / per-length / per-extraction-method slices, confidence-bucket monotonicity. No results (no model). Stage D of the runbook adds two watch-items: SI/TA slice F1 (leaking Wijesekara-era text quality — cross-check the [[02-Research-Modules/1 Module-1-Awareness-Gap/final/works/17_PHASE2_TRILINGUAL_AUTOCHAIN_PLAN]] backfill) and the extraction_method slice (OCR CER as binding constraint).
@@ -81,14 +81,15 @@ AL baseline in `m1/model/baselines.py` (`ALBaseline`/`ProductionBaseline`, TF-ID
 
 - Unit-level: model modules import and construct (with the `training` extra); `samplers.py` demo produces a batch; `eval.py` slice functions unit-tested on synthetic data.
 - Session-70 code checks (deferred to user): `alembic upgrade head` + `classification_source` backfill counts; `python -m app.m1.health` → `classifier: no_model`; `GET /admin/m1/pipeline/classifier-review` empty-but-valid with `threshold: 0.55`; override endpoint sets source='expert' + audit row.
-- **Absent:** an end-to-end training run hitting the ≥ 0.92 macro-F1 DoD; per-language F1 (EN ≥ 0.93 / SI ≥ 0.88 / TA ≥ 0.86); INT8-vs-FP32 within 1.5 pp; p95 ≤ 2 s measured on a real artifact; a real `classify_gazette` producing a non-null `change_category` from the XLM-R model.
+- **Present now:** frozen v1 800-row gold files, deterministic 560/120/120 key split, TF-IDF baseline report (`LogReg=0.4980`, `LinearSVC=0.6167` macro-F1), and CPU LoRA smoke registry/checkpoint.
+- **Absent:** an end-to-end full GPU training run hitting the ≥ 0.92 macro-F1 DoD; per-language F1 (EN ≥ 0.93 / SI ≥ 0.88 / TA ≥ 0.86); INT8-vs-FP32 within 1.5 pp; p95 ≤ 2 s measured on a real artifact; a real `classify_gazette` producing a non-null `change_category` from the XLM-R model.
 
 ---
 
 ## 6. Gaps & missed approaches (the analytical part)
 
-1. **The model was never trained → the classifier pipeline is inert.** `classify_gazette` runs, `classifier_service` tries to load `storage/models/m1/onnx/v1`, fails — but no `change_category` is ever written by the model. This is the single blocking gap: **finish gold labels → train → export → drop the ONNX artifact.** → 📋 runbook Stages A–E.
-2. **Gold annotation not completed / not κ-gated in the tracker.** The IAA ≥ 0.75 κ gate (3c) and the 3a calibration κ ≥ 0.80 have no recorded pass. → 📋 every gate in the runbook now names where its evidence is recorded.
+1. **The full model was never trained/exported → the classifier pipeline is inert.** `classify_gazette` runs, `classifier_service` tries to load `storage/models/m1/onnx/v1`, fails — but no `change_category` is ever written by the model. The CPU smoke checkpoint is not an ONNX production artifact. This is the single blocking gap: **accepted gold labels → full GPU train → eval → export → drop the ONNX artifact.** → 📋 runbook Stages C–E.
+2. **Gold annotation is completed, but rare-domain coverage is weak.** The IAA ≥ 0.75 κ gate (3c) is now passed with 800 accepted rows, but `EPF_ETF_CHANGE=0` and several rare classes are far below 50 examples. → decide top-up vs. explicit thesis limitation before final LoRA claims.
 3. **Heuristic corpus can be mistaken for model output.** F-199's 800 rows are regex-classified; downstream analytics reading `change_category` without distinguishing "heuristic seed" from "model prediction" would be biased. → ✅ **Closed (Session 70):** `classification_source` ('heuristic'|'model'|'expert'), migration `202607210005` with backfill; **analytics rule: every consumer of `change_category` filters/facets by `classification_source`**, gold exporters exclude heuristic mechanically.
 4. **Serving diverges from the plan.** Local in-process ONNX in the Celery worker instead of a Fly.io service. → ✅ **Decided (Session 70):** amend the DoD to in-process ONNX (worker already ships the runtime; ~dozens/day never queues; a network hop only adds a failure mode). What was lost was the *measurement*, now restored via per-call `latency_ms` logging; deploy/rollback DoDs map to `onnx/vN` versioning + `promotion.py` canary. Revisit Fly only at 100× volume.
 5. **Silent-failure ergonomics.** Swallowing the missing-model error is right for resilience but hid that classification does nothing. → ✅ **Closed (Session 70):** `classifier_status()` → `no_model`|`ready`|`load_error`, wired into `app/m1/health.py`, surfaced at worker boot / `/admin/m1/pipeline/health` / container start.
@@ -101,8 +102,8 @@ Items 1–2 are the critical path; everything else is now either closed or downs
 >
 > | # | Gap | Status |
 > |---|---|---|
-> | 1 | Model never trained — pipeline inert | 📋 runbook (critical path) |
-> | 2 | Gold annotation / κ not gated | 📋 runbook (critical path) |
+> | 1 | Full model not trained/exported — pipeline inert | 📋 runbook (critical path); CPU smoke only |
+> | 2 | Gold annotation / κ gate | ✅ 800 accepted rows; rare-domain limitation remains |
 > | 3 | Heuristic corpus mistakable for model output | ✅ `classification_source` |
 > | 4 | Serving diverges from plan | ✅ decided in-process + latency measured |
 > | 5 | Silent-failure ergonomics | ✅ classifier readiness in health |

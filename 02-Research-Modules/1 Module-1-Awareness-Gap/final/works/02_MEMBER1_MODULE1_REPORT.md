@@ -30,12 +30,14 @@ The largest completed block. Why it exists: gazette PDFs are heterogeneous (born
 5. **Accuracy measurement system** *(the feature set that measures extraction-content accuracy)* — dataset registry with immutable sealed versions + Excel ground-truth upload; extraction-profile registry + run dispatcher with overlap detection and auto v1→v2 versioning; measurement engine with per-field metrics (categorical/dates/numeric/strings/semantic/text-summary), strata, completeness, date-scope filtering; measurement dashboard UI with drill-downs, worst-N, calibration; **downloadable accuracy report** `GET /m1/measurements/{run_id}/report.md`; data-quality expectation suites auto-run post-seal; thesis table/figure generator. *Files:* `app/api/v1/{m1_datasets,m1_extractions,m1_measurements}.py`, `app/services/m1_{dataset_service,dataset_upload,profile_service,overlap_service,measurement_aggregates,measurement_report,snapshot_service,xlsx_parser}.py`, `enigmatrix-ml/m1/evaluation/**`, pages `/admin/datasets/m1/**`.
 6. **Data population** — 800 raw PDFs bulk-extracted (11 batches); legacy-baseline backfill script materialising pre-registry extractions into the dataset registry (`scripts/backfill_legacy_baseline.py`).
 
-### Phase 3 — Annotation + Classification (3a/3b 🟢 · 3d–3f code 🟢 · 3c human gate 🔲)
-- **3a/3b:** Label Studio config (8 domains × 3 sectors × relevance × confidence), 20-doc trilingual calibration set with expert rationales, sampling library (stratified × k-means × active learning) → `batch_01.csv` (200 docs). *Files:* `research/data/label_studio_config.xml`, `research/data/calibration_set_v1.csv`, `enigmatrix-ml/m1/data/samplers.py`, `scripts/sample_for_labeling.py`.
-- **3d:** `m1/model/` — XLM-R + LoRA dual-head classifier, temporal-split data loader (leakage-tested), 3-seed trainer with F1 gate ≥ 0.92, `model_registry.json`. *Why XLM-R+LoRA:* one multilingual encoder covers EN/SI/TA; LoRA keeps training feasible on a single GPU; dual head handles single-label category + multi-label sectors jointly (CE + BCE loss).
-- **3e:** per-slice evaluation (language / quarter / length, slice-cliff ≤ 8pp) + TF-IDF baselines — the RQ1 comparison is itself a finding.
+### Phase 3 — Annotation + Classification (3a–3c complete · 3d prep/smoke complete · 3d–3f full model pending)
+- **3a/3b:** Label Studio config (8 domains × 3 sectors × relevance × confidence), 20-doc trilingual calibration set with expert rationales, stratified/k-means sampler, minority-domain targeting, and hybrid active learning. *Files:* `research/data/label_studio_config.xml`, `research/data/calibration_set_v1.csv`, `enigmatrix-ml/m1/data/samplers.py`, `scripts/sample_for_labeling.py`.
+- **3c current gold state:** annotator calibration completed; Batches 02-05 were dual-annotated and resolved to 800 gold rows. Current resolved IAA: category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518. `manual_resolutions.csv` contains 40 adjudicated disagreement decisions and the final gold file has zero lead-annotator fallback rows.
+- **Batch 05 state:** `batch_05.csv` and `batch_05_annotations_full.json` were reduced through `resolve_iaa.py`; its 3 disagreement rows were manually reviewed.
+- **3d prep/smoke:** `gold_standard_v1_800.csv` is frozen; `m1.model.data --by key` produced train/validation/test parquet splits of 560/120/120 rows; TF-IDF baselines are complete (`LogReg=0.4980`, `LinearSVC=0.6167` macro-F1); CPU LoRA smoke wrote `model_registry.json` and `model.pt` under `storage/models/m1/xlmr_lora_smoke`, with `gate_pass=false`. *Why XLM-R+LoRA:* one multilingual encoder covers EN/SI/TA; LoRA keeps training feasible on a single GPU; dual head handles single-label category + multi-label sectors jointly (CE + BCE loss).
+- **3e:** per-slice evaluation (language / quarter / length, slice-cliff ≤ 8pp) code exists; final slice evaluation is pending until a promotable GPU-trained LoRA model exists.
 - **3f:** ONNX export (LoRA-merged, optional INT8) + `GazetteInference` runtime + `m1_classifier_service` (min-confidence 0.55 review threshold) + `classify_gazette` Celery task auto-chained after preprocessing. Migration `202606300001`.
-- **In progress:** a local Label Studio instance exists (`xyz/mydata/` — sqlite + media), i.e. the annotation environment is stood up; gold labels not yet collected.
+- **In progress:** decide rare-domain top-up vs. explicit limitation, run full LoRA training/evaluation on a CUDA/GPU machine, then export/promote only if gates pass.
 
 ### Phase 4 — Watchers + Alerts + Analytics 🟢 code-complete (Sessions 66–68)
 - **4a Propagation:** `m1_propagation_events` (unique regulation × source, `first_seen_at`) + 2-step matcher (exact gazette-no conf 1.0 → difflib fuzzy ≥ 0.78) + portal/RSS watchers on 2-h Beat. *Why:* every downstream appearance timestamp is a data point in the diffusion-lag dataset — the platform's research instrument.
@@ -54,9 +56,9 @@ F1-gate reconciled to 0.92 everywhere; MASTER_CONTEXT + dossier/Excel regenerate
 ### HIGH — critical path
 | # | Task | Notes |
 |---|---|---|
-| 1 | **Phase 3c annotation** — recruit 2–3 annotators, run calibration (κ ≥ 0.80 on 20-doc set), label batch_01 (200), iterate AL batches to ≥800 gold (κ ≥ 0.75) | Blocks everything ML. Label Studio env exists in `mydata/`; import `calibration_set_v1.csv` first |
+| 1 | **Phase 3d final training decision** — deterministic split, TF-IDF baselines, and CPU smoke are complete; decide rare-domain top-up vs. limitation before full GPU LoRA | Annotation row-count and IAA gates are met; model training is now the critical path |
 | 2 | Apply migrations `202606300001–005` in production + `uv sync` extras (`serving`, `training`, `research`, feedparser) | Until then Phases 3f/4/5 code is dormant in prod |
-| 3 | **Train + evaluate + deploy the classifier** (3d→3f): `m1.model.data` → `train_xlmr` (GPU) → `eval` + `baselines` → `export_onnx --int8` → set `M1_MODEL_ONNX_DIR` | Gate: macro-F1 ≥ 0.92, slice cliff ≤ 8pp |
+| 3 | **Train + evaluate + deploy the classifier** (3d→3f): full `train_xlmr` on GPU → `eval` slice analysis → `export_onnx --int8` → set `M1_MODEL_ONNX_DIR` | Gate: macro-F1 ≥ 0.92, slice cliff ≤ 8pp |
 | 4 | **Re-extract clean SI/TA text** — resolve `(cid:…)` glyph spans before training | Known RQ2 risk (Session 62); use `scripts/log_fonts_for_cid_spans.py` + `wijesekara_routing_v1` profile |
 | 5 | Confirm portal/RSS source URLs + first live watcher runs write real `m1_propagation_events` | URLs in `m1_secondary_sources.py` marked "to confirm" |
 
@@ -68,6 +70,7 @@ F1-gate reconciled to 0.92 everywhere; MASTER_CONTEXT + dossier/Excel regenerate
 | 8 | Frontend: `/alerts` middleware public-route + nav link; accuracy-report download button + CSV export; remaining Session-72 audit items (empty states, a11y, confidence surfacing) | Snippets ready in the audit doc |
 | 9 | SI/TA translations for newest i18n keys (`[TODO]` placeholders) | Sessions 58–59, 67 strings |
 | 10 | Integration tests: auto-v2 routing path, date-scoped measurement run, alert dispatch end-to-end | Unit coverage exists; integration gaps flagged |
+| 11 | Regulation summarization + NLLB translation workflow: generate `summary_en` from raw/classified text, translate `title_en`/`summary_en` to Sinhala and Tamil, and store `summary_si`/`summary_ta` with quality checks | DB fields and admin translation queue exist; production summarizer/backfill script still needs implementation |
 
 ### LOW
 | # | Task | Notes |

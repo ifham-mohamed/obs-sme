@@ -592,7 +592,7 @@ python scripts/export_onnx.py --checkpoint storage/models/m1/staging/best.pt \
                                --out storage/models/m1/staging/gazette_classifier.onnx
 python scripts/quantize_onnx.py --input ... --out staging/gazette_classifier_int8.onnx
 python scripts/integration_test.py --model staging/gazette_classifier_int8.onnx \
-                                    --test-set research/data/test_split.parquet
+                                    --test-set enigmatrix-ml/datasets/m1_regulations/test.parquet
 # Asserts test-set F1 matches the training F1 ± 0.5 pp
 ```
 

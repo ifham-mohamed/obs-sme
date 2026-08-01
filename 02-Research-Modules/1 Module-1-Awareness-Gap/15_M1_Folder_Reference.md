@@ -45,7 +45,7 @@ This document is the per-folder build reference for Module 1. It covers six top-
 
 §8 traces a single gazette across all six folders, which is the view no individual folder section can give. §9 consolidates every folder's acceptance criteria, and §10 is the single status table across the whole tree.
 
-**Implementation status:** 🟡 Partial across the tree, and unevenly so. The scraper and the docs set are ✅ shipped; the ML extraction/preprocessing/evaluation/model scaffolds and the backend `app/m1/` package are largely shipped with the live classify path pending a trained model; `research/` has its annotation surface live and its findings notebooks deferred; `storage/` is mostly conventions with one model artefact present. Per-file status is in each section's tables and consolidated in §10.
+**Implementation status:** 🟡 Partial across the tree, and unevenly so. The scraper and the docs set are ✅ shipped; the ML extraction/preprocessing/evaluation/model scaffolds and the backend `app/m1/` package are largely shipped with the live classify path pending a trained/exported ONNX model; `research/` has completed the v1 annotation/gold gate; `enigmatrix-ml/datasets/` now holds the v1 parquet split; `storage/` holds baseline results and a CPU LoRA smoke artifact that is not promotable. Per-file status is in each section's tables and consolidated in §10.
 
 ---
 
@@ -78,8 +78,8 @@ Each folder has one or two numbered design docs that are its *specification* —
 | `enigmatrix-ml/` — extraction, preprocessing, evaluation, model, `data/samplers`, tests | §2 | [03_M1_Data_Collection.md](03_M1_Data_Collection.md) §PDF extraction chain, [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md), [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md), [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md), [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) | ~100 files | ✅ Extraction + preprocessing + evaluation + model + sampler shipped; augmentation/summarisation deferred |
 | `enigmatrix-backend/app/` — API routes, services, Celery tasks, models, schemas, migrations, scripts, middleware | §3 | [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) (schema), [11_M1_API_Reference.md](11_M1_API_Reference.md) (API), [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) (orchestration) | ~40 files | 🟡 Admin-CRUD + audit-log + Phase-2 ingest/extract pipeline shipped; alerts/schedulers deferred |
 | Scrapy project under `enigmatrix-backend/` — settings, pipelines, spiders | §4 | [03_M1_Data_Collection.md](03_M1_Data_Collection.md) §1.2–§1.3, [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §data sources | ~5 files | ✅ Phase-2 spiders shipped — gazette + weekly + acts + bills |
-| `research/` — labeling data + config + calibration + runbook; notebooks/figures | §5 | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) (annotation), [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) §research findings (F1–F6) | ~10 files | 🟡 Labelling surface shipped — config, calibration, batch_01, runbook; notebooks deferred |
-| `storage/` — raw PDFs, OCR cache, inference cache, model artifacts | §6 | [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §governance and retention, [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §reproducibility hash, [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) | ~5 directories | 🟡 Conventions documented; `storage/models/m1/baseline/lid.176.bin` present |
+| `research/` — labeling data + config + calibration + runbook; notebooks/figures | §5 | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) (annotation), [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) §research findings (F1–F6) | ~10+ files | ✅ v1 annotation gate complete — config, calibration, Batches 02-05 exports, manual resolutions, 800-row gold, and frozen v1 evidence files |
+| `storage/` — raw PDFs, OCR cache, inference cache, model artifacts | §6 | [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §governance and retention, [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §reproducibility hash, [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) | ~5 directories | 🟡 Conventions documented; `lid.176.bin`, `baselines_v1/baselines.json`, and `xlmr_lora_smoke/model_registry.json` present |
 | `enigmatrix-docs/m1/` — the docs set | §7 | [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) (placement), this document (conventions) | 17 canonical root Markdown files | ✅ Shipped — the docs themselves |
 
 **Why one canonical spec per file rather than a list.** A file with three "relevant docs" has no owner, and when the three disagree nothing forces a resolution. The "Primary doc" column in every table below names exactly one; secondary references go into §12. That constraint is what makes the CI check in §9.6 — status-badge honesty and cross-ref integrity — meaningful rather than decorative.
@@ -422,8 +422,8 @@ The Scrapy CLI works standalone for local testing. Production runs the spiders *
 
 ## 5. `research/` — the Analytical Surface
 
-> **Repo note (2026-07-24):** the annotation surface is **live**. The labeling config, the 20-doc calibration set, `batch_01.csv` plus provenance, and the Phase-3 runbook all exist under `research/data/`; a working Label Studio instance is initialised at `xyz/mydata/`. The Jupyter findings notebooks (F1–F6) are still to scaffold.
-> **Implementation status snapshot:** ✅ 5 shipped — labeling config, calibration set, batch_01 plus provenance, Phase-3 runbook · 🟡 1 partial — pre-pilot data · 🔲 ~6 deferred — findings notebooks, figures, `gold_standard.csv`, `test_split.parquet`.
+> **Repo note (2026-07-30):** the annotation surface is **live and v1-complete**. The labeling config, calibration set, Batches 02-05, full Label Studio exports, IAA reports, `manual_resolutions.csv`, `gold_standard.csv`, and frozen v1 evidence files exist under `research/data/labeling/`; a working Label Studio instance is initialised at `xyz/mydata/`. The Jupyter findings notebooks (F1–F6) are still to scaffold.
+> **Implementation status snapshot:** ✅ annotation config, calibration, Batches 02-05, reducer, IAA reports, manual resolutions, 800-row gold, frozen v1 files, deterministic parquet split, TF-IDF baselines, CPU smoke · 🟡 full LoRA model/ONNX pending · 🔲 findings notebooks/figures deferred.
 
 ### 5.1 Purpose and Specifying Docs
 
@@ -438,7 +438,7 @@ The Scrapy CLI works standalone for local testing. Production runs the spiders *
 | File | Owns | Status | Primary doc | How to build (1-liner) |
 |---|---|---|---|---|
 | `notebooks/findings_lag_analysis.ipynb` | F1–F5 lag distributions plus statistical tests | 🔲 | [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) §research findings | Read replicas; median plus bootstrap 95 % CI plus Mann-Whitney U / Kruskal-Wallis tests |
-| `notebooks/findings_classifier_evaluation.ipynb` | Full classifier eval suite — slice analyses plus confusion matrix | 🔲 | [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) + §slice analysis | Load `test_split.parquet` plus the ONNX model; reproduce eval per language / quarter / length |
+| `notebooks/findings_classifier_evaluation.ipynb` | Full classifier eval suite — slice analyses plus confusion matrix | 🔲 | [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) + §slice analysis | Load `enigmatrix-ml/datasets/m1_regulations/test.parquet` plus the ONNX model; reproduce eval per language / quarter / length |
 | `notebooks/findings_alert_effectiveness.ipynb` | F6 — DiD analysis on subscribed versus non-subscribed SMEs | 🔲 | [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) §research findings F6 | DiD regression with sector and district fixed effects; parallel-trends robustness check |
 | `notebooks/findings_secondary_diffusion.ipynb` | F4 — channel-effectiveness ranking | 🔲 | [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §3.3 — `v_m1_channel_effectiveness` | Query the view; sort by median lag; produce the channel-effectiveness heatmap |
 
@@ -464,13 +464,15 @@ The Scrapy CLI works standalone for local testing. Production runs the spiders *
 | `data/labeling/batch_01.csv` | First 200-doc annotation batch — 150 stratified + 40 k-means + 10 hand-pick | ✅ Shipped | [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) §sampling strategy | Emitted by `scripts/sample_for_labeling.py`, then imported into Label Studio |
 | `data/labeling/batch_01_provenance.json` | Sampling provenance — seed, corpus size, language/year/type breakdowns | ✅ Shipped | [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) §sampling strategy | Auto-written alongside each `batch_NN.csv` |
 | `data/PHASE3_ANNOTATION_RUNBOOK.md` | Operational runbook for the whole labelling loop | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | Living doc; describes data versus mydata, LS setup, calibration, IAA, export |
-| `data/labeling/gold_standard.csv` | Final consensus labels at κ ≥ 0.75 | 🔲 Deferred | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | Concatenation of all batches' resolved annotations; ≥ 800 rows, ≥ 50 per domain — needs the not-yet-built export/IAA reducer |
-| `data/test_split.parquet` | Held-out test set, hash-pinned in `model_registry.json` | 🔲 Deferred | [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §1.2 | Temporal split with a 30-day minimum window; SHA-256 stored in the registry |
+| `data/labeling/batch_02_annotations_full.json` … `batch_05_annotations_full.json` | Full Label Studio exports for the accepted v1 gold set | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | Reducer inputs for `scripts/resolve_iaa.py`; each accepted batch has 200 tasks and 400 annotations |
+| `data/labeling/gold_standard.csv` and `gold_standard_v1_800.csv` | Final consensus labels at κ ≥ 0.75, plus frozen v1 copy | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | 800 rows from Batches 02-05; 40 manual adjudications; rare-domain coverage still below target |
+| `data/labeling/iaa_report*.json/csv`, `disagreements.csv`, `manual_resolutions.csv` | IAA evidence and adjudication audit trail | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | Category kappa 0.871534; mean sector kappa 0.863776; SME relevance kappa 0.723518 |
+| `enigmatrix-ml/datasets/m1_regulations/{train,val,test}.parquet` | Current v1 train/validation/test split | ✅ Shipped with limitation | [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §1.2 | 560/120/120 rows from `m1.model.data --by key`; deterministic but not temporal/stratified |
 | `data/prepilot_2025-09.csv` | 40-respondent informal SME scan — EN-only Google Forms export | 🟡 Partial, already collected | [01_M1_Research_Problem.md](01_M1_Research_Problem.md) §motivation and evidence | Already collected; redact PII before commit |
 
 > **Where the live Label Studio instance lives:** `xyz/mydata/` — `label_studio.sqlite3` plus `media/upload/1` for the Batch project, `/2` for the Calibration project, plus `.env`. Start it with `LABEL_STUDIO_BASE_DATA_DIR=C:\Reasearch\xyz\mydata`. This is **not** `research/data/`: `research/data/` holds the import *sources*, while `mydata/` is Label Studio's own store of tasks and submitted annotations.
 >
-> **Supporting scripts, in `xyz/scripts/`:** `sample_for_labeling.py` emits batches (✅), `score_calibration.py` scores a calibration export against the expert labels with Cohen's κ plus per-sector κ (✅). Still to build: an `annotations_to_dataframe.py` / `resolve_iaa.py` reducer that turns a Label Studio export into `gold_standard.csv`.
+> **Supporting scripts, in `xyz/scripts/`:** `sample_for_labeling.py` emits batches (✅), `score_calibration.py` scores a calibration export against the expert labels with Cohen's κ plus per-sector κ (✅), and `resolve_iaa.py` reduces full Label Studio JSON exports into disagreements, IAA reports, and `gold_standard.csv` (✅).
 
 **Why the import sources and the Label Studio store are kept apart.** `research/data/` is version-controlled input; `mydata/` is a running application's mutable state. Collapsing them would put a SQLite database under git and make an annotation session a source-control event.
 
@@ -478,13 +480,13 @@ The Scrapy CLI works standalone for local testing. Production runs the spiders *
 
 `research/` builds *behind* `ml/` and `backend/` — the notebooks need real data from the production replicas, and the labelling data comes out of Phase 3 of the roadmap.
 
-> **Labelling — Phase 3a/3b — is already stood up.** Steps 1–4 below are largely done. Follow [`PHASE3_ANNOTATION_RUNBOOK.md`](../../../../Reasearch/xyz/research/data/PHASE3_ANNOTATION_RUNBOOK.md) to operate it; the remaining research work is `gold_standard.csv` plus the notebooks.
+> **Labelling — Phase 3a/3b/3c — is v1 complete.** Steps 1–4 below are done for Batches 02-05. Follow [`PHASE3_ANNOTATION_RUNBOOK.md`](../../../../Reasearch/xyz/research/data/PHASE3_ANNOTATION_RUNBOOK.md) to repeat or extend it; the remaining research work is full GPU training, ONNX export, and the findings notebooks.
 
 1. **Labeling interface — ✅ done.** `data/label_studio_config.xml` carries the 8-domain / 3-sector interface. Paste it into a Label Studio project's Code tab. Keep it in sync with `enigmatrix-ml/m1/model/labels.py`.
 2. **Calibration set — ✅ done (Phase 3a).** The 20 expert-labelled docs are in `data/calibration_set_v1.csv`. Candidates label them in the "M1 Calibration Test v1" project; score with `scripts/score_calibration.py`, gating at κ ≥ 0.80. See runbook §5–6.
 3. **First labelling batch — ✅ done (Phase 3b).** `data/labeling/batch_01.csv` (200 docs) plus `batch_01_provenance.json` are committed. Regenerate or add batches with `uv run python scripts/sample_for_labeling.py --batch N`. Versioned and append-only — the sampler refuses to overwrite an existing batch.
-4. **Dual-annotate plus IAA (Phase 3c) — in progress.** Two annotators per task; export Label Studio JSON; compute κ, reusing `score_calibration.py`'s helpers; resolve per [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6.3–6.4. Output goes to `data/labeling/gold_standard.csv` — ≥ 800 rows, ≥ 50 per domain. **Next script to build:** the export → `gold_standard.csv` reducer.
-5. **`test_split.parquet` (Phase 3d).** Once the 800-label set exists, produce and SHA-256-hash-pin the held-out temporal split; the hash goes into `model_registry.json`.
+4. **Dual-annotate plus IAA (Phase 3c) — done for v1.** Two annotators per task; full JSON exports reduced by `scripts/resolve_iaa.py`; output is `data/labeling/gold_standard.csv` and frozen `gold_standard_v1_800.csv`. The row-count and IAA gates passed; rare-domain coverage did not meet the original 50/domain target.
+5. **Parquet split (Phase 3d) — done with limitation.** `enigmatrix-ml/datasets/m1_regulations/{train,val,test}.parquet` exists from `m1.model.data --by key`; produce a better temporal/stratified split only if the thesis needs stronger evaluation evidence.
 6. **Notebook environment plus scaffolds (Phase 5).** `requirements-research.txt` — `jupyterlab`, `pandas`, `scipy`, `matplotlib`, `pyarrow` — plus a `.env.research` pointing at the read-only Postgres replica and the ONNX model URL. Then scaffold `findings_classifier_evaluation.ipynb` first, since Phase 3 output feeds it, then `findings_secondary_diffusion.ipynb`, then `findings_lag_analysis.ipynb` and `findings_alert_effectiveness.ipynb`, which need SME survey data.
 7. **Figures.** Each notebook writes to `figures/*.png` — commit the PNGs, which are small, so thesis reviewers can see the chart without re-running.
 8. **Pre-registration.** Before unblinding the data, write `research/preregistration.md` listing the hypotheses and tests; the pattern is in [08_M1_Full_System_Architecture.md](08_M1_Full_System_Architecture.md) §research findings, validation.
@@ -507,8 +509,8 @@ The notebooks are the **thesis artifact** — they must re-run end to end agains
 
 ## 6. `storage/` — the On-Disk Artifact Store
 
-> **Repo note (2026-07-24):** `storage/` is mostly conventions still. What is actually present today is the fastText language-ID model at **`storage/models/m1/baseline/lid.176.bin`**, used by `enigmatrix-ml/m1/extraction/language_detection.py` and fetched via `enigmatrix-ml/scripts/download_lid_model.py`. Raw-PDF and OCR-cache directories populate at runtime; the trained ONNX classifier lands once Phase-3 labelling → training completes.
-> **Implementation status snapshot:** 🟡 Conventions documented; `models/m1/baseline/lid.176.bin` present; raw/OCR/inference caches plus `models/m1/v*/` populate as Phase 2/3 run.
+> **Repo note (2026-07-30):** `storage/` now contains the fastText language-ID model at **`storage/models/m1/baseline/lid.176.bin`**, the baseline report at **`storage/models/m1/baselines_v1/baselines.json`**, and a CPU LoRA smoke output at **`storage/models/m1/xlmr_lora_smoke/`**. The smoke output is not a production classifier. The trained ONNX classifier lands only after full GPU training and export.
+> **Implementation status snapshot:** 🟡 Conventions documented; language-ID model, baseline report, and CPU smoke registry present; production `models/m1/v*/` ONNX artifacts still pending.
 
 ### 6.1 Purpose and Specifying Docs
 
@@ -540,6 +542,8 @@ The notebooks are the **thesis artifact** — they must re-run end to end agains
 | `models/m1/v1.0/metrics.json` | Per-language F1, confusion matrix, ECE | 🔲 | [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §4 | **Committed to git**; consumed by the monitoring dashboard |
 | `models/m1/v0.9/` | Previous version — the rollback target | 🔲 | [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) §Fly.io operations, rollback | Always kept on the Fly volume for ~60 s rollback |
 | `models/m1/baseline/lid.176.bin` | fastText language-ID model for EN/SI/TA routing | ✅ **Present** | [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) §language detection and routing | Fetched by `enigmatrix-ml/scripts/download_lid_model.py`; read by `enigmatrix-ml/m1/extraction/language_detection.py` |
+| `models/m1/baselines_v1/baselines.json` | TF-IDF baseline report for the v1 split | ✅ Shipped | [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §baselines | LogReg macro-F1 0.4980; LinearSVC macro-F1 0.6167 |
+| `models/m1/xlmr_lora_smoke/model_registry.json` | CPU LoRA smoke registry | ✅ Shipped / not promotable | [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §training config | One seed, one epoch, tiny smoke split, `gate_pass=false`; engineering proof only |
 | `models/m1/baseline/tfidf_lr_model.pkl` | Production-baseline TF-IDF + LR | 🔲 | [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) §architecture comparison | Trained on the full labelled set; used for ablation only |
 | `models/m1/baseline/vocabulary.pkl` | The baseline's vocabulary | 🔲 | Same | Companion to `tfidf_lr_model.pkl`; pickle for reproducibility |
 
@@ -695,7 +699,7 @@ The dotted edges are the important ones: the backend *calls* the ML modules but 
 
 **The one boundary with no persistence, and why.** Preprocessing hands chunks to the classifier in memory inside a single Celery worker process — there is no table between Stage C and Stage D. That is a deliberate trade documented in [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) §Implementation flow: it saves a DB round-trip per document, at the cost of no resumability mid-task, so a failure re-runs the whole classify step. It is also why cleaning must be idempotent (§2.6) — the re-run is the normal recovery path, not an exception.
 
-**Where the loop closes back into training.** The research folder reads the replica and the ONNX artefact, produces `gold_standard.csv` and `test_split.parquet` (§5.4), and those feed the next training run in `ml/m1/model/` (§2.7), which writes a new versioned directory under `storage/models/m1/` (§6.3), which the inference path then serves. The pipeline is not a line; it is a line plus a retraining cycle that runs through `research/`.
+**Where the loop closes back into training.** The research folder reads the replica and the ONNX artefact, produces `gold_standard.csv`, while `enigmatrix-ml/datasets/m1_regulations/{train,val,test}.parquet` carries the current split (§5.4), and those feed the next training run in `ml/m1/model/` (§2.7), which writes a new versioned directory under `storage/models/m1/` (§6.3), which the inference path then serves. The pipeline is not a line; it is a line plus a retraining cycle that runs through `research/`.
 
 ---
 
@@ -769,7 +773,9 @@ Reading §9.1–§9.6 together, four rules appear in folder-specific dress:
 | `enigmatrix-ml/` | `m1/extraction/` chain — PDF classify, page engines, Wijesekara + font-aware conversion, segmenter, language detection | ✅ Shipped | §2.5 |
 | `enigmatrix-ml/` | `m1/preprocessing/` — cleaning, metadata, chunking | ✅ Shipped | §2.6 |
 | `enigmatrix-ml/` | `m1/evaluation/` extraction-metrics package | ✅ Shipped | §2.4 |
-| `enigmatrix-ml/` | `m1/model/` — labels, architecture, `train_xlmr`, eval, baselines, `export_onnx`, inference, promotion | ✅ Scaffolds shipped · 🟡 training/ONNX being validated | §2.7 |
+| `enigmatrix-ml/` | `m1/model/` — labels, architecture, `train_xlmr`, eval, baselines, `export_onnx`, inference, promotion | ✅ Shipped · primary classifier trained, frozen and reproduced (§13) | §2.7, §13 |
+| `enigmatrix-ml/` | `m1/model/inference.py` — `LinearSVCGazetteInference` beside the ONNX `GazetteInference`; both exported from `m1.model` | ✅ Shipped · 🟡 not yet wired to FastAPI/Celery | §13.3 |
+| `enigmatrix-ml/` | `m1/model/train_xlmr.py` XLM-R + LoRA dual-head path | 🟡 Built and trained · **not promoted** — failed the temporal-test gate (§13.2) | §13.2 |
 | `enigmatrix-ml/` | `m1/data/samplers.py` | ✅ Shipped | §2.3 |
 | `enigmatrix-ml/` | `m1/data/sources.py`, `loaders.py`, `augmentation.py` | 🔲 Deferred | §2.3 |
 | `enigmatrix-ml/` | `m1/summarization/marianmt.py` | 🔲 Deferred | §2.8 |
@@ -788,13 +794,18 @@ Reading §9.1–§9.6 together, four rules appear in folder-specific dress:
 | `research/` | `data/labeling/batch_01.csv` + `batch_01_provenance.json` | ✅ Shipped | §5.4 |
 | `research/` | `data/PHASE3_ANNOTATION_RUNBOOK.md` | ✅ Shipped | §5.4 |
 | `research/` | `data/prepilot_2025-09.csv` | 🟡 Partial — already collected | §5.4 |
-| `research/` | `data/labeling/gold_standard.csv`, `data/test_split.parquet` | 🔲 Deferred | §5.4 |
+| `research/` | `data/labeling/gold_standard.csv`, frozen v1 evidence, IAA reports, manual resolutions | ✅ v1 gold shipped | §5.4 |
 | `research/` | `notebooks/` F1–F6 + `figures/` | 🔲 Deferred | §5.2, §5.3 |
 | `storage/` | `models/m1/baseline/lid.176.bin` | ✅ Present | §6.3 |
 | `storage/` | `m1/raw/`, `m1/ocr_cache/`, `m1/inference_cache/` | 🔲 Populate at runtime | §6.2 |
-| `storage/` | `models/m1/v*/` ONNX, adapter, tokenizer, registry, metrics | 🔲 Land with Phase-3 training | §6.3 |
+| `storage/` | `models/m1/baselines_v1/baselines.json`, `models/m1/xlmr_lora_smoke/model_registry.json` | ✅ baseline + smoke present | §6.3 |
+| `storage/` | `models/m1/v*/` ONNX, adapter, tokenizer, registry, metrics | 🔲 Land with full Phase-3 GPU training/export | §6.3 |
 | `storage/` | `models/m1/baseline/tfidf_lr_model.pkl` + `vocabulary.pkl` | 🔲 Deferred | §6.3 |
-| `enigmatrix-docs/m1/` | The numbered doc set 01–16 plus README | ✅ Shipped | §7.2 |
+| `enigmatrix-docs/m1/` | The numbered doc set 01–16 plus README | 🟡 **Stale mirror** — 34 of 36 shared files diverged from the vault; vault is canonical | §7.2, §13.4 |
+| workspace root | `datasets/` — frozen M1 dataset versions V4→V6 | ✅ V6 frozen + hashed | §13.1 |
+| workspace root | `models/m1/linearsvc_v6_primary/` — frozen primary classifier + evidence CSV/JSON | ✅ Frozen, checksum-verified, locally reproduced | §13.2 |
+| workspace root | `scripts/` — 31 flat research/ops scripts | ✅ Present · deliberately not subfoldered | §13.5 |
+| workspace root | `documentation/m1/{records,structure_audit}/` — generated records and audits | ✅ Shipped | §13.5 |
 
 The phase that supplies each deferred row is in [16_M1_Development_Roadmap.md](16_M1_Development_Roadmap.md): Phase 2 for the extraction chain and the raw-PDF store, Phase 3 for labelling and the model artefacts, Phase 4 for the watchers and propagation data, Phase 5 for the notebooks.
 
@@ -827,5 +838,72 @@ The status picture is honest about where the work stands: ingestion and the docs
 - **Monitoring:** [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) — §3.1 drift helpers, §performance monitoring and calibration.
 - **Evidence base:** [01_M1_Research_Problem.md](01_M1_Research_Problem.md) §motivation and evidence — the source of the pre-pilot dataset.
 - **Operational runbook:** [`research/data/PHASE3_ANNOTATION_RUNBOOK.md`](../../../../Reasearch/xyz/research/data/PHASE3_ANNOTATION_RUNBOOK.md) — the labelling loop end to end.
+- **Measured workspace map:** [[17_M1_Repo_Structure_Map]] — the physical `C:\Reasearch\xyz` tree, what is source versus generated, and which paths are contracts.
+- **Dataset and model lineage:** [[18_M1_Dataset_And_Model_Lineage]] — V4→V6 corrections, split integrity, artifact hashes, and the model bake-off.
+
+---
+
+## 13. Workspace-Root Folders and the Trained-Model State (added 2026-08-01)
+
+§2–§7 describe the six pipeline folders. Four more directories at the workspace root now hold the Phase-3 output, and this section documents them and corrects the model status above. Full physical map: [[17_M1_Repo_Structure_Map]].
+
+### 13.1 `datasets/` — frozen dataset versions
+
+```text
+datasets/
+├── m1_regulations_v4_1128/                    raw gold freeze (+ 2 stratified variants)
+├── m1_regulations_v5_1110_clean_fixedsplit/   −18 OCR artifacts, +3 adjudicated corrections
+└── m1_regulations_v6_1110_clean_fixedsplit/   +4 EPF/ETF corrections  ← CURRENT
+    ├── adjudication/                          correction manifest + PDF adjudication evidence
+    ├── applied_label_changes_v6.csv
+    ├── dataset_manifest_v6.json               per-split SHA256
+    └── {train,val,test}.parquet               777 / 166 / 167
+```
+
+The split has not moved since V4, which is what makes a V5-vs-V6 score difference attributable to labels rather than sampling. The legacy pre-V4 sets (`m1_regulations`, `_smoke`, `v2_1000`, `v3_1128_stratified`) still live in `enigmatrix-ml/datasets/` and are untracked in git.
+
+### 13.2 `models/m1/` — the frozen primary classifier
+
+**The production classifier is lexical, not neural.** This supersedes the "🟡 full GPU training pending" status the rest of this document carried.
+
+| Model | Dataset | Val macro-F1 | Test macro-F1 | Outcome |
+|---|---|---:|---:|---|
+| XLM-R LoRA, balanced | V5 | 0.596014 | 0.685348 | Rejected — 0 EPF predictions |
+| XLM-R LoRA, underfit-fix | V6 | 0.902693 | 0.743563 | Experimental only |
+| **TF-IDF + balanced LinearSVC** | **V6** | **0.924476** | **0.947220** | **Primary — frozen** |
+
+The V6 transformer reached 0.969340 *training* macro-F1, so the optimization fixes worked; it simply did not generalize to the temporal test split. Artifact:
+
+```text
+models/m1/linearsvc_v6_primary/
+├── linearsvc_pipeline.joblib      SHA256 1D7F8475…23CFA
+├── model_registry.json · labels.json · SHA256SUMS.json
+├── local_windows_verification.json
+├── {validation,test}_{summary.json,per_class.csv,confusion_matrix.csv,errors.csv,predictions.csv}
+└── ../linearsvc_v6_primary_bundle.zip
+```
+
+Test macro-F1 reproduced exactly (`0.9472199858964565`) across Kaggle and local Windows.
+
+### 13.3 `m1/model/inference.py` — two engines
+
+`LinearSVCGazetteInference` loads the frozen joblib pipeline and validates `labels.json` + `model_registry.json`; the ONNX `GazetteInference` is unchanged and still serves the dual-head category/sector model. Both are public exports of `m1.model`.
+
+Two contract consequences, both intentional:
+
+- **`confidence` is `null`** for the LinearSVC engine (`confidence_type: "not_available_uncalibrated_linearsvc"`). Margins are exposed as `decision_score`, `decision_margin`, `second_category`, `class_scores` — usable for ranking, never for display as a percentage.
+- **`sectors` is empty** — the frozen primary model has no sector head.
+
+Non-slow M1 model tests: 26 passed, 2 deselected. Service wiring, config-based path resolution and persistence mapping are still open.
+
+### 13.4 `enigmatrix-docs/m1/` is a stale mirror
+
+The repo copy of this documentation set has diverged badly: 34 of 36 shared filenames differ, the vault is newer in 31, and this very file is 5.9 KB there against 101.6 KB here. **The vault is canonical**; refresh the mirror one-way from it. The repo set does hold 52 `NN_M1_N_*` deep-dive documents the vault lacks — companions, not duplicates. Evidence: `documentation/m1/structure_audit/DOCS_SYNC_REPORT.md`.
+
+### 13.5 `scripts/` and `documentation/`
+
+`scripts/` stays flat by decision: 26 files across the docs, runbooks, work log, ML tests and the frozen record reference those paths, so subfoldering would break documented commands for cosmetic gain. The lifecycle grouping is indexed in `C:\Reasearch\xyz\STRUCTURE.md` §4.
+
+`documentation/` was reorganized on 2026-08-01 into `m1/records/`, `m1/structure_audit/`, `plans/`, `manuals/` and `_archive/`, with root-level planning documents moved in via `git mv`.
 - **Doc index:** [README.md](README.md).
 - **Build phases:** BUILD_07 (Stage A–F backend), BUILD_11 (ML training), BUILD_12 (schedulers), BUILD_13 (admin and SME tracking UI).

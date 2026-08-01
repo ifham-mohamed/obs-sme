@@ -6,7 +6,7 @@
 
 ---
 
-## Where M1 stands today (2026-05-14)
+## Where M1 stands today (2026-05-14; Phase 3 refreshed 2026-07-30)
 
 | Surface | Status | Notes |
 |---|---|---|
@@ -16,7 +16,7 @@
 | Seed data | ✅ Shipped | 5 demo regulations (`VAT_2024_AMD`, `EPF_2024_RATE`, multi-pin adapter, etc.) |
 | M1 docs base | ✅ Shipped | 53 files in `enigmatrix-docs/m1/` covering research + design |
 | Ingest pipeline (Stage A–B+) | ✅ Shipped | Sessions 23/25/26/28/30/31/32 (F-145 → F-155). Phase 2 complete: spider → extract_gazette → preprocess_gazette_task chained; rows flow `ingested → extracted → preprocessed` with all metadata fields populated and multi-penalty junction filled. |
-| ML training + classifier (Stage D) | 🔲 Deferred | BUILD_11 — no XLM-R fine-tune, no ONNX model |
+| ML training + classifier (Stage D) | 🟡 Prep/smoke complete; full model pending | 800-row v1 gold set, deterministic split, TF-IDF baselines, and CPU LoRA smoke exist. No full GPU fine-tune or ONNX model yet. |
 | Summarisation (Stage E) | 🔲 Deferred | BUILD_07 — no MarianMT integration |
 | Alert dispatch (Stage F) | 🔲 Deferred | BUILD_07 — no email/SMS pipeline |
 | Schedulers + portal watchers | 🔲 Deferred | BUILD_12 — no Celery Beat, no IRD/EPF watchers |
@@ -92,32 +92,35 @@ Already shipped. You're inheriting:
 
 **Goal:** the model classifies new gazettes at macro-F1 ≥ 0.92 and serves predictions via ONNX from Fly.io.
 
+**2026-07-30 status update:** calibration and Batches 02-05 are complete; `gold_standard_v1_800.csv` freezes the accepted 800-row gold set. `m1.model.data --by key` created 560/120/120 train/validation/test parquet splits, TF-IDF baselines scored 0.4980 (LogReg) and 0.6167 (LinearSVC) macro-F1, and a one-seed/one-epoch CPU LoRA smoke wrote `storage/models/m1/xlmr_lora_smoke/model_registry.json` with `gate_pass=false`. The smoke proves the training path only; the production classifier still needs full GPU LoRA training, evaluation, ONNX export, and activation. Rare-domain coverage remains a thesis limitation unless a targeted top-up batch is collected.
+
 ### Step 3a — Label Studio setup + calibration test
 
 - **Read first:** [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) — Label Studio setup, calibration, IAA, and the SME survey are consolidated there.
 - **Build:** Label Studio project XML config + 20-doc calibration set in `research/data/calibration_set_v1.csv`.
 - **DoD:** annotators recruited; ≥ 60 % pass the calibration test (κ ≥ 0.80 first attempt).
-- **Do this next:** copy the XML config from [09 §1.2](09_M1_Annotation_Guidelines.md) into your Label Studio instance.
+- **Status 2026-07-30:** complete. Ifham passed; Reezma and Ilham passed after retest.
 
 ### Step 3b — Sample the first 300 labelling examples
 
 - **Read first:** [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md).
 - **Build:** `scripts/sample_for_labeling.py` (stratified-by-year-language + k-means topical diversity).
 - **DoD:** `research/data/labeling/batch_01.csv` with 200 stratified + 40 k-means-diverse + 10 minority-class hand-picks.
-- **Do this next:** run the sampler against the extracted gazettes from Phase 2, send batch_01 to Label Studio.
+- **Status 2026-07-30:** sampling and annotation continued through Batches 02-05. Use the sampler again only for rare-domain top-up or future active-learning batches.
 
 ### Step 3c — Iterate to 800 labels with active learning
 
 - **Read first:** [05_M1_Model_Architecture.md §1.3 (active-learning baseline)](05_M1_Model_Architecture.md).
 - **Build:** AL baseline (TF-IDF + LR) + uncertainty-sampling acquisition function. Iterate batches 2–4 (200 docs each) over ~6 weeks.
 - **DoD:** 800 labels in `gold_standard.csv` (≥ 50 per domain); IAA on dual-annotated subset ≥ 0.75 κ.
+- **Status 2026-07-30:** row-count and IAA gates passed with 800 rows and category kappa 0.871534, but the ≥50/domain target is not met for rare categories.
 
 ### Step 3d — Train XLM-R + LoRA classifier
 
 - **Read first:** [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) §3–4 and LoRA hyperparameter sections, plus [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) for augmentation and evaluation.
 - **Build:** `ml/m1/model/architecture.py` (GazetteClassifier dual head) + `training.py` (3-seed loop + AdamW + early-stop + FP16).
 - **DoD:** 3-seed mean macro-F1 ≥ 0.92; per-language F1 hits EN ≥ 0.93, SI ≥ 0.88, TA ≥ 0.86; reproducibility hash written to `model_registry.json`.
-- **Do this next:** start by hard-coding the small LoRA ablation (`r ∈ {8, 16, 32}`) from [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) and run on the first 300 labels.
+- **Status 2026-07-30:** deterministic split, TF-IDF baselines, and CPU smoke are complete. Do this next: decide rare-domain top-up vs. limitation wording, then run the full 3-seed LoRA training on a CUDA/GPU machine.
 
 ### Step 3e — Eval + slice analysis
 

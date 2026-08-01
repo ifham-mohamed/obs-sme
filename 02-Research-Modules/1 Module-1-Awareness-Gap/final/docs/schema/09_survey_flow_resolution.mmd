@@ -1,0 +1,18 @@
+flowchart LR
+    A["start_flow(sme, module)"] --> B{"Active admin_survey for<br/>(module, sme.sector)?"}
+    B -->|yes| C["Use its ordered<br/>admin_survey_assignments"]
+    B -->|no| D{"Active admin_survey with<br/>sector_code = NULL?"}
+    D -->|yes| E["Use the general survey"]
+    D -->|no| F["Fall back to the raw bank:<br/>survey_questions filtered by<br/>module_number + sector_code + is_active"]
+    C --> G["survey_sessions row created"]
+    E --> G
+    F --> G
+    G --> H["Ask question"]
+    H --> I["survey_responses row<br/>+ auto-score if module 2"]
+    I --> J{"next_question_rules<br/>predicate matches?"}
+    J -->|yes| K["Jump to goto_question_code<br/>breadcrumb written to meta"]
+    J -->|no| L["Next by instrument_section<br/>+ sort_order"]
+    K --> H
+    L --> H
+    I -.->|m3_field_mapping| M["Project into m3_compliance_history<br/>or m3_behavioural_signals"]
+    I -.->|on submit| N["Recompute m2_knowledge_scores"]

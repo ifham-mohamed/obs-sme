@@ -1,7 +1,7 @@
 # 13 — M1 Folder Structure & Implementation Flow
 
 > Where every M1 file lives, what it owns, when it lands, and how the same shape extends to M2/M3/M4.
-> **Implementation status (2026-07-24):** 🟢 Largely built. Phase-2 ingest + the full `enigmatrix-ml/m1/` extraction/preprocessing/evaluation stack, the `model/` scaffolds, and the Phase-3 labelling surface (sampler + Label Studio config + calibration set + `batch_01` + runbook) are shipped. Remaining: alerts/schedulers (BUILD_12), summarisation, and the findings notebooks.
+> **Implementation status (2026-07-30):** 🟢 Largely built. Phase-2 ingest + the full `enigmatrix-ml/m1/` extraction/preprocessing/evaluation stack, the `model/` scaffolds, and the Phase-3 labelling surface are shipped. The v1 annotation gate is complete with 800 accepted gold rows; deterministic parquet split, TF-IDF baselines, and CPU LoRA smoke exist. Remaining: full GPU LoRA training/export, summarisation, final extraction-measurement evidence runs, and the findings notebooks.
 > **Path note:** the short names below (`ml/`, `backend/`, `scraper/`) map to the real roots `enigmatrix-ml/`, `enigmatrix-backend/` (which also hosts the Scrapy scraper), and the top-level `research/` · `data/` · `mydata/` · `scripts/` · `storage/`. Labelling operation: see the research folder section in [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) plus `research/data/PHASE3_ANNOTATION_RUNBOOK.md`.
 
 ---
@@ -10,7 +10,7 @@
 
 The 12 numbered M1 docs describe **what** the gazette-classifier system does. This doc describes **where in the project tree** each piece lives once BUILD_07/11/12 ship. It also locks the per-module shape so M2 (Knowledge), M3 (Vulnerability), and M4 (Misinformation) can copy the layout without re-litigating decisions.
 
-> Current state (2026-07-29): far beyond the original admin-CRUD slice. Shipped now includes the Phase-2 Scrapy spiders + Celery ingest/extract chain (`enigmatrix-backend/`), the whole `enigmatrix-ml/m1/` extraction → preprocessing → evaluation → model stack, and the Phase-3 labelling surface (`enigmatrix-ml/m1/data/samplers.py`, `research/data/label_studio_config.xml`, `calibration_set_v1.csv`, `labeling/batch_01.csv`, the live `mydata/` Label Studio instance, and `research/data/PHASE3_ANNOTATION_RUNBOOK.md`). The tree below is still the canonical *target* layout; the numbered parent docs and the consolidated 15_M1 folder guide carry current status badges.
+> Current state (2026-07-30): far beyond the original admin-CRUD slice. Shipped now includes the Phase-2 Scrapy spiders + Celery ingest/extract chain (`enigmatrix-backend/`), the whole `enigmatrix-ml/m1/` extraction → preprocessing → evaluation → model stack, the Phase-3 labelling/reducer flow, frozen v1 gold files, deterministic parquet splits, TF-IDF baselines, and a CPU LoRA smoke artifact. The tree below is still the canonical *target* layout; the numbered parent docs and the consolidated 15_M1 folder guide carry current status badges.
 
 ---
 
@@ -65,6 +65,11 @@ xyz/                                          # repo root
 │   │   │   ├── loaders.py                     # AsyncSession DB loaders for labeled set
 │   │   │   ├── samplers.py                    # stratified + k-means + active-learning
 │   │   │   └── augmentation.py                # back-translation + paraphrase + SI morph
+│   │   │
+│   │   ├── datasets/m1_regulations/           # v1 parquet split in real root: enigmatrix-ml/datasets/
+│   │   │   ├── train.parquet                  # 560 rows, deterministic --by key
+│   │   │   ├── val.parquet                    # 120 rows
+│   │   │   └── test.parquet                   # 120 rows
 │   │   │
 │   │   ├── extraction/                        # Stage B — PDF → text
 │   │   │   ├── __init__.py
@@ -161,7 +166,7 @@ xyz/                                          # repo root
 │       ├── gazette_spider.py                  # gazette.lk + documents.gov.lk
 │       └── portal_spiders.py                  # IRD/EPF/eROC/Customs watchers
 │
-├── research/                                  # 🟡 notebooks scaffolded, no real data yet
+├── research/                                  # ✅ v1 annotation/gold data; 🟡 findings notebooks still pending
 │   ├── notebooks/
 │   │   ├── findings_lag_analysis.ipynb        # F1–F3
 │   │   ├── findings_classifier_evaluation.ipynb
@@ -171,8 +176,11 @@ xyz/                                          # repo root
 │   └── data/
 │       ├── labeling/                          # Label Studio export CSVs
 │       │   ├── batch_01.csv … batch_NN.csv
-│       │   └── gold_standard.csv
-│       └── test_split.parquet                 # held-out test set hash-pinned in registry
+│       │   ├── batch_02_annotations_full.json … batch_05_annotations_full.json
+│       │   ├── gold_standard.csv
+│       │   ├── gold_standard_v1_800.csv
+│       │   ├── iaa_report_v1_800.json
+│       │   └── manual_resolutions.csv
 │
 ├── storage/                                   # local + Fly persistent volume artifacts
 │   ├── m1/
@@ -181,6 +189,10 @@ xyz/                                          # repo root
 │   │   └── inference_cache/                   # Redis dump (operational, gitignored)
 │   └── models/
 │       └── m1/
+│           ├── baselines_v1/
+│           │   └── baselines.json             # TF-IDF baseline report
+│           ├── xlmr_lora_smoke/
+│           │   └── model_registry.json        # CPU smoke only; not promotable
 │           ├── v1.0/
 │           │   ├── gazette_classifier.onnx
 │           │   ├── gazette_classifier_int8.onnx

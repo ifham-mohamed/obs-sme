@@ -1,0 +1,76 @@
+erDiagram
+    users ||--o{ refresh_tokens : "issues (rotation families)"
+    users ||--o{ password_reset_tokens : "requests"
+    users ||--|| sme_profiles : "has exactly one (UNIQUE user_id)"
+
+    users {
+        uuid id PK "uuid4, app-generated"
+        string email UK "unique + indexed, the login identity"
+        string password_hash "bcrypt/argon hash, never the raw password"
+        string role "sme | annotator | admin, default 'sme'"
+        string preferred_language "en | si | ta, default 'en'"
+        bool is_active "soft disable without deleting history"
+        int token_version "bumped on log-out-all; JWT ver claim must match"
+        timestamptz created_at "TimestampMixin"
+        timestamptz updated_at "TimestampMixin"
+        string created_by "AuthorshipMixin, acting user email"
+        string updated_by "AuthorshipMixin, acting user email"
+    }
+
+    refresh_tokens {
+        uuid jti PK "the JWT ID of the issued refresh token"
+        uuid user_id FK "to users.id, ON DELETE CASCADE"
+        uuid family_id "rotation family; login opens one"
+        timestamptz expires_at "absolute expiry, independent of revocation"
+        timestamptz revoked_at "NULL = live; set on rotation or breach"
+        uuid replaced_by "jti of the successor token, audit chain"
+        timestamptz created_at "issue time"
+    }
+
+    password_reset_tokens {
+        uuid id PK "row identity"
+        uuid user_id FK "to users.id, ON DELETE CASCADE"
+        string token_hash UK "SHA-256 hex(64); raw token is emailed only"
+        timestamptz expires_at "time-boxed window"
+        timestamptz used_at "NULL = unused; enforces single use"
+        timestamptz created_at "request time"
+    }
+
+    sme_profiles {
+        uuid sme_id PK "research-facing SME identity"
+        uuid user_id FK,UK "to users.id, UNIQUE = strict 1:1"
+        string sector "grocery_retail | food_service | general_retail"
+        string sub_sector "free-form refinement"
+        string employee_count_band "1-10 | 11-50 | 51-200"
+        string annual_turnover_band "banded, not exact - disclosure comfort"
+        int business_age_years "M3 risk feature"
+        string region "geographic stratification"
+        string primary_language "en | si | ta"
+        string phone "E.164 +94..., for SMS alerts"
+        bool alert_sms_opt_in "default FALSE - explicit opt-in required"
+        bool consent_given "research ethics gate, default TRUE"
+        string consent_text_version "which consent wording was agreed"
+        timestamptz created_at "TimestampMixin"
+        timestamptz updated_at "TimestampMixin"
+        string created_by "AuthorshipMixin"
+        string updated_by "AuthorshipMixin"
+    }
+
+    audit_log {
+        bigint log_id PK "BIGSERIAL, append-only ordering"
+        string event_type "indexed; discriminates the two row families"
+        string table_name "affected table, NULL for http.request rows"
+        uuid record_id "UUID PK of affected row, NULL for batch events"
+        string record_key "indexed natural key e.g. VAT_FACT_001"
+        string user_name "actor email, denormalised"
+        jsonb event_data_json "free-form event payload"
+        timestamptz occurred_at "indexed, server_default now()"
+        string http_method "GET|POST|PUT|PATCH|DELETE"
+        string endpoint_path "e.g. /api/v1/m1/regulations/uuid"
+        string ip_address "x-forwarded-for first hop else client host"
+        string user_agent "raw UA string"
+        int status_code "HTTP response status"
+        bool success "indexed, fast failure queries"
+        jsonb old_value "optional before-snapshot"
+        jsonb new_value "optional after-snapshot"
+    }

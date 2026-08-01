@@ -1,0 +1,30 @@
+erDiagram
+    sectors ||--o{ m1_regulation_sectors : "targeted by"
+    sectors ||--o{ survey_questions : "scopes"
+    sectors ||--o{ admin_surveys : "scopes"
+    regulatory_domains ||--o{ m1_regulations : "classifies"
+    regulatory_domains ||--o{ survey_questions : "categorises"
+
+    sectors {
+        string sector_code PK "grocery_retail | food_service | general_retail"
+        string name "display label"
+        string description "scope note for annotators"
+        int sort_order "stable UI ordering, default 0"
+    }
+
+    regulatory_domains {
+        string domain_code PK "TAX_RATE_CHANGE IMPORT_EXPORT EPF_ETF_CHANGE ... 8 seeded"
+        string name "display label"
+        string description "what falls inside this domain"
+        int sort_order "stable UI ordering, default 0"
+    }
+
+    survey_limits {
+        int id PK "singleton row, always 1"
+        int sme_limit "max surveys an SME may take, default 10"
+        int annotator_limit "default 0"
+        int admin_limit "default 0"
+        string updated_by "who last changed the policy"
+        timestamptz created_at "TimestampMixin"
+        timestamptz updated_at "TimestampMixin"
+    }

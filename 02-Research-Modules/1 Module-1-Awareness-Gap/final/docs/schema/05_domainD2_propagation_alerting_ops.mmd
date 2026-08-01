@@ -1,0 +1,89 @@
+erDiagram
+    m1_regulations ||--o{ m1_propagation_events : "confirmed mention"
+    m1_regulations ||--o{ m1_propagation_reviews : "uncertain candidate"
+    m1_regulations ||--o{ m1_alerts : "notifies about"
+    users ||--o{ m1_alerts : "recipient (NULL = broadcast)"
+
+    m1_propagation_events {
+        uuid event_id PK "uuid4"
+        uuid regulation_id FK "to m1_regulations CASCADE"
+        string source_id "source code - NOT a declared FK to m1_sources"
+        string channel "CHECK official_portal or news_rss"
+        timestamptz first_seen_at "earliest-wins timestamp, the research datum"
+        string match_method "CHECK exact_gazette or fuzzy_title"
+        numeric match_confidence "0.00-1.00 CHECK-bounded"
+        string source_url "where the mention was found"
+        string detail "extra match context"
+        timestamptz created_at "TimestampMixin"
+        timestamptz updated_at "TimestampMixin"
+    }
+
+    m1_propagation_reviews {
+        uuid review_id PK "uuid4"
+        uuid regulation_id FK "to m1_regulations CASCADE"
+        string source_id "candidate source"
+        string channel "official_portal or news_rss"
+        numeric cosine "similarity in the 0.60-0.78 uncertain band"
+        string item_url "candidate item URL"
+        text item_text "candidate text for the reviewer to judge"
+        timestamptz first_seen_at "candidate timestamp"
+        string status "CHECK pending confirmed rejected"
+        timestamptz created_at "server_default now()"
+        timestamptz reviewed_at "decision time"
+        string reviewed_by "decision maker"
+    }
+
+    m1_alerts {
+        uuid alert_id PK "uuid4"
+        uuid regulation_id FK "to m1_regulations CASCADE"
+        uuid sme_id FK "to USERS.id CASCADE; NULL = public broadcast"
+        string channel "in_app email sms"
+        string status "pending sent failed skipped read"
+        string sector_code "denormalised targeting snapshot"
+        string title "notification headline, required"
+        text body "notification body"
+        string url "deep link target"
+        timestamptz sent_at "dispatch time"
+        timestamptz read_at "engagement signal"
+        timestamptz created_at "TimestampMixin"
+        timestamptz updated_at "TimestampMixin"
+    }
+
+    m1_retraining_runs {
+        uuid run_id PK "uuid4"
+        string trigger "scheduled drift manual"
+        string status "queued running succeeded failed rolled_back"
+        numeric candidate_f1 "4,3 new model score"
+        numeric prod_f1 "4,3 incumbent score"
+        string action "promote rollback hold"
+        string reason "why that action was taken"
+        bool promoted "outcome flag"
+        bool rolled_back "outcome flag"
+        timestamptz started_at "execution start"
+        timestamptz finished_at "execution end"
+        text notes "operator notes"
+        timestamptz created_at "TimestampMixin"
+        timestamptz updated_at "TimestampMixin"
+    }
+
+    m1_quality_probes {
+        uuid probe_id PK "uuid4"
+        timestamptz window_start "probe window start"
+        timestamptz window_end "probe window end"
+        int window_n "rows in window, all statuses"
+        int sampled_n "texts sampled for content-level checks"
+        jsonb metrics "flat metric_name to float map"
+        bool degraded "TRUE on floor breach or >2 sigma drift"
+        jsonb alerts "which metrics breached and why"
+        timestamptz created_at "probe time"
+    }
+
+    m1_pipeline_audits {
+        bigint audit_id PK "BIGSERIAL"
+        date run_date "INDEXED logical UTC day, UNIQUE with check_name"
+        string check_name "which nightly check this row reports"
+        numeric value "measured rate count or age-hours, NULL if uncomputable"
+        bool passed "did the check pass"
+        jsonb detail "threshold n and message"
+        timestamptz created_at "server_default now()"
+    }

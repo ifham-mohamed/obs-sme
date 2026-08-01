@@ -127,12 +127,15 @@ This answers *"how good is our extraction?"* quantitatively — a core thesis ar
 - **Data-quality suites** (`data_quality/expectations/*.json`) auto-validated post-seal via `validate_dataset_version` task; violations recorded on the version row.
 - **Thesis artefact generator**: `scripts/regenerate_thesis_tables.py` → `data/thesis/table_4_{1,2,3}.csv`, `figure_4_{1,2}.svg`, `RUN_PROVENANCE.md` (`make thesis-artifacts`).
 
-### 5.4 M1 Phase 3 — Annotation + Classification (Sessions 61–65, F-216…F-228)
-- **3a/3b (🟢):** Label Studio project XML (8-domain + 3-sector + SME-relevance + confidence + notes), 20-doc trilingual calibration set with expert labels, stratified + k-means + active-learning samplers (`m1/data/samplers.py`), `scripts/sample_for_labeling.py` → `batch_01.csv` (200 docs: 150 stratified + 40 k-means + 10 handpick).
-- **3d (scaffold 🟢, training 🟡):** `m1/model/` — labels, config, temporal-split data loader (no leakage, unit-tested), XLM-R+LoRA dual-head architecture, 3-seed trainer CLI with FP16/early-stop/`model_registry.json`, gate macro-F1 ≥ 0.92.
-- **3e (🟢 code):** `m1/model/eval.py` (per-slice macro-F1 by language/quarter/length, slice-cliff ≤ 8pp check, error analysis CSV) + `baselines.py` (TF-IDF+LogReg, TF-IDF+LinearSVC — the RQ1 comparison).
-- **3f (🟢 code):** `export_onnx.py` (merges LoRA, optional INT8) + `GazetteInference` ONNX Runtime engine + backend `m1_classifier_service` + `classify_gazette` task auto-chained after preprocessing; migration `202606300001` adds `change_category` confidence columns.
-- **Human gate 🔲:** annotation (3c) to ≥800 gold labels at κ ≥ 0.75, then the GPU training run. A local Label Studio instance exists at `xyz/mydata/` (sqlite + media) — annotation environment stood up, labels not yet collected/merged.
+### 5.4 M1 Phase 3 — Annotation + Classification (Sessions 61–65 + 2026-07-30 update, F-216…F-228)
+- **3a/3b (complete):** Label Studio project XML (8-domain + 3-sector + SME-relevance + confidence + notes), 20-doc trilingual calibration set with expert labels, stratified + k-means samplers, minority-domain targeting, and hybrid active learning in `scripts/sample_for_labeling.py`.
+- **3c (gold gate reached):** Calibration was completed; Batches 02-05 were dual-annotated and reduced into an 800-row `gold_standard.csv`. Current resolved IAA: category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518, with 40 manual-review rows recorded in `manual_resolutions.csv` and zero lead-annotator fallback rows.
+- **Batch 05 state:** `batch_05.csv` and `batch_05_annotations_full.json` were merged through `resolve_iaa.py`; its 3 disagreement rows were manually resolved as non-SME-facing public/administrative notices.
+- **Rare-domain warning:** Current gold set is dominated by `SECTOR_SPECIFIC` (671/800); `EPF_ETF_CHANGE` is still 0 and product/business/penalty/import remain under the preferred 50/domain target. More source data should be ingested or hand-targeted if the thesis needs strong rare-domain performance claims.
+- **3d (training-prep complete, full training pending):** `gold_standard_v1_800.csv` is frozen; `m1.model.data --by key` produced train/validation/test parquet splits of 560/120/120 rows; TF-IDF baselines are complete (`LogReg=0.4980`, `LinearSVC=0.6167` macro-F1); CPU LoRA smoke wrote `storage/models/m1/xlmr_lora_smoke/model_registry.json` with `gate_pass=false`. This smoke proves the training loop, not model quality. Full LoRA still needs CUDA/GPU.
+- **3e (code + baseline evidence):** `m1/model/eval.py` exists for per-slice macro-F1 by language/quarter/length, slice-cliff ≤ 8pp check, and error analysis CSV. Final slice evaluation is pending until a promotable GPU-trained model exists.
+- **3f (code):** `export_onnx.py` (merges LoRA, optional INT8) + `GazetteInference` ONNX Runtime engine + backend `m1_classifier_service` + `classify_gazette` task auto-chained after preprocessing; migration `202606300001` adds `change_category` confidence columns.
+- **Model gate now moves forward:** The 800-row annotation gate, frozen v1 dataset, deterministic key split, TF-IDF baselines, and CPU smoke are complete. Next: decide rare-domain top-up vs. limitation wording, then run full GPU LoRA, evaluate/export, and activate only if gates pass.
 
 ### 5.5 M1 Phase 4 — Watchers, Alerts, Analytics (Sessions 66–68, F-229…F-236, code-complete)
 - **4a:** `m1_propagation_events` table; secondary-source registry (IRD/EPF/ETF/eROC portals + 5 news RSS); 2-step matcher (exact gazette-number conf 1.0 → difflib fuzzy ≥ 0.78, unit-tested); `portal_watcher` + `rss_watcher` Beat tasks.
@@ -165,13 +168,14 @@ Migrations: linear Alembic chain `202605080001` … `202606300005` (the last fiv
 
 **Everything in the M1 roadmap (Phases 1–5) is code-complete.** The remaining gates are human/data, not code:
 
-1. **Annotate** (Phase 3c): recruit annotators → calibration test (κ ≥ 0.80 on the 20-doc set) → label `batch_01.csv` → active-learning batches → ≥800 gold labels. *This is the single blocker for the entire ML path.*
-2. **Train** (3d): `python -m m1.model.data` → `python -m m1.model.train_xlmr` (GPU) → eval (3e) → `export_onnx --int8` → set `M1_MODEL_ONNX_DIR` (3f).
-3. **Apply migrations** `202606300001–005` + `uv sync` extras (`serving`, `training`, `research`, feedparser) in the deployed env; confirm portal/RSS source URLs.
-4. **Survey fieldwork** (5a): ≥100 SME respondents; then run the F1–F6 notebooks on real data.
-5. **Re-extract clean SI/TA text** — the `(cid:…)` glyph issue is a known RQ2 risk flagged in Session 62.
+1. **Freeze the accepted gold set** (Phase 3c): archived locally as `gold_standard_v1_800.csv`, `iaa_report_v1_800.json`, and `iaa_report_summary_v1_800.csv`; keep `disagreements.csv` and `manual_resolutions.csv` as adjudication evidence.
+2. **Fix data coverage if needed:** if the project needs strong rare-domain claims, ingest or hand-target more EPF/ETF, product-standard, business-registration, penalty/enforcement, tax, and import/export notices before final training.
+3. **Train** (3d): use the existing deterministic key split and baseline results as prep evidence, or rebuild a better temporal/stratified split if needed → run `python -m m1.model.train_xlmr` on GPU → eval (3e) → `export_onnx --int8` → set `M1_MODEL_ONNX_DIR` (3f).
+4. **Apply migrations** `202606300001–005` + `uv sync` extras (`serving`, `training`, `research`, feedparser) in the deployed env; confirm portal/RSS source URLs.
+5. **Survey fieldwork** (5a): ≥100 SME respondents; then run the F1–F6 notebooks on real data.
+6. **Re-extract clean SI/TA text** — the `(cid:…)` glyph issue is a known RQ2 risk flagged in Session 62.
 
-Secondary follow-ups: FE accuracy-report download button + CSV export (Session-72 audit list), `/alerts` middleware + nav wiring, SME phone field for SMS, SI/TA i18n for newest strings, git tag `m1-phase2-complete`, real Docker digests, `graphify update .` (graph is ~6 weeks stale).
+Secondary follow-ups: FE accuracy-report download button + CSV export (Session-72 audit list), `/alerts` middleware + nav wiring, SME phone field for SMS, production regulation summarization plus NLLB Sinhala/Tamil title/summary backfill, SI/TA i18n for newest strings, git tag `m1-phase2-complete`, real Docker digests, `graphify update .` (graph is ~6 weeks stale).
 
 ---
 

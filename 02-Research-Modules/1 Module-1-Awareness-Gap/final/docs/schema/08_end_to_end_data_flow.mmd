@@ -1,0 +1,35 @@
+flowchart TD
+    A["Government listing page"] -->|spider| B["m1_gazette_items<br/>title, download_url"]
+    B --> C["m1_regulations<br/>status = ingested"]
+    C -->|extract_gazette| D["raw_text, sha256,<br/>pdf_pages, language"]
+    D -->|preprocess_gazette_task| E["cleaned_text +<br/>classification_chunk"]
+    E --> F["m1_regulation_penalties<br/>DELETE-then-INSERT rebuild"]
+    E --> G["m1_sub_documents<br/>DELETE-then-INSERT rebuild"]
+    E -->|classify_gazette_task| H["change_category +<br/>classifier_confidence +<br/>classification_source"]
+    H --> I{"confidence &lt; 0.55?"}
+    I -->|yes| J["Admin review queue<br/>expert_verified = TRUE"]
+    I -->|no| K["m1_regulation_sectors<br/>impact_level per sector"]
+    J --> K
+    K --> L["m1_alerts<br/>UNIQUE reg+sme+channel"]
+    L --> M["SME reads alert<br/>read_at set"]
+
+    C -.->|watchers poll m1_sources| N["m1_propagation_events<br/>first_seen_at"]
+    N --> O["v_m1_regulation_lag_summary<br/>v_m1_channel_effectiveness"]
+    C -.->|uncertain 0.60-0.78| P["m1_propagation_reviews<br/>human confirm/reject"]
+    P -->|confirmed| N
+
+    K --> Q["survey_question_regulations"]
+    Q --> R["survey_questions<br/>unified bank"]
+    R --> S["admin_surveys +<br/>admin_survey_assignments"]
+    S --> T["survey_sessions"]
+    T --> U["survey_responses<br/>is_correct, score_points, meta"]
+    U --> V["m2_knowledge_scores"]
+    U --> W["m3_compliance_history +<br/>m3_behavioural_signals<br/>via m3_field_mapping"]
+    V --> X["M3 vulnerability model"]
+    W --> X
+
+    D -.->|snapshot| Y["m1_dataset_versions<br/>frozen_at = SEALED"]
+    Y --> Z["m1_dataset_rows"]
+    Y --> AA["m1_measurement_runs<br/>baseline vs candidate"]
+    AA --> AB["m1_measurement_scores"]
+    AB --> AC["m1_retraining_runs<br/>promote / rollback / hold"]

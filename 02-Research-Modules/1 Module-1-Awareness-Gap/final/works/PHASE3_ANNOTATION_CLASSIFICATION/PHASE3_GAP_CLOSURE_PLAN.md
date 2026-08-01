@@ -6,13 +6,30 @@
 
 | # | Gap | Status |
 |---|---|---|
-| 1 | Model never trained — pipeline inert | 📋 runbook below (critical path) |
-| 2 | Gold annotation not completed / κ not gated | 📋 runbook below (critical path) |
+| 1 | Full model never trained/exported — pipeline inert | 📋 runbook below (critical path); CPU LoRA smoke passed but is not promotable |
+| 2 | Gold annotation not completed / κ not gated | ✅ 800 resolved gold rows from Batches 02-05; category kappa 0.871534 |
 | 3 | Heuristic corpus mistakable for model output | ✅ implemented — `classification_source` |
 | 4 | Serving diverges from plan (in-process vs Fly) | ✅ decision + latency now measured; plan below |
 | 5 | Silent-failure ergonomics (no model = invisible) | ✅ implemented — classifier readiness in health |
 | 6 | Review-queue UI deferred | ✅ backend implemented; UI slice specced |
-| 7 | Training env heavy + optional | 📋 plan below |
+| 7 | Training env heavy + optional | 🟡 local extras usable for smoke; full CUDA/GPU environment still required |
+
+---
+
+## Current Phase 3 State (2026-07-30)
+
+This plan remains the original gap-closure sequence, but the annotation gap has progressed:
+
+- Annotator calibration was run and retested where needed.
+- Batches 02, 03, 04, and 05 were dual-annotated and reduced into `gold_standard.csv`.
+- Current accepted gold set: 800 rows, category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518.
+- `manual_resolutions.csv` contains 40 adjudicated disagreement rows; `gold_standard.csv` has 760 `auto_agree` rows and 40 `manual_review` rows.
+- Frozen v1 files exist: `gold_standard_v1_800.csv`, `iaa_report_v1_800.json`, and `iaa_report_summary_v1_800.csv`.
+- Deterministic `--by key` parquet split exists: train 560, validation 120, test 120.
+- TF-IDF baselines are complete: LogReg macro-F1 0.4980 and LinearSVC macro-F1 0.6167.
+- CPU LoRA smoke is complete and wrote `storage\models\m1\xlmr_lora_smoke\model_registry.json`, but `gate_pass=false`; this proves the training loop only, not model quality.
+- Immediate action: decide rare-domain top-up vs. limitation wording, then run full LoRA training/evaluation on a CUDA/GPU machine.
+- Full LoRA training is no longer blocked by row count or category IAA, but rare-domain coverage and GPU availability remain validity/execution limitations.
 
 ---
 
@@ -34,12 +51,12 @@ Everything else is downstream of this. Detailed runbook, in order; each stage na
 1. `batch_01.csv` (250 docs: 200 stratified + 40 k-means diversity + 10 minority) already exists — import to Label Studio, **dual-annotate** every doc.
 2. Per batch: compute pairwise κ. Gate **κ ≥ 0.75**; disagreements → adjudicate → single gold label per doc. Record κ per batch in the tracker.
 3. Train the AL baseline (`m1/model/baselines.py` ALBaseline, TF-IDF+LR) on gold-so-far → `select_uncertainty_batch` (margin sampling) picks batch_02 (~200) from the unlabelled pool → repeat. Expect 3–4 batches to reach **800 gold**.
-4. Export gold as parquet via `m1/model/data.py` conventions (temporal split — train on older, eval on newer; the split code exists). **The F-199 heuristic rows are NOT gold and never enter this set** (they're now marked `classification_source='heuristic'` — gap #3 — so the exporter can exclude them mechanically).
+4. Export gold as parquet via `m1/model/data.py` conventions. Current v1 split uses `--by key` because reliable gazette dates are absent in the accepted gold file; replace with a temporal/stratified split if stronger evaluation evidence is required. **The F-199 heuristic rows are NOT gold and never enter this set** (they're now marked `classification_source='heuristic'` — gap #3 — so the exporter can exclude them mechanically).
 5. Minority floor: every category ≥ 20 gold docs; if a category can't reach it, merge per taxonomy rules BEFORE training, not after.
 
 ### Stage C — Train (3d gate: 3-seed mean macro-F1 ≥ 0.92)
 
-1. Environment: the separate ML env from gap #7 (GPU box / Colab Pro / Lambda; `uv sync --extra training` per the plan below). Verify: `python -c "import torch; assert torch.cuda.is_available()"`.
+1. Environment: the separate ML env from gap #7 (GPU box / Colab Pro / Lambda; `uv sync --extra training` per the plan below). Local CPU smoke has already passed, but the final run must verify CUDA: `python -c "import torch; assert torch.cuda.is_available()"`.
 2. Run `m1/model/train_xlmr.py` — the 3-seed loop, temporal split, model-registry hash are already coded. Config via `ModelConfig` (LoRA r, lr, epochs); start with defaults.
 3. Gate: mean macro-F1 across the 3 seeds ≥ 0.92 on the held-out temporal split. Below gate, in order: more gold (another AL batch — usually the answer), then LoRA r / lr sweep, then category-merge review. Record all runs + seeds + F1s in the tracker.
 
@@ -83,6 +100,7 @@ UI slice (14_M1_2, frontend follow-up): table mirroring the metadata-review patt
 2. `enigmatrix-ml/TRAINING.md`: GPU requirements (fits a T4/16 GB with LoRA + fp16), `uv sync --extra training`, the Stage C–E commands verbatim, expected wall-times, artifact upload step.
 3. Optional `Dockerfile.train` (CUDA base + the extra) for a rentable GPU box; not CI — training is launched by a human against gold data.
 4. Reproducibility invariants already in code (keep them): `set_seed` 3-seed loop, model-registry hash written by `train_xlmr.py`, temporal split determinism from `data.py`. Record the winning run's hash in the tracker next to the κ evidence.
+5. Local smoke evidence: `C:\Reasearch\xyz\storage\models\m1\xlmr_lora_smoke\model_registry.json` was written from one seed/one epoch on a tiny smoke split. Treat it as an environment check only; do not export it to ONNX or use it in RQ1.
 
 ## Verification of Session 70's code (deferred to user)
 

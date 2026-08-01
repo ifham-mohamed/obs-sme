@@ -1,0 +1,24 @@
+stateDiagram-v2
+    [*] --> ingested : spider writes row (Step 2a)
+    ingested --> extracted : extract_gazette — raw_text, extraction_method, sha256, pdf_pages
+    extracted --> preprocessed : preprocess_gazette_task — cleaned_text, classification_chunk, penalties, sub_documents
+    preprocessed --> classified : classify_gazette_task — change_category, classifier_confidence, classification_source
+    classified --> summarized : Stage-E summariser — summary_en/si/ta per sub-document
+    summarized --> alerted : alert dispatch writes m1_alerts rows
+    alerted --> archived : end of lifecycle
+    ingested --> extraction_failed : exception → last_error, last_error_at
+    extracted --> extraction_failed : exception → last_error, last_error_at
+    extraction_failed --> ingested : operator Retry clears last_error
+
+    note right of classified
+        INVARIANT ck_m1_reg_category_when_classified:
+        at classified or beyond, change_category
+        MUST be non-NULL.
+    end note
+
+    note right of ingested
+        manual_hold = TRUE makes resume_pipeline
+        skip this row, so it never auto-advances.
+        is_active = FALSE is orthogonal admin
+        soft-delete, not a pipeline state.
+    end note

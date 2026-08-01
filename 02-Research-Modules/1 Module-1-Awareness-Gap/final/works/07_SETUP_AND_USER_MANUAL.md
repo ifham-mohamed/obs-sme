@@ -179,24 +179,74 @@ Base install already arrives via the backend's `uv sync` (workspace). Extras are
 | `surya` | surya-ocr (~700 MB models) | opting into the Surya OCR fallback profile |
 | `research` | pandas, numpy, scipy, jupyter, matplotlib | F1–F6 findings notebooks |
 
-```bash
+```powershell
 cd enigmatrix-ml
 uv sync --extra evaluation            # combine as needed: --extra training --extra research
 uv run pytest -q                      # extraction (12+), evaluation (19+), model, findings tests
 uv run pytest tests/m1/extraction -v  # or: make test-extraction
 ```
 
-**End-to-end ML workflow (after Phase-3c gold labels exist):**
+**End-to-end ML workflow (current v1 state after Phase-3c gold labels):**
 
-```bash
-uv sync --extra training
-uv run python -m m1.model.data --input gold_standard.csv --out data/splits/     # temporal 70/15/15 split
-uv run python -m m1.model.train_xlmr --data data/splits/ [GPU]                   # 3-seed train, gate macro-F1 ≥ 0.92
-uv run python -m m1.model.eval --model <ckpt> --test data/splits/test.parquet    # per-slice F1 + cliff ≤ 8pp
-uv run python -m m1.model.baselines --data data/splits/                          # TF-IDF baselines (RQ1 comparison)
-uv run python -m m1.model.export_onnx --int8                                     # → ONNX; then set M1_MODEL_ONNX_DIR for the backend
-uv run python scripts/retrain.py --dry-run                                       # verify the retraining loop wiring
+```powershell
+cd C:\Reasearch\xyz\enigmatrix-ml
+uv sync --extra training --extra research
+
+uv run --extra research python -m m1.model.data `
+  --in ..\research\data\labeling\gold_standard_v1_800.csv `
+  --out datasets\m1_regulations `
+  --by key
+
+uv run --extra training --extra research python -m m1.model.baselines `
+  --data datasets\m1_regulations `
+  --report ..\storage\models\m1\baselines_v1
+
+# Full model training requires CUDA/GPU. Do not promote the CPU smoke output.
+uv run --extra training --extra research python -m m1.model.train_xlmr `
+  --data datasets\m1_regulations `
+  --seeds 42 1 2 `
+  --base xlm-roberta-base `
+  --lora-r 16 `
+  --epochs 8 `
+  --fp16 `
+  --out ..\storage\models\m1\xlmr_lora_v1
+
+uv run --extra training --extra research python -m m1.model.eval `
+  --model ..\storage\models\m1\xlmr_lora_v1 `
+  --data datasets\m1_regulations
+
+uv run --extra training --extra serving python -m m1.model.export_onnx --int8
+uv run --extra training python scripts\retrain.py --dry-run
 ```
+
+**Latest v3 rare-domain workflow (current classifier evidence after Batch 06/07):**
+
+The v1 workflow above is retained as historical evidence. For current training and baseline reporting, use the v3 frozen gold set and stratified split:
+
+```powershell
+cd C:\Reasearch\xyz\enigmatrix-ml
+uv sync --extra training --extra research
+
+# Current accepted source dataset:
+# C:\Reasearch\xyz\research\data\labeling\gold_standard_v3_1128.csv
+# Current split:
+# C:\Reasearch\xyz\enigmatrix-ml\datasets\m1_regulations_v3_1128_stratified
+
+uv run --extra training --extra research python -m m1.model.baselines `
+  --data datasets\m1_regulations_v3_1128_stratified `
+  --report ..\storage\models\m1\baselines_v3_1128_stratified
+```
+
+Current v3 result:
+
+```text
+TF-IDF LogReg macro-F1     = 0.862652
+TF-IDF LinearSVC macro-F1  = 0.908012
+target macro-F1            = 0.92
+decision                   = close to gate, not final pass
+```
+
+Do not promote the older Kaggle v1 LoRA checkpoint. Any future XLM-R LoRA run must beat the v3 LinearSVC baseline on the same v3 split before export/promotion.
 
 ---
 
@@ -208,7 +258,7 @@ python3 -m venv ~/ls-venv && source ~/ls-venv/bin/activate
 pip install label-studio
 LABEL_STUDIO_BASE_DATA_DIR=/mnt/c/Reasearch/xyz/mydata label-studio start   # reuses your existing instance data
 ```
-Then in the UI: create/open the project → import `research/data/label_studio_config.xml` as the labeling config → import `research/data/calibration_set_v1.csv` (annotator calibration, κ ≥ 0.80 gate) → then `research/data/labeling/batch_01.csv` (200 docs). Generate later batches: `make labeling-batch BATCH=2` (live DB) or `make labeling-batch-demo` (synthetic). ⚠️ `mydata/` holds the sqlite DB + media for your existing instance — **back it up before upgrades**.
+Then in the UI: create/open the project → import `research/data/label_studio_config.xml` as the labeling config → import `research/data/calibration_set_v1.csv` for new annotator calibration. Current Phase 3 state as of 2026-07-30: Batches 02-05 are resolved into 800 gold rows with category kappa 0.871534 and mean sector kappa 0.863776. The detailed current process is in `PROGRAM_READINESS/M1_PHASE3_ANNOTATION_AND_ACTIVE_LEARNING_USER_MANUAL.md`. Generate another batch only if you decide to improve rare-domain coverage before final LoRA training. ⚠️ `mydata/` holds the sqlite DB + media for your existing instance — **back it up before upgrades**.
 
 ---
 

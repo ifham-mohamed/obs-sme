@@ -44,7 +44,24 @@ This document specifies the annotation protocol for constructing the 800-documen
 
 Four annotation platforms are evaluated — Label Studio, Prodigy, Doccano, and a custom web tool — and Label Studio is selected for its active-learning integration, multi-label support, IAA dashboard, and zero licensing cost. The guidelines are designed to achieve labeling consistency sufficient for a training corpus that reaches the F1 ≥ 0.92 target defined in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md).
 
-**Implementation status:** 🔲 Deferred to BUILD_07. The taxonomy, decision criteria, and survey instrument are frozen and already drive the database enum and the seeded demo regulations. Annotator onboarding, the calibration set, and the Label Studio deployment land with BUILD_07. Examples marked `[template]` are realistic-but-synthetic; unmarked examples are real seeded regulations.
+**Implementation status:** 🟢 Annotation gate completed for v1. The taxonomy, decision criteria, and survey instrument are frozen and drive the database enum and seeded demo regulations. Label Studio calibration was completed; Batches 02-05 were dual-annotated and resolved into 800 accepted gold rows with category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518, and 40 manual adjudications. Rare-domain coverage remains a limitation for model claims. Examples marked `[template]` are realistic-but-synthetic; unmarked examples are real seeded regulations.
+
+### 0.1 Accepted Annotation Run — 2026-07-30
+
+```text
+Final accepted batches = batch_02, batch_03, batch_04, batch_05
+Tasks                  = 800
+Annotations            = 1600
+Gold rows              = 800
+Manual resolutions     = 40
+Auto-agree rows         = 760
+Category kappa          = 0.871534
+Mean sector kappa       = 0.863776
+SME relevance kappa     = 0.723518
+Frozen gold             = C:\Reasearch\xyz\research\data\labeling\gold_standard_v1_800.csv
+```
+
+Use this run as the v1 annotation evidence. Manual adjudication fixed final labels, but it does not change historical kappa because kappa measures pre-resolution annotator agreement.
 
 ---
 
