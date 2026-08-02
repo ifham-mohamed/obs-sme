@@ -10,13 +10,6 @@
 > **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
 > **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
 
-> [!info] Lineage update — 2026-08-02 (later pass)
-> A **second V7 line (V7-M)** on the full 1110-row multitask fixed split is now recorded. It reached the strict promotion gate and **failed on sector macro-F1 `0.888330`** (required ≥ 0.90), consuming its 167-row test split in that single read. A sector-focused improvement run produced **seed 13**, which is validation-selected, **never tested**, and not promoted.
->
-> Two docs were added: [[21_M1_Data_Limitations_and_Risk_Register]] and [[22_M1_Data_Usage_and_Row_Count_Register]].
->
-> **Next action: Step 55A — fresh holdout v3 lock validation. No model evaluation until it passes; old Step 50 must never be rerun.**
-
 ---
 
 ## Status
@@ -24,10 +17,9 @@
 | Dimension                      | Target                             | Status                  |
 | ------------------------------ | ---------------------------------- | ----------------------- |
 | Category classifier F1 (macro) | ≥ 0.92                             | **PASSED** — V6 TF-IDF LinearSVC = **0.9472** (temporal test), frozen as primary |
-| Sector assignment F1 (macro)   | ≥ 0.88                             | **No sector model in production** — the frozen classifier is category-only (`sectors: []`). Best measured sector macro-F1 is **0.888330** from the V7-M Step 50 candidate, which **failed** its own stricter ≥ 0.90 gate and was archived. The current seed13 candidate is untested |
-| Sector label coverage          | usable multi-label structure       | **Weak in training** — 73.2% of gold rows carry no sector, 84% of the rest carry all three; only 48 rows (4.3%) are partial. **Fixed for evaluation** — fresh holdout v3 is 93.4% partial among its sector-positive rows |
-| Labeled gazette documents      | ≥ 800                              | 1128 resolved v3 gold rows → 1110 after artifact exclusion; IAA gate passed. Plus **286** newly collected fresh-holdout rows = **1396 distinct rows** ([[22_M1_Data_Usage_and_Row_Count_Register]]) |
-| Fresh evaluation surface       | one unspent locked holdout         | **286-row v3 ready for lock** — both prior test splits (V6, V7-M) are consumed. Step 55A pending |
+| Sector assignment F1 (macro)   | ≥ 0.88                             | **No sector model in production** — the frozen classifier is category-only (`sectors: []`). A 1,103-row no-leak V7 working experiment ran and was rejected; the formal enriched V7 release was not built |
+| Sector label coverage          | usable multi-label structure       | **Weak** — 73.2% of gold rows carry no sector, 84% of the rest carry all three; only 48 rows (4.3%) are partial |
+| Labeled gazette documents      | ≥ 800                              | 1128 resolved v3 gold rows → 1110 after artifact exclusion; IAA gate passed |
 | Propagation data points        | ≥ 800 (200 regulations × 4 stages) | Data collection         |
 | SME awareness survey responses | ≥ 100 unique SMEs                  | Instrument, authenticated flow, and public `/portal/m1/survey` route exist; real field responses remain 0/100 |
 | Ingestion latency              | ≤ 6 hours from gazette publication | Pipeline deployed       |
@@ -50,16 +42,6 @@
 - **Live integration has moved past the earlier blocker:** gazettes have been classified by the frozen model, `/admin/m1/pipeline/classifier-review` consumes the margin modes, and analytics now records margin/category-distribution drift, queue size, dominant-category concentration, and review correction yield. The 0.40 threshold remains provisional because no live review outcome has been completed.
 - **The public survey route is built:** `/portal/m1/survey` carries EN/SI/TA recruitment copy, consent, safe login/register returns, and recruitment-channel attribution. The fieldwork count is still 0/100; software readiness is not participant evidence.
 - **The first weighted V7 recovery diagnostic is complete:** seed 42, validation only, category macro-F1 `0.899862`, sector macro-F1 `0.884312`, partial-sector exact match `4/9`. It recovered from collapse but stopped before test/three-seed/export because the category gate and evidence gate were not met.
-
-### V7-M line and the fresh holdout — 2026-08-02, later pass
-
-- **A second V7 line exists and must not be confused with the 1103-row working experiment.** V7-M trains on the full 1110-row `m1_regulations_v7_1110_multitask_fixedsplit` (777/166/167, multitask fields stored rather than derived). It did not collapse: Step 47 reached category macro-F1 `0.91096`, and Step 49's three-seed validation run peaked at selection score `0.91794`.
-- **The strict gate was reached and failed.** Step 50 evaluated the seed-1 candidate once: category `0.910533` ✅, relevance `0.92` ✅, sector exact `0.916168` ✅, **sector macro-F1 `0.888330` ❌** against ≥ 0.90. Four of five gates passed; the failure margin is `0.0117`, concentrated in `general_retail` (F1 `0.873563`, recall `0.844` at threshold 0.75). Candidate archived, not promoted.
-- **That single read consumed the V7-M test split.** Old Step 50 must never be rerun, and its 167 rows — including their error table — may not inform any later selection, tuning or claim.
-- **The current candidate is `…improvement_validation_only_candidate_seed13_not_tested`.** Sector-focused run over seeds 7/13/29; seed 13 selected on validation at category `0.929558` / sector `0.927620` / sector-exact `0.957831` / relevance `0.936170`, thresholds `0.45 / 0.45 / 0.75`. These are **selection** figures, not measurement — the previous candidate's validation numbers were in the same range before it failed on real held-out data.
-- **Fresh holdout v3 is the only unspent evaluation surface left.** 286 rows, English, leakage-verified, never seen by a model. It went 193 (v1, `IMPORT_EXPORT`=0) → 225 (v2, `general_retail`=11) → 286 (v3, `general_retail`=29, all sector minimums met, six of eight category targets met).
-- **Two limitations remain open by source, not by effort:** `EPF_ETF_CHANGE` 3/8 (no genuine EPF/ETF instruments exist in the 39,649-item gazette index) and `PENALTY_ENFORCEMENT` 10/15 with all 10 sector-`NONE` (SME-facing offence clauses live in by-law Schedules beyond the page-1 extraction scope). Full register: [[21_M1_Data_Limitations_and_Risk_Register]].
-- **Next action is Step 55A**, which runs no model: validate v3's structure and labels, correct the `row_count_in_150_200` flag, record limitations, write the locked manifest. Only then may Step 55B evaluate the seed13 candidate once, with thresholds frozen from validation.
 
 Full record: [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · lineage: [17_M1_Repo_Structure_Map.md](17_M1_Repo_Structure_Map.md) and [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) · status ledger: [[final/works/03_FEATURE_CHECKLIST|03_FEATURE_CHECKLIST]].
 
@@ -101,9 +83,7 @@ Full record: [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FR
 | 17 | [17_M1_Repo_Structure_Map.md](17_M1_Repo_Structure_Map.md) | **The workspace as measured** (against doc 13's designed tree) — top-level inventory with sizes, the root tidy of 2026-08-01, `documentation/` layout, why `scripts/` was deliberately left flat (26 files reference those paths), the vault-vs-repo doc fork and which copy is canonical, and where new files go. |
 | 18 | [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) | **V4 → V5 → V6 dataset lineage and every model trained on them** — per-version label changes, class distribution, per-split SHA256, the five-model comparison table, why the transformer lost, the frozen LinearSVC artifact and its hashes, the confidence contract, and four standing constraints., plus the **fresh locked holdout v3 (286 rows, leakage-verified, 93.4 % partial-sector)** that satisfies the fresh-holdout precondition. |
 | 19 | [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) | **Stage-E summarisation method** — the input contract (raw text + the 6 Stage-C metadata fields + classifier context), a measured diagnostic showing the extractors return a *wrong* gazette number on 31.1% of test rows, a 5-way approach comparison (decisive-constraint table + scored matrix + one real gazette walked through every approach), and the selected **field-grounded constrained generation** design with four faithfulness invariants, a reference-free evaluation protocol, and the novelty claim it supports. |
-| 20 | [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) | **V7 multitask upgrade** — one shared XLM-R encoder emitting regulation domain (8-way softmax), affected SME sectors (3 sigmoids) and SME relevance **derived** from the sector output so the two can never contradict. Contains the 1,110-row source audit, the executed 1,103-row no-leak working dataset, parser/trainer fixes, smoke and 3-seed rejected run, plus the still-unbuilt formal enriched V7 package — and, in §∞, the **separate V7-M line**: sector-focused training config, the Step 50 strict gate failed at sector macro-F1 `0.888330`, the frozen thresholds and why they may not move, and the untested seed13 candidate awaiting Step 55A/55B. |
-| 21 | [21_M1_Data_Limitations_and_Risk_Register.md](21_M1_Data_Limitations_and_Risk_Register.md) | **Every known data weakness, with severity and required wording** — L1–L10 open limitations (EPF/ETF 3/8, PENALTY 10/15 all sector-`NONE`, page-1 extraction, English-only, targeted sampling, 286-row spec deviation, formulaic families, context-dependent labels, the self-contradicting `row_count_in_150_200` flag), R1–R4 resolved ones (`IMPORT_EXPORT`=0, `general_retail` shortfall, SME-irrelevant majority, the 128-PDF training-leakage trap), the failure modes deliberately avoided, and the **verbatim lock-manifest declaration**. |
-| 22 | [22_M1_Data_Usage_and_Row_Count_Register.md](22_M1_Data_Usage_and_Row_Count_Register.md) | **How much data there is, and who spent what** — the non-additive counting rule (**1110 corpus + 286 holdout = 1396 distinct rows**, not 4,726), the stage-by-stage usage table, what each split was used for, which model touched which data, the never-mix table, and why 166 validation rows carrying every selection decision means validation figures are not promotion evidence. |
+| 20 | [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) | **V7 multitask upgrade** — one shared XLM-R encoder emitting regulation domain (8-way softmax), affected SME sectors (3 sigmoids) and SME relevance **derived** from the sector output so the two can never contradict. Contains the 1,110-row source audit, the executed 1,103-row no-leak working dataset, parser/trainer fixes, smoke and 3-seed rejected run, plus the still-unbuilt formal enriched V7 package. Weighted-loss recovery and fresh evaluation data are required before any promotion work. |
 
 ---
 
@@ -132,11 +112,9 @@ The former sub-step companion files have been merged into their matching parent 
 | [17_M1_Repo_Structure_Map.md](17_M1_Repo_Structure_Map.md) | Measured workspace/repository inventory; companion to doc 13's design |
 | [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) | Dataset versions, model comparison, frozen artifact hashes, confidence contract |
 | [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) | Stage-E summarisation: input contract, approach comparison, faithfulness invariants, evaluation |
-| [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) | V7 multitask: domain + sectors + derived relevance, V6 audit, gates, steps 41–53, plus the V7-M line and steps 53A–56 |
-| [21_M1_Data_Limitations_and_Risk_Register.md](21_M1_Data_Limitations_and_Risk_Register.md) | Open and resolved limitations, severity table, avoided failure modes, lock-manifest declaration, reporting rules |
-| [22_M1_Data_Usage_and_Row_Count_Register.md](22_M1_Data_Usage_and_Row_Count_Register.md) | Row counts, non-additive counting rule, stage-by-stage usage, per-model split usage, never-mix table |
+| [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) | V7 multitask: domain + sectors + derived relevance, V6 audit, gates, steps 41–53 |
 
-**File counts:** 22 numbered main docs + this README = **23 canonical Markdown files** at the Module 1 root. Historical implementation notes remain in `final/`, `findings/`, `local-dev/`, and `planned-for-development/`, but root companion files have been retired.
+**File counts:** 20 numbered main docs + this README = **21 canonical Markdown files** at the Module 1 root. Historical implementation notes remain in `final/`, `findings/`, `local-dev/`, and `planned-for-development/`, but root companion files have been retired.
 
 ---
 
@@ -154,7 +132,7 @@ The frontend route table that maps these workflows to real frontend files is rec
 | ----- | ------------------ | ----------------------------------------------------------------------------------- |
 | A     | Ingestion          | Scrapy scrapes `gazette.lk` + `documents.gov.lk` every 6 hours; PDFs stored locally |
 | B     | Extraction         | PyMuPDF → pdfplumber → Tesseract OCR; fastText language detection                   |
-| C     | Classification     | **TF-IDF + LinearSVC** on the 8-domain taxonomy, frozen 2026-08-01 (test macro-F1 0.9472). Category only — no sector head, and `confidence` is `null` by design. The XLM-R multitask path has now failed one strict gate (sector macro-F1 `0.888330`) and its replacement candidate is untested; nothing has been promoted. See [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) |
+| C     | Classification     | **TF-IDF + LinearSVC** on the 8-domain taxonomy, frozen 2026-08-01 (test macro-F1 0.9472). Category only — no sector head, and `confidence` is `null` by design. The XLM-R dual-head path exists but was never promoted. See [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) |
 | D     | Secondary Tracking | Watchers on IRD, EPF, ETF, eROC portals; 5 news RSS feeds (every 2h)                |
 | E     | Summarisation      | **Backend slice shipped and live-backfilled.** The deterministic 80-English audit passed 80/80; four false sentence-count reviews were repaired, leaving 7 genuine low-margin reviews. Human faithfulness review, review UI, and full coverage remain open. See [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) |
 | E2    | Translation        | NLLB-200 pull worker shipped, but the SI/TA numeric audit passed only 10/152 checks. 144 replacement jobs are queued; worker/tunnel recovery and re-audit remain open. See [10_M1_Sinhala_Tamil_NLP.md §10](10_M1_Sinhala_Tamil_NLP.md) |

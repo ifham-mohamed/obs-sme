@@ -4,7 +4,6 @@
 >
 > Evidence base: `documentation/m1/records/ENIGMATRIX_M1_COMPLETE_END_TO_END_RECORD_2026-07-31_2313_IST.md` (5,642 lines) and `datasets/m1_regulations_v6_1110_clean_fixedsplit/dataset_manifest_v6.json`.
 > Verified and reconciled with the executed V7 working branch: 2026-08-02.
-> Extended 2026-08-02 with the **V7-M 1110-row multitask line** (Steps 47–50 strict-gate failure and the untested seed13 candidate) — see §∞ V7-M multitask line.
 
 > [!warning] Truth-ledger sync — 2026-08-02
 > This document is the lineage of record and is **already reconciled to 2026-08-02**. No corrections needed — it is the source the other documents were corrected *against*.
@@ -48,28 +47,15 @@ gold_standard.csv  (research/data/labeling/)
            │       original six columns retained; sector vectors/relevance derived by the trainer
            │       3-seed e8 run: category macro-F1 0.0936, sector macro-F1 0.1207
            │
-           ├─ V7-F  m1_regulations_v7_1103_multitask_noleak   ◄── FORMAL ENRICHED RELEASE, not built
-           │       would add stored sector_vector, category_id, relevance_label and explicit split
-           │
-           └─ V7-M  m1_regulations_v7_1110_multitask_fixedsplit  ◄── SECOND V7 LINE, current candidate lineage
-                   1110 rows · 777 / 166 / 167 — the full V6 corpus with stored multitask fields
-                   Steps 47–49 validation-only · Step 50 strict test run once and FAILED (sector macro-F1 0.888330)
-                   improvement run seeds 7/13/29 → seed 13 validation-selected, NOT tested, NOT promoted
-
-Separate, and never merged with the corpus above:
-
-           FH-v3  research/data/labeling/fresh_locked_holdout_intake_v1
-                  286 newly collected rows · evaluation-only · single-use · awaiting Step 55A lock
+           └─ V7-F  m1_regulations_v7_1103_multitask_noleak   ◄── FORMAL ENRICHED RELEASE, not built
+                   would add stored sector_vector, category_id, relevance_label and explicit split
 ```
 
-**Two distinct V7 lines exist. Do not merge their numbers.** V7-W is the 1103-row no-leak *working experiment* that collapsed and was rejected (category 0.0936). V7-M is the later 1110-row *multitask fixed-split* line that trained successfully, consumed the old test split once at Step 50, failed the strict sector gate at 0.888330, and produced the current untested seed13 candidate. They share an encoder design and nothing else — different row counts, different splits, different outcomes. Full V7-M record: §∞ V7-M multitask line.
-
-Four rules keep the lineage clean:
+Three rules keep the lineage clean:
 
 1. **Legacy datasets are provenance only.** They explain how early baselines were produced, but they are not used for final model claims.
-2. **The reporting split never moved from V5 to V6.** 777 train / 166 validation / 167 test, so a V5-vs-V6 score difference is a labelling effect, never a split effect. V7-M inherits the same split unchanged.
+2. **The reporting split never moved from V5 to V6.** 777 train / 166 validation / 167 test, so a V5-vs-V6 score difference is a labelling effect, never a split effect.
 3. **Nothing was deleted from the gold history.** The 18 excluded artifacts are excluded from *ML training and evaluation only*; they remain in the adjudicated gold record.
-4. **Versions are not addends.** V4, V5, V6 and V7-M are successive transformations of one 1110-row corpus, not four datasets. The project holds **1110 corpus rows + 286 fresh holdout rows = 1396 distinct rows**, and the fresh holdout's own v1/v2/v3 revisions (193 → 225 → 286) are cumulative versions of one file, not three files. Counting rules and the stage-by-stage usage table: [[22_M1_Data_Usage_and_Row_Count_Register]].
 
 ---
 
@@ -183,34 +169,6 @@ V6 lost the relevance column and nothing else. The working trainer did not mater
 
 Consequences for thresholds and promotion gates: [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) §1.4 and §6.2. Audit artifacts: `documentation/m1/analysis/multitask_dataset_audit.json` · `multitask_label_distribution.csv` · `multitask_consistency_errors.csv`.
 
-### V7-M — `m1_regulations_v7_1110_multitask_fixedsplit` (second V7 line, current candidate lineage)
-
-*Recorded 2026-08-02. This is a **separate later line** from the V7-W working experiment above; the V7-W figures stay as historical record and are not superseded by these.*
-
-```text
-/kaggle/working/enigmatrix-ml/datasets/m1_regulations_v7_1110_multitask_fixedsplit
-```
-
-| Property | Value |
-|---|---|
-| Rows | **1110** — the full V6 corpus, no no-leak exclusions |
-| Split | **777 / 166 / 167**, inherited unchanged from V5/V6 |
-| Difference from V7-W | keeps all 1110 rows and **stores** the multitask fields instead of deriving them at load |
-
-Columns: `key · text · category · category_id · sectors · affected_sectors · sector_vector · is_sme_relevant · relevance_label · sector_grocery_retail · sector_food_service · sector_general_retail · sector_combo · language · date · split`.
-
-Task heads: category = 8-way single-label · sector = 3-label multi-label · relevance = auxiliary binary diagnostic. Production relevance stays **derived** — `is_sme_relevant = bool(predicted_affected_sectors)` — and the relevance head is diagnostic only. Sector index order remains the frozen `["grocery_retail", "food_service", "general_retail"]`; there is no universal sentinel, and economy-wide instruments carry all three.
-
-**Rebuilt checksums after the Kaggle reset:**
-
-```text
-train.parquet  2BDEF31BE676D81FA900DCFCE6CD756F0B14BF9F1B872C2A64F391C00E3786C6
-val.parquet    5A8DD14AB04EB8595E31664C60DFB69A5E60090CACFAC23B65D7568F2DC95400
-test.parquet   8A0BBB09028046D16E6397FCF15BB3B892F1E71195903F7AE55D271557394FFD
-```
-
-The 167-row test parquet listed here is the split that Step 50 consumed. It is retained for reproducibility of that one run and must not be scored again — see §5.8.
-
 ### Legacy L1 — `enigmatrix-ml\datasets\m1_regulations`
 
 800 rows with a deterministic/key split of 560 / 120 / 120. This is the earliest retained ML split and is historical only. It is not comparable with V6 because `EPF_ETF_CHANGE` is absent from train and test, while the test split is dominated by `SECTOR_SPECIFIC` (115 of 120 rows).
@@ -258,12 +216,6 @@ Verified legacy split inventory:
 | TF-IDF + Logistic Regression              | V6      |            — |      0.882481 | Baseline reference                  |
 | XLM-R LoRA, multitask (3 seeds, 8 ep)      | V7-W 1103 |          — | category **0.0936**; sector **0.1207** | Rejected — collapsed; never promoted |
 | XLM-R LoRA, weighted multitask (seed 42, 15 ep) | V7-W 1103 | category **0.899862**; sector **0.884312** | **not read** | Validation diagnostic only — partial exact `4/9`; stopped before final run |
-| XLM-R LoRA multitask, diagnostic (seed 42, 20 ep) | V7-M 1110 | category **0.91096**; sector **0.92428** *(tuned)* | **not read** | Diagnostic only — Step 47/48, promoted nothing |
-| XLM-R LoRA multitask, 3-seed validation-only (42/1/2) | V7-M 1110 | best seed 42 selection **0.91794** | **not read** | Step 49 — validation-only, no test load |
-| XLM-R LoRA multitask, **strict Step 50 candidate (seed 1)** | V7-M 1110 | — | category **0.910533**; sector **0.888330**; sector-exact **0.916168**; relevance **0.92** | **Strict gate FAILED** (sector < 0.90) — archived, not promoted, **test split now consumed** |
-| **XLM-R LoRA multitask, improvement candidate (seed 13, 24 ep)** | **V7-M 1110** | category **0.929558**; sector **0.927620**; sector-exact **0.957831**; relevance **0.936170** | **NOT TESTED** | **Current candidate** — validation-selected only, `promotion_allowed = false`, awaiting locked fresh-holdout evaluation |
-
-The last four rows are the **V7-M line** and are recorded in full in §∞ V7-M multitask line. Only one of them ever touched a test split — the Step 50 seed-1 candidate — and that single read is what consumed the V7-M test split. The seed13 row's validation figures are **not** promotion evidence; they are selection evidence, and the model has never seen held-out data of any kind.
 
 The weighted row is deliberately not a new final model result. It used only the no-leak 773-row training and 163-row validation branches, wrote no promotable checkpoint, and did not load the V6 test split. It demonstrates optimization recovery, while its below-gate category score and nine-row partial-sector denominator demonstrate why a fresh temporal holdout plus genuine EPF/ETF and partial-sector examples are required before another claim.
 
@@ -324,19 +276,12 @@ The frozen primary model also has **no sector head**; it returns `"sectors": []`
 
 ## 5. Standing constraints
 
-1. **The V6 test split is spent.** It was used for the frozen-model comparison and again by the rejected V7 working experiment. Do not tune, select, or make a new final claim on it; any recovery run needs a fresh temporal holdout, nested CV, or newly collected data. **(2026-08-02: satisfied — a fresh, leakage-verified 286-row holdout now exists. See §∞ Fresh locked holdout v3.)**
-2. **`EPF_ETF_CHANGE` needs real data, not resampling.** 4 train / 1 test rows. **(2026-08-02: three independent searches of all 39,649 indexed extraordinary gazette items returned zero genuine EPF/ETF instruments. This class is not obtainable from gazettes; it needs Department of Labour EPF circulars or Central Bank notices, or an explicit out-of-scope declaration. See §∞ Fresh locked holdout v3.)**
+1. **The V6 test split is spent.** It was used for the frozen-model comparison and again by the rejected V7 working experiment. Do not tune, select, or make a new final claim on it; any recovery run needs a fresh temporal holdout, nested CV, or newly collected data.
+2. **`EPF_ETF_CHANGE` needs real data, not resampling.** 4 train / 1 test rows. The next annotation round should target genuine EPF/ETF regulations before any per-class claim is made about this category.
 3. **Do not rename or move `datasets/` or `models/`.** Their paths are recorded inside `model_registry.json`, `SHA256SUMS.json`, `local_windows_verification.json` and the frozen record.
 4. **Re-derive, don't hand-edit.** Every table here is regenerable from the record generator; if a number changes, change the source and regenerate.
-5. **The sector label space is nearly degenerate.** 73.2 % of rows carry no sector and 84 % of the remainder carry all three. Collecting **partial-sector** regulations — ones affecting one or two of the three study sectors — is now a higher-value annotation target than general volume, because it is the only thing that turns the sector head from a relevance detector into a sector classifier. **(2026-08-02: satisfied for evaluation — the fresh holdout is 46.9 % no-sector and 93.4 % partial among its sector-positive rows. Still open for training data, which that artifact must never become.)**
+5. **The sector label space is nearly degenerate.** 73.2 % of rows carry no sector and 84 % of the remainder carry all three. Collecting **partial-sector** regulations — ones affecting one or two of the three study sectors — is now a higher-value annotation target than general volume, because it is the only thing that turns the sector head from a relevance detector into a sector classifier.
 6. **`CATEGORIES` and `SECTORS` index order is a contract.** `SECTORS = ["grocery_retail", "food_service", "general_retail"]` is frozen. A `sector_vector` written under one order and read under another is silently wrong, so the order ships in `labels.json` *and* in `model_registry.json`, and is asserted at load.
-
-Two further constraints are declared in the dated sections below and are equally binding:
-
-7. **The fresh holdout is evaluation-only and single-use** — §∞ Fresh locked holdout v3.
-8. **The V7-M test split is consumed; old Step 50 must never be rerun** — §∞ V7-M multitask line.
-
-The full limitation set, with severity and required lock-manifest wording, is [[21_M1_Data_Limitations_and_Risk_Register]].
 
 ---
 
@@ -626,242 +571,3 @@ Anyone reading the report alone will attribute the module's results to the wrong
 ### V7 status, for the record
 
 `V7-W` (`m1_regulations_v6_1110_multitask_noleak`, 1103 rows, 773 / 163 / 167) ran to completion and was **rejected**: test category macro-F1 0.0936, sector micro-F1 0.2113, derived relevance accuracy 0.5948. `V7-F`, the formal enriched release with stored `sector_vector` / `category_id` / `relevance_label`, was **never built**. The frozen `linearsvc_v6_primary` is untouched by any of it.
-
----
-
-## ∞ Fresh locked holdout v3 (2026-08-02) — the standing constraint answered
-
-*Added by the 2026-08-02 holdout collection pass. §5.1 of this document required "a fresh temporal holdout, nested CV, or newly collected data" before any new final claim. This section records the newly collected data and what it does and does not fix. Collection methodology is in [[03_M1_Data_Collection]] §∞ Step 54A.*
-
-### The artifact
-
-`research/data/labeling/fresh_locked_holdout_intake_v1/fresh_holdout_label_template.csv`
-
-| Property | Value |
-|---|---|
-| Rows | **286** (`fresh-v1-001` … `fresh-v1-286`) |
-| Distinct source gazettes | 286 — one row per gazette, no internal duplicates |
-| Date range | 2010-01-27 → 2025-12-23 |
-| Language | 100 % English (`_E` PDFs) |
-| Schema | the 12 intake columns, all populated |
-| Annotator | ifham, from the row's own page-1 text |
-| Provenance | `fresh_holdout_provenance_report.csv`, per-row category and sector reasoning plus duplicate-check status |
-
-**Leakage status: clean.** Zero gazette-id overlap with the 1,128 consumed gazette ids across V6 train/val/test and the Kaggle bundle. Zero exact-text overlap against 1,910 consumed rows. Zero duplicate text within the holdout. Max 8-gram Jaccard among accepted rows 0.489, below the 0.50 near-duplicate threshold. Re-verified on the full merged set after each of the two collection rounds.
-
-### Label distribution
-
-| Category | Rows | Spec target | |
-|---|---:|---:|---|
-| LABOUR_LAW | 88 | ~20 | met |
-| SECTOR_SPECIFIC | 59 | ~45 | met |
-| TAX_RATE_CHANGE | 58 | ~20 | met |
-| PRODUCT_STANDARD | 30 | ~20 | met |
-| IMPORT_EXPORT | 22 | ~20 | met |
-| BUSINESS_REGISTRATION | 16 | ~12 | met |
-| PENALTY_ENFORCEMENT | 10 | ~15 | short |
-| EPF_ETF_CHANGE | 3 | ~8 | short |
-
-| Sector | Positive rows | Minimum | |
-|---|---:|---:|---|
-| grocery_retail | 136 | 20 | met |
-| food_service | 88 | 20 | met |
-| general_retail | 29 | 20 | met |
-
-`is_sme_relevant`: 152 true / 134 false.
-
-### This directly answers §5.5 — the partial-sector constraint
-
-§5.5 records that the sector label space in V6 is nearly degenerate: **73.2 % of rows carry no sector and 84 % of the remainder carry all three**, and names partial-sector regulations as a higher-value annotation target than general volume.
-
-The v3 holdout inverts that shape:
-
-| | V6 training data | v3 holdout |
-|---|---:|---:|
-| rows with no sector | 73.2 % | **46.9 %** |
-| of sector-positive rows, carrying all three | 84 % | **6.6 %** |
-| of sector-positive rows, carrying one or two | 16 % | **93.4 %** |
-
-142 of the 152 sector-positive rows are partial. The combination spread is: grocery_retail + food_service 73, grocery_retail alone 46, general_retail alone 11, all three 10, grocery_retail + general_retail 7, food_service alone 4, food_service + general_retail 1.
-
-This is the first dataset in the project where the sector head could be evaluated as a sector classifier rather than a relevance detector.
-
-### What it does not fix
-
-**`EPF_ETF_CHANGE` remains 3 rows, and §5.2 should now be read as a source finding rather than a collection backlog.** Three independent searches across all 39,649 indexed extraordinary gazette items returned zero genuine EPF or ETF instruments. This is not a search-quality problem: EPF and ETF rules are published through Department of Labour circulars and Central Bank notices, not extraordinary gazettes. The three rows carried here are provincial Co-operative Employees' Pension Scheme instruments, which are contributory employee-fund rules but not EPF or ETF proper. Either source those channels separately, or declare `EPF_ETF_CHANGE` out of scope for this holdout and record it as a limitation. Blocking a lock indefinitely on a class the source cannot supply is the worse option.
-
-**`PENALTY_ENFORCEMENT` is 10 rows and all 10 carry `affected_sectors = NONE`.** What gazette titles surface are property forfeitures, provincial court-fines statutes, a prosecution-jurisdiction regulation and sports-offence investigation units. None imposes an offence, fine or inspection duty on a grocery, food-service or general retail business. The SME-facing offence provisions do exist — inside the Schedules of the Pradeshiya Sabha and Municipal Council trade by-laws, several of which are already in this set — but those Schedules sit on page 2 and later and the extraction is page-1 only. Reaching them means changing the extraction scope for that instrument family, which would make those rows structurally unlike the other 280.
-
-**`IMPORT_EXPORT` is 22 rows of which 21 carry `NONE`.** Same page-1 cause: Imports and Exports (Control) regulations carry their controlled-goods Schedules beyond page 1, so the category is testable but sector attribution within it is not.
-
-### Standing-constraint updates
-
-- **§5.1 (V6 test split spent)** — still binding, but the precondition it names is now satisfied. A fresh, leakage-verified holdout exists.
-- **§5.2 (`EPF_ETF_CHANGE` needs real data)** — reclassify from "next annotation round should target it" to "not obtainable from extraordinary gazettes; needs Department of Labour or Central Bank sources, or an explicit out-of-scope declaration".
-- **§5.5 (partial-sector is the higher-value target)** — substantially satisfied for evaluation purposes by this holdout (93.4 % partial among positives). It remains open for *training* data, which this artifact must never become.
-
-### Standing constraint added
-
-7. **The fresh holdout is evaluation-only and single-use.** It must not be added to any training split, used for threshold selection, or read more than once for a promotion decision. Its value is entirely in never having been seen. Row-level provenance and the gate criteria are recorded so a future reader can re-verify rather than re-trust.
-
-### Open decision before locking
-
-286 rows exceeds the 150–200 window in the original intake spec, which was written for the intake stage. `LABOUR_LAW` (88) and `TAX_RATE_CHANGE` (58) are internally formulaic — 25 near-identical cocoa/cardamom/pepper cost-of-living allowance notices, 42 single-employer industrial dispute and collective agreement notices, 54 Special Commodity Levy orders. Subsampling those two families would restore the row count and lift every other class's relative weight without touching category coverage or the sector minimums. Not done unilaterally: it is a research-design decision, and the full 286 remains the reproducible base either way.
-
----
-
-## ∞ V7-M multitask line (2026-08-02) — the strict-gate failure and the untested seed13 candidate
-
-*Added by the 2026-08-02 lineage pass. This records a **second, later V7 line** trained on the full 1110-row `m1_regulations_v7_1110_multitask_fixedsplit`. It does not supersede the V7-W 1103-row working experiment recorded in §2 and §3 — that remains the historical record of the collapsed run. These are two separate lines with different row counts, different splits and different outcomes.*
-
-### Why this line exists
-
-V7-W collapsed to majority-class behaviour (category macro-F1 0.0936). V7-M rebuilt the multitask dataset on the full 1110 rows with **stored** rather than derived multitask fields, and trained with explicit class weights, a weighted sampler and per-head loss weights. It did not collapse. It reached the strict promotion gate, and failed it on one metric.
-
-### Step 47 — single-seed diagnostic (validation only)
-
-Seed 42, best epoch 18, `diagnostic_only = true`, test split never loaded.
-
-| Metric | Value |
-|---|---:|
-| selection_score | 0.9117 |
-| category macro-F1 | 0.91096 |
-| sector macro-F1 | 0.91249 |
-| sector exact match | 0.93373 |
-| relevance F1 | 0.9072 |
-| aux relevance F1 | 0.9263 |
-
-### Step 48 — threshold tuning on validation
-
-Thresholds `grocery_retail 0.45 · food_service 0.45 · general_retail 0.70` lifted the same checkpoint to sector macro-F1 **0.92428**, sector exact **0.95181**, relevance F1 **0.9263**, selection score **0.91762**. Category is unchanged by thresholds (0.91096) because it is argmax over a softmax.
-
-### Step 49 — three-seed validation-only run
-
-`/kaggle/working/storage/models/m1/xlmr_lora_v7_multitask_final_validation_only_3seed_e20`
-
-| Seed | selection | category macro | sector macro |
-|---:|---:|---:|---:|
-| 42 | 0.91794 | 0.91385 | 0.92202 |
-| 1  | 0.91666 | 0.93214 | 0.90119 |
-| 2  | 0.90886 | 0.91858 | 0.89914 |
-
-No test split was loaded during this run.
-
-### Step 50 — the strict test, run once, failed
-
-Candidate: **seed 1**, thresholds `grocery_retail 0.50 · food_service 0.60 · general_retail 0.75`. Evaluated once against the 167-row V7-M test split.
-
-| Metric | Result | Gate | Passed |
-|---|---:|---:|:--:|
-| category macro-F1 | 0.910533 | ≥ 0.90 | ✅ |
-| relevance F1 | 0.92 | ≥ 0.90 | ✅ |
-| sector exact match | 0.916168 | ≥ 0.90 | ✅ |
-| **sector macro-F1** | **0.888330** | **≥ 0.90** | ❌ |
-| prediction consistency | 1.0 | = 1.0 | ✅ |
-
-Supporting figures: category weighted-F1 0.942027, category accuracy 0.940120, sector micro-F1 0.888889, sector Hamming loss 0.061876, relevance accuracy 0.952096, aux relevance F1 0.891089, selection score 0.899432.
-
-**Verdict: `STRICT_GATE_PASSED = FALSE`. Do not promote. Do not rerun.**
-
-The failure margin is 0.0117 on one metric. Per-sector, the shortfall is concentrated in the two rarer sectors:
-
-| Sector | Threshold | TP | TN | FP | FN | Precision | Recall | F1 | Support |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| grocery_retail | 0.50 | 44 | 114 | 5 | 4 | 0.897959 | 0.916667 | **0.907216** | 48 |
-| food_service | 0.60 | 42 | 114 | 6 | 5 | 0.875 | 0.893617 | **0.884211** | 47 |
-| general_retail | 0.75 | 38 | 118 | 4 | 7 | 0.904762 | 0.844444 | **0.873563** | 45 |
-
-Error overlap across the 167 rows: 145 clean · 8 category-only · 6 sector-only · 6 sector + relevance · 2 all three. Totals: 10 category errors, 14 sector errors, 8 relevance errors. `general_retail` recall (0.844) at threshold 0.75 is the single largest contributor — the threshold was tuned for precision on a validation split where general_retail is thin.
-
-Archived, not deleted:
-
-```text
-/kaggle/working/storage/models/m1/xlmr_lora_v7_multitask_strict_gate_failed_archive
-bundle  ...strict_gate_failed_archive.zip
-SHA256  CC0080B9A92A6408AFB44A3812E4E0E1621C4279C3EEE3F26456E506CA5A2AA3
-status  FAILED_STRICT_GATE · ARCHIVED · NOT PROMOTED
-```
-
-### What the failure consumed
-
-**The V7-M 167-row test split is now spent.** It was read once, under a pre-declared gate, and the result was a rejection. That single read exhausts it:
-
-- Old Step 50 must not be rerun.
-- Its 167 rows must not be used to select, tune, threshold or compare any later candidate.
-- Its per-row errors must not be inspected to guide the next architecture — reading the error table *is* tuning on the test set.
-- No later promotion claim may cite it.
-
-This is the constraint that made the fresh holdout necessary. The same rule that retired the V6 test split (§5.1) now applies to V7-M's.
-
-### The improvement run — seeds 7, 13, 29 (validation only)
-
-`/kaggle/working/storage/models/m1/xlmr_lora_v7_multitask_improvement_validation_only_sector_focus_e24`
-
-Sector-focused configuration: `xlm-roberta-base`, LoRA r=16, 24 epochs, batch 16, max_length 512, head LR 1e-3, LoRA LR 2e-4, **sector_loss_weight 0.45**, relevance_loss_weight 0.03, sampling_alpha 0.65, loss_weight_cap 4.0, sector/relevance pos-weight caps 8.0, grad-clip 1.0, patience 6, fp16. Safety flags recorded in the run: `diagnostic_only: true`, `test_split_loaded: false`, `promotion_allowed: false`.
-
-| Seed | Best epoch | selection | category macro | sector macro | sector exact | relevance F1 |
-|---:|---:|---:|---:|---:|---:|---:|
-| **13** | **21** | **0.926686** | **0.929558** | **0.923813** | **0.951807** | **0.926316** |
-| 7 | 20 | 0.912371 | 0.923732 | 0.901010 | 0.939759 | 0.914894 |
-| 29 | 20 | 0.904222 | 0.903170 | 0.905274 | 0.939759 | 0.926316 |
-
-**Seed 13 selected on validation.** Thresholds re-tuned on validation only: `grocery_retail 0.45 · food_service 0.45 · general_retail 0.75`.
-
-| Tuned validation metric | Value |
-|---|---:|
-| category macro-F1 | 0.929558 |
-| category weighted-F1 | 0.934945 |
-| category accuracy | 0.933735 |
-| sector macro-F1 | 0.927620 |
-| sector micro-F1 | 0.927757 |
-| sector exact match | 0.957831 |
-| sector Hamming loss | 0.038153 |
-| relevance F1 | 0.936170 |
-| relevance accuracy | 0.963855 |
-| selection score | 0.928589 |
-| sector-focus selection score | 0.928395 |
-| aux relevance F1 | 0.936170 |
-
-Run flags at archive time: `test_evaluation_completed: false`, `final_test_split_loaded_for_evaluation: false`, `promotion_allowed: false`.
-
-### The current candidate artifact
-
-```text
-/kaggle/working/storage/models/m1/xlmr_lora_v7_multitask_improvement_validation_only_candidate_seed13_not_tested
-bundle       ...candidate_seed13_not_tested.zip
-bundle SHA256  1964A346CFDA3659BB4D511872D87F46D8B896D5D4D0E3EB334B77A1C47690D9
-model  SHA256  7739501786B8501C247397D9E72D37CF4FF8C7D1C3F5494215980C8AAB5FFB26
-
-status                   VALIDATION_SELECTED_ONLY_NOT_TESTED
-promotion_allowed        false
-old_step50_consumed      true
-old_step50_do_not_rerun  true
-```
-
-The name carries the status on purpose. This model has been selected but never measured against held-out data. Its validation sector macro-F1 (0.927620) sits **0.039 above** the figure that failed the gate on real test data (0.888330) — and the earlier candidate's validation-to-test drop was of exactly that order. Treating the validation number as a promotion result would repeat the mistake the strict gate was built to catch.
-
-### How this connects to the fresh holdout
-
-| | V6 test | V7-M test | Fresh holdout v3 |
-|---|---|---|---|
-| Rows | 167 | 167 | **286** |
-| Status | spent (§5.1) | **spent — Step 50** | **unread** |
-| May be used for | nothing further | nothing further | one locked evaluation |
-
-The seed13 candidate has exactly one unspent evaluation surface left in the project. Spending it before the lock validation passes would leave the project with a candidate and no way to test it.
-
-### Sequenced next steps
-
-| Step | Work | Precondition | State |
-|---|---|---|---|
-| **55A** | Fresh Holdout v3 lock validation | v3 uploaded to Kaggle | **next action** |
-| 55B | One-time evaluation of seed13 on locked v3 | 55A passed | blocked |
-| 56 | Promotion decision + export/freeze | 55B gate passed | blocked |
-
-Step 55A performs schema and label validation, recomputes distributions, records limitations and writes the locked manifest. **It runs no model.** Step 55B loads the seed13 candidate with the frozen validation thresholds (`0.45 / 0.45 / 0.75`), evaluates once, and reports with the declared limitations attached. Thresholds must not be re-tuned on v3 — tuning on the holdout converts it into a validation set and destroys the only unspent surface.
-
-Upload folder and file manifest: [[03_M1_Data_Collection]] §∞ Step 54A. Evaluation and reporting protocol: [[06_M1_Training_Evaluation]] §∞ Step 55A/55B. Limitations to carry into the manifest: [[21_M1_Data_Limitations_and_Risk_Register]]. Row-count and usage rules: [[22_M1_Data_Usage_and_Row_Count_Register]].
-
-### Standing constraint added
-
-8. **The V7-M test split is consumed and old Step 50 must never be rerun.** One pre-declared read, one rejection, done. No later candidate may be selected, tuned, thresholded or compared using those 167 rows or their error table, and no promotion claim may cite them. Promotion now requires the locked fresh holdout or another newly collected set.

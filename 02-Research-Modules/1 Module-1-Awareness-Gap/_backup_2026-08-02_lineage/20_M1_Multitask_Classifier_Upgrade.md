@@ -9,8 +9,6 @@
 > [!warning] Truth-ledger sync — 2026-08-02
 > The rejected unweighted V7 run remains historical evidence. A later **weighted seed-42 validation-only diagnostic** recovered category macro-F1 to `0.899862` and sector macro-F1 to `0.884312`, but partial-sector exact match was only `4/9` and the category gate is `0.92`. The V6 test split was not loaded, no model was promoted, and the frozen `linearsvc_v6_primary` remains the production category classifier.
 >
-> **Second V7 line added 2026-08-02.** Sections 0–11 describe the **V7-W** 1103-row working line. A separate **V7-M** line on the full 1110-row `m1_regulations_v7_1110_multitask_fixedsplit` ran its own Steps 47–50, failed the strict gate on sector macro-F1 `0.888330`, consumed its 167-row test split in that single read, and produced an untested seed13 candidate now awaiting the locked fresh holdout. Do not merge the two lines' numbers. See **§∞ V7-M line**.
->
 > **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
 > **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
 
@@ -480,8 +478,6 @@ One test that is easy to omit and worth having: **assert the frozen orders**. A 
 | 52     | `MultitaskGazetteInference` + backend integration          | ⛔ blocked on promotion                                |
 | 53     | Freeze, hash, package, reproduce locally                   | ⛔ blocked on promotion                                |
 
-**Steps 41–53 above describe the V7-W 1103-row working line.** A second line — **V7-M**, on the full 1110-row `m1_regulations_v7_1110_multitask_fixedsplit` — ran its own Steps 47–50, failed the strict gate on sector macro-F1, consumed its test split, and produced the current untested seed13 candidate. Its step table continues at 53A–56 and is recorded in §∞ V7-M line below. The two lines are **not** the same work and their numbers must not be merged.
-
 ---
 
 ## 10. Standing constraints
@@ -491,8 +487,6 @@ One test that is easy to omit and worth having: **assert the frozen orders**. A 
 3. **`EPF_ETF_CHANGE` is 4 train / 1 test.** A multitask model does not fix this; only more documents do. **(2026-08-02: and the documents are not in the gazettes — three exhaustive searches of the 39,649-item index returned zero genuine EPF/ETF instruments. Needs Department of Labour or Central Bank sources, or an out-of-scope declaration.)**
 4. **The sector task cannot yet support a strong multi-label claim** (§1.4). Collecting partial-sector examples — regulations affecting one or two of the three sectors — is now the highest-value annotation target, ahead of general volume. **(2026-08-02: the fresh holdout supplies 142 partial-sector rows, 93.4 % of its sector-positive rows, so the sector head can now be *evaluated* as a classifier. Training data is still degenerate.)**
 5. **`is_sme_relevant` after derivation means "affects a studied sector"**, which is narrower than the annotated field. State it in the write-up (§1.3).
-6. **The V7-M test split is consumed and old Step 50 must never be rerun.** (2026-08-02) The V7-M line ran one pre-declared strict evaluation on its 167-row test split and failed the sector gate at `0.888330`. That single read exhausts the split: no later candidate may be selected, tuned, thresholded or compared using those rows *or their error table*, and no promotion claim may cite them. Reading the Step 50 error rows to guide the next architecture is tuning on the test set. See §∞ V7-M line.
-7. **No model output may touch the fresh holdout before it is locked.** (2026-08-02) No predictions may inform its labels, no thresholds may be tuned on it, and no hard rows may be quietly dropped after seeing results. Step 55A validates and locks; only then may Step 55B evaluate, once, with thresholds frozen from validation.
 
 ---
 
@@ -536,132 +530,3 @@ The root cause is upstream of the architecture: **73.2% of gold rows carry no se
 ### The honest next step
 
 Not another training run. An annotation round designed to produce **partial sector sets** — sampling regulations that plausibly affect one or two sectors but not three — followed by a re-measure of the label distribution before any head is retrained. Everything after Step 47 stays blocked until that exists.
-
----
-
-## ∞ V7-M line (2026-08-02) — the 1110-row multitask run, the failed strict gate, and the candidate that is not allowed to be tested yet
-
-*Added by the 2026-08-02 lineage pass. This section documents a **second V7 line**, separate from the 1103-row V7-W working experiment described in §1–§10. V7-W collapsed and was rejected; V7-M did not collapse, reached the strict promotion gate, and failed it by 0.0117 on one metric. Both records stand. Dataset-side detail: [[18_M1_Dataset_And_Model_Lineage]] §∞ V7-M multitask line.*
-
-### 1. What changed between the two lines
-
-| | V7-W | V7-M |
-|---|---|---|
-| Dataset | `m1_regulations_v6_1110_multitask_noleak` | `m1_regulations_v7_1110_multitask_fixedsplit` |
-| Rows / split | 1103 · 773 / 163 / 167 | **1110 · 777 / 166 / 167** |
-| Multitask fields | derived by the trainer at load | **stored in the parquet** |
-| Best category macro-F1 | 0.0936 (test, collapsed) | **0.929558** (validation, seed 13) |
-| Outcome | rejected — majority-class collapse | strict gate reached and failed on sector macro-F1 |
-
-The design in §3 is unchanged — one shared XLM-R encoder, 8-way softmax category head, 3-sigmoid sector head, auxiliary relevance head, and production relevance **derived** as `is_sme_relevant = bool(predicted_affected_sectors)` so category and relevance cannot contradict. What changed is the data plumbing and the loss/sampling configuration, and that was enough to move the line from collapse to near-gate.
-
-### 2. Training configuration that produced the current candidate
-
-```text
-base:                     xlm-roberta-base
-lora_r:                   16
-epochs:                   24
-seeds:                    7 13 29
-batch_size:               16
-max_length:               512
-head_lr:                  1e-3
-lora_lr:                  2e-4
-sector_loss_weight:       0.45
-relevance_loss_weight:    0.03
-sampling_alpha:           0.65
-loss_weight_cap:          4.0
-sector_pos_weight_cap:    8.0
-relevance_pos_weight_cap: 8.0
-gradient_clip_norm:       1.0
-patience:                 6
-fp16:                     true
-diagnostic_only:          true
-```
-
-Two settings carry the sector-focus intent: `sector_loss_weight 0.45` raises the sector head's share of the gradient, and `relevance_loss_weight 0.03` all but silences the auxiliary head — correct, since relevance is derived at serving time and the head exists only as a diagnostic. `sampling_alpha 0.65` is partial rebalancing, not full inversion; `loss_weight_cap 4.0` and the 8.0 positive-weight caps stop the rare-class weights from dominating the loss, which is what caused the earlier collapse.
-
-Safety flags written by the run: `diagnostic_only: true` · `test_split_loaded: false` · `promotion_allowed: false`.
-
-### 3. The strict gate, and why 0.888330 matters more than it looks
-
-Step 50 evaluated the seed-1 candidate once, against pre-declared gates:
-
-| Gate | Required | Measured | |
-|---|---:|---:|:--:|
-| category macro-F1 | ≥ 0.90 | 0.910533 | ✅ |
-| relevance F1 | ≥ 0.90 | 0.92 | ✅ |
-| sector exact match | ≥ 0.90 | 0.916168 | ✅ |
-| **sector macro-F1** | **≥ 0.90** | **0.888330** | ❌ |
-| prediction consistency | 1.0 | 1.0 | ✅ |
-
-Four of five gates passed. The temptation at this point is to call it "essentially passing" and promote. The gate exists precisely to refuse that: sector macro-F1 is the metric that distinguishes a sector classifier from a relevance detector, and it is the one the §1.4 label-degeneracy finding predicted would be weakest. Per-sector, `general_retail` F1 0.873563 at recall 0.844 is the floor — the sector with the least training support, evaluated at the highest threshold (0.75).
-
-**Gate discipline recorded, because it is the methodological contribution here:** the gate was declared before the run, the run happened once, the result was a rejection, the candidate was archived rather than tuned, and the split was retired. That sequence is what makes the *next* evaluation meaningful.
-
-### 4. The seed13 candidate, and the trap in its numbers
-
-| | Step 50 seed 1 | Improvement seed 13 |
-|---|---:|---:|
-| category macro-F1 | 0.910533 *(test)* | 0.929558 *(validation)* |
-| sector macro-F1 | **0.888330** *(test)* | **0.927620** *(validation)* |
-| sector exact | 0.916168 *(test)* | 0.957831 *(validation)* |
-| relevance F1 | 0.92 *(test)* | 0.936170 *(validation)* |
-
-The columns are not comparable and must never be placed side by side in the write-up without this warning. The left column is held-out measurement; the right is selection-set performance on data the model was tuned against. The earlier line's own validation-to-test drop on sector macro-F1 was of the same order as the entire gap between these two columns. **Nothing in the right-hand column is evidence that the gate would now pass.**
-
-Candidate identity:
-
-```text
-archive  .../xlmr_lora_v7_multitask_improvement_validation_only_candidate_seed13_not_tested
-bundle   ...candidate_seed13_not_tested.zip
-bundle   SHA256 1964A346CFDA3659BB4D511872D87F46D8B896D5D4D0E3EB334B77A1C47690D9
-model    SHA256 7739501786B8501C247397D9E72D37CF4FF8C7D1C3F5494215980C8AAB5FFB26
-seed 13 · best epoch 21 · thresholds grocery 0.45 / food 0.45 / general 0.75
-status   VALIDATION_SELECTED_ONLY_NOT_TESTED · promotion_allowed = false
-```
-
-### 5. Frozen thresholds — and why they may not move
-
-```text
-grocery_retail: 0.45
-food_service:   0.45
-general_retail: 0.75
-```
-
-These were selected on the 166-row validation split and are frozen at that value for the fresh-holdout evaluation. Re-tuning them on the holdout would convert the holdout into a validation set: the reported metric would become "best achievable after search", not "performance of a pre-specified system", and the project would again hold a candidate with no unspent evaluation surface. If the thresholds turn out to be wrong for the holdout distribution, that is a finding to report, not an error to correct in place.
-
-The asymmetry is deliberate and worth stating in the write-up: `general_retail` sits at 0.75 while the other two sit at 0.45 because `general_retail` is the thinnest, noisiest sector in training and a low threshold floods it with false positives. That same asymmetry is what cost recall (0.844) at Step 50.
-
-### 6. Order of work — V7-M line
-
-| Step | Work | State |
-|---|---|---|
-| 47 | Single-seed diagnostic (seed 42, validation only) | ✅ done — category `0.91096`, sector `0.91249` |
-| 48 | Threshold tuning on validation | ✅ done — sector `0.92428`, exact `0.95181` |
-| 49 | Three-seed validation-only run (42/1/2) | ✅ done — best seed 42, selection `0.91794` |
-| 50 | **Strict final test** (seed 1) | ⛔ **run once and FAILED** — sector `0.888330` < 0.90; split consumed |
-| — | Improvement run, sector-focus (seeds 7/13/29) | ✅ done — seed 13 selected on validation |
-| 53A | Fresh locked holdout intake package | ✅ done — template, allowed labels, instructions, manifest |
-| 53B | Premature lock attempt | ✅ correctly refused — `ValueError: Fresh holdout CSV is empty` |
-| 54A | Source-backed collection + two top-up rounds | ✅ done — v1 193 → v2 225 → **v3 286** |
-| **55A** | **Fresh holdout v3 lock validation** | 🔵 **NEXT ACTION** — no model runs in this step |
-| 55B | One-time evaluation of seed13 on locked v3 | ⛔ blocked on 55A |
-| 56 | Promotion decision, export, freeze | ⛔ blocked on 55B |
-
-Step 53B deserves its line in the record: the lock validator was invoked before any rows existed and refused with an empty-CSV error. That is the control working. No model was loaded, no old test was touched, and the failure was cheap and loud rather than silent.
-
-### 7. What Step 55B must do, and must not do
-
-**Must:** load the seed13 archive; apply the frozen validation thresholds unchanged; evaluate exactly once on the locked 286-row v3 holdout; report category macro/weighted F1 with per-class precision/recall/F1/support, sector macro/micro F1 and exact match with per-label breakdown, relevance derived from sectors, confusion matrix, error table; attach every declared limitation; state the promotion decision against the pre-declared gate.
-
-**Must not:** tune thresholds on v3; re-label any row after seeing predictions; drop hard rows; re-run if the first result disappoints; cite the consumed V7-M test split; or report EPF_ETF_CHANGE and PENALTY_ENFORCEMENT per-class F1 without their support counts (3 and 10) printed alongside.
-
-Suggested gate for the fresh-holdout evaluation, unchanged from Step 50 so the two are comparable: category macro-F1 ≥ 0.90, sector macro-F1 ≥ 0.90, derived relevance F1 ≥ 0.90, sector exact ≥ 0.90, prediction consistency 1.0 — **reported with limitations attached**, since a 3-row class cannot support a stable macro-F1 contribution. The honest form is to report macro-F1 both with and without the under-supported classes and to say so.
-
-### 8. Cross-references for this line
-
-- Dataset, hashes, per-sector error breakdown: [[18_M1_Dataset_And_Model_Lineage]] §∞ V7-M multitask line
-- Holdout collection, leakage gates, upload manifest: [[03_M1_Data_Collection]] §∞ Step 54A
-- Lock and evaluation protocol, reporting rules: [[06_M1_Training_Evaluation]] §∞ Step 55A/55B
-- Limitations to carry into the lock manifest: [[21_M1_Data_Limitations_and_Risk_Register]]
-- Which model used which split, and the counting rules: [[22_M1_Data_Usage_and_Row_Count_Register]]

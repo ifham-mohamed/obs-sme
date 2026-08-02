@@ -1154,61 +1154,6 @@ Two selection lessons are worth keeping:
 
 **Some classes are not in gazettes at all.** Three independent searches of all 39,649 items returned zero genuine EPF or ETF instruments. The three title matches were a Trust Ordinance order, a National Development Trust Fund revocation and a social-service-organisation appointment. EPF and ETF rules are published through Department of Labour circulars and Central Bank notices, not extraordinary gazettes.
 
-### Version progression — v1 → v2 → v3, and why the first two were not lockable
-
-The holdout went through three annotated states. **They are cumulative revisions of one file, not three datasets** — the current master is v3 at 286 rows, and 193 + 225 + 286 is not a meaningful total.
-
-| | **v1** | **v2** | **v3** |
-|---|---:|---:|---:|
-| Rows | 193 | 225 | **286** |
-| Added | — | +32 (round 1) | +61 (round 2) |
-| Key range added | `fresh-v1-001…193` | `fresh-v1-194…225` | `fresh-v1-226…286` |
-| TAX_RATE_CHANGE | 58 | 58 | 58 |
-| IMPORT_EXPORT | **0** | 17 | **22** |
-| SECTOR_SPECIFIC | 25 | 25 | **59** |
-| EPF_ETF_CHANGE | 3 | 3 | 3 |
-| LABOUR_LAW | 88 | 88 | 88 |
-| PRODUCT_STANDARD | 11 | 16 | **30** |
-| BUSINESS_REGISTRATION | 6 | 8 | **16** |
-| PENALTY_ENFORCEMENT | 2 | 10 | 10 |
-| grocery_retail | 92 | 99 | **136** |
-| food_service | 72 | 79 | **88** |
-| general_retail | **10** | **11** | **29** |
-| relevant / irrelevant | 98 / 95 | 105 / 120 | **152 / 134** |
-| SME-irrelevant share | 49.2 % | 53.3 % | **46.9 %** |
-| Verdict | not lockable | not lockable | **ready to lock, with limitations** |
-
-**v1 — labelled but structurally unusable as a promotion holdout.** `IMPORT_EXPORT` was **zero**: not one of the 193 instruments was an import/export licence, control, restriction or prohibition. The nearest candidate was a Customs Ordinance Revenue Protection Order fixing import duty rates, which is `TAX_RATE_CHANGE`. A holdout with an empty class cannot measure that class at all — the per-class F1 is undefined and the macro average silently drops a category. `general_retail` at 10 and `PENALTY_ENFORCEMENT` at 2 were the other blockers. v1 remains useful as a labelled diagnostic set; it was never a lock candidate.
-
-**v2 — the fix that made one metric worse.** Round 1 closed `IMPORT_EXPORT` (0 → 17) and `PENALTY_ENFORCEMENT` (2 → 10), but 25 of the 32 added rows carry `affected_sectors = NONE`, because Imports and Exports (Control) regulations keep their controlled-goods Schedules past page 1. SME-irrelevant rows went from 49.2 % to **53.3 %** — a majority — and `general_retail` moved only 10 → 11. Categories were now all populated and the set still was not lockable: the sector minimum is a hard gate, and a holdout where most rows carry no sector tests relevance detection, not sector classification.
-
-**v3 — the blocker cleared.** Round 2 added 61 rows and took `general_retail` from 11 to **29** against a minimum of 20, pushed `SECTOR_SPECIFIC` 25 → 59, `PRODUCT_STANDARD` 16 → 30 and `BUSINESS_REGISTRATION` 8 → 16, and pulled the SME-irrelevant share back to 46.9 %. The `general_retail` rows came from Consumer Affairs Authority instruments on non-food goods, described above. All three sector minimums are met and six of eight category targets are met; `EPF_ETF_CHANGE` (3/8) and `PENALTY_ENFORCEMENT` (10/15) remain short for the source reasons already recorded.
-
-The sequence is worth keeping in the write-up as-is. The v2 step is the informative one: a top-up that closed the category gaps it targeted and simultaneously degraded the sector and relevance balance, because the extraction scope — not the sampling — determined what the added rows could carry.
-
-### Uploading v3 for lock validation
-
-Upload the **whole folder**, not just the CSV:
-
-```text
-C:\Reasearch\xyz\research\data\labeling\fresh_locked_holdout_intake_v1
-suggested Kaggle dataset name: m1-fresh-locked-holdout-v3-2026-08-02
-```
-
-| File | Role |
-|---|---|
-| `fresh_holdout_label_template.csv` | **master data file — 286 rows, 12 columns** |
-| `fresh_holdout_provenance_report.csv` | per-row source reference, page numbers, category and sector reasoning, duplicate/leakage status |
-| `fresh_holdout_creation_summary.json` | counts, validation checks, safety and leakage notes, declared limitations |
-| `STEP_54A_round2_merge_report.md` | final v3 merge; records the `general_retail` fix |
-| `STEP_54A_merge_report.md` | round-1 merge |
-| `STEP_54A_topup_collection_report.md` | collection run detail |
-| `fresh_holdout_annotation_gap_report.md` | v1 gap analysis |
-| `fresh_holdout_topup_targets.csv` · `..._round2.csv` | screened target lists with `exclusion_checked` |
-| `fresh_holdout_annotation_worksheet.csv` | optional — **stale if it still has 193 rows; not the master** |
-
-Lock checklist and the one-shot evaluation protocol: [[06_M1_Training_Evaluation]] §∞ Step 55A/55B.
-
 ### Reproduction
 
 - `scripts/download_topup_pdfs.py` — standard-library-only downloader; reads a target CSV, fetches English PDFs to `raw/topup_pdf_cache/`, resumable, rate-limited.
@@ -1220,6 +1165,3 @@ Lock checklist and the one-shot evaluation protocol: [[06_M1_Training_Evaluation
 - Dataset status, split counts and standing constraints: [[18_M1_Dataset_And_Model_Lineage]]
 - Promotion gate and Step 50 status: [[20_M1_Multitask_Classifier_Upgrade]]
 - Label taxonomy and the sector rule applied: [[09_M1_Annotation_Guidelines]]
-- Lock validation and one-shot evaluation protocol: [[06_M1_Training_Evaluation]] §∞ Step 55A/55B
-- Every limitation this collection route imposes, with severity: [[21_M1_Data_Limitations_and_Risk_Register]]
-- Row counts and the non-additive counting rule: [[22_M1_Data_Usage_and_Row_Count_Register]]
