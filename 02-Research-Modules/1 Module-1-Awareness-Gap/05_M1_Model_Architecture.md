@@ -4,6 +4,16 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/m1/model/architecture.py`, `ml/m1/data/samplers.py`, `ml/m1/model/calibration.py`, `scripts/sample_for_labeling.py`, `scripts/lora_ablation.py`
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `05_M1_1_Sampling_Strategy`, `05_M1_2_Architecture_Comparison_Deep_Dive`, and `05_M1_3_LoRA_Hyperparameter_Justification`. Those three files have been retired; every sampling algorithm, pilot measurement, ablation grid, memory budget, and failure mode from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> **The production classifier is not XLM-R.** It is TF-IDF (`max_features=50000`, `ngram_range=(1,2)`, `min_df=2`) → `LinearSVC(class_weight="balanced")`, frozen at `models/m1/linearsvc_v6_primary/`, temporal-test macro-F1 **0.947220** against a 0.92 gate.
+> **XLM-R + LoRA was trained in full and rejected** across three runs; the best reached training macro-F1 0.969340 and validation 0.902693 but only **0.743563** on the temporal test. **No ONNX artifact was ever exported** for it.
+> **`confidence` is nullable.** `LinearSVC.decision_function` returns an uncalibrated signed margin, never a probability. The 0.55 confidence gate applies only to the dormant `onnx` backend.
+>
+> This document already carries correction callouts at §3.3 and §4. They are correct — the whole XLM-R + LoRA dual-head design below is **retained as the rationale that justified the attempt**, not as a description of what serves.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -714,7 +724,7 @@ The `alpha=0.7` weighting prioritises domain accuracy (the primary research metr
 
 ## 6. Inference Architecture (Production)
 
-After training, the model is exported to ONNX format for production serving. Full deployment details — quantization, session configuration, Fly.io machine sizing — are in [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md).
+After training, the model *would be* exported to ONNX format for production serving. **This never happened.** XLM-R was rejected at the bake-off (temporal test 0.743563) and no ONNX artifact was exported; the dormant `onnx` backend still points at `storage/models/m1/onnx/v1`, which is empty. Full deployment details — quantization, session configuration, Fly.io machine sizing — are in [07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md).
 
 ```python
 # Export to ONNX
@@ -824,3 +834,32 @@ The sampling strategy in §1 is the part of this document with the earliest dead
 - Chalkidis et al. (2019). *Large-Scale Multi-Label Text Classification on EU Legislation*. ACL 2019.
 - Devlin et al. (2018). *BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding*. [arxiv.org/abs/1810.04805](https://arxiv.org/abs/1810.04805)
 - Kakwani et al. (2020). *IndicNLPSuite*. EMNLP 2020 Findings.
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Figure 13 (XLM-RoBERTa with LoRA adapters and a dual classification head), Table 3.5 (classification heads, tasks and loss functions) and Table 5.3 (classification design decisions and their rationale); Part II Figure 5.11.
+
+### The report describes this document's design as if it shipped
+
+Report Figure 13 and Table 5.3 present the frozen-encoder / LoRA-adapter / dual-head / 0.55-gate design as the production classifier. It is not. The bake-off that settled it:
+
+| Run | Dataset | Val macro-F1 | Test macro-F1 | Failure mode |
+|---|---|---:|---:|---|
+| Category-only, unweighted | V5 | ~0.0946 | ~0.0936 | collapsed to the majority class |
+| Balanced, seed 42, 16 epochs | V5 | 0.596014 | 0.685348 | **zero** `EPF_ETF_CHANGE` predictions |
+| Underfit-fix, seed 42, 20 epochs | V6 | 0.902693 | **0.743563** | training macro-F1 0.969340 — underfitting solved, generalisation not |
+| **TF-IDF + LinearSVC (frozen)** | **V6** | **0.924476** | **0.947220** | — |
+
+Head-to-head on the 167-row temporal test: both correct 150, LinearSVC only 10, XLM-R only 3, both wrong 4.
+
+### The reading that belongs in the thesis
+
+777 training rows across 8 classes with a 4-row minority is inside the regime where a strongly regularised lexical model is the better estimator. That is **not** evidence that transformers are unsuited to regulatory classification — it is evidence that this corpus is currently too small to identify one. Stating it the second way is defensible; stating it the first way is not.
+
+Transformer tuning was stopped deliberately rather than continued: the V6 test split had already been used to compare four models, and continuing to tune against it would have converted a held-out measurement into a selection set.
+
+**How to read this.** The report is the *earlier* artefact. Where the two disagree, this vault is authoritative and the report is a record of what was believed at submission time. The report's XLM-R material is preserved as design rationale, not as a description of what serves.

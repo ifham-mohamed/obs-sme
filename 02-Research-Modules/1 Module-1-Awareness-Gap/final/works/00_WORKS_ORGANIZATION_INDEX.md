@@ -73,7 +73,7 @@ final/works/
 | Change | Reason |
 |---|---|
 | `PROGRAM_READINESS/log and works/` → `PROGRAM_READINESS/LOG_AND_WORKS/` | Spaces in a path break shell commands and code-block references; the rest of the tree is already SCREAMING_CASE |
-| `LOG_AND_WORKS/M1_PROGRAM_READINESS_MASTER_INDEX.md` → `_archive/duplicates/` | Byte-identical duplicate (both `9B328ADC38BB5BFF`) of the copy in `PROGRAM_READINESS/`; two canonical indexes is one too many |
+| `LOG_AND_WORKS/M1_PROGRAM_READINESS_MASTER_INDEX.md` removed from the active tree | It reappeared as a byte-identical copy of the current canonical index (SHA256 `931C62A15828AF1C…`). The canonical file remains in `PROGRAM_READINESS/`; `_archive/duplicates/` retains the older superseded snapshot. Two active canonical indexes is one too many. |
 | `_REORGANIZE_works.ps1` → `_tooling/` | A maintenance script sitting among documents reads like a document |
 | Added `00_WORKS_ORGANIZATION_INDEX.md` | This file — the tree had no map |
 

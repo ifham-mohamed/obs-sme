@@ -4,6 +4,17 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/m1/model/training.py`, `ml/m1/model/evaluation.py`, `ml/m1/data/augmentation.py`, `ml/m1/model/calibration.py`; `model_registry.json` location.
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `06_M1_1_Data_Augmentation_Strategy` and `06_M1_2_Slice_Analysis_Framework`. Those two files have been retired; every augmentation recipe, diversity check, ablation table, slice implementation, cliff pattern, and figure template from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> **The production classifier is not XLM-R.** It is TF-IDF (`max_features=50000`, `ngram_range=(1,2)`, `min_df=2`) → `LinearSVC(class_weight="balanced")`, frozen at `models/m1/linearsvc_v6_primary/`, temporal-test macro-F1 **0.947220** against a 0.92 gate.
+> **XLM-R + LoRA was trained in full and rejected** across three runs; the best reached training macro-F1 0.969340 and validation 0.902693 but only **0.743563** on the temporal test. **No ONNX artifact was ever exported** for it.
+> **`confidence` is nullable.** `LinearSVC.decision_function` returns an uncalibrated signed margin, never a probability. The 0.55 confidence gate applies only to the dormant `onnx` backend.
+>
+> The training protocol, gates and slice-analysis framework below are **still the governing method**. What changed is which model came out the other side.
+> Frozen primary: `models/m1/linearsvc_v6_primary/linearsvc_pipeline.joblib`, SHA256 `1D7F84754421A881EE1B5FA0F008A0CC3DB4E24F52CE6D97CE155CB4D1923CFA`, re-scored byte-identically on a second machine at `0.9472199858964565`.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -1273,3 +1284,34 @@ Final model artifacts are exported to ONNX for CPU-optimised production serving,
 - Guo et al. (2017). *On Calibration of Modern Neural Networks*. ICML 2017.
 - Scikit-learn. (2024). *sklearn.metrics.classification_report*. [scikit-learn.org](https://scikit-learn.org)
 - Loshchilov & Hutter (2017). *Decoupled Weight Decay Regularization (AdamW)*. ICLR 2019.
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Chapter 7 (§7.1.1–§7.1.15 metric definitions), Figure 21 (GPU training session) and Tables 7.3–7.6; Part II Chapter 7 and Figure 7.1.
+
+### The frozen result, in the form the thesis needs
+
+`TfidfVectorizer(max_features=50000, ngram_range=(1,2), min_df=2)` → `LinearSVC(class_weight="balanced")`, fitted under scikit-learn **1.5.2** / joblib 1.5.3 (both now pinned `>=1.5.2,<1.6` in the `serving` and `training` extras).
+
+| Metric | Value |
+|---|---:|
+| Validation macro-F1 | 0.924476 |
+| **Temporal test macro-F1** | **0.947220** |
+| Test accuracy | 0.958084 (160 / 167) |
+| Gate | ≥ 0.92 — **passed** |
+
+Per-class test F1: `LABOUR_LAW` 1.000 · `EPF_ETF_CHANGE` 1.000 · `SECTOR_SPECIFIC` 0.970 · `IMPORT_EXPORT` 0.970 · `PRODUCT_STANDARD` 0.941 · `BUSINESS_REGISTRATION` 0.923 · `TAX_RATE_CHANGE` 0.917 · `PENALTY_ENFORCEMENT` 0.857.
+
+> [!caution] Read `EPF_ETF_CHANGE` 1.000 as *"one test document, classified correctly"* and nothing more. It is a one-sample estimate, and quoting it as a per-class result without that qualifier is the most easily challenged claim in the module.
+
+### Metric definitions the report supplies
+
+Report Chapter 7 defines, with formulas, the fifteen metrics this document uses or will need: accuracy, precision, recall, F1, Cohen's kappa, field/record/stage accuracy, CER and WER, calibration (ECE and Brier), timeliness and diffusion metrics, model drift, ROC-AUC and PR-AUC, the DeLong test for correlated ROC curves, Cramér's V, Shapley attribution with block share, and positive-unlabelled correction. Cite the report for the definitions; cite this document for how they are applied to M1.
+
+### Calibration is not available on the served path
+
+ECE and Brier score require a probability. `LinearSVC.decision_function` does not produce one. Any calibration claim in the thesis must therefore either (a) apply to the rejected XLM-R runs, clearly labelled as such, or (b) wait for a Platt/isotonic wrapper that has not been fitted. Do not report a calibration figure for the frozen model.

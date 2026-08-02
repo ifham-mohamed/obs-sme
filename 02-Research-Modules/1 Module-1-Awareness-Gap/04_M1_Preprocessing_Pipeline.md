@@ -5,6 +5,14 @@
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `04_M1_1_Gazette_Noise_Removal`, `04_M1_2_Metadata_Extraction_Patterns`, and `04_M1_3_Text_Chunking_Strategy`. Those three files have been retired; every cleaning rule, metadata regex, chunking decision, worked example, and validation check from them lives below.
 > **Implementation status:** ✅ Shipped Session 31 / F-154 (Step 2e — `ml/m1/preprocessing/{cleaning,metadata_extractor,chunking}.py` + orchestrator `preprocess_gazette()`). Backend persistence + Celery wiring shipped Session 32 / F-155 (Step 2f).
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> This document selects the **HuggingFace XLM-R tokenizer** as the production tokenizer. That selection is now historically accurate but operationally dormant:
+> the production classifier is TF-IDF + LinearSVC, which uses scikit-learn word uni/bi-gram tokenisation, not SentencePiece.
+> The XLM-R tokenizer remains correct for the dormant `onnx` backend and for any future transformer attempt. The cleaning, metadata-extraction and chunking stages are unaffected and remain live.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## Abstract
@@ -327,3 +335,24 @@ The preprocessing pipeline converts raw, noisy gazette PDF text into structured,
 - Honnibal et al. (2020). *spaCy: Industrial-strength Natural Language Processing in Python*. [spacy.io](https://spacy.io)
 - Bojanowski et al. (2016). *Enriching Word Vectors with Subword Information (fastText)*. [arxiv.org/abs/1607.04606](https://arxiv.org/abs/1607.04606)
 - Bird et al. (2009). *Natural Language Processing with Python (NLTK)*. O'Reilly.
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I §3.6 (language identification and preprocessing) and §6.3.1; Part II §5.3.1 and §6.3.1.
+
+### Tokenisation, as actually served
+
+| Path | Tokeniser | Status |
+|---|---|---|
+| `linearsvc` (default) | `TfidfVectorizer` word uni/bi-grams, `min_df=2`, `max_features=50000` | **live** — 898 rows classified |
+| `onnx` | XLM-R SentencePiece, `max_length=512` | dormant, no artifact exported |
+
+The ≤ 512-token chunking contract this document specifies is still enforced upstream, because the chunk boundary is a *storage* contract (`classification_chunk`), not a model contract. Nothing needs to change if a transformer is revisited.
+
+### Report cross-reference
+
+Report §3.6 names fastText for language ID and the same cleaning/metadata/penalty/chunking stage list. Report Figure 2 (Part I) / Figure 4.1 (Part II) place preprocessing as Stage 3 of five.

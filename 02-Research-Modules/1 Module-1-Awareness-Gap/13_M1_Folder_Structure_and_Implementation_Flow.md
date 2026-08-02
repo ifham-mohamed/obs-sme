@@ -1,8 +1,14 @@
 # 13 — M1 Folder Structure & Implementation Flow
 
 > Where every M1 file lives, what it owns, when it lands, and how the same shape extends to M2/M3/M4.
-> **Implementation status (2026-07-30):** 🟢 Largely built. Phase-2 ingest + the full `enigmatrix-ml/m1/` extraction/preprocessing/evaluation stack, the `model/` scaffolds, and the Phase-3 labelling surface are shipped. The v1 annotation gate is complete with 800 accepted gold rows; deterministic parquet split, TF-IDF baselines, and CPU LoRA smoke exist. Remaining: full GPU LoRA training/export, summarisation, final extraction-measurement evidence runs, and the findings notebooks.
+> **Implementation status (2026-07-30):** 🟢 Largely built. Phase-2 ingest + the full `enigmatrix-ml/m1/` extraction/preprocessing/evaluation stack, the `model/` scaffolds, and the Phase-3 labelling surface are shipped. **Superseded 2026-08-02** — the annotation gate is complete with **1128 accepted gold rows** (Batches 01–07); the ML branch froze at **1110 rows** with a fixed 777 / 166 / 167 split. Full GPU LoRA training *ran* and was **rejected**; TF-IDF + `LinearSVC` is frozen as the production classifier at macro-F1 0.947220 and is wired into the backend behind `M1_CLASSIFIER_BACKEND`. Remaining: operating-threshold selection, review-quality evidence, margin-aware monitoring, summarisation backfill, and the F1–F6 findings notebooks.
 > **Path note:** the short names below (`ml/`, `backend/`, `scraper/`) map to the real roots `enigmatrix-ml/`, `enigmatrix-backend/` (which also hosts the Scrapy scraper), and the top-level `research/` · `data/` · `mydata/` · `scripts/` · `storage/`. Labelling operation: see the research folder section in [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) plus `research/data/PHASE3_ANNOTATION_RUNBOOK.md`.
+
+> [!warning] Truth-ledger sync — 2026-08-02
+> Folder ownership is unchanged. The **status line has moved on**: the gold set is 1128 rows (not 800), full GPU training ran and was rejected, and the production classifier is frozen and wired into the backend.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
 
 ---
 
@@ -342,3 +348,34 @@ How each stage scales horizontally. Numbers are targets; real capacity confirmed
 - `enigmatrix-docs/backend/BUILD_PLAN/BUILD_07_Module1_Awareness.md` — when stages A, B, D, E, F, G land.
 - `enigmatrix-docs/ml/BUILD_PLAN/BUILD_11_ML_Training_Pipeline.md` — when `ml/m1/data/`, `ml/m1/model/training.py`, `storage/models/m1/`, and `model_registry.json` land.
 - `enigmatrix-docs/backend/BUILD_PLAN/BUILD_12_Data_Ingestion_and_Scheduling.md` — when `backend/app/tasks/m1/portal_watcher.py`, `rss_watcher.py`, and Celery Beat config land.
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Table 3.2 (repository components) and §3.2 (platform architecture and repository layout).
+
+### Repository layout, as the report states it
+
+| Component | Purpose |
+|---|---|
+| `enigmatrix-backend` | FastAPI, SQLAlchemy 2.0 async, Alembic, Pydantic v2, Celery + Beat, Scrapy spiders. Owns the PostgreSQL schema and every migration. Hosts `app/m1`, `app/m2`, `app/m3` |
+| `enigmatrix-frontend` | Next.js 14 App Router, Tailwind + shadcn-pattern HSL tokens, next-intl (EN/SI/TA), TanStack Query, Playwright |
+| `enigmatrix-ml` | Python packages m1–m4 — extraction, preprocessing, evaluation, model training, thesis-figure notebooks |
+| `enigmatrix-docs` | MkDocs documentation set |
+| `enigmatrix-infrastructure` | infrastructure configuration and local orchestration |
+| `research/data` | Label Studio configuration, calibration set, annotation batches |
+| `scripts` | cross-repository scripts (sampling, thesis artefact regeneration, translation helpers) |
+
+The report states the design reason directly, and it is worth quoting: placing extraction and evaluation in `enigmatrix-ml` rather than the backend was deliberate — the ML package is pip-installable and backend-independent, so it runs in Colab or Kaggle without importing the web application. `backend/app/extraction` is a thin re-export adapter that preserves existing imports and tests.
+
+### New artifact paths since this document was written
+
+```text
+models/m1/linearsvc_v6_primary/linearsvc_pipeline.joblib      ← frozen production model
+models/m1/linearsvc_v6_primary/local_windows_verification.json ← second-machine reproduction
+datasets/m1_regulations_v6_1110_clean_fixedsplit/             ← frozen dataset + manifest
+storage/models/m1/onnx/v1/                                    ← empty; dormant onnx backend
+```

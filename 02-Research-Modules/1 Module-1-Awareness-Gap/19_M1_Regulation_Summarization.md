@@ -4,6 +4,13 @@
 >
 > Companion to [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md) (what produces the input), [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) §10 (what consumes the output), and `final/works/PROGRAM_READINESS/M1_SUMMARIZATION_TRANSLATION_READINESS_PLAN.md` (the operational readiness plan this document supplies the method for).
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> Summarisation and translation are independent of the classifier change and this document stands.
+> The measured state as of 2026-08-01: English summary generation passes **80/80 (100%)**, but numeric-locale checking passes **10/152 (6.58%)** with 7 rows flagged. The translation queue holds **1145** items. Numeric-locale handling is the weakest link in the chain and should be treated as the next work item here.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -30,7 +37,7 @@ This document specifies **field-grounded constrained generation**: the summary i
 
 The claimed contribution is **faithfulness by construction** — hallucination of regulatory figures is prevented structurally rather than detected statistically. §3 gives the measurement that motivates it, including the finding that verbatim-presence checking alone would catch **0 of 52** observed field errors, which is why the design needs anchor binding and not just span grounding.
 
-**Implementation status:** 🟡 **First conservative backend slice built, not final evidence-complete.** As of 2026-08-01 the codebase has `app/m1/services/summary_service.py`, `app/m1/tasks/summarise_gazette.py`, `scripts/generate_regulation_summaries.py`, `scripts/enqueue_missing_m1_translations.py`, Alembic migration `202608010002_m1_summary_metadata.py`, and unit tests for the core verifier contract. `summary_en` is now written only by the constrained service or left empty with `summary_status='review_required'`. Every number in §3 remains measured; the first implementation follows the selected method but still needs the production `cleaned_text` diagnostic, review workflow, and human evaluation before this feature is final-ready.
+**Implementation status:** 🟡 **First conservative backend slice built, not final evidence-complete.** As of 2026-08-02 the deterministic 80-English audit passed 80/80, and the sentence counter was repaired after `No.` in Act citations created four false length failures. Seven genuine low-margin classifier reviews remain. The separate SI/TA numeric audit passed only 10/152 locale checks; 144 replacement translation jobs are queued and must be drained and re-audited. These engineering checks do not replace the planned human harm/faithfulness review, production `cleaned_text` diagnostic, or review workflow.
 
 ### 0.1 Current decision
 
@@ -638,3 +645,35 @@ This gate order is the answer to "what should I work on next?" Build G0–G2 bef
 - Dabre, R. et al. (2022). *IndicBART: A Pre-trained Model for Indic Natural Language Generation*. ACL Findings 2022. [arxiv.org/abs/2109.02903](https://arxiv.org/abs/2109.02903)
 - NLLB Team (2022). *No Language Left Behind: Scaling Human-Centered Machine Translation*. [arxiv.org/abs/2207.04672](https://arxiv.org/abs/2207.04672)
 - Department of Government Printing Sri Lanka. *Gazette Extraordinary*. [documents.gov.lk](https://documents.gov.lk)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I §3.12 (summarization and translation), Figure 22 (summarisation and Sinhala/Tamil translation flow) and Figure 23 (administrative translation review queue); Part II Figures 6.6–6.7, with Mermaid source.
+
+### The chain, as the report draws it
+
+`Extracted + cleaned regulation text` + `classification (change_category + affected_sectors)` → **controlled English summary generation** (inputs: title, domain, sectors, amendment type, cleaned text) → `summary_en`; `title_en` from the gazette or the title scraper → **NLLB-200 distilled 600M** on a Colab/Kaggle GPU → `title_si`, `title_ta`, `summary_si`, `summary_ta` → **quality check** (length, script, empty, truncation) → *pass* publishes to SME alerts and the dashboard in the user's preferred language; *fail* routes to the admin translation review queue.
+
+Part II carries this as Mermaid source (Figure 6.6), which is the editable form.
+
+### Measured state, 2026-08-01
+
+| Check | Result |
+|---|---:|
+| English summaries sampled | 80 |
+| English summaries passing | **80 (100%)** |
+| Rows translated | 76 |
+| Numeric-locale checks run | 152 |
+| Numeric-locale checks passing | **10 (6.58%)** |
+| Rows flagged for review | 7 |
+| Translation queue depth | **1145** |
+
+### What 6.58% means
+
+The figure-masking pipeline the report describes (mask → split → translate → restore → verify) is not preserving numerics through the EN → SI/TA hop. Since Module 1's alerts carry rates, thresholds, deadlines and penalty amounts, a numeric that silently changes in translation is the highest-severity failure this module can produce — worse than a missed alert, because it is confidently wrong in the user's own language.
+
+Treat this as a correctness defect, not a quality metric. The status statement in the report — that the production batch summary generator and bulk translation backfill are the remaining pieces — is accurate but understates the severity.

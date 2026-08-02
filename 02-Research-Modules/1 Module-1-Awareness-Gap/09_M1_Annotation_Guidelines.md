@@ -4,6 +4,13 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `research/data/labeling/` + `tests/m1/fixtures/gold_labels.csv`
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `09_M1_1_Category_Taxonomy_Examples`, `09_M1_2_Annotation_Workflow_IAA_Protocol`, and `09_M1_3_SME_Survey_Instrument`. Those three files have been retired; every worked example, calibration protocol, and survey-operations detail from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> The taxonomy, decision criteria and survey instrument here are **frozen and correct**.
+> The annotation *outcome* figures in §Implementation status were the v1 snapshot and are superseded: the gold set went on to **1128 rows across Batches 01–07** (2256 annotations, 2 per task), with v3 IAA of **category kappa 0.947215**, mean sector kappa 0.965567 and SME relevance kappa 0.914637.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -44,7 +51,7 @@ This document specifies the annotation protocol for constructing the 800-documen
 
 Four annotation platforms are evaluated — Label Studio, Prodigy, Doccano, and a custom web tool — and Label Studio is selected for its active-learning integration, multi-label support, IAA dashboard, and zero licensing cost. The guidelines are designed to achieve labeling consistency sufficient for a training corpus that reaches the F1 ≥ 0.92 target defined in [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md).
 
-**Implementation status:** 🟢 Annotation gate completed for v1. The taxonomy, decision criteria, and survey instrument are frozen and drive the database enum and seeded demo regulations. Label Studio calibration was completed; Batches 02-05 were dual-annotated and resolved into 800 accepted gold rows with category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518, and 40 manual adjudications. Rare-domain coverage remains a limitation for model claims. Examples marked `[template]` are realistic-but-synthetic; unmarked examples are real seeded regulations.
+**Implementation status:** 🟢 Annotation gate completed for v1. The taxonomy, decision criteria, and survey instrument are frozen and drive the database enum and seeded demo regulations. Label Studio calibration was completed; Batches 02-05 were dual-annotated and resolved into 800 accepted gold rows with category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518, and 40 manual adjudications. **Superseded 2026-08-02** — rare-domain top-up Batches 06–07 took the gold set to **1128 rows / 2256 annotations**, lifting v3 IAA to category kappa **0.947215**, mean sector kappa **0.965567** and SME relevance kappa **0.914637**. Rare-domain coverage remains a limitation for model claims. Examples marked `[template]` are realistic-but-synthetic; unmarked examples are real seeded regulations.
 
 ### 0.1 Accepted Annotation Run — 2026-07-30
 
@@ -918,3 +925,39 @@ The SME awareness survey supplies the other half of the measurement. The classif
 - Sri Lanka Standards Institution. (2023). *SLSI Mandatory Certification List*. slsi.lk
 - Inland Revenue Department. (2023). *Gazette Notifications Archive*. ird.gov.lk
 - Consumer Affairs Authority. *Maximum Retail Price Orders*. caa.gov.lk
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Figure 18 (Label Studio annotation interface), Table 6.1 (datasets used), Table 6.2 (columns of the frozen gold dataset) and Tables 7.5–7.6 (inter-annotator agreement); Part II Figure 6.1.
+
+### Annotation outcome, current
+
+| | v1 snapshot | Current (v3, 2026-08-02) |
+|---|---:|---:|
+| Batches | 02–05 | **01–07** |
+| Gold rows | 800 | **1128** |
+| Annotations | 1600 | **2256** |
+| Category kappa | 0.871534 | **0.947215** |
+| Mean sector kappa | 0.863776 | **0.965567** |
+| SME relevance kappa | 0.723518 | **0.914637** |
+| Manual adjudications | 40 | 40 + top-up adjudications |
+
+Report Figure 18 is the matching Label Studio board: four production batches at 200/200 tasks with 400 annotations each, plus three calibration projects at 19/19.
+
+### The sector-label problem this document should now record
+
+Sector labels were collected, but the distribution makes them nearly unusable as a multi-label target:
+
+- **73.2%** of gold rows carry **no** sector at all
+- Of the remainder, **84%** carry **all three** sectors
+- Only **48 rows (4.3%)** are genuinely partial
+
+That is why there is no sector model in production and why `sectors: []` is served. Any future sector head needs an annotation round designed to produce partial sets, not another training run on the same labels.
+
+### Caution carried forward
+
+`EPF_ETF_CHANGE` holds **4 train rows and 1 test row** after the V6 correction. `PENALTY_ENFORCEMENT` has the weakest per-class F1 (0.857). If strict independent-annotation evidence is required, Batches 06–07 should be manually audited.

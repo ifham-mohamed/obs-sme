@@ -4,6 +4,12 @@
 > **Audience:** the developer implementing M1. Status-aware: every file table marks entries ✅ / 🟡 / 🔲 to match doc 13.
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `15_M1_1_ML_Folder_Guide`, `15_M1_2_Backend_Folder_Guide`, `15_M1_3_Scraper_Folder_Guide`, `15_M1_4_Research_Folder_Guide`, `15_M1_5_Storage_Folder_Guide`, and `15_M1_6_Docs_Folder_Guide`. Those six files have been retired; every file inventory, build sequence, dependency edge, and acceptance criterion from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> File ownership is unchanged; **four status snapshots were stale** and have been corrected in place. Model training is no longer "being validated" — it ran, XLM-R was rejected, and LinearSVC V6 is frozen and serving.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -116,7 +122,7 @@ Acceptance criteria, which each source guide carried per-folder, are consolidate
 ## 2. `enigmatrix-ml/` — the ML Monorepo
 
 > **Repo note (2026-07-24):** the real folder is **`enigmatrix-ml/`**, not `ml/`. Much of it is now **shipped**, not deferred: the full `m1/extraction/` chain (PDF classify → PyMuPDF/pdfplumber/pypdfium2/Tesseract/Surya page engines → Wijesekara + font-aware conversion → segmenter → language detection), `m1/preprocessing/` (cleaning, metadata, chunking), the `m1/evaluation/` extraction-metrics package, `m1/model/` (labels, architecture, `train_xlmr`, eval, baselines, `export_onnx`, inference, promotion), and `m1/data/samplers.py`. The idealised names below (`shared/`, `model/training.py`, `model/calibration.py`) map to real files noted inline.
-> **Implementation status snapshot:** ✅ extraction + preprocessing + evaluation + model scaffolds + sampler shipped · 🟡 model training/ONNX being validated · 🔲 `data/sources.py` / `data/loaders.py` / `data/augmentation.py` / `summarization/` deferred.
+> **Implementation status snapshot:** ✅ extraction + preprocessing + evaluation + model scaffolds + sampler shipped · ✅ model training complete — XLM-R rejected, `linearsvc_v6_primary` frozen and serving · 🔲 ONNX export never produced · 🔲 `data/sources.py` / `data/loaders.py` / `data/augmentation.py` / `summarization/` deferred.
 
 ### 2.1 Purpose and Specifying Docs
 
@@ -195,13 +201,16 @@ Shipped, and not present in doc 13's original tree — this package was added wh
 
 **Why the cache key includes the model version.** Without it, a model promotion silently serves stale predictions from the previous version for every cached document — and because the cache hit rate is highest on exactly the high-traffic regulations, the stale answers would be the most visible ones. Including gazette number and date in the key additionally prevents cross-gazette contamination when two documents share an identical cleaned chunk.
 
-### 2.8 `ml/m1/summarization/` — Stage E
+### 2.8 Stage E summarisation — implemented in the backend
 
-| File | Owns | Status | Primary doc | How to build (1-liner) |
+| File | Owns | Status | Primary doc | Implementation note |
 |---|---|---|---|---|
-| `summarization/marianmt.py` | MarianMT EN→SI/TA plus EN→EN summary | 🔲 | [04_M1_Preprocessing_Pipeline.md](04_M1_Preprocessing_Pipeline.md) §chunking | Summarise per chunk; concatenate to ≤ 600 chars total |
+| `enigmatrix-backend/app/m1/services/summary_service.py` | Anchor-bound English summary construction + quality flags/provenance | ✅ Shipped | [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) | Writes only source-grounded slots or marks `review_required` |
+| `enigmatrix-backend/app/m1/tasks/summarise_gazette.py` | Per-regulation Stage-E task | ✅ Shipped | [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) | Persists `summary_en`, status, source hash, and model version |
+| `enigmatrix-backend/scripts/generate_regulation_summaries.py` | Controlled backfill | ✅ Shipped; partial live run | [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) | First evidence: 380 generated, 11 review-required, 751 pending |
+| `m1/summarization/marianmt.py` | Earlier MarianMT proposal | Superseded | [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) §10 | Translation is handled by the shipped NLLB queue; this file is not required |
 
-Independent of the classifier, which is why §2.11 places it last but explicitly allows it to be built in parallel once Stage D has output to summarise.
+The first slice is deliberately non-LLM and runs after classification. Generated English summaries enqueue into the shipped NLLB translation path; remaining work is evaluation, review/edit UI, and full coverage rather than basic implementation.
 
 ### 2.9 `ml/m1/schema/` and `ml/m1/utils/`
 
@@ -254,7 +263,7 @@ Cross-module helpers in `ml/shared/` build alongside whatever needs them — emb
 ## 3. `enigmatrix-backend/app/` — the FastAPI + Celery Service
 
 > **Repo note (2026-07-24):** the real folder is **`enigmatrix-backend/`**, and M1 code is a **self-contained package at `app/m1/`** (`api/`, `models/`, `schemas/`, `services/`, `tasks/`) — moved there from the flat `app/{services,models,...}` layout the old guide assumed. It is now **largely shipped**: Phase-2 ingest/extract/preprocess, the extraction dataset/measurement admin surface, alerts, drift, retraining, propagation matching, and pipeline validation all exist. Deferred: the live ONNX classify path, which waits on the trained model, plus some Stage-E summarisation.
-> **Implementation status snapshot:** ✅ ~70 M1 files under `app/m1/` shipped — api/models/schemas/services/tasks — plus Scrapy Stage A, seeds, audit, and migrations · 🟡 classify/summarise tasks wired but pending the trained model · 🔲 MarianMT summarisation.
+> **Implementation status snapshot:** ✅ ~70 M1 files under `app/m1/` shipped — api/models/schemas/services/tasks — plus Scrapy Stage A, seeds, audit, and migrations · ✅ classify task live on the frozen LinearSVC backend (898 rows classified) · 🟡 summarise task pending the production batch generator · 🔲 MarianMT summarisation.
 
 ### 3.1 Purpose and Specifying Docs
 
@@ -423,7 +432,7 @@ The Scrapy CLI works standalone for local testing. Production runs the spiders *
 ## 5. `research/` — the Analytical Surface
 
 > **Repo note (2026-07-30):** the annotation surface is **live and v1-complete**. The labeling config, calibration set, Batches 02-05, full Label Studio exports, IAA reports, `manual_resolutions.csv`, `gold_standard.csv`, and frozen v1 evidence files exist under `research/data/labeling/`; a working Label Studio instance is initialised at `xyz/mydata/`. The Jupyter findings notebooks (F1–F6) are still to scaffold.
-> **Implementation status snapshot:** ✅ annotation config, calibration, Batches 02-05, reducer, IAA reports, manual resolutions, 800-row gold, frozen v1 files, deterministic parquet split, TF-IDF baselines, CPU smoke · 🟡 full LoRA model/ONNX pending · 🔲 findings notebooks/figures deferred.
+> **Implementation status snapshot:** ✅ annotation config, calibration, Batches 02-05, reducer, IAA reports, manual resolutions, 800-row gold, frozen v1 files, deterministic parquet split, TF-IDF baselines, CPU smoke · ✅ full LoRA training ran and was rejected; LinearSVC V6 frozen instead · 🔲 ONNX never exported · 🔲 findings notebooks/figures deferred.
 
 ### 5.1 Purpose and Specifying Docs
 
@@ -465,7 +474,7 @@ The Scrapy CLI works standalone for local testing. Production runs the spiders *
 | `data/labeling/batch_01_provenance.json` | Sampling provenance — seed, corpus size, language/year/type breakdowns | ✅ Shipped | [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) §sampling strategy | Auto-written alongside each `batch_NN.csv` |
 | `data/PHASE3_ANNOTATION_RUNBOOK.md` | Operational runbook for the whole labelling loop | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | Living doc; describes data versus mydata, LS setup, calibration, IAA, export |
 | `data/labeling/batch_02_annotations_full.json` … `batch_05_annotations_full.json` | Full Label Studio exports for the accepted v1 gold set | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | Reducer inputs for `scripts/resolve_iaa.py`; each accepted batch has 200 tasks and 400 annotations |
-| `data/labeling/gold_standard.csv` and `gold_standard_v1_800.csv` | Final consensus labels at κ ≥ 0.75, plus frozen v1 copy | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | 800 rows from Batches 02-05; 40 manual adjudications; rare-domain coverage still below target |
+| `data/labeling/gold_standard.csv` and `gold_standard_v1_800.csv` | Final consensus labels at κ ≥ 0.75, plus frozen v1 copy | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | 800 rows from Batches 02-05 at the v1 freeze; **superseded** — Batches 06-07 took the gold set to 1128 rows (v3 category kappa 0.947215); 40 manual adjudications at v1 |
 | `data/labeling/iaa_report*.json/csv`, `disagreements.csv`, `manual_resolutions.csv` | IAA evidence and adjudication audit trail | ✅ Shipped | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §6 | Category kappa 0.871534; mean sector kappa 0.863776; SME relevance kappa 0.723518 |
 | `enigmatrix-ml/datasets/m1_regulations/{train,val,test}.parquet` | Current v1 train/validation/test split | ✅ Shipped with limitation | [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §1.2 | 560/120/120 rows from `m1.model.data --by key`; deterministic but not temporal/stratified |
 | `data/prepilot_2025-09.csv` | 40-respondent informal SME scan — EN-only Google Forms export | 🟡 Partial, already collected | [01_M1_Research_Problem.md](01_M1_Research_Problem.md) §motivation and evidence | Already collected; redact PII before commit |
@@ -510,7 +519,7 @@ The notebooks are the **thesis artifact** — they must re-run end to end agains
 ## 6. `storage/` — the On-Disk Artifact Store
 
 > **Repo note (2026-07-30):** `storage/` now contains the fastText language-ID model at **`storage/models/m1/baseline/lid.176.bin`**, the baseline report at **`storage/models/m1/baselines_v1/baselines.json`**, and a CPU LoRA smoke output at **`storage/models/m1/xlmr_lora_smoke/`**. The smoke output is not a production classifier. The trained ONNX classifier lands only after full GPU training and export.
-> **Implementation status snapshot:** 🟡 Conventions documented; language-ID model, baseline report, and CPU smoke registry present; production `models/m1/v*/` ONNX artifacts still pending.
+> **Implementation status snapshot:** ✅ Conventions documented; language-ID model, baseline report and smoke registry present; **`models/m1/linearsvc_v6_primary/` is the frozen production artifact** (joblib pipeline + SHA256 + second-machine verification JSON) · 🔲 `storage/models/m1/onnx/v1/` remains empty — no ONNX artifact was ever exported.
 
 ### 6.1 Purpose and Specifying Docs
 
@@ -778,14 +787,14 @@ Reading §9.1–§9.6 together, four rules appear in folder-specific dress:
 | `enigmatrix-ml/` | `m1/model/train_xlmr.py` XLM-R + LoRA dual-head path | 🟡 Built and trained · **not promoted** — failed the temporal-test gate (§13.2) | §13.2 |
 | `enigmatrix-ml/` | `m1/data/samplers.py` | ✅ Shipped | §2.3 |
 | `enigmatrix-ml/` | `m1/data/sources.py`, `loaders.py`, `augmentation.py` | 🔲 Deferred | §2.3 |
-| `enigmatrix-ml/` | `m1/summarization/marianmt.py` | 🔲 Deferred | §2.8 |
+| `enigmatrix-ml/` | `m1/summarization/marianmt.py` | Superseded by backend Stage-E service + NLLB translation queue | §2.8 |
 | `enigmatrix-ml/` | `shared/embeddings.py`, `drift.py`, `reproducibility.py` | 🔲 Deferred | §2.2 |
 | `enigmatrix-ml/` | `m1/schema/`, `m1/utils/`, `tests/m1/` | 🔲 Deferred | §2.9, §2.10 |
 | `enigmatrix-backend/` | `app/m1/api/` routers | ✅ Shipped | §3.2 |
 | `enigmatrix-backend/` | `app/m1/services/` — ~30 modules | ✅ Shipped | §3.3 |
 | `enigmatrix-backend/` | `app/m1/tasks/` — Stages A, B/C, F, secondary, measurement, retraining | ✅ Shipped | §3.4 |
-| `enigmatrix-backend/` | `classify_gazette` live ONNX path | 🟡 Wired, pending the trained model | §3.4 |
-| `enigmatrix-backend/` | MarianMT Stage-E summarisation | 🔲 Deferred | §3.4 |
+| `enigmatrix-backend/` | `classify_gazette` default LinearSVC path (legacy ONNX path retained) | ✅ Wired and used on live gazettes | §3.4, §13.3 |
+| `enigmatrix-backend/` | Anchor-bound Stage-E summarisation service/task/backfill | 🟡 Backend slice shipped and partially backfilled; evaluation/review open | §2.8, §3.4 |
 | `enigmatrix-backend/` | `app/m1/models/`, `app/m1/schemas/`, migrations, seeds, settings, audit middleware | ✅ Shipped | §3.5, §3.6 |
 | Scraper | Stage A spiders — gazette, weekly, acts, bills — plus settings and pipelines | ✅ Shipped | §4.2 |
 | Scraper | Secondary-source watchers — built as Celery tasks, not spiders | ✅ Shipped elsewhere | §4.2, §3.4 |
@@ -907,3 +916,25 @@ The repo copy of this documentation set has diverged badly: 34 of 36 shared file
 `documentation/` was reorganized on 2026-08-01 into `m1/records/`, `m1/structure_audit/`, `plans/`, `manuals/` and `_archive/`, with root-level planning documents moved in via `git mv`.
 - **Doc index:** [README.md](README.md).
 - **Build phases:** BUILD_07 (Stage A–F backend), BUILD_11 (ML training), BUILD_12 (schedulers), BUILD_13 (admin and SME tracking UI).
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Table 3.2 (repository components) and Table 3.7 (storage and deployment layers).
+
+### Artifact inventory, corrected
+
+| Path | What it is | State |
+|---|---|---|
+| `models/m1/linearsvc_v6_primary/linearsvc_pipeline.joblib` | frozen production classifier | ✅ SHA256 `1D7F8475…23CFA` |
+| `models/m1/linearsvc_v6_primary/local_windows_verification.json` | second-machine reproduction record | ✅ `0.9472199858964565` |
+| `datasets/m1_regulations_v6_1110_clean_fixedsplit/dataset_manifest_v6.json` | frozen dataset manifest, per-split SHA256 | ✅ |
+| `storage/models/m1/onnx/v1/` | dormant ONNX backend target | 🔲 empty |
+| `research/data/labeling/gold_standard.csv` | adjudicated gold, Batches 01–07 | ✅ 1128 rows |
+
+### Environment pin worth enforcing
+
+`enigmatrix-ml/pyproject.toml` pins `scikit-learn>=1.5.2,<1.6` in **both** the `serving` and `training` extras, and declares `joblib` explicitly rather than relying on it arriving transitively. The rule behind it: *a model trained under one line must be loadable by the other.* The workspace had drifted to 1.8.0 and emitted `InconsistentVersionWarning`; it is now back on 1.5.2 / joblib 1.5.3, matching the artifact.

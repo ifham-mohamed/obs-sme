@@ -4,6 +4,13 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `scraper/`, `ml/m1/extraction/`, and the Stage-A / Stage-B Celery task boundaries
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `03_M1_1_PDF_Extraction_Chain`, `03_M1_2_Gazette_Segmentation`, and `03_M1_3_Secondary_Source_Integration`. Those three files have been retired; every Tesseract flag, calibration procedure, per-strategy failure table, embedding benchmark, worked example, and as-shipped build note from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> Collection is unaffected by the classifier change and this document remains accurate.
+> One number to carry forward: the two-step secondary-source matcher described here is **live** — exact gazette-number match first (confidence 1.0), then `difflib` title similarity **≥ 0.78**, polled every 2 hours by `portal_watcher` / `rss_watcher` on Celery Beat.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -962,3 +969,23 @@ The output feeds directly into the preprocessing stage described in [04_M1_Prepr
 - Smith, R. (2007). *An Overview of the Tesseract OCR Engine*. ICDAR 2007.
 - Wang, L. et al. (2024). *Multilingual E5 Text Embeddings*. [huggingface.co/intfloat/multilingual-e5-base](https://huggingface.co/intfloat/multilingual-e5-base)
 - Department of Government Printing Sri Lanka. *gazette.lk*. [gazette.lk](https://www.gazette.lk)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I §4.2.1–§4.2.2 (Module 1 input and process), §6.3.1 (implementation), Figure 12 (extraction and OCR routing chain) and Table 3.4 (extraction engine routing); Part II §5.3.1 and Figure 5.10.
+
+### Where the report agrees
+
+Figure 12 of the report is a rendering of the same routing chain this document specifies: `classify_pdf` inspects text yield and image coverage, emits one of `text` / `hybrid` / `scanned`, dispatches hybrid pages individually, and converges every branch on font inspection before Wijesekara-to-Unicode conversion. Part II carries the Mermaid source for that figure, so the diagram is version-controlled rather than a flat image.
+
+### Spiders, confirmed
+
+Four Scrapy spiders are live: `gazette_spider`, `weekly_gazette_spider`, `acts_spider`, `bills_spider`. Report §6.3.1 states the same four.
+
+### Worked evidence available
+
+The extraction run recorded in report Figure 19 (EGZ, 2026-03-08 → 2026-03-14) is a real console capture: 59 PDFs found, 59/59 extracted, 59/59 preprocessed, sealed as versions v1–v5. Report Figure 20 shows the paired measurement runs scoring those snapshots against manual ground truth at overall **0.852** (15 fields) and **0.942** (11 fields) across 51 regulations. Those two numbers are the module's best current extraction-accuracy evidence and belong in §7 of the thesis.

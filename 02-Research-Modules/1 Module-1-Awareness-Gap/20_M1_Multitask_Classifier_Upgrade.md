@@ -6,6 +6,12 @@
 >
 > Companion to [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) (the head design), [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) (protocol and gates), [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) (lineage), and [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] (what is frozen and must stay frozen).
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> The rejected unweighted V7 run remains historical evidence. A later **weighted seed-42 validation-only diagnostic** recovered category macro-F1 to `0.899862` and sector macro-F1 to `0.884312`, but partial-sector exact match was only `4/9` and the category gate is `0.92`. The V6 test split was not loaded, no model was promoted, and the frozen `linearsvc_v6_primary` remains the production category classifier.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where this sits
@@ -30,7 +36,17 @@ Deriving relevance rather than serving a third prediction is what makes this res
 { "is_sme_relevant": false, "sectors": ["grocery_retail"] }
 ```
 
-**Implementation status:** 📋 **Step 41 complete (audit, below). Steps 42–53 not started.** No V7 dataset exists, no multitask trainer exists, and nothing is trained. Every number in §1 is measured from the V6 parquets and the v3 gold standard; everything from §3 onward is specification.
+**Implementation status (synced 2026-08-02):** Steps 41-47 ran as an additive working experiment and the unweighted run was rejected. The first Step-48 recovery diagnostic is now complete: one weighted seed, training/validation only, no test access, no promotable checkpoint. It recovered from collapse but stopped below the category gate and on only nine informative partial-sector validation rows. Further model claims remain blocked on better evidence, not another immediate tuning run.
+
+| Step | Kaggle artifact/status | Verdict |
+|---|---|---|
+| 41 | Source V6 audit at `/kaggle/working/storage/reports/m1/v6_multitask_audit` | Found no unknown labels or key overlap, but exact-text leakage existed: 8 within-split duplicate-text rows and 6 train-val overlap rows. |
+| 42 | No-leak working dataset at `/kaggle/working/storage/datasets/m1/m1_regulations_v6_1110_multitask_noleak` | Source unchanged; rows `1110 -> 1103`; splits `773/163/167`. |
+| 43 | Clean audit at `/kaggle/working/storage/reports/m1/v6_multitask_noleak_audit` | Zero consistency errors, zero text overlap, zero unknown labels. |
+| 44 + 46 | Kaggle working `labels.py` and `train_xlmr.py` patched | Sector parser handles `numpy.ndarray`; trainer records category, sector, exact-set, and derived relevance metrics plus registry/model/labels/tokenizer artifacts. |
+| 45 | Smoke run at `/kaggle/working/storage/models/m1/xlmr_multitask_v6_noleak_metrics_smoke_seed42` | Pipeline/artifact path proved; metrics not used for promotion. |
+| 47 | 3-seed e8 run at `/kaggle/working/storage/models/m1/xlmr_multitask_v6_noleak_e8_s3` | Rejected: test category macro-F1 `0.0936`, sector micro-F1 `0.2113`, derived relevance accuracy `0.5948`. |
+| 48 diagnostic | `/kaggle/working/v7_weighted_seed42_validation_only.json` | Validation only, seed 42, 15 epochs: best category macro-F1 `0.899862`, sector macro-F1 `0.884312`, sector exact-set `0.907975`, partial-sector exact `4/9`. Recovered from collapse but did not clear the gate; stopped before test/three-seed/export. |
 
 ---
 
@@ -39,9 +55,9 @@ Deriving relevance rather than serving a third prediction is what makes this res
 Run read-only over all three V6 parquets plus `research/data/labeling/gold_standard_v3_1128.csv`. Artifacts:
 
 ```text
-documentation/m1/analysis/multitask_dataset_audit.json
-documentation/m1/analysis/multitask_label_distribution.csv
-documentation/m1/analysis/multitask_consistency_errors.csv
+/kaggle/working/storage/reports/m1/v6_multitask_audit/multitask_dataset_audit.json
+/kaggle/working/storage/reports/m1/v6_multitask_audit/multitask_label_distribution.csv
+/kaggle/working/storage/reports/m1/v6_multitask_audit/multitask_consistency_errors.csv
 ```
 
 ### 1.1 Schema — the plan assumed a field that is not there
@@ -67,12 +83,14 @@ key · text · category · sectors · language · date
 |---|---|
 | Rows | 777 / 166 / 167 = **1110** |
 | Duplicate keys | **0** |
-| Cross-split overlap | **0** |
+| Cross-split key overlap | **0** |
+| Cross-split exact-text overlap | **3 train-val text hashes / 6 affected rows** |
+| Duplicate text within split | **8 affected rows** |
 | Missing or empty text | **0** |
 | Unknown categories | **none** |
 | Unknown sector labels | **none** |
 | Duplicate sectors within a row | **0** |
-| **Total consistency errors** | **1** |
+| **Total consistency errors** | **DUPLICATE_TEXT_WITHIN_SPLIT=8; TEXT_OVERLAP_ACROSS_SPLITS=6** |
 
 ### 1.3 The one derivation-rule violation is not a data error
 
@@ -130,19 +148,22 @@ Relevance balance per split: train 204/573 · val 45/121 · test 50/117.
 
 ## 2. Step 42 — the V7 dataset
 
-**V6 is frozen and is not touched.** V7 is derived.
+**2026-08-01 execution note:** The Kaggle working branch built the leak-free training dataset at `/kaggle/working/storage/datasets/m1/m1_regulations_v6_1110_multitask_noleak` with the original six columns. It removed seven exact-text duplicate/overlap records, leaving **1103 rows split 773/163/167**. Sector vectors and derived relevance are computed by the trainer at load time. The 3-seed experiment on this working dataset was rejected. A formal enriched release with stored `sector_vector` and `relevance_label` columns remains unbuilt and should exist only if a recovery run makes the line worth promoting.
+
+**V6 is frozen and is not touched.** The working experiment is derived from it; a future formal package must derive from the cleaned 1103-row branch, not silently restore the seven excluded records.
 
 ```text
-source   /kaggle/input/datasets/ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split/
-                m1_regulations_v6_1110_clean_fixedsplit
-target   /kaggle/working/enigmatrix-ml/datasets/m1_regulations_v7_1110_multitask_fixedsplit
+source          /kaggle/input/datasets/ifhammohamed1/m1-regulations-v6-1110-clean-fixed-split/
+                        m1_regulations_v6_1110_clean_fixedsplit
+working target  /kaggle/working/storage/datasets/m1/m1_regulations_v6_1110_multitask_noleak
+formal target   /kaggle/working/enigmatrix-ml/datasets/m1_regulations_v7_1103_multitask_noleak
 ```
 
-Preserved unchanged: all 1110 keys · the 777/166/167 split · every V6 category label · text · date · language.
+Preserved for retained rows: every V6 category label · text · date · language · original split membership. The seven exclusions must be named in a manifest; the resulting split is 773/163/167.
 
-Added: `is_sme_relevant` (recovered by gold join), `sector_vector`, `category_id`, `relevance_label`, explicit `split`.
+Working dataset: no stored columns added; `sector_vector`, `category_id`, and derived `relevance_label` are computed at load time. Formal package proposal: store those fields plus explicit `split` and parent/exclusion provenance.
 
-### 2.1 Row schema
+### 2.1 Proposed formal row schema (not materialized)
 
 ```json
 {
@@ -187,11 +208,12 @@ Write both into `labels.json` beside the model artifact and assert them at load 
 
 ### 2.3 Builder acceptance
 
-The V7 build script must fail loudly rather than write a bad dataset:
+Any formal V7 build script must fail loudly rather than write a bad dataset:
 
-- 1110 rows, split sizes 777/166/167 exactly
-- every key present in V6 and no key added
-- category labels identical to V6, row for row
+- 1103 rows, split sizes 773/163/167 exactly
+- every retained key present in V6, no key added, and the seven exclusions recorded with reason and source split
+- category labels identical to V6 for every retained key
+- zero duplicate text within a split and zero exact-text overlap across splits
 - `sector_vector` reconstructs `sectors` exactly under the frozen order
 - `relevance_label == int(any(sector_vector))` on **every** row (after the `GZT_2492_10` relabel)
 - per-split SHA256 recorded in `dataset_manifest_v7.json`, and the V6 hashes recorded as the parent
@@ -253,6 +275,7 @@ Build the training sampler from **category rarity alone**. Three independent wei
 
 ## 4. Steps 45–49 — training protocol
 
+**2026-08-01 execution note:** The unweighted/old-loss working run completed through Step 47 and failed. The recorded 3-seed e8 output is `/kaggle/working/storage/models/m1/xlmr_multitask_v6_noleak_e8_s3`; mean test category macro-F1 was `0.0936`, sector micro-F1 `0.2113`, and derived SME relevance accuracy `0.5948`. Next training work must add category class weights and sector `pos_weight` before any further full run.
 | Stage | What | Gate to proceed |
 |---|---|---|
 | **A** Smoke | 32–64 rows, 1 epoch | All three heads receive gradients; shapes `(B,8)`, `(B,3)`, `(B,)`; loss finite; save/reload parity; eval files written |
@@ -260,7 +283,7 @@ Build the training sampler from **category rarity alone**. Three independent wei
 | **C** Loss weights | A (0.70/0.30/0.00) · B (0.65/0.30/0.05) · C (0.60/0.30/0.10) | **Validation only** |
 | **D** Final | seeds 42, 1, 2 | Report mean ± std for every metric |
 
-**The test split is not touched until the configuration is frozen.** It has already been used to compare four models ([18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) §5) and is close to spent; using it for weight selection would end its usefulness as a held-out measurement entirely.
+**The original plan said not to touch the test split until configuration freeze; Step 47 nevertheless reported test metrics.** Treat those numbers as rejection evidence, not as a reusable selection surface. Weighted-loss recovery must select on train/validation only, and any new final claim needs a fresh temporal holdout, nested CV, or newly collected data.
 
 Do not modify `m1/model/train_xlmr_v6_underfit_fix.py`. Add `m1/model/train_xlmr_v7_multitask.py`.
 
@@ -297,6 +320,7 @@ A disagreement between the auxiliary head and the sector-derived answer is a **u
 
 ## 6. Step 50 — evaluation and promotion
 
+**2026-08-01 promotion decision:** Step 47 is a rejection, not a candidate. It is below the frozen LinearSVC benchmark by an order of magnitude on category macro-F1 and shows sector collapse. Although the plan reserved test evaluation for Step 50, the Step-47 registry already reports the V6 temporal-test metrics, so that holdout has been consumed for this line. Export, inference, and freeze remain blocked; any weighted-loss recovery must select on training/validation and use a fresh temporal holdout or new data for a defensible final claim.
 ### 6.1 Metrics
 
 | Task | Report |
@@ -312,14 +336,14 @@ A disagreement between the auxiliary head and the sector-derived answer is a **u
 
 ### 6.2 Promotion gates
 
-| Gate | Threshold |
-|---|---|
-| Category macro-F1 | **≥ 0.92** |
-| Category regression vs the frozen benchmark **0.9472199858964565** | **≤ 0.01** |
-| Sector macro-F1 | **≥ 0.88** |
-| No individual sector F1 | **< 0.80** |
-| SME relevance recall | **≥ 0.90** |
-| Sector/relevance consistency | **= 100%** |
+| Gate                                                                 | Threshold                                            |
+| -------------------------------------------------------------------- | ---------------------------------------------------- |
+| Category macro-F1                                                    | **≥ 0.92**                                           |
+| Category regression vs the frozen benchmark **0.9472199858964565**   | **≤ 0.01**                                           |
+| Sector macro-F1                                                      | **≥ 0.88**                                           |
+| No individual sector F1                                              | **< 0.80**                                           |
+| SME relevance recall                                                 | **≥ 0.90**                                           |
+| Sector/relevance consistency                                         | **= 100%**                                           |
 | **Partial-sector exact-set-match on the 8 test rows that carry one** | **reported explicitly, not folded into any average** |
 
 The last gate exists because of §1.4. Without it, sector macro-F1 ≥ 0.88 can be met by a model that has learned only "relevant → all three", which would be a relevance detector wearing a sector head. Reporting the partial-pattern rows separately is what distinguishes the two, even though 8 rows is too few to gate on numerically — hence *reported*, not thresholded.
@@ -328,11 +352,11 @@ The last gate exists because of §1.4. Without it, sector macro-F1 ≥ 0.88 can 
 
 **Do not promote on a combined average.** The frozen LinearSVC scores **0.947220** on category. A multitask transformer scoring 0.925 on category and 0.90 on sector is *worse at the thing that already works* and better at a thing that does not exist yet.
 
-| Outcome | Action |
-|---|---|
-| V7 category ≥ 0.9372 **and** sector gates pass | Promote V7 for both tasks |
+| Outcome                                         | Action                                                                                     |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| V7 category ≥ 0.9372 **and** sector gates pass  | Promote V7 for both tasks                                                                  |
 | V7 sector gates pass, category regresses > 0.01 | **Hybrid:** LinearSVC serves category, V7 sector head serves sectors and derived relevance |
-| Sector gates fail | Do not promote. Keep LinearSVC; sectors stay with `m1_regulation_sectors` |
+| Sector gates fail                               | Do not promote. Keep LinearSVC; sectors stay with `m1_regulation_sectors`                  |
 
 The hybrid is not a fallback or an embarrassment — it is the arrangement that gives each task its best available model, and the confidence contract already supports two backends ([[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] §5.2). Note that a hybrid means one row carries a **calibrated softmax probability for sectors and no probability at all for category** — the response contract must express that rather than paper over it.
 
@@ -388,7 +412,7 @@ Out of scope:
 {
   "model_name": "m1_xlmr_v7_multitask",
   "dataset_source": "m1_regulations_v6_1110_clean_fixedsplit",
-  "derived_dataset": "m1_regulations_v7_1110_multitask_fixedsplit",
+  "derived_dataset": "m1_regulations_v7_1103_multitask_noleak",
   "tasks": ["regulation_domain", "affected_sectors", "sme_relevance_auxiliary"],
   "categories": 8,
   "sectors": 3,
@@ -438,28 +462,28 @@ One test that is easy to omit and worth having: **assert the frozen orders**. A 
 
 ## 9. Order of work
 
-| Step   | Work                                                  | State           |
-| ------ | ----------------------------------------------------- | --------------- |
-| **41** | Audit V6 schema and sector/relevance labels           | ✅ **done — §1** |
-| 42     | Build V7 without touching V6                          | ⬜ next          |
-| 43     | `labels.py` / `data.py` contracts + consistency tests | ⬜               |
-| 44     | Tri-head `GazetteClassifier`                          | ⬜               |
-| 45     | Three-loss training loop                              | ⬜               |
-| 46     | One-epoch Kaggle smoke                                | ⬜               |
-| 47     | One-seed diagnostic                                   | ⬜               |
-| 48     | Threshold + loss-weight selection **on validation**   | ⬜               |
-| 49     | Three-seed final                                      | ⬜               |
-| 50     | Single evaluation on the untouched test split         | ⬜               |
-| 51     | ONNX export + parity                                  | ⬜               |
-| 52     | `MultitaskGazetteInference` + backend integration     | ⬜               |
-| 53     | Freeze, hash, package, reproduce locally              | ⬜               |
+| Step   | Work                                                       | State                                                 |
+| ------ | ---------------------------------------------------------- | ----------------------------------------------------- |
+| **41** | Audit V6 schema and sector/relevance labels                | ✅ **done — §1**                                       |
+| 42     | Build no-leak working dataset without touching V6          | ✅ **done — 1103 rows**; formal enriched release gated |
+| 43     | Clean audit + label/data consistency contracts             | ✅ **done** — zero consistency/text-overlap errors     |
+| 44     | Tri-head contract + ndarray-safe sector parser             | ✅ **done in working branch**                          |
+| 45     | Artifact-path smoke                                        | ✅ **done** — promotion metrics not claimed            |
+| 46     | Three-loss/metric-aware trainer and registry output        | ✅ **done in working branch**                          |
+| 47     | Three-seed, eight-epoch diagnostic                         | ✅ **done and rejected** — collapse recorded           |
+| 48     | Weighted-loss recovery + threshold selection on validation | 🟡 **diagnostic done; threshold freeze not justified** — category `0.899862`, sector `0.884312`, partial exact `4/9` |
+| 49     | Three-seed recovery final                                  | ⛔ stopped; Step 48 did not clear the category/evidence gate |
+| 50     | Final evaluation on fresh temporal holdout/new data        | ⛔ blocked; V6 test was already consumed by Step 47    |
+| 51     | ONNX export + parity                                       | ⛔ blocked on promotion                                |
+| 52     | `MultitaskGazetteInference` + backend integration          | ⛔ blocked on promotion                                |
+| 53     | Freeze, hash, package, reproduce locally                   | ⛔ blocked on promotion                                |
 
 ---
 
 ## 10. Standing constraints
 
 1. **Do not modify `models/m1/linearsvc_v6_primary/` or the V6 parquets.** Their hashes are recorded in frozen artifacts and a research record.
-2. **The V6 test split is nearly spent.** Four models have been compared on it. V7 gets **one** evaluation, after the configuration is frozen on validation.
+2. **The V6 test split is spent.** Four earlier models and the rejected V7 working experiment have now been evaluated on it. Do not reuse it for recovery tuning or a new final claim; obtain a fresh temporal holdout, nested-CV estimate, or newly collected data.
 3. **`EPF_ETF_CHANGE` is 4 train / 1 test.** A multitask model does not fix this; only more documents do.
 4. **The sector task cannot yet support a strong multi-label claim** (§1.4). Collecting partial-sector examples — regulations affecting one or two of the three sectors — is now the highest-value annotation target, ahead of general volume.
 5. **`is_sme_relevant` after derivation means "affects a studied sector"**, which is narrower than the annotated field. State it in the write-up (§1.3).
@@ -478,3 +502,31 @@ One test that is easy to omit and worth having: **assert the frozen orders**. A 
 - **Downstream consumer of sectors and relevance:** [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) §2.2
 - **Status ledger:** [[final/works/03_FEATURE_CHECKLIST|03_FEATURE_CHECKLIST]]
 - **Audit artifacts:** `documentation/m1/analysis/multitask_dataset_audit.json` · `multitask_label_distribution.csv` · `multitask_consistency_errors.csv`
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Figure 13 (XLM-R with LoRA adapters and a dual classification head), Table 3.5 (classification heads, tasks and loss functions) and Table 5.3 (classification design decisions); Part II Figure 5.11.
+
+### The report presents this document's *target* as its *current state*
+
+Report Figure 13 and Table 3.5 describe the dual-head architecture — 8-way softmax category head plus 3-label sigmoid sector head, joint loss `CE + w·BCE`, 0.55 confidence gate — as the classifier in production. It is the V7 design, it was executed, and it was rejected.
+
+### Why it collapsed, and what that implies
+
+| Signal | V7-W 3-seed e8 result |
+|---|---:|
+| Test category macro-F1 | 0.0936 |
+| Sector micro-F1 | 0.2113 |
+| Derived relevance accuracy | 0.5948 |
+
+Category macro-F1 of 0.0936 is majority-class behaviour — the same failure mode as the first XLM-R run. The sector head produced one-or-zero predictions.
+
+The root cause is upstream of the architecture: **73.2% of gold rows carry no sector, and 84% of the rest carry all three.** A sigmoid head trained on that distribution learns "predict nothing" or "predict everything", and both are locally optimal. No amount of weighted-loss recovery fixes a label distribution with almost no partial sets in it.
+
+### The honest next step
+
+Not another training run. An annotation round designed to produce **partial sector sets** — sampling regulations that plausibly affect one or two sectors but not three — followed by a re-measure of the label distribution before any head is retrained. Everything after Step 47 stays blocked until that exists.

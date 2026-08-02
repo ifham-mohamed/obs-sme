@@ -4,21 +4,28 @@
 > **Code map:** [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) — `frontend/app/(admin)/admin/regulations/`, `frontend/app/(app)/surveys/`, `frontend/components/ui/domain-badge.tsx`
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `14_M1_1_Admin_Pipeline_State_Tracking`, `14_M1_2_Admin_Review_Queue_Triage`, `14_M1_3_Admin_Expert_Verification`, `14_M1_4_Admin_Lag_Analytics`, `14_M1_5_SME_Regulation_Discovery`, `14_M1_6_SME_Awareness_Survey`, `14_M1_7_SME_Compliance_Action_Tracking`, `14_M1_8_SME_Deadline_Alert_History`, and `14_M1_9_Category_Sector_Workflows`. Those nine files have been retired; every procedure, decision table, worked example, failure mode, and acceptance criterion from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> Tracking surfaces are current — §Classifier review already reflects LinearSVC margins and nullable confidence.
+> One thing to keep visible on the admin surfaces: a review queue reporting `mode='disabled'` means **no threshold has been configured**, not that nothing needs review.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
 
-The M1 backend describes a regulation's life as a state machine: a gazette is ingested → text extracted → classified → summarised → alerted → archived. The frontend docs map the screens that exist today. Neither answers the question a new contributor most often asks: **"As an admin, what do I do when a low-confidence classification lands? As an SME, what do I do when an alert arrives?"** This document is that missing layer — it maps the *verbs*, where [12_UI_Screens_and_Loading.md](../frontend/SETUP/12_UI_Screens_and_Loading.md) maps the *screens* and [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) maps the *tables*.
+The M1 backend describes a regulation's life as a state machine: a gazette is ingested → text extracted → classified → summarised → alerted → archived. The frontend docs map the screens that exist today. Neither answers the question a new contributor most often asks: **"As an admin, what do I do when a weak classifier signal lands? As an SME, what do I do when an alert arrives?"** This document is that missing layer — it maps the *verbs*, where [12_UI_Screens_and_Loading.md](../frontend/SETUP/12_UI_Screens_and_Loading.md) maps the *screens* and [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) maps the *tables*.
 
 | | Stage | Produced by | What this document does with it | Handed to |
 |---|---|---|---|---|
 | **In** | `m1_regulations.status` — the six-value pipeline enum | [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §2.1 | Renders it as a per-row `<StatusBadge>` and defines the admin triage loop over it | — |
-| **In** | Classifier prediction + `confidence` + `needs_review` | [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) inference path, persisted per [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §2.1 | Defines the review-queue ordering and the confirm / override / escalate decision | — |
+| **In** | Classifier prediction + model identity + review signal (`decision_margin` or confidence) | [05_M1_Model_Architecture.md](05_M1_Model_Architecture.md) inference path, persisted per [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §2.1 | Defines mode-aware review ordering and the confirm/override decision; LinearSVC confidence remains nullable | — |
 | **In** | `m1_propagation_events` + the lag views | [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §2.3, §3.3 | Turns them into the four analytics cards and the per-regulation propagation timeline | — |
 | **In** | The Q1–Q8 awareness instrument | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §9 | Delivers it through the survey wizard as a per-regulation flow | — |
 | **In** | 8 domains × 3 sectors taxonomy | [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §2–§4 | Fixes label, colour, URL-state, and sort conventions for every surface — §10 | — |
 | **In** | Screen inventory + component catalogue | [12_UI_Screens_and_Loading.md](../frontend/SETUP/12_UI_Screens_and_Loading.md) | Names the exact screen each workflow runs on | — |
-| **Step** | Admin triage loop A1 → A2 → A3 | *this document* §2–§4 | Stuck-row detection, low-confidence clearing, expert sign-off | — |
+| **Step** | Admin triage loop A1 → A2 → A3 | *this document* §2–§4 | Stuck-row detection, low-signal clearing, expert sign-off | — |
 | **Step** | Admin measurement loop A4 | *this document* §5 | Per-channel lag, propagation traces, weekly trend | — |
 | **Step** | SME loop S1 → S2 → S3 → S4 | *this document* §6–§9 | Discovery, survey, compliance status, deadline and alert history | — |
 | **Out** | `expert_verified` coverage ≥ 30 % | — | — | [01_M1_Research_Problem.md](01_M1_Research_Problem.md) §5 success metrics; [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) §1 |
@@ -29,7 +36,7 @@ The M1 backend describes a regulation's life as a state machine: a gazette is in
 ```mermaid
 flowchart LR
     D[02 Data Requirements<br/>status enum + needs_review] --> T[14 Tracking Workflows<br/>THIS DOC]
-    C[05 / 06 Classifier<br/>prediction + confidence] --> T
+    C[05 / 06 Classifier<br/>prediction + model-specific review signal] --> T
     P[02 §2.3 propagation events<br/>+ lag views] --> T
     I[09 §9 Q1-Q8 instrument] --> T
     X[09 §2-§4 taxonomy<br/>8 domains x 3 sectors] --> T
@@ -52,7 +59,7 @@ This document specifies the nine tracking surfaces of Module 1 — the procedure
 
 Each surface section gives the user procedure, the design decisions with the trade-off that actually settled each one, and a worked example against the seeded demo regulations (`VAT_2024_AMD`, `EPF_2024_RATE`, and the multi-pin adapter case from [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §worked examples). Failure modes are consolidated in §11, acceptance criteria in §12, and the shipped-versus-deferred code map in §13.
 
-**Implementation status:** 🟡 Partial — of the eight tracking surfaces, 2 are ✅ shipped end-to-end (A3, S2), 3 are 🟡 partial (A1, S1, S3), and 3 are 🔲 deferred (A2, A4, S4). X9 is a reference whose conventions are already shipped in the component layer. Every section below carries the surface's own status marker verbatim.
+**Implementation status:** 🟡 Partial — of the eight tracking surfaces, 3 are ✅ shipped end-to-end (A2, A3, S2), 3 are 🟡 partial (A1, S1, S3), and 2 are 🔲 deferred (A4, S4). X9 is a reference whose conventions are already shipped in the component layer. Every section below carries the surface's own status marker verbatim.
 
 > **Reading the markers.** `✅` = the workflow runs end-to-end in the UI today. `🟡` = the data plus some UI exists but a key surface is missing. `🔲` = backend-only today; the section describes the *intended* UI for when BUILD_07 / BUILD_13 lands it. Where a section describes an unbuilt page, the sub-heading says so explicitly, so a reader never mistakes an intended UI for a shipped one.
 
@@ -67,7 +74,7 @@ Each surface section gives the user procedure, the design decisions with the tra
 | # | Surface | Audience | Status | Detail in |
 |---|---|---|---|---|
 | A1 | Pipeline-state tracking — Stage A→F status machine | Admin | 🟡 Partial | §2 |
-| A2 | Needs-review queue triage | Admin | 🔲 Deferred | §3 |
+| A2 | Needs-review queue triage | Admin | ✅ Shipped | §3 |
 | A3 | Expert-verification ledger | Admin | ✅ Shipped | §4 |
 | A4 | Lag analytics + propagation tracker | Admin | 🔲 Deferred | §5 |
 | S1 | Regulation discovery — sector + region filter | SME | 🟡 Partial | §6 |
@@ -79,7 +86,7 @@ Each surface section gives the user procedure, the design decisions with the tra
 ```mermaid
 flowchart TB
     subgraph ADMIN[Admin loop - triage and measurement]
-        A1[A1 Pipeline state<br/>which rows are stuck] --> A2[A2 Review queue<br/>confidence below 0.70]
+        A1[A1 Pipeline state<br/>which rows are stuck] --> A2[A2 Review queue<br/>model-specific weak signal]
         A2 --> A3[A3 Verification ledger<br/>expert sign-off]
         A3 --> A4[A4 Lag analytics<br/>channel medians + traces]
     end
@@ -107,19 +114,19 @@ The admin's M1 day-to-day is a triage loop. Drawn from the screen map in [12_UI_
 [09:10] Pick the top row → /admin/regulations/[id]/edit
          ↓ review classifier's change_category + sectors against the regulation summary
          ↓ if confident → click "Verify" → status flips, audit-log row written  [A3]
-         ↓ if low-confidence / wrong category → override in form + save  [A1, A2 once shipped]
+         ↓ if low-signal / wrong category → classifier triage + save  [A1, A2]
 [10:30] Open /admin/regulations/[id]/flow  for any regulation that has a survey flow
          ↓ verify the M1→M2→M3 branching is wired
-[11:30] (Once shipped) Open /admin/m1/review-queue
-         ↓ sort by classifier_confidence asc
-         ↓ triage the 5–15 items where confidence < 0.70  [A2]
+[11:30] Open /admin/m1/pipeline/classifier-review
+         ↓ read mode + threshold before interpreting queue depth
+         ↓ in LinearSVC mode, triage lowest decision margins first  [A2]
 [14:00] (Once shipped) Open /admin/m1/analytics
          ↓ check lag p50 by channel; investigate if any channel slipped > 1 day vs last week  [A4]
 [16:00] Open /admin/activity-log
          ↓ scan for verify / archive events; ensure expert_verified coverage trending toward 30%
 ```
 
-The first three lines are shipped today. The fourth and fifth describe surfaces that are 🔲 — §3 and §5 document them so the UI lands consistent with the backend invariants rather than being designed from scratch under deadline pressure.
+The regulation flow and A2 classifier triage are shipped today. The A4 analytics line remains 🔲 — §5 documents that target so the UI lands consistent with the backend invariants rather than being designed from scratch under deadline pressure.
 
 ### 1.3 How an SME Spends a Week with M1
 
@@ -215,71 +222,56 @@ The admin never had to write a SQL query — the table filter plus status badges
 
 ## 3. A2 — Admin Review-Queue Triage
 
-> **Implementation status:** 🔲 Deferred — the backend flags `needs_review = true` on every classification with `confidence < 0.70`; no dedicated UI exists yet. The `/admin/regulations?needs_review=true` filter is the workaround. This section describes the intended page.
+> **Implementation status:** ✅ Shipped — `/admin/m1/pipeline/classifier-review` consumes the backend's explicit review mode, handles LinearSVC decision margins and nullable confidence, and lets an admin confirm or override the eight-domain category.
 
 ### 3.1 Why This Surface Exists
 
-The XLM-R classifier produces a confidence score per regulation. When confidence falls below 0.70, the row is auto-flagged `needs_review = true` and *the alert is suppressed* until an admin confirms. The review-queue page is where the admin clears that backlog — sorted by confidence ascending so the riskiest cases come first.
+The production TF-IDF + LinearSVC classifier produces an uncalibrated decision margin, not a probability. The review endpoint therefore declares its mode and threshold: `margin` for LinearSVC, `confidence` for a probability-capable backend, or `disabled` when no compatible threshold is configured. The page orders the weakest configured signal first and never turns a margin into a percentage.
 
-**What breaks without it.** Alert suppression is a safety mechanism with a cost: every suppressed regulation is an SME who is not being told. Without a surface that makes clearing the backlog fast, the suppression queue becomes a silent outage of the platform's core promise. Admins can work the backlog through the regulation bank with a filter applied, and that works for a handful of items — but it breaks down once the queue exceeds ~20 rows, because the regulation bank is optimised for browsing rather than for a decide-and-move-on loop. This is the highest-value 🔲 deferred surface in M1.
+**What breaks without mode awareness.** An empty queue can mean either “no row falls below the configured threshold” or “review is disabled.” Conflating those states creates a false clean bill of health. Likewise, rendering a LinearSVC margin as `42%` invents a probability that the model never produced. The shipped page makes both semantics visible.
 
-**Ordering constraint.** A2 cannot precede Stage D. There is no queue until the classifier runs, which is why BUILD_07 (the classification path) gates the data and BUILD_13 gates the UI.
+**Ordering constraint.** A2 follows classification and precedes expert sign-off. It can rank only the signal defined by the row's model/backend, so model name and review mode are part of the contract rather than decoration.
 
 ### 3.2 Detailed Process
 
-> 🔲 Intended workflow — design not yet locked.
+1. **Open the queue.** Navigate to `/admin/m1/pipeline/classifier-review`.
+2. **Read the contract first.** The three summary cards show queue depth, active mode, and threshold. If mode is `disabled`, the page explains that a LinearSVC margin threshold has not been configured.
+3. **Inspect a row.** Each row shows rank, regulation title/link, gazette number, source, classified date, model name, current category, and the active signal. In margin mode, confidence may appear as `n/a`; that is correct.
+4. **Open source context.** Follow the trace link when the category cannot be judged from title/metadata alone.
+5. **Decide.** Keep the existing category and **Confirm**, or choose another frozen domain and **Save**. The mutation refreshes the queue and reports success/failure.
+6. **Continue by rank.** Pagination preserves the server-provided weakest-first order.
 
-1. **Open the queue.** Navigate to `/admin/m1/review-queue` (intended route). The page renders a table sorted by `confidence ASC` so the lowest-confidence rows surface first.
-2. **Inspect a row.** Each row shows: regulation short code, title (locale-aware), classifier's predicted category, sectors, `confidence` (rendered as a thin bar 0–100 %), `created_at`, age in hours.
-3. **Open detail (per-row).** Click a row → opens a slim `<Sheet>` drawer (not a full page) showing: the classification chunk that fed the classifier (first 512 tokens of cleaned text), the alternative top-3 category predictions with their softmax probabilities, the model version (`v1.0`, `v1.1` …), and a side-by-side "Classifier says X | Override to:" picker.
-4. **Decide.** Three buttons in the drawer footer:
-   - **Confirm** — accept the classifier's prediction; `needs_review = false`, alert dispatches.
-   - **Override + Verify** — admin picks the correct category (and any sector edits) from the dropdowns; backend updates the row and writes an audit-log entry.
-   - **Escalate to expert** — set `escalated_to_expert = true` on the row; the domain expert (CA / Attorney) receives an email and the row appears in their `/admin/m1/expert-queue` (a separate surface, not in this MVP).
-5. **Bulk actions.** Multi-select checkboxes plus a bulk action bar at the bottom: "Confirm selected" (only enables when all selected rows have the same category — otherwise greyed with tooltip "mixed categories — confirm individually").
-6. **Keyboard navigation.** `j` / `k` move row focus; `Enter` opens the drawer; `c` confirms in the drawer; `o` opens the override picker. The keyboard shortcuts are documented in a `?` help modal.
+The current page intentionally does not invent top-3 probabilities for LinearSVC. `class_scores` and the second category may support a richer future detail view, but the present production obligation is more basic: preserve the distinction between an uncalibrated margin and a probability.
 
-**Why the top-3 probabilities are in the drawer.** The admin's real question is not "is the classifier right?" but "is the classifier's *second* guess the right one?" — because a low-confidence prediction is usually a near-tie between two of the confusable pairs in [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §3. Showing the runner-up turns the decision from a free-text recall task into a two-option comparison, which is what makes the ≤ 15-minute target in §3.4 achievable.
-
-**What this step produces, and who consumes it.** Every Confirm / Override / Escalate writes an `audit_log` row. Those rows are not just for accountability: the override stream is the retraining trigger described in [12_M1_Monitoring_Maintenance.md](12_M1_Monitoring_Maintenance.md) §3.3 — a rising override rate on a specific domain is the signal that the model has drifted on that class.
+**What this step produces, and who consumes it.** Confirm/override decisions update the category through the backend review contract and belong in the audit trail. The override stream is also useful evidence for threshold yield and future retraining; a rising override rate on one domain is a stronger drift signal than nullable confidence.
 
 ### 3.3 Design Decisions
 
 | Option | Trade-off | Decision | When to reconsider |
 |---|---|---|---|
-| Dedicated `/admin/m1/review-queue` page (chosen target) | Single-purpose surface optimised for high-throughput triage | 🔲 Target — ship in BUILD_13 | If queue volume stays below ~20/day after BUILD_07 launches, the filter-on-regulation-bank workaround stays viable |
-| Drawer for detail vs full-page route | Triage flow stays in one tab; admin doesn't lose context | ✅ Drawer | If the drawer becomes too cramped — drawer width is 480 px; switch to full page if more than 3 stacked cards needed |
-| Sort by confidence ASC by default | Highest-risk items get attention first | ✅ Default sort | If high-volume / low-confidence dominates, switch to `(confidence_bucket, age_hours) ASC` |
-| Bulk "Confirm selected" (chosen) + bulk "Override selected" (rejected) | Confirm is safe; override is dangerous in bulk | ✅ Confirm-only bulk; override is per-row | If admins request bulk-override, gate behind a second confirm modal |
-| Keyboard shortcuts `j` / `k` / `Enter` | Power-user throughput | ✅ Ship at MVP — triage is a power-user workflow | Never remove |
+| Dedicated `/admin/m1/pipeline/classifier-review` page | Single-purpose surface with queue/mode/threshold visible | ✅ Shipped | Add filters only after live queue volume shows which ones matter |
+| Explicit `disabled` state | Prevents an unconfigured threshold from looking like an empty clean queue | ✅ Shipped | Never collapse into the empty state |
+| Mode-aware weakest-first order | Margin and confidence are different signal types | ✅ Shipped | Add severity as a secondary key only after evidence supports it |
+| Per-row confirm/override | Safer than bulk category writes and easy to audit | ✅ Shipped | Consider bulk confirm only with explicit audit and mixed-category protection |
+| Trace link instead of invented probability detail | Keeps source evidence available without misrepresenting LinearSVC | ✅ Shipped | Add class-score detail when its semantics and UX are tested |
 
-**The asymmetry that settled the bulk question.** Bulk-confirm and bulk-override look symmetrical and are not. Bulk-confirm accepts a prediction the model already made, so the worst case is that a batch of already-plausible labels goes out unchanged. Bulk-override *writes* a human label across N rows from a single glance, and a wrong bulk override contaminates the training corpus — the same rows later feed retraining. The cost of a mistake is what breaks the symmetry, not the convenience of the action.
-
-**Why a drawer rather than a route.** Triage is a rhythm: read, decide, next. A full-page route costs two navigations per item and destroys the rhythm; at 12 items that is 24 page loads. The drawer keeps focus and context, and the 480 px width is the constraint that keeps it honest — if the detail needs more than three stacked cards, the design has outgrown the pattern.
+**Why per-row decisions remain the safe default.** Bulk-confirm and bulk-override look symmetrical and are not. Bulk-override writes a human label across N rows from one glance and can contaminate the next training corpus. The cost of a wrong write, not convenience, keeps the shipped action per-row.
 
 ### 3.4 Worked Example — Morning Queue Clear
 
-> Intended flow, on the deferred page.
-
 ```text
-09:15 — admin opens /admin/m1/review-queue
-         Queue depth: 12 items, sorted by confidence ASC
-         Top item: classifier confidence 0.42
-         Item is VAT-amendment look-alike; classifier said "SECTOR_SPECIFIC"
-09:16 — admin clicks the row → drawer opens
-         classification_chunk shows: "VAT registration threshold raised from LKR 60M to LKR 80M..."
-         Top-3: TAX_RATE_CHANGE 0.32 | SECTOR_SPECIFIC 0.42 | BUSINESS_REGISTRATION 0.18
-         Admin sees classifier ranked SECTOR_SPECIFIC above TAX_RATE_CHANGE — wrong
-09:16 — admin clicks "Override + Verify" → picks TAX_RATE_CHANGE → save
-         needs_review=false; expert_verified=true; audit-log row written
-         Row disappears from queue; next item auto-focuses
-09:22 — admin clears item #2–8 (most are straight Confirms — classifier was right but low-confidence)
-09:25 — item #9 is genuinely ambiguous → admin clicks "Escalate to expert"
-         Expert receives email; row tagged expert_pending
-09:27 — queue cleared (5 confirmed, 3 overridden, 1 escalated, 3 left for expert)
+09:15 — admin opens /admin/m1/pipeline/classifier-review
+         Mode card says "Margin review"; threshold shows 0.40
+         Queue depth is 12; lower decision margins rank first
+09:16 — top row shows margin 0.182 and confidence n/a
+         Admin opens the trace and confirms the source text is a tax-rate change
+09:17 — category selector changes SECTOR_SPECIFIC → TAX_RATE_CHANGE; Save
+         Success toast appears and the queue refreshes
+09:18 — next row already has the correct category; Confirm
+09:27 — admin records the day's queue yield and override count for threshold review
 ```
 
-This loop currently takes the admin ~30 minutes via the regulation-bank filter workaround. The dedicated page targets ≤ 15 minutes for the same workload. The top item is worth studying: it is confusable pair #1 from [09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §3 — a registration-threshold change that is inland taxation, not sector regulation — which is exactly the kind of near-tie the top-3 display is designed to expose.
+The example preserves the key semantic: `0.182` is a ranking margin, not 18.2% confidence. Live queue yield and override rate are the evidence needed to decide whether the candidate 0.40 threshold is operationally useful.
 
 ---
 
@@ -1067,8 +1059,8 @@ Never a blank canvas — every surface names why it is empty and offers the next
 |---|---|---|---|
 | **A1** — status column + `<StatusBadge>` on `/admin/regulations` | 🟡 Partial | BUILD_07 (backend Stage A–F) | `frontend/app/(admin)/admin/regulations/page.tsx`, `frontend/components/ui/status-badge.tsx` |
 | **A1** — `/admin/m1/pipeline` stage dashboard | 🔲 Deferred | BUILD_13 | not yet created; needs Stage A–F metrics in `m1_pipeline_audits` |
-| **A2** — `needs_review` flag + confidence floor | ✅ Shipped (backend) | BUILD_07 | [02_M1_Data_Requirements.md](02_M1_Data_Requirements.md) §2.1 |
-| **A2** — `/admin/m1/review-queue` page + drawer | 🔲 Deferred | BUILD_13 §admin tracking dashboards | `frontend/app/(admin)/admin/m1/review-queue/page.tsx`, `frontend/components/forms/review-queue-drawer.tsx` |
+| **A2** — mode-aware classifier-review endpoint + decision mutation | ✅ Shipped (backend) | BUILD_07/13 | `classifier-review` response exposes `margin`, `confidence`, or `disabled` mode plus threshold/model signal |
+| **A2** — classifier triage page | ✅ Shipped | BUILD_13 §admin tracking dashboards | `frontend/app/(admin)/admin/m1/pipeline/classifier-review/page.tsx`, `frontend/lib/api/m1-pipeline.ts` |
 | **A3** — Verify button + `<VerificationBadge>` + bulk-verify | ✅ Shipped | BUILD_13 §verification (shipped) | `frontend/app/(admin)/admin/regulations/page.tsx`, `frontend/app/(admin)/admin/regulations/[id]/edit/page.tsx`, `frontend/components/regulations/verification-badge.tsx` |
 | **A3** — verification endpoints | ✅ Shipped | BUILD_13 | `PATCH /api/v1/m1/regulations/{id}/verify`, `POST /api/v1/m1/regulations/bulk-verify`, `GET /api/v1/admin/regulations/coverage` |
 | **A3** — audit-log writes | ✅ Shipped | Session 14 | `backend/app/services/audit_service.py`, `backend/app/models/audit_log.py` |
@@ -1110,3 +1102,31 @@ X9 is the reason the eight surfaces read as one product rather than eight screen
 - **Ingestion and Celery interaction:** [03_M1_Data_Collection.md](03_M1_Data_Collection.md) §6.1.
 - **Code layout for every path named in §13:** [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md); folder spec in [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md).
 - **Build phases that ship the deferred surfaces:** [../BUILD_PLAN/BUILD_13_Admin_and_Annotation.md](../frontend/BUILD_PLAN/BUILD_13_Admin_and_Annotation.md) for admin surfaces; BUILD_07 for the ingest pipeline feeding A1/A4; BUILD_12 for the schedulers feeding A4/S4; sequencing in [16_M1_Development_Roadmap.md](16_M1_Development_Roadmap.md).
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Figures 19 (extraction pipeline console), 20 (measurement dashboard), 23 (translation review queue) and 24 (trilingual SME dashboard); Part II Figures 6.2–6.8.
+
+### Screens the report evidences
+
+| Surface | Report figure | State captured |
+|---|---|---|
+| Landing page | Figure 19 (a) | 4 modules · 12 sectors · 800+ regulations · ≤6h alert latency |
+| Extraction run console | Figure 19 (b) | EGZ 2026-03-08→03-14, 59/59 through all three stages, versions v1–v5 sealed |
+| M1 Datasets | Figure 20 (a) | 12 datasets, 20 versions, 0 ground truth, 0 archived |
+| Measurement runs | Figure 20 (b) | 14 runs, 14 complete, 0 failed; overall 0.852 and 0.942 |
+| Translation queue | Figure 23 | **1145** items awaiting Sinhala/Tamil |
+| Sinhala admin console | Figure 24 | full UI in Sinhala, with one `[TODO si]` string still untranslated |
+| Claim verification | Figures 38–39 | Module 4 verdict screens |
+
+Two of those are usable as thesis evidence exactly as captured: the 59/59 extraction run and the 0.852 / 0.942 measurement scores.
+
+### Open UI work implied by the classifier change
+
+- The classifier-review screen must never render a margin as a percentage.
+- A `mode='disabled'` state needs its own empty-state copy, distinct from "nothing to review".
+- The `[TODO si]` Task Manager string visible in report Figure 24 is still untranslated.

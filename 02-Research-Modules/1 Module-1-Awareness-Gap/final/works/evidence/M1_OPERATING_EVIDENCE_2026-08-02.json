@@ -1,0 +1,1267 @@
+{
+  "generated_at": "2026-08-01T19:30:15.828334+00:00",
+  "stage_e": {
+    "english_sample_n": 80,
+    "english_pass_n": 80,
+    "english_pass_pct": 100.0,
+    "english_failures": [],
+    "sample_category_counts": {
+      "SECTOR_SPECIFIC": 78,
+      "BUSINESS_REGISTRATION": 1,
+      "IMPORT_EXPORT": 1
+    },
+    "translated_rows_n": 76,
+    "numeric_locale_checks_n": 152,
+    "numeric_pass_n": 10,
+    "numeric_pass_pct": 6.58,
+    "numeric_failures": [
+      {
+        "code": "GZT_2485_17",
+        "locale": "si",
+        "missing": [
+          "2485/17"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_17",
+        "locale": "ta",
+        "missing": [
+          "2485/17"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2498_14",
+        "locale": "si",
+        "missing": [
+          "2498/14",
+          "262"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2495_33",
+        "locale": "si",
+        "missing": [
+          "2495/33"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2495_33",
+        "locale": "ta",
+        "missing": [
+          "2495/33"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2498_12",
+        "locale": "si",
+        "missing": [
+          "2498/12",
+          "262"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2498_07",
+        "locale": "si",
+        "missing": [
+          "2498/07"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2498_07",
+        "locale": "ta",
+        "missing": [
+          "2498/07"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_18",
+        "locale": "si",
+        "missing": [
+          "2485/18"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_18",
+        "locale": "ta",
+        "missing": [
+          "2485/18"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_20",
+        "locale": "si",
+        "missing": [
+          "2485/20"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_20",
+        "locale": "ta",
+        "missing": [
+          "2485/20"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2488_21",
+        "locale": "si",
+        "missing": [
+          "2488/21"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2488_21",
+        "locale": "ta",
+        "missing": [
+          "2488/21"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_61",
+        "locale": "si",
+        "missing": [
+          "2483/61"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_61",
+        "locale": "ta",
+        "missing": [
+          "2483/61"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2495_91",
+        "locale": "si",
+        "missing": [
+          "2495/91"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2495_91",
+        "locale": "ta",
+        "missing": [
+          "2495/91"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_23",
+        "locale": "si",
+        "missing": [
+          "2485/23"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_23",
+        "locale": "ta",
+        "missing": [
+          "2485/23"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2495_16",
+        "locale": "si",
+        "missing": [
+          "2495/16"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2495_16",
+        "locale": "ta",
+        "missing": [
+          "2495/16"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_73",
+        "locale": "si",
+        "missing": [
+          "2489/73"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_73",
+        "locale": "ta",
+        "missing": [
+          "2489/73"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_24",
+        "locale": "si",
+        "missing": [
+          "2485/24"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_24",
+        "locale": "ta",
+        "missing": [
+          "2485/24"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_43",
+        "locale": "si",
+        "missing": [
+          "2484/43"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_43",
+        "locale": "ta",
+        "missing": [
+          "2484/43"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_27",
+        "locale": "si",
+        "missing": [
+          "2485/27"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_27",
+        "locale": "ta",
+        "missing": [
+          "2485/27"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_62",
+        "locale": "si",
+        "missing": [
+          "2483/62"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_62",
+        "locale": "ta",
+        "missing": [
+          "2483/62"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_25",
+        "locale": "si",
+        "missing": [
+          "2485/25"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_25",
+        "locale": "ta",
+        "missing": [
+          "2485/25"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_21",
+        "locale": "si",
+        "missing": [
+          "2485/21"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_21",
+        "locale": "ta",
+        "missing": [
+          "2485/21"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_11",
+        "locale": "si",
+        "missing": [
+          "2486/11"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_11",
+        "locale": "ta",
+        "missing": [
+          "2486/11"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_16",
+        "locale": "si",
+        "missing": [
+          "2486/16"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_16",
+        "locale": "ta",
+        "missing": [
+          "2486/16"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_14",
+        "locale": "si",
+        "missing": [
+          "2483/14"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_14",
+        "locale": "ta",
+        "missing": [
+          "2483/14"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_63",
+        "locale": "si",
+        "missing": [
+          "2483/63"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_63",
+        "locale": "ta",
+        "missing": [
+          "2483/63"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_31",
+        "locale": "si",
+        "missing": [
+          "2485/31"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_31",
+        "locale": "ta",
+        "missing": [
+          "2485/31"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_30",
+        "locale": "si",
+        "missing": [
+          "2485/30"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_30",
+        "locale": "ta",
+        "missing": [
+          "2485/30"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_44",
+        "locale": "si",
+        "missing": [
+          "2489/44"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_44",
+        "locale": "ta",
+        "missing": [
+          "2489/44"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_33",
+        "locale": "si",
+        "missing": [
+          "2485/33"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_33",
+        "locale": "ta",
+        "missing": [
+          "2485/33"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_64",
+        "locale": "si",
+        "missing": [
+          "2483/64"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_64",
+        "locale": "ta",
+        "missing": [
+          "2483/64"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_02",
+        "locale": "si",
+        "missing": [
+          "2486/02",
+          "27.04.2026"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_02",
+        "locale": "ta",
+        "missing": [
+          "2486/02",
+          "27.04.2026"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_13",
+        "locale": "si",
+        "missing": [
+          "2486/13"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_13",
+        "locale": "ta",
+        "missing": [
+          "2486/13"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_32",
+        "locale": "si",
+        "missing": [
+          "2485/32"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_32",
+        "locale": "ta",
+        "missing": [
+          "2485/32"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_41",
+        "locale": "si",
+        "missing": [
+          "2483/41"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_41",
+        "locale": "ta",
+        "missing": [
+          "2483/41"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_34",
+        "locale": "si",
+        "missing": [
+          "2485/34"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_34",
+        "locale": "ta",
+        "missing": [
+          "2485/34"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_06",
+        "locale": "si",
+        "missing": [
+          "2486/06"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_06",
+        "locale": "ta",
+        "missing": [
+          "2486/06"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_03",
+        "locale": "si",
+        "missing": [
+          "2486/03"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_03",
+        "locale": "ta",
+        "missing": [
+          "2486/03"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_14",
+        "locale": "si",
+        "missing": [
+          "2484/14"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_14",
+        "locale": "ta",
+        "missing": [
+          "2484/14"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_17",
+        "locale": "si",
+        "missing": [
+          "11,280.7",
+          "2483/17"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_17",
+        "locale": "ta",
+        "missing": [
+          "11,280.7",
+          "2483/17"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_44",
+        "locale": "si",
+        "missing": [
+          "2484/44"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_44",
+        "locale": "ta",
+        "missing": [
+          "2484/44"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_01",
+        "locale": "si",
+        "missing": [
+          "2485/01"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_01",
+        "locale": "ta",
+        "missing": [
+          "2485/01"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_05",
+        "locale": "si",
+        "missing": [
+          "2486/05"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2486_05",
+        "locale": "ta",
+        "missing": [
+          "2486/05"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_61",
+        "locale": "si",
+        "missing": [
+          "2485/61"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_61",
+        "locale": "ta",
+        "missing": [
+          "2485/61"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_44",
+        "locale": "si",
+        "missing": [
+          "2485/44"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_44",
+        "locale": "ta",
+        "missing": [
+          "2485/44"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_10",
+        "locale": "si",
+        "missing": [
+          "2484/10"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_10",
+        "locale": "ta",
+        "missing": [
+          "2484/10"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_09",
+        "locale": "si",
+        "missing": [
+          "2484/09"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_09",
+        "locale": "ta",
+        "missing": [
+          "2484/09"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_08",
+        "locale": "si",
+        "missing": [
+          "2484/08"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_08",
+        "locale": "ta",
+        "missing": [
+          "2484/08"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_42",
+        "locale": "si",
+        "missing": [
+          "2489/42"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_42",
+        "locale": "ta",
+        "missing": [
+          "2489/42"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_46",
+        "locale": "si",
+        "missing": [
+          "2484/46"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_46",
+        "locale": "ta",
+        "missing": [
+          "2484/46"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_62",
+        "locale": "si",
+        "missing": [
+          "2485/62"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_62",
+        "locale": "ta",
+        "missing": [
+          "2485/62"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_36",
+        "locale": "si",
+        "missing": [
+          "2485/36"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_36",
+        "locale": "ta",
+        "missing": [
+          "2485/36"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_54",
+        "locale": "si",
+        "missing": [
+          "2485/54"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_54",
+        "locale": "ta",
+        "missing": [
+          "2485/54"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_40",
+        "locale": "si",
+        "missing": [
+          "2485/40"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_40",
+        "locale": "ta",
+        "missing": [
+          "2485/40"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_11",
+        "locale": "si",
+        "missing": [
+          "2484/11"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_11",
+        "locale": "ta",
+        "missing": [
+          "2484/11"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_56",
+        "locale": "si",
+        "missing": [
+          "2485/56"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_56",
+        "locale": "ta",
+        "missing": [
+          "2485/56"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_22",
+        "locale": "si",
+        "missing": [
+          "2485/22"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_22",
+        "locale": "ta",
+        "missing": [
+          "2485/22"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_42",
+        "locale": "si",
+        "missing": [
+          "2485/42"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_42",
+        "locale": "ta",
+        "missing": [
+          "2485/42"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_35",
+        "locale": "si",
+        "missing": [
+          "2483/35"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_35",
+        "locale": "ta",
+        "missing": [
+          "2483/35"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_46",
+        "locale": "si",
+        "missing": [
+          "2485/46"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_46",
+        "locale": "ta",
+        "missing": [
+          "2485/46"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_45",
+        "locale": "si",
+        "missing": [
+          "2489/45"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_45",
+        "locale": "ta",
+        "missing": [
+          "2489/45"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_67",
+        "locale": "si",
+        "missing": [
+          "2483/67"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_67",
+        "locale": "ta",
+        "missing": [
+          "2483/67"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_17",
+        "locale": "si",
+        "missing": [
+          "2489/17"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2489_17",
+        "locale": "ta",
+        "missing": [
+          "2489/17"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_49",
+        "locale": "si",
+        "missing": [
+          "2485/49"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_49",
+        "locale": "ta",
+        "missing": [
+          "2485/49"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_68",
+        "locale": "si",
+        "missing": [
+          "2483/68"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2483_68",
+        "locale": "ta",
+        "missing": [
+          "2483/68"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_48",
+        "locale": "si",
+        "missing": [
+          "2485/48"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_48",
+        "locale": "ta",
+        "missing": [
+          "2485/48"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_16",
+        "locale": "si",
+        "missing": [
+          "2484/16"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_16",
+        "locale": "ta",
+        "missing": [
+          "2484/16"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_18",
+        "locale": "si",
+        "missing": [
+          "2484/18"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_18",
+        "locale": "ta",
+        "missing": [
+          "2484/18"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_20",
+        "locale": "si",
+        "missing": [
+          "2484/20"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_20",
+        "locale": "ta",
+        "missing": [
+          "2484/20"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_47",
+        "locale": "si",
+        "missing": [
+          "2485/47"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_47",
+        "locale": "ta",
+        "missing": [
+          "2485/47"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_21",
+        "locale": "si",
+        "missing": [
+          "2484/21"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_21",
+        "locale": "ta",
+        "missing": [
+          "2484/21"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_13",
+        "locale": "si",
+        "missing": [
+          "2485/13"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2485_13",
+        "locale": "ta",
+        "missing": [
+          "2485/13"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_22",
+        "locale": "si",
+        "missing": [
+          "2484/22"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_22",
+        "locale": "ta",
+        "missing": [
+          "2484/22"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_23",
+        "locale": "si",
+        "missing": [
+          "2484/23"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_23",
+        "locale": "ta",
+        "missing": [
+          "2484/23"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_19",
+        "locale": "si",
+        "missing": [
+          "2484/19"
+        ],
+        "extra": []
+      },
+      {
+        "code": "GZT_2484_19",
+        "locale": "ta",
+        "missing": [
+          "2484/19"
+        ],
+        "extra": []
+      }
+    ],
+    "review_required_n": 7,
+    "review_hard_flag_counts": {
+      "classification_not_review_ready": 7,
+      "classifier_review_required": 7
+    },
+    "review_items": [
+      {
+        "code": "GZT_2480_04",
+        "category": "SECTOR_SPECIFIC",
+        "margin": 0.037619,
+        "hard_flags": [
+          "classification_not_review_ready",
+          "classifier_review_required"
+        ]
+      },
+      {
+        "code": "GZT_2480_47",
+        "category": "BUSINESS_REGISTRATION",
+        "margin": 0.320857,
+        "hard_flags": [
+          "classification_not_review_ready",
+          "classifier_review_required"
+        ]
+      },
+      {
+        "code": "GZT_2480_49",
+        "category": "SECTOR_SPECIFIC",
+        "margin": 0.135182,
+        "hard_flags": [
+          "classification_not_review_ready",
+          "classifier_review_required"
+        ]
+      },
+      {
+        "code": "GZT_2481_09",
+        "category": "SECTOR_SPECIFIC",
+        "margin": 0.249429,
+        "hard_flags": [
+          "classification_not_review_ready",
+          "classifier_review_required"
+        ]
+      },
+      {
+        "code": "GZT_2482_11",
+        "category": "SECTOR_SPECIFIC",
+        "margin": 0.376224,
+        "hard_flags": [
+          "classification_not_review_ready",
+          "classifier_review_required"
+        ]
+      },
+      {
+        "code": "GZT_2486_08",
+        "category": "LABOUR_LAW",
+        "margin": 0.389598,
+        "hard_flags": [
+          "classification_not_review_ready",
+          "classifier_review_required"
+        ]
+      },
+      {
+        "code": "GZT_2489_72",
+        "category": "SECTOR_SPECIFIC",
+        "margin": 0.391476,
+        "hard_flags": [
+          "classification_not_review_ready",
+          "classifier_review_required"
+        ]
+      }
+    ]
+  },
+  "classifier": {
+    "backend": "linearsvc",
+    "classified_n": 898,
+    "margin_n": 898,
+    "margin_min": 0.008653,
+    "margin_p10": 1.12149,
+    "margin_p50": 1.809804,
+    "margin_p90": 2.081984,
+    "margin_max": 2.245461,
+    "category_counts": {
+      "SECTOR_SPECIFIC": 831,
+      "LABOUR_LAW": 26,
+      "TAX_RATE_CHANGE": 7,
+      "IMPORT_EXPORT": 25,
+      "BUSINESS_REGISTRATION": 6,
+      "PRODUCT_STANDARD": 3
+    },
+    "configured_threshold": 0.4,
+    "below_threshold_n": 18,
+    "active_queue_n": 18,
+    "review_outcomes": {
+      "reviewed": 0,
+      "confirmed": 0,
+      "corrected": 0,
+      "correction_yield": null
+    },
+    "threshold_decision": "provisional_no_review_outcomes"
+  },
+  "recruitment": {
+    "m1_sessions_n": 0,
+    "completed_unique_smes_n": 0,
+    "target_unique_smes_n": 100,
+    "remaining_unique_smes_n": 100,
+    "completed_by_channel": {}
+  }
+}

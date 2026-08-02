@@ -4,6 +4,13 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — Stage-G lag measurement + `research/data/prepilot_2025-09.csv`, `research/citations.bib`
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `01_M1_1_Research_Motivation_Evidence`. That file has been retired; the complete three-stream evidence base, the pre-pilot instrument comparison, the anonymised respondent example, and the evidence-validity limitations from it live below in §1.2, §10.1 and §11.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> The research problem, the four research questions and the T0–T9 diffusion timeline in this document are **unchanged and still authoritative**.
+> What has moved since it was written is the *instrument*: the classifier that answers RQ2 is LinearSVC V6, not XLM-R, and the SME awareness survey has **0 completed responses against a target of 100** — the largest open evidence gap in the module.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -393,3 +400,28 @@ Every constraint fixed here propagates: the 8 domains become a database enum and
 - Department of Census and Statistics. (2022). *Annual Survey of Industries 2022*.
 - Employees' Provident Fund. (2022). *EPF Statistical Bulletin 2022*, §4. [epf.lk/publications](https://www.epf.lk/publications/)
 - Inland Revenue Department. (2023). *Annual Report 2023*, Table 7.4. [ird.gov.lk](https://www.ird.gov.lk/en/publications/annual_report_2023.pdf)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Chapter 1 (§1.1–§1.5) and Figure 1; Part II Chapter 1 and Figure 1.1. Table 1.1 of the report is the research-question table that matches §RQ here.
+
+### What the report adds
+
+Report Part I §1.1 states the framing this document argues for in a single sentence worth reusing verbatim in the thesis: *"A gazette becomes binding on publication regardless of whether any affected business has read it."* §1.2 supplies the large-organisation-versus-SME capacity contrast, and §1.5.5 gives the four-module composition diagram (Figure 1) that shows where Module 1's output is consumed.
+
+### What this document has that the report does not
+
+The T0–T9 regulatory diffusion timeline, the 7-row implementation risk register, and the three-stream evidence base in §1.2 / §10.1 / §11 are vault-only. If the thesis needs a defensible account of *why* the lag is measurable, it comes from here, not from the report.
+
+### Open evidence gap
+
+| Target | Status (2026-08-02) |
+|---|---|
+| ≥ 100 unique SME survey responses | **0 completed, 0 sessions** — instrument and authenticated `/surveys/module/m1` flow exist; public recruitment route never opened |
+| ≥ 800 propagation data points | collection in progress |
+
+RQ4 (awareness lag as experienced by SMEs) currently has **no primary respondent data**. Every lag figure the module can defend today is channel-side (gazette → portal → news), not SME-side.

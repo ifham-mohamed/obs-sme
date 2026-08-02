@@ -4,6 +4,14 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `backend/app/api/v1/m1_regulations.py` · `services/m1_regulation_service.py` · `schemas/m1.py` · `dependencies.py` · `middleware/request_id.py`
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `11_M1_1_API_Authentication_Authorization` and `11_M1_2_API_Integration_Examples`. Those two files have been retired. The JWT contract, refresh flow, and request-id propagation are folded into §1; every cURL, Python, and troubleshooting example is attached to the endpoint it exercises rather than parked in a trailing appendix, so an integrator reads the contract and the call together.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> Endpoint shapes are current, but **two response fields changed** and any consumer written against this document must handle them:
+> `classifier_confidence` is **nullable** (always NULL on the default `linearsvc` backend), and two new fields exist — `classifier_decision_margin` and `classifier_model_name`.
+> The classifier-review endpoint now reports which signal it used via a `mode` field: `confidence` | `margin` | `disabled`.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -1340,3 +1348,34 @@ Three contract inconsistencies surfaced during consolidation and are recorded as
 - FastAPI. (2024). *OpenAPI Documentation*. [fastapi.tiangolo.com](https://fastapi.tiangolo.com)
 - Pydantic. (2024). *Data validation using Python type hints*. [docs.pydantic.dev](https://docs.pydantic.dev)
 - HTTPX. (2024). *A next-generation HTTP client for Python*. [python-httpx.org](https://www.python-httpx.org)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Figure 4 (M1 routes: regulations, extraction, datasets, measurements, alerts) and Chapter 6; Part II §5.2 and Chapter 6.
+
+### Response contract delta
+
+| Field | Type | Populated when |
+|---|---|---|
+| `classifier_confidence` | `numeric(3,2)` \| `null` | **only** on the `onnx` backend |
+| `classifier_decision_margin` | `numeric(10,6)` \| `null` | on the `linearsvc` backend |
+| `classifier_model_name` | `varchar(64)` \| `null` | both backends |
+| `confidence_type` | string | `not_available_uncalibrated_linearsvc` on the default path |
+
+### Classifier-review endpoint modes
+
+| Backend | Predicate issued | Reported `mode` |
+|---|---|---|
+| `onnx` | `classifier_confidence < 0.55` | `confidence` |
+| `linearsvc` + threshold configured | `classifier_decision_margin < threshold` | `margin` |
+| `linearsvc`, no threshold | *(no query issued)* | `disabled` |
+
+`/admin/m1/pipeline/classifier-review` consumes all three modes. A client that treats a `disabled` response as "queue is empty" is wrong — it means no threshold has been chosen.
+
+### Live queue state (2026-08-01)
+
+898 rows classified, all carrying a margin. At the `.env.example` candidate threshold of 0.40, **18 rows** fall below and form the active queue. The threshold decision is recorded as `provisional_no_review_outcomes` — nine validation errors are too thin to freeze an operating point, so this number will move.

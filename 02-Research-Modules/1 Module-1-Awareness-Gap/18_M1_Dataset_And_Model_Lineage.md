@@ -3,7 +3,13 @@
 > One page that traces every M1 classification dataset from the raw gold standard to the frozen production model: which version came from which, what changed between them, what the split was, what each artifact hashes to, and which model was trained on which. Companion to [[06_M1_Training_Evaluation]] (method) and [[09_M1_Annotation_Guidelines]] (how labels were produced).
 >
 > Evidence base: `documentation/m1/records/ENIGMATRIX_M1_COMPLETE_END_TO_END_RECORD_2026-07-31_2313_IST.md` (5,642 lines) and `datasets/m1_regulations_v6_1110_clean_fixedsplit/dataset_manifest_v6.json`.
-> Verified: 2026-08-01.
+> Verified and reconciled with the executed V7 working branch: 2026-08-02.
+
+> [!warning] Truth-ledger sync — 2026-08-02
+> This document is the lineage of record and is **already reconciled to 2026-08-02**. No corrections needed — it is the source the other documents were corrected *against*.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
 
 ---
 
@@ -36,11 +42,13 @@ gold_standard.csv  (research/data/labeling/)
            V6  m1_regulations_v6_1110_clean_fixedsplit   ◄── FROZEN, current
            │  + 4 EPF/ETF label corrections (all in train split)
            │  split preserved byte-for-byte from V5
-           ▼
-           V7  m1_regulations_v7_1110_multitask_fixedsplit   ◄── PLANNED, not built
-              + is_sme_relevant recovered from gold_standard_v3_1128  (1110/1110)
-              + sector_vector, category_id, relevance_label, explicit split
-              V6 labels, text and split unchanged
+           ├─ V7-W  m1_regulations_v6_1110_multitask_noleak   ◄── WORKING EXPERIMENT, completed and rejected
+           │       1103 rows · 773 / 163 / 167 after seven exact-text duplicate/overlap exclusions
+           │       original six columns retained; sector vectors/relevance derived by the trainer
+           │       3-seed e8 run: category macro-F1 0.0936, sector macro-F1 0.1207
+           │
+           └─ V7-F  m1_regulations_v7_1103_multitask_noleak   ◄── FORMAL ENRICHED RELEASE, not built
+                   would add stored sector_vector, category_id, relevance_label and explicit split
 ```
 
 Three rules keep the lineage clean:
@@ -122,11 +130,14 @@ C:\Reasearch\xyz\kaggle_bundle\m1_v6_epf_etf_corrections\extracted\
 | `m1_regulations_v5_1110_clean_fixedsplit.zip` | `E1CA910E690F59C77F9859F57BE15069E48CBC6DF9C952BC8B28106C5A25FB29` |
 | `m1_v6_epf_etf_corrections_bundle.zip` | `2C9169B54C99B21241354E378172DEF8BC8071AC8FF40AAA22ED9551BD386597` |
 
-### V7 — `m1_regulations_v7_1110_multitask_fixedsplit` (planned, not built)
+### V7 — working experiment completed; formal enriched release not built
 
-Derived from V6 **without modifying it**, to carry multitask labels. Preserves all 1110 keys, the 777/166/167 split, every V6 category label, text, date and language. Adds `is_sme_relevant`, `sector_vector`, `category_id`, `relevance_label` and an explicit `split` column.
+Two artifacts must not be conflated:
 
-**`is_sme_relevant` has to be recovered, because V6 does not carry it.** The V6 parquet columns are exactly `key · text · category · sectors · language · date` — the relevance field was dropped at export. It is recovered by joining `research/data/labeling/gold_standard_v3_1128.csv` on `regulation_key`. Audited 2026-08-01:
+- **Executed working dataset:** `/kaggle/working/storage/datasets/m1/m1_regulations_v6_1110_multitask_noleak`. It was derived without modifying V6, removed seven exact-text duplicate/overlap records, and contains **1103 rows split 773/163/167**. It deliberately retains the original six columns; the trainer computes sector vectors and derived relevance at load time. The 3-seed e8 experiment trained on it and was rejected.
+- **Formal enriched V7 release:** not built. If weighted-loss recovery ever justifies creating it, it must derive from the cleaned 1103-row working set, carry a seven-row exclusion manifest, and add stored `sector_vector`, `category_id`, `relevance_label`, and `split` fields. It must not claim to preserve all 1110 rows.
+
+The pre-build **V6 source audit** covered all 1110 rows. V6 columns are exactly `key · text · category · sectors · language · date`; `is_sme_relevant` was absent. Joining `research/data/labeling/gold_standard_v3_1128.csv` on `regulation_key` established the following before the no-leak exclusions:
 
 | Check | Result |
 |---|---|
@@ -137,11 +148,11 @@ Derived from V6 **without modifying it**, to carry multitask labels. Preserves a
 | `is_sme_relevant == bool(affected_sectors)` | **1109 / 1110** |
 | **Total consistency errors** | **1** |
 
-V6 lost the relevance column and nothing else.
+V6 lost the relevance column and nothing else. The working trainer did not materialize the recovered field: it derives the served relevance target from the sector vector so the two outputs cannot contradict.
 
-**The single violation is a reasoned annotation, not an error.** `GZT_2492_10` (train, `IMPORT_EXPORT`) is marked SME-relevant with an empty sector list, and both annotators independently recorded the same reason at confidence 1.0: *"Export-proceeds rule affects SME exporters, but it is outside the three shop-focused study sectors; affected_sectors left blank."* Adopting `is_sme_relevant = any(sectors)` therefore **narrows** the field to *"affects at least one of the three study sectors"*. V7 relabels this row to `false` and preserves the note; the narrowing belongs in the limitations section, not in a silent flip.
+**The single violation is a reasoned annotation, not an error.** `GZT_2492_10` (train, `IMPORT_EXPORT`) is marked SME-relevant with an empty sector list, and both annotators independently recorded the same reason at confidence 1.0: *"Export-proceeds rule affects SME exporters, but it is outside the three shop-focused study sectors; affected_sectors left blank."* Adopting `is_sme_relevant = any(sectors)` therefore **narrows** the field to *"affects at least one of the three study sectors"*. The working experiment derives this row as `false`; any formal release must preserve the original note and record the narrowing in its manifest and limitations.
 
-**Sector label shape (all 1110 rows)** — the finding that most constrains what the sector head can claim:
+**Sector label shape in the audited 1110-row V6 source** — the finding that most constrains what the sector head can claim:
 
 | Combination | Train | Val | Test | Total | Share |
 |---|---:|---:|---:|---:|---:|
@@ -203,6 +214,10 @@ Verified legacy split inventory:
 | XLM-R LoRA, underfit-fix (seed 42, 20 ep) | V6      |     0.902693 |      0.743563 | Experimental only — failed the gate |
 | **TF-IDF + balanced LinearSVC**           | **V6**  | **0.924476** |  **0.947220** | **Primary — frozen**                |
 | TF-IDF + Logistic Regression              | V6      |            — |      0.882481 | Baseline reference                  |
+| XLM-R LoRA, multitask (3 seeds, 8 ep)      | V7-W 1103 |          — | category **0.0936**; sector **0.1207** | Rejected — collapsed; never promoted |
+| XLM-R LoRA, weighted multitask (seed 42, 15 ep) | V7-W 1103 | category **0.899862**; sector **0.884312** | **not read** | Validation diagnostic only — partial exact `4/9`; stopped before final run |
+
+The weighted row is deliberately not a new final model result. It used only the no-leak 773-row training and 163-row validation branches, wrote no promotable checkpoint, and did not load the V6 test split. It demonstrates optimization recovery, while its below-gate category score and nine-row partial-sector denominator demonstrate why a fresh temporal holdout plus genuine EPF/ETF and partial-sector examples are required before another claim.
 
 ### Historical legacy model records
 
@@ -261,7 +276,7 @@ The frozen primary model also has **no sector head**; it returns `"sectors": []`
 
 ## 5. Standing constraints
 
-1. **The V6 test split is spent for tuning.** It is final-evaluation only. Any further model selection needs a fresh split or nested CV.
+1. **The V6 test split is spent.** It was used for the frozen-model comparison and again by the rejected V7 working experiment. Do not tune, select, or make a new final claim on it; any recovery run needs a fresh temporal holdout, nested CV, or newly collected data.
 2. **`EPF_ETF_CHANGE` needs real data, not resampling.** 4 train / 1 test rows. The next annotation round should target genuine EPF/ETF regulations before any per-class claim is made about this category.
 3. **Do not rename or move `datasets/` or `models/`.** Their paths are recorded inside `model_registry.json`, `SHA256SUMS.json`, `local_windows_verification.json` and the frozen record.
 4. **Re-derive, don't hand-edit.** Every table here is regenerable from the record generator; if a number changes, change the source and regenerate.
@@ -532,3 +547,27 @@ If a future correction bundle is uploaded as its own Kaggle dataset, download it
 - **Annotation, taxonomy and IAA protocol:** [[09_M1_Annotation_Guidelines]]
 - **Physical layout of `datasets/` and `models/`:** [[17_M1_Repo_Structure_Map]]
 - **Full chronology with every epoch and error:** `documentation/m1/records/ENIGMATRIX_M1_COMPLETE_END_TO_END_RECORD_2026-07-31_2313_IST.md`
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Table 6.1 (datasets used in this project), Table 6.2 (columns of the frozen gold dataset), Table 7.3 (change category distribution) and Table 7.4 (train / validation / test split).
+
+### Where the report's dataset tables are wrong
+
+The report's Table 7.3 and Table 7.4 describe the **v1 800-row set with a 560 / 120 / 120 split**. That is the L1 legacy branch in §1 of this document — provenance only, not a reporting artifact. The reporting branch is V4 → V5 → V6 with the fixed **777 / 166 / 167** split.
+
+Anyone reading the report alone will attribute the module's results to the wrong dataset. If the report is revised, Tables 7.3 and 7.4 are the first things to replace.
+
+### The three rules, restated
+
+1. **Legacy datasets are provenance only.** They explain how early baselines were produced; they are not used for final model claims.
+2. **The reporting split never moved from V5 to V6.** A V5-vs-V6 score difference is a labelling effect, never a split effect.
+3. **Nothing was deleted from the gold history.** The 18 excluded artifacts are excluded from ML training and evaluation only; they remain in the adjudicated gold record.
+
+### V7 status, for the record
+
+`V7-W` (`m1_regulations_v6_1110_multitask_noleak`, 1103 rows, 773 / 163 / 167) ran to completion and was **rejected**: test category macro-F1 0.0936, sector micro-F1 0.2113, derived relevance accuracy 0.5948. `V7-F`, the formal enriched release with stored `sector_vector` / `category_id` / `relevance_label`, was **never built**. The frozen `linearsvc_v6_primary` is untouched by any of it.

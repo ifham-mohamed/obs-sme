@@ -4,6 +4,13 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — the full code tree this document's architecture maps to; `research/notebooks/findings_*.ipynb`, `m1_pipeline_errors`.
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `08_M1_1_Research_Findings_Extraction` and `08_M1_2_Edge_Cases_Failure_Modes`. Those two files have been retired; every finding-level SQL query, sample-size requirement, statistical test, notebook cell reference, and edge-case entry from them lives below. The parent document's 9-case table and the companion's 23-case catalogue have been merged into the **single deduplicated runbook in §13** — there is no longer a second overlapping list.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> The end-to-end architecture, happy-path timeline and failure runbook here remain accurate.
+> Two corrections: the classification stage runs **LinearSVC V6 in-process**, not an ONNX session; and the review-queue predicate is now **mode-aware** (`confidence` / `margin` / `disabled`) rather than a fixed `confidence < 0.55`.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -67,8 +74,8 @@ The Module 1 system is organised as **six pipeline stages (A–F)** — matching
 | **A** | Ingestion | Scrapy gazette spider, portal watchers, RSS watchers | Scrapy, httpx, feedparser |
 | **B** | Extraction | PDF text extraction, language detection | PyMuPDF, pdfplumber, Tesseract, fastText |
 | **C** | Preprocessing | Noise removal, metadata extraction, chunking | Regex rule sets, custom chunker |
-| **D** | Classification | XLM-R + LoRA inference, TF-IDF + LR baseline | ONNX Runtime, scikit-learn |
-| **E** | Summarisation | Multilingual EN/SI/TA summary generation | MarianMT (Helsinki-NLP) |
+| **D** | Classification | Frozen TF-IDF + balanced LinearSVC primary; optional legacy ONNX path | scikit-learn/joblib; ONNX Runtime retained but unpromoted |
+| **E** | Summarisation | Anchor-bound English summary + queued SI/TA translation | FastAPI/Celery constrained service; NLLB-200 pull worker |
 | **F** | Alerting | SME-sector matching, email/SMS dispatch | Celery, SendGrid, Twilio |
 | — | Presentation | Admin dashboard, SME portal, survey forms | Next.js 14, FastAPI, PostgreSQL |
 | **G** | Lag Measurement | Nightly view refresh + research notebooks | Postgres materialized views, pandas |
@@ -97,13 +104,14 @@ The `m1_regulations` status state machine:
 ```text
 ingested → extracted → classified → summarized → alerted → archived
                                ↘
-                           needs_review (confidence < 0.70)
-                               → admin verified → classified
+               classifier review signal (backend-declared mode)
+               margin < configured cutoff · confidence < configured cutoff
+               or disabled when no compatible threshold is configured
 ```
 
 **Why one central table rather than a table per stage.** `m1_regulations` is the single source of truth and its `status` column is the pipeline's program counter. A stage-per-table design would make "where is this gazette right now" a join across six tables and would make the pipeline-state dashboard impossible to write cheaply. The cost is that every stage writes to the same row, which is why the audit trail in `audit_log` is not optional: without it, a status transition has no history and an admin override is indistinguishable from a model output.
 
-Note that the `needs_review` branch is a *side* branch, not a terminal state. A regulation in review is still expected to reach `classified` — it has simply acquired a human in its path. This matters for the Definition of Done in §14, where the bar is that low-confidence rows are **triaged**, not that they never occur.
+The classifier-review branch is a side signal, not a probability claim or a terminal pipeline state. For the production LinearSVC backend, confidence is nullable and the raw decision margin ranks rows only. This matters for the Definition of Done in §14: the bar is that configured weak-signal rows are triaged and that `mode='disabled'` is visible, not that every model exposes the same score.
 
 ---
 
@@ -143,11 +151,11 @@ The Next.js 14 App Router frontend provides the following routes for Module 1.
 | `/admin/regulations/[id]/authoring` | `(admin)/admin/regulations/[id]/authoring/page.tsx` | ✅ Shipped | 3-step guided wizard (Session-11 quick-start) |
 | `/admin/surveys/awareness/responses` | `(admin)/admin/surveys/awareness/responses/page.tsx` | ✅ Shipped | M1 awareness response browser |
 | `/admin/activity-log` | `(admin)/admin/activity-log/page.tsx` | ✅ Shipped | Audit-log viewer (Session 14) |
-| `/admin/m1/review-queue` | — | 🔲 Deferred (BUILD_13) | Needs-review queue triage — see [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) §review queue triage |
+| `/admin/m1/pipeline/classifier-review` | `(admin)/admin/m1/pipeline/classifier-review/page.tsx` | ✅ Shipped | Mode-aware classifier triage for LinearSVC margin / legacy confidence / disabled threshold |
 | `/admin/m1/analytics` | — | 🔲 Deferred (BUILD_13) | Lag dashboard + propagation tracker — see [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) §lag analytics |
-| `/admin/m1/pipeline` | — | 🔲 Deferred (BUILD_13) | Stage A–F dashboard — see [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md) §pipeline state tracking |
+| `/admin/m1/pipeline` | `(admin)/admin/m1/pipeline/page.tsx` | ✅ Shipped | Pipeline operations/health entry point; stage-detail depth remains partial |
 
-**The three deferred routes are the three §13 runbook consumers.** Review-queue triage is where Stage D's low-confidence rows land, the pipeline dashboard is where Stage A/B failures become visible, and lag analytics is the operational twin of §10's findings. Until BUILD_13 ships them, the runbook's "monitoring" column resolves to logs and SQL rather than to a screen — which is workable for a research build and would not be for an operational one.
+Classifier triage and the pipeline operations page now consume Stage-D and Stage-A/B signals. Lag analytics is still deferred, so that part of the runbook's monitoring column continues to resolve to logs/SQL rather than a dedicated screen.
 
 ### 4.2 SME Routes (`/` and `/surveys/*`)
 
@@ -199,16 +207,18 @@ flowchart LR
 
     subgraph Chain["Task Chain per gazette"]
         T1[extract_gazette<br/>PyMuPDF/pdfplumber/Tesseract]
-        T2[classify_gazette<br/>ONNX inference + Redis cache]
-        T3[summarise_gazette<br/>MarianMT EN to SI and TA]
+        T2[classify_gazette<br/>LinearSVC joblib primary]
+        T3[summarise_gazette<br/>anchor-bound summary + provenance]
+        T3B[translation queue<br/>NLLB-200 SI and TA drafts]
         T4[dispatch_alerts<br/>SendGrid + Twilio]
     end
 
     B1 --> T1
     B5 --> T1
     T1 -->|on success| T2
-    T2 -->|confidence >= 0.70| T3
-    T2 -->|confidence < 0.70| REVIEW[Admin Review Queue]
+    T2 -->|classification succeeds| T3
+    T2 -.->|configured weak signal| REVIEW[Classifier Review Queue]
+    T3 --> T3B
     T3 --> T4
     T4 --> PROP[INSERT m1_propagation_events<br/>channel=alert_delivery]
 ```
@@ -244,8 +254,8 @@ flowchart TB
 
     subgraph Pipeline["Stages B to F: Processing Pipeline"]
         B[Stage B: Extraction<br/>PyMuPDF/pdfplumber/Tesseract<br/>fastText language detection]
-        C[Stages C and D: Preprocess + Classify<br/>XLM-R + LoRA ONNX<br/>TF-IDF + LR baseline]
-        E[Stage E: Summarisation<br/>MarianMT EN to SI and TA<br/>summary_en/si/ta]
+        C[Stages C and D: Preprocess + Classify<br/>TF-IDF + balanced LinearSVC primary<br/>nullable confidence + decision margin]
+        E[Stage E: Summarisation<br/>anchor-bound summary_en<br/>NLLB queue for summary_si/ta]
         F[Stage F: Alert Dispatch<br/>Sector matching<br/>SendGrid + Twilio]
     end
 
@@ -346,8 +356,8 @@ The following timeline traces a single gazette from the moment the Scrapy spider
 | T+0:01 | PDF downloaded to `/tmp/` | Scrapy pipeline | `FilesPipeline` writes to local disk; SHA-256 hash computed; duplicate check against `m1_regulations.pdf_hash` |
 | T+0:02 | PDF type classified; text extracted | `classify_pdf()` + PyMuPDF / Tesseract | `text_pdf` → PyMuPDF direct; `scanned` → Tesseract OCR (`sin`/`tam`/`eng` packs) |
 | T+0:03 | Raw text stored; classify task enqueued | PostgreSQL `m1_regulations` INSERT; Celery `classify` queue | Status set to `INGESTED`; `classify_gazette` task dispatched |
-| T+0:05 | XLM-R classification + sector mapping | Celery worker (`classify_gazette` task) | ONNX-exported model; dual head returns `change_category` + `sector_tags[]`; confidence logged |
-| T+0:07 | Three-length summaries generated | Celery worker (`summarize_gazette` task) | MarianMT produces EN/SI/TA × short/medium/long summaries; stored in `m1_regulation_summaries` |
+| T+0:05 | LinearSVC category classification | Celery worker (`classify_gazette` task) | Frozen joblib pipeline returns one of 8 categories, decision margin, nullable confidence, and model name; no production sector head |
+| T+0:07 | Constrained English summary attempted | Celery worker (`summarise_gazette` task) | Anchor-bound slots write `summary_en` + provenance/status flags, or `review_required`; SI/TA jobs are queued for NLLB |
 | T+0:08 | Matching SMEs identified | `match_smes()` service | JOIN `m1_sme_profiles` ON sector overlap + district overlap; filter `is_subscribed=true` |
 | T+0:10 | Alerts queued | Celery `alert` queue | One task per SME × channel (email / SMS / dashboard); dead-letter queue for failures |
 | T+0:15 | Alerts dispatched; propagation event logged | SendGrid / Twilio / WebSocket push | `m1_propagation_events` row inserted with `channel='alert_delivery'`; status set to `ALERTED` |
@@ -602,20 +612,20 @@ This is the on-call runbook: *the page has fired, what does this mean?* It is so
 
 | # | Edge case | Trigger | Detection | Resolution | Monitoring |
 |---|---|---|---|---|---|
-| D1 | **Confidence < 0.30 — hard floor** | Confidence floor in `classify_gazette.py` | Auto `needs_review=true`; the alert is **not** dispatched | Admin manually reclassifies in the dashboard; these rows are the ones §14's backfill bar requires to be triaged | `needs_review` count + low-confidence histogram |
-| D2 | **Confidence < 0.60** | Below the alert-suppression band | Classification proceeds but `needs_review=true` is set and the alert is suppressed until an admin confirms | Admin reviews in the dashboard; 24 h SLA | Review-queue age |
-| D3 | **Confidence 0.60–0.80** | Mid-band prediction | Domain and sectors are assigned as predicted; `needs_review=true` set for optional human verification | Nightly batch report lists all `needs_review` items | Nightly `needs_review` report |
+| D1 | **Decision margin below configured cutoff** | LinearSVC review mode + `M1_CLASSIFIER_MIN_MARGIN` | Review endpoint returns `mode='margin'`; lower margins rank first | Admin confirms/overrides in `/admin/m1/pipeline/classifier-review` | Queue yield + override rate by margin band |
+| D2 | **Review threshold not configured** | LinearSVC backend with no compatible cutoff | Endpoint returns `mode='disabled'` | UI shows an explicit disabled state; operator decides capacity/threshold before interpreting queue depth | Disabled-mode health signal |
+| D3 | **Nullable confidence misread as zero/probability** | Client assumes every backend emits probability | `confidence=null`, `confidence_type=not_available_uncalibrated_linearsvc` | Render `n/a`; use decision margin only as a rank and retain model identity | Contract/UI tests |
 | D4 | **Long PDF — domain signal in a tail chunk** | Classifier scored chunk 0 only and mis-classified | Caught only by admin verification; no automatic signal | Open a ticket; roll out logit aggregation across chunks per [06_M1_Training_Evaluation.md](06_M1_Training_Evaluation.md) §7.8 | Length-cliff dashboard |
 | D5 | **Domain drift — a new gazette type appears** | More than 5 `needs_review=true` rows sharing a keyword | Per-week pattern detector in `analytics.py` | Admin triggers retraining plus a taxonomy update ([09_M1_Annotation_Guidelines.md](09_M1_Annotation_Guidelines.md) §2.10) | Drift alert |
 
-**On the three confidence bands.** D1, D2, and D3 are layered rather than competing. The operative trigger in the Celery task is `needs_review = confidence < 0.70` ([07_M1_Deployment_Integration.md](07_M1_Deployment_Integration.md) §4.1) — that is what puts a row in front of a human. What the finer bands add is *what else happens*: below 0.60 the alert is additionally suppressed so an SME is never notified of a guess, and below 0.30 the row is treated as effectively unclassified and routed to the manual-label queue rather than to verification. Read the ladder from the bottom: 0.30 is "the model has nothing", 0.60 is "do not act on this", 0.70 is "have someone look".
+**On review semantics.** The old 0.30/0.60/0.70 probability ladder belonged to the unpromoted transformer design and is not the production contract. The frozen LinearSVC uses a validation-derived candidate margin cutoff (0.40 in `.env.example`) but leaves the code default unset. Margin magnitude is useful for ordering; it is not calibrated probability and must not be compared numerically with an ONNX confidence.
 
 ### Stage E — Summarisation
 
 | # | Edge case | Trigger | Detection | Resolution | Monitoring |
 |---|---|---|---|---|---|
-| E1 | **MarianMT returns a truncated summary** | Output is just the `[EOS]` token | Empty `summary_en` after dispatch | Re-run with shorter chunks; if it still fails, set `summary_en=NULL` and flag | Summary-empty rate |
-| E2 | **Translated summary diverges from English semantics** | Translation drift on legal phrasing | Cosine similarity between back-translated `summary_si` and `summary_en` < 0.65, on a 1 % hand-checked QC sample | Mark the translation low-confidence; the SME UI shows the English alongside | Quarterly QC summary |
+| E1 | **Grounding/identity invariant fails** | Required source literal or trusted identity evidence is absent/conflicting | Summary service records `review_required` with named quality flags and source hash | Human review/edit; do not generate free-form filler | Generated/review-required/omission rates |
+| E2 | **SI/TA draft changes a number or legal meaning** | NLLB translation drift | Sampled numeric-preservation and human faithfulness audit | Mark as draft, correct manually, and feed glossary/worker improvements | Per-language sampled error count |
 
 ### Stage F — Alerting
 
@@ -726,7 +736,8 @@ Module 1's outputs feed three downstream modules in the Enigmatrix platform. The
 | Celery task chain (extract → classify → summarise → alert) | 🟡 Partial | `backend/app/tasks/m1/` |
 | Chunked alert dispatch | 🟡 Partial | `backend/app/tasks/m1/alert_dispatch.py` |
 | `m1_pipeline_errors` + per-stage reason codes | 🟡 Partial | `m1_pipeline_errors` table |
-| Admin review queue / analytics / pipeline routes | 🔲 BUILD_13 | `/admin/m1/review-queue`, `/admin/m1/analytics`, `/admin/m1/pipeline` |
+| Admin classifier triage + pipeline routes | ✅ Shipped / 🟡 partial depth | `/admin/m1/pipeline/classifier-review`, `/admin/m1/pipeline` |
+| Admin lag analytics route | 🔲 BUILD_13 | `/admin/m1/analytics` |
 | SME compliance tracker + deadline routes | 🔲 BUILD_13 | `/portal/m1/my-regulations`, `/portal/m1/deadlines` |
 | Research notebooks (4) | 🟡 Scaffolds exist | `research/notebooks/findings_*.ipynb` |
 | Lag materialized views + nightly refresh | 🟡 Partial | `v_m1_*` views; `refresh_lag_views` Celery beat task |
@@ -738,7 +749,7 @@ Module 1's outputs feed three downstream modules in the Enigmatrix platform. The
 
 ## 17. Conclusion
 
-The Module 1 system architecture integrates six pipeline stages (A–F), a presentation surface, and an asynchronous lag-measurement stage across a Celery-driven pipeline, a FastAPI backend, and a Next.js frontend. The central `m1_regulations` table is the single source of truth that advances through a well-defined status state machine as each stage completes. The architecture prioritises reliability (retryable Celery tasks, Redis cache, Scrapy retry middleware), multilingual capability (XLM-R, Tesseract eng+sin+tam, MarianMT), and research measurability (propagation event logging, survey response capture).
+The Module 1 system architecture integrates six pipeline stages (A–F), a presentation surface, and an asynchronous lag-measurement stage across a Celery-driven pipeline, a FastAPI backend, and a Next.js frontend. The central `m1_regulations` table is the single source of truth that advances through a well-defined status state machine as each stage completes. The current implementation combines a frozen scikit-learn category classifier, Tesseract EN/SI/TA extraction support, anchor-bound English summaries, and NLLB draft translation with the propagation and survey records needed for research measurement.
 
 The measurability point is the one that distinguishes this system from an ordinary alerting product. Every timestamp the pipeline writes is a term in one of the six findings, which means the instrument and the product are the same artefact and cannot drift apart. §10 turns that into an executable plan — SQL, sample sizes, non-parametric tests chosen because lag distributions are heavy-tailed, and a pre-registration requirement that fixes the hypotheses before the data is unblinded.
 
@@ -754,3 +765,39 @@ The unified runbook in §13 names 28 failure modes across seven stages, each wit
 - FastAPI. (2024). *FastAPI Documentation*. [fastapi.tiangolo.com](https://fastapi.tiangolo.com)
 - Next.js. (2024). *Next.js 14 App Router Documentation*. [nextjs.org/docs](https://nextjs.org/docs)
 - Fly.io. (2024). *Fly.io Architecture*. [fly.io/docs](https://fly.io/docs)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I §5.2 and Figures 3–10 (four-layer architecture, deployment component view, Level 0 and Level 1 DFDs, domain class diagram, sequence diagram, ER design, Module 1 pipeline); Part II Figures 5.1–5.8, with Mermaid source for several.
+
+### Figure correspondence
+
+| This document's diagram | Report figure (Part I) | Report figure (Part II) |
+|---|---|---|
+| Four-layer platform architecture | Figure 3 | Figure 5.1 |
+| Deployment component view | Figure 4 | Figure 5.2 |
+| Level 0 context DFD | Figure 5 | Figure 5.3 |
+| Level 1 DFD | Figure 6 | Figure 5.4 |
+| Domain class diagram | Figure 7 | Figure 5.5 |
+| End-to-end sequence | Figure 8 | Figure 5.6 |
+| Database ER design | Figure 9 | Figure 5.7 |
+| Module 1 pipeline | Figure 10 | Figure 5.8 |
+| Regulation status machine | Figure 11 | Figure 5.9 *(Mermaid source)* |
+| Extraction / OCR routing | Figure 12 | Figure 5.10 *(Mermaid source)* |
+| Propagation + alert dispatch | Figure 14 | Figure 5.12 *(Mermaid source)* |
+
+Part II carries **8 diagrams as Mermaid source**, which is the version-controllable form. Prefer those over the rendered PNGs when a diagram needs editing.
+
+### The status machine, as it actually runs
+
+`ingested → extracted → preprocessed → classified → alerted`, with two guarded detours into `review`: `metadata_confidence` below threshold from `preprocessed`, and — on the ONNX path only — `classifier_confidence < 0.55` from `classified`. On the LinearSVC path the second detour is a **margin** comparison, and when no threshold is configured the endpoint issues no query at all and truthfully reports `mode='disabled'`.
+
+> [!important] `mode='disabled'` exists so that *"nothing configured"* and *"nothing flagged"* cannot be confused. The original predicate `WHERE classifier_confidence < 0.55` matched nothing on the LinearSVC backend, and an empty review queue is indistinguishable from a clean bill of health. That is the failure worth naming: not an error, not a log line, just a screen saying everything is fine because it asked a question the data cannot answer.
+
+### Findings F1–F6
+
+The report's §6.3.1 and Figure 14 confirm the two materialised views this document's findings depend on: `v_m1_regulation_lag_summary` and `v_m1_channel_effectiveness`, both fed by `m1_propagation_events` (unique on `(regulation, source)`, carrying `first_seen_at`).

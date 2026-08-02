@@ -4,6 +4,13 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/m1/extraction/language_detection.py` · `ml/m1/extraction/ocr.py` · `ml/m1/extraction/wijesekara.py` + `wijesekara_map.yaml`
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `10_M1_1_Language_Detection_Routing` and `10_M1_2_OCR_Wijesekara_Conversion`. Those two files have been retired; every calibration table, mapping excerpt, quality check, and worked example from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> Language detection, OCR routing and Wijesekara-to-Unicode conversion are **live and unaffected** by the classifier change.
+> One consequence worth recording: because the production classifier is TF-IDF over the extracted text, **multilingual transfer is no longer doing any work** — cross-lingual generalisation was an XLM-R property, and the frozen model is lexical. Sinhala and Tamil coverage now depends entirely on the extraction and translation stages, not on the model.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -673,7 +680,7 @@ This is why the new queue and the pre-existing manual queue never fight, with no
 
 1. **MT quality is unmeasured.** No BLEU/chrF against a reference set yet. Each job stores `model_name`, `device`, and `latency_ms` so a sampled human evaluation can be attributed later. Treat SI/TA as **draft until reviewed** in any claim made from this data.
 2. **Domain terminology is generic.** NLLB has no Sri Lankan legal-register training signal, so statutory terms come back literal rather than in established Sinhala/Tamil legal usage. Glossary-constrained decoding is the natural next step and is the honest answer if asked.
-3. **Summaries are mostly empty today** — `summary_en` is written by the Stage-E summariser, which has not shipped, so in practice this currently translates titles. The enqueue already handles summaries the moment they exist. The summarisation method — and the constraint it places on the English so that figures survive translation — is specified in [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md); its §7.4 makes **numeric preservation EN → SI/TA** the cheapest first measurement of the MT quality that §10.6.1 records as unmeasured.
+3. **Stage-E summaries now have live draft translations, but quality is not yet established.** The first conservative backfill recorded 380 generated summaries, 11 `review_required`, and 751 pending; the generated set was drained through the NLLB queue with 388 Sinhala and 388 Tamil summary jobs done and zero generated summaries missing SI/TA. Treat all of these as machine-generated drafts until sampled faithfulness and **numeric preservation EN → SI/TA** are reviewed under [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) §7.4.
 4. **`MAX_SOURCE_CHARS = 8000`.** Longer text is skipped with a warning rather than half-translated; NLLB's ~512-token window means long inputs are sentence-chunked by the worker.
 
 > **Full engineering spec:** `enigmatrix-docs/m1/10_M1_3_NLLB_Translation_Pipeline.md` in the code repo — schema table, API surface, and the complete file list.
@@ -701,3 +708,27 @@ The token-length disparity between Sinhala/Tamil and English — ~2.3× more tok
 - Joulin et al. (2016). *Bag of Tricks for Efficient Text Classification (fastText)*. [arxiv.org/abs/1607.01759](https://arxiv.org/abs/1607.01759)
 - Smith, R. (2007). *An Overview of the Tesseract OCR Engine*. ICDAR 2007.
 - Department of Government Printing Sri Lanka. *Gazette Extraordinary — Sinhala editions*. [gazette.lk](https://www.gazette.lk)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I §3.5–§3.6 (extraction, OCR, language identification), §3.12 (summarisation and translation) and Figure 12; Part II §5.3.1 and Figure 5.10.
+
+### The multilingual argument has changed shape
+
+| Layer | Before (XLM-R planned) | Now (LinearSVC frozen) |
+|---|---|---|
+| Language ID | fastText | fastText — unchanged |
+| Script normalisation | Wijesekara → Unicode | unchanged |
+| OCR | Tesseract 5 `--oem 1 --psm 6 -l eng+sin+tam @300dpi`, Surya fallback | unchanged |
+| Classification | shared multilingual encoder, cross-lingual transfer | **lexical, per-language vocabulary** |
+| SME-facing output | summary_en + NLLB si/ta | unchanged |
+
+The honest thesis statement: the module's trilingual capability is delivered by **extraction and translation**, not by the classifier. A Sinhala-only gazette is classified on whatever tokens survive extraction, and there is no cross-lingual sharing to fall back on. This is a limitation that did not exist in the planned architecture and should be stated as one.
+
+### Translation quality, measured
+
+From the 2026-08-01 operating evidence: English summary generation passes **80/80 (100%)**, but the numeric-locale check passes only **10/152 (6.58%)**, with 7 rows flagged for review. Numeric-locale handling — digits, currency and date formats surviving the EN → SI/TA hop — is the weakest measured link in the trilingual chain.

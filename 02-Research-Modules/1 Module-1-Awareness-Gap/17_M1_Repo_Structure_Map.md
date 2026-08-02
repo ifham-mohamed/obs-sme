@@ -5,6 +5,12 @@
 > Audit source: `C:\Reasearch\xyz\documentation\m1\structure_audit\STRUCTURE_AUDIT.md`
 > Generated: 2026-08-01 · Workspace root spelling is `Reasearch` (not `Research`) and must not be silently corrected.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> Structure map is current. Add the frozen-model paths introduced at the 2026-08-01 classifier freeze — `models/m1/linearsvc_v6_primary/` and `datasets/m1_regulations_v6_1110_clean_fixedsplit/`.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 1. Why this document exists
@@ -150,3 +156,26 @@ The repo set does hold 52 files the vault lacks — the `NN_M1_N_*` deep-dive su
 - **Module reorg convention (`m<N>/` per layer):** [[08_M1_MODULE_REORG_PLAN]]
 - **Works-folder layout and naming rules:** `final/works/00_WORKS_ORGANIZATION_INDEX.md`
 - **Repo-side mirror of this map:** `C:\Reasearch\xyz\STRUCTURE.md`
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Table 3.2 (repository components) and §3.2.
+
+### Paths added at the classifier freeze
+
+```text
+models/m1/linearsvc_v6_primary/
+  ├── linearsvc_pipeline.joblib            SHA256 1D7F84754421A881EE1B5FA0F008A0CC3DB4E24F52CE6D97CE155CB4D1923CFA
+  └── local_windows_verification.json      re-scored 0.9472199858964565 on a second machine
+
+datasets/m1_regulations_v6_1110_clean_fixedsplit/
+  └── dataset_manifest_v6.json             per-split SHA256, zero cross-split key leakage
+
+storage/models/m1/onnx/v1/                 dormant — no artifact was ever exported
+```
+
+Bundle SHA256: `2F80BEFE494F1275DCB14FCB5352902A8BF98C1CC3FA86F919D53B7958C5F11B`.

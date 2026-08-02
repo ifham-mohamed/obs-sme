@@ -4,9 +4,16 @@
 > **Audience:** the developer (or team) starting M1 implementation work. Status-aware: every phase tells you what's done vs what's next.
 > **See also:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) (the spec) · [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md) (per-folder build guides).
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> The roadmap's *Where M1 stands today* section is already refreshed to 2026-08-02 and is current.
+> The two 2026-07-30 status paragraphs further down predate the model bake-off and have been marked superseded in place.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
-## Where M1 stands today (2026-05-14; Phase 3 refreshed 2026-07-30)
+## Where M1 stands today (refreshed 2026-08-02)
 
 | Surface | Status | Notes |
 |---|---|---|
@@ -16,8 +23,8 @@
 | Seed data | ✅ Shipped | 5 demo regulations (`VAT_2024_AMD`, `EPF_2024_RATE`, multi-pin adapter, etc.) |
 | M1 docs base | ✅ Shipped | 53 files in `enigmatrix-docs/m1/` covering research + design |
 | Ingest pipeline (Stage A–B+) | ✅ Shipped | Sessions 23/25/26/28/30/31/32 (F-145 → F-155). Phase 2 complete: spider → extract_gazette → preprocess_gazette_task chained; rows flow `ingested → extracted → preprocessed` with all metadata fields populated and multi-penalty junction filled. |
-| ML training + classifier (Stage D) | 🟡 Prep/smoke complete; full model pending | 800-row v1 gold set, deterministic split, TF-IDF baselines, and CPU LoRA smoke exist. No full GPU fine-tune or ONNX model yet. |
-| Summarisation (Stage E) | 🔲 Deferred | BUILD_07 — no MarianMT integration |
+| ML training + classifier (Stage D) | ✅ Category model shipped | V6 TF-IDF + balanced LinearSVC is frozen at temporal-test macro-F1 0.947220, wired as the default backend, and has classified live gazettes. XLM-R and V7 multitask experiments were trained and rejected; no transformer/ONNX promotion is pending. |
+| Summarisation (Stage E) | 🟡 Backend slice shipped; evaluation open | Anchor-bound constrained summaries, provenance/status flags, task, migration, and backfill scripts are built. First live evidence: 380 generated, 11 review-required, 751 pending; human faithfulness review, review UI, and full coverage remain. |
 | Alert dispatch (Stage F) | 🔲 Deferred | BUILD_07 — no email/SMS pipeline |
 | Schedulers + portal watchers | 🔲 Deferred | BUILD_12 — no Celery Beat, no IRD/EPF watchers |
 | Lag-analytics UI (Stage G) | 🔲 Deferred | BUILD_13 — no admin dashboard |
@@ -92,7 +99,7 @@ Already shipped. You're inheriting:
 
 **Goal:** the model classifies new gazettes at macro-F1 ≥ 0.92 and serves predictions via ONNX from Fly.io.
 
-**2026-07-30 status update:** calibration and Batches 02-05 are complete; `gold_standard_v1_800.csv` freezes the accepted 800-row gold set. `m1.model.data --by key` created 560/120/120 train/validation/test parquet splits, TF-IDF baselines scored 0.4980 (LogReg) and 0.6167 (LinearSVC) macro-F1, and a one-seed/one-epoch CPU LoRA smoke wrote `storage/models/m1/xlmr_lora_smoke/model_registry.json` with `gate_pass=false`. The smoke proves the training path only; the production classifier still needs full GPU LoRA training, evaluation, ONNX export, and activation. Rare-domain coverage remains a thesis limitation unless a targeted top-up batch is collected.
+**2026-07-30 status update:** calibration and Batches 02-05 are complete; `gold_standard_v1_800.csv` freezes the accepted 800-row gold set. `m1.model.data --by key` created 560/120/120 train/validation/test parquet splits, TF-IDF baselines scored 0.4980 (LogReg) and 0.6167 (LinearSVC) macro-F1, and a one-seed/one-epoch CPU LoRA smoke wrote `storage/models/m1/xlmr_lora_smoke/model_registry.json` with `gate_pass=false`. The smoke proves the training path only. **Superseded 2026-08-02** — full GPU LoRA training ran across three configurations and was **rejected** (best temporal test 0.743563); TF-IDF + `LinearSVC` was frozen instead at temporal-test macro-F1 **0.947220** and wired into the backend. ONNX export was never performed and is no longer on the critical path. Rare-domain coverage remains a thesis limitation unless a targeted top-up batch is collected.
 
 ### Step 3a — Label Studio setup + calibration test
 
@@ -114,6 +121,7 @@ Already shipped. You're inheriting:
 - **Build:** AL baseline (TF-IDF + LR) + uncertainty-sampling acquisition function. Iterate batches 2–4 (200 docs each) over ~6 weeks.
 - **DoD:** 800 labels in `gold_standard.csv` (≥ 50 per domain); IAA on dual-annotated subset ≥ 0.75 κ.
 - **Status 2026-07-30:** row-count and IAA gates passed with 800 rows and category kappa 0.871534, but the ≥50/domain target is not met for rare categories.
+- **Status 2026-08-02:** Batches 06–07 lifted the gold set to **1128 rows** and category kappa to **0.947215**. `EPF_ETF_CHANGE` remains the binding constraint at 4 train / 1 test rows.
 
 ### Step 3d — Train XLM-R + LoRA classifier
 
@@ -222,3 +230,34 @@ These cross-reference [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)
 - Per-folder build guides: [15_M1_Folder_Reference.md](15_M1_Folder_Reference.md)
 - Tracking workflows: [14_M1_Tracking_Workflows.md](14_M1_Tracking_Workflows.md)
 - Module 1 doc index: [README.md](README.md)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I Chapter 8 (conclusion) and Chapter 7 (evaluation); Part II Chapter 8.
+
+### Critical path, restated for 2026-08-02
+
+Closed:
+
+1. Annotation gate — 1128 gold rows, v3 category kappa 0.947215
+2. Dataset freeze — V6 at 1110 rows, fixed 777 / 166 / 167 split, per-split SHA256
+3. Model selection — XLM-R rejected, LinearSVC V6 frozen at 0.947220
+4. Backend integration — two-backend switch, migration `202608010001` applied live
+5. First production classification run — 898 regulations classified
+
+Open, in dependency order:
+
+| # | Item | Blocked on |
+|---|---|---|
+| 1 | Operating-threshold selection for the margin queue | review outcomes; nine validation errors are too thin |
+| 2 | Review-quality evidence | (1) |
+| 3 | Margin-aware monitoring | (1) — see §∞ of [[12_M1_Monitoring_Maintenance]] |
+| 4 | Numeric-locale repair in translation | currently 6.58% pass |
+| 5 | SME survey recruitment | **0 of 100** — no primary respondent data exists |
+| 6 | F1–F6 findings notebooks | propagation data volume |
+
+Item 5 is the one that cannot be closed by engineering. It is the only open item that blocks a research question outright rather than an evidence quality gate.

@@ -110,11 +110,11 @@ The bundle was downloaded to the Windows host and re-scored end to end. Test mac
 
 ### The scikit-learn pin
 
-The pipeline was fitted under scikit-learn **1.5.2**; the workspace `.venv` holds **1.8.0** and emits `InconsistentVersionWarning` on unpickle. Validation accuracy still reproduced exactly (`0.9457831325301205`), so this artifact is unaffected in practice — but the dependency range that allowed the drift was `>=1.4,<2`, which is precisely how it happened.
+The pipeline was fitted under scikit-learn **1.5.2**. The earlier workspace had drifted to 1.8.0 and emitted `InconsistentVersionWarning`; the current workspace `.venv` is now back on **1.5.2** with joblib **1.5.3**, matching the artifact and the pin. Validation accuracy had reproduced exactly even during the mismatch (`0.9457831325301205`), but the mismatch is no longer an active deploy blocker.
 
 `enigmatrix-ml/pyproject.toml` now pins `scikit-learn>=1.5.2,<1.6` in **both** the `serving` and `training` extras, on the rule that *a model trained under one line must be loadable by the other*, and declares `joblib` explicitly rather than relying on it arriving transitively.
 
-⚠ **The pin constrains future resolution; it does not fix the existing environment.** Run `uv sync --extra serving` before trusting a deploy.
+The environment repair is complete. Future serving/training syncs must retain the 1.5.x line unless the model is deliberately re-verified and re-frozen under a newer version.
 
 ---
 
@@ -256,9 +256,9 @@ Turning it on is one environment variable — `M1_CLASSIFIER_MIN_MARGIN=0.40` �
 
 ### 9.1 Blocking a deploy
 
-1. `uv sync --extra serving` — the pin constrains future resolution; the live `.venv` still holds scikit-learn 1.8.0.
-2. Decide on `M1_CLASSIFIER_MIN_MARGIN`. Column, index and endpoint mode all exist; this is a review-capacity question.
-3. **Triage UI against `GET /classifier-review`** — must handle `mode='disabled'`, render the margin as a **rank** rather than a percentage, and tolerate `classifier_confidence: null`. Until this ships, the review queue has no surface.
+1. Decide on `M1_CLASSIFIER_MIN_MARGIN`. Column, index, endpoint mode, and triage UI all exist; this is a review-capacity and observed-yield question.
+2. Record service-latency/canary-style acceptance evidence and preserve a reproducible summary of the first live classification run.
+3. Replace confidence-based drift assumptions with margin/category-distribution monitoring before claiming classifier monitoring is active.
 
 ### 9.2 Standing research constraints
 

@@ -4,6 +4,13 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — `ml/shared/drift.py` · `backend/app/tasks/m1/analytics.py` · `model_registry.json` · `infra/prometheus/` · `infra/grafana/dashboards/`
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `12_M1_1_Performance_Monitoring_Alerting` and `12_M1_2_Retraining_Deployment_Rollback`. Those two files have been retired; the per-severity runbook, Grafana dashboard layout, Alertmanager routing, retraining scripts, canary measurement protocol, and auto-rollback code all live below, folded into the sections they belong to rather than appended.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> Monitoring targets and topology are unchanged, but **the classifier-performance section monitors the wrong signal**.
+> There is no calibrated probability to monitor on the default path. Drift detection, confidence-histogram alerts and ECE tracking must be re-specified against the **margin distribution**, or they will silently monitor a column that is always NULL.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -54,7 +61,7 @@ Production deployment of the Module 1 NLP pipeline requires continuous monitorin
 
 A daily analytics refresh materialised view captures classifier performance metrics. Model retraining is triggered when production macro-F1 estimated from expert-verified labels drops below 0.85 or when confidence distribution drift exceeds the KL-divergence threshold of 0.15. Rollout is staged at 10 % → 50 % → 100 % with 24-hour dwell at each stage, and an automatic rollback fires if production F1 drops more than 5 pp in 24 hours. SLA targets are: ≥ 99.9 % uptime, ≤ 6 h ingestion latency, ≤ 24 h alert delivery latency.
 
-**Implementation status:** 🔲 Largely deferred. The daily health-check task and the analytics refresh land with the existing analytics module; the Prometheus/Alertmanager/Grafana stack and the runbooks are BUILD_12; the retraining scripts, canary deployment, and auto-rollback are BUILD_11. See §11 for the artefact-level map.
+**Implementation status:** 🟡 Partially shipped. The live analytics task now uses LinearSVC decision margins, category-distribution KL, dominant-category share, review-queue size, and confirmed/corrected review yield; it no longer treats nullable `classifier_confidence` as the production signal. The Prometheus/Alertmanager/Grafana stack, labelled production-F1 loop, retraining pipeline, and canary/rollback remain deferred. See the final-report reconciliation and §11 for the boundary.
 
 ---
 
@@ -1013,3 +1020,38 @@ Together these keep the classifier accurate as Sri Lanka's regulatory landscape 
 - Gretton et al. (2012). *A Kernel Two-Sample Test (dataset drift detection)*. JMLR.
 - PostgreSQL. (2024). *VACUUM and ANALYSE Documentation*. [postgresql.org/docs](https://www.postgresql.org/docs)
 - PostgreSQL. (2024). *Advisory Locks*. [postgresql.org/docs](https://www.postgresql.org/docs)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I §7.1.10 (model drift), §7.1.8 (calibration: ECE and Brier) and Figure 20 (extraction accuracy measurement dashboard); Part II §7.2.
+
+### What must be re-specified
+
+| Monitor | Written against | Status on the live path |
+|---|---|---|
+| Confidence histogram | `classifier_confidence` | **dead** — column is always NULL |
+| ECE / Brier drift | calibrated probability | **not computable** — no probability exists |
+| Low-confidence review rate | `confidence < 0.55` | **matches zero rows** |
+| Margin distribution | *(not written)* | **this is the signal that exists** |
+
+### The margin baseline to monitor against
+
+Established 2026-08-01 over 898 classified rows:
+
+| Percentile | Margin |
+|---|---:|
+| min | 0.008653 |
+| p10 | 1.12149 |
+| p50 | 1.809804 |
+| p90 | 2.081984 |
+| max | 2.245461 |
+
+A drift monitor for the frozen model now records the margin histogram, category-distribution KL, dominant-category share/concentration alert, and the count below the configured threshold (currently 18 of 898 at 0.40). It also records active-queue size and review correction yield. That is a rank-order/distribution signal, not a calibration signal, and the alert text must not describe it as a confidence drop. With zero completed review outcomes, 0.40 remains provisional rather than frozen or revised.
+
+### Measurement runs are the extraction-side monitor
+
+Report Figure 20 shows the measurement-run surface: 14 runs, 14 complete, 0 failed, scoring sealed dataset versions against manual ground truth. Recent overall scores 0.852 (15 fields) and 0.942 (11 fields) across 51 regulations. That is the working accuracy monitor today; the classifier-side equivalent does not yet exist.

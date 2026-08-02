@@ -2,6 +2,14 @@
 
 > **Research Question:** Are regulatory changes reaching Sri Lankan SMEs in time to act — and what is the information lag between gazette publication and SME awareness?
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> This index is the module's status ledger and is **current**. Two figures elsewhere in the doc set were stale and have now been corrected everywhere:
+> the gold set is **1128 adjudicated rows → 1110 ML rows** (not 800), and the production classifier is **LinearSVC V6**, not XLM-R.
+> A full copy of the submitted final report now lives in `final/report/` so every document can cite it directly.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## Status
@@ -9,29 +17,31 @@
 | Dimension                      | Target                             | Status                  |
 | ------------------------------ | ---------------------------------- | ----------------------- |
 | Category classifier F1 (macro) | ≥ 0.92                             | **PASSED** — V6 TF-IDF LinearSVC = **0.9472** (temporal test), frozen as primary |
-| Sector assignment F1 (macro)   | ≥ 0.88                             | **No sector model in production** — the frozen classifier is category-only (`sectors: []`). V7 multitask specified, not built |
+| Sector assignment F1 (macro)   | ≥ 0.88                             | **No sector model in production** — the frozen classifier is category-only (`sectors: []`). A 1,103-row no-leak V7 working experiment ran and was rejected; the formal enriched V7 release was not built |
 | Sector label coverage          | usable multi-label structure       | **Weak** — 73.2% of gold rows carry no sector, 84% of the rest carry all three; only 48 rows (4.3%) are partial |
 | Labeled gazette documents      | ≥ 800                              | 1128 resolved v3 gold rows → 1110 after artifact exclusion; IAA gate passed |
 | Propagation data points        | ≥ 800 (200 regulations × 4 stages) | Data collection         |
-| SME awareness survey responses | ≥ 100 unique SMEs                  | Survey instrument ready |
+| SME awareness survey responses | ≥ 100 unique SMEs                  | Instrument, authenticated flow, and public `/portal/m1/survey` route exist; real field responses remain 0/100 |
 | Ingestion latency              | ≤ 6 hours from gazette publication | Pipeline deployed       |
 | Alert delivery latency         | ≤ 24 hours from publication        | Pipeline deployed       |
 | System uptime                  | ≥ 99.9%                            | Monitoring active       |
 | Expert verification coverage   | ≥ 30% of production regulations    | In progress             |
-| Production classification run  | ≥ 1 end-to-end                     | **Not yet run** — model wired + migration applied, no gazette classified live |
+| Production classification run  | ≥ 1 end-to-end                     | **Completed** — the frozen model has classified live gazettes; retain the run evidence and complete the remaining quality review |
 
 ---
 
 ## Current Implementation Update
 
-**As of 2026-08-01 — Phase 3 model selection is closed.**
+**As of the 2026-08-02 truth-ledger refresh — Phase 3 model selection and first live integration are closed.**
 
 - The production classifier is **TF-IDF + `LinearSVC(class_weight="balanced")`**, frozen at `models/m1/linearsvc_v6_primary/`. Temporal-test macro-F1 **0.947220**, validation 0.924476, accuracy 0.958084 (160/167). This clears the ≥ 0.92 gate that the V3 baseline (0.9080) missed.
 - **XLM-R + LoRA was trained in full and rejected.** Three runs; the best reached 0.969340 *training* macro-F1 and 0.902693 validation but only **0.743563** on the temporal test — a generalization failure, not an optimization one. No ONNX artifact was ever exported.
 - The V6 dataset corrected four `EPF_ETF_CHANGE` mislabels, all in the **train** split, so the test split is byte-identical to V5 and every V5/V6 comparison remains valid. Split fixed at 777/166/167 since V4.
 - The classifier is **wired into the backend** behind `M1_CLASSIFIER_BACKEND` (default `linearsvc`), and migration `202608010001` is applied to the live Supabase database (`classifier_decision_margin`, `classifier_model_name`).
-- **`confidence` is now nullable.** LinearSVC emits an uncalibrated margin, not a probability. Margins may rank; they must never be displayed as percentages. The review-queue threshold was derived on the validation split and **ships unset** — 9 errors in 166 rows is too thin to freeze an operating point, so the queue reports `mode='disabled'` rather than looking like a clean bill of health.
-- **Still outstanding:** no gazette has been classified by the frozen model in the live system, and there is no triage UI. Everything downstream — backfill, review queue, drift, F6 — waits on that first run.
+- **`confidence` is now nullable.** LinearSVC emits an uncalibrated margin, not a probability. Margins may rank; they must never be displayed as percentages. The review threshold is configuration-dependent: the code default is unset and truthfully reports `mode='disabled'`, while `.env.example` opts into the validation-derived candidate `M1_CLASSIFIER_MIN_MARGIN=0.40`. Nine validation errors are too thin to call that operating point frozen.
+- **Live integration has moved past the earlier blocker:** gazettes have been classified by the frozen model, `/admin/m1/pipeline/classifier-review` consumes the margin modes, and analytics now records margin/category-distribution drift, queue size, dominant-category concentration, and review correction yield. The 0.40 threshold remains provisional because no live review outcome has been completed.
+- **The public survey route is built:** `/portal/m1/survey` carries EN/SI/TA recruitment copy, consent, safe login/register returns, and recruitment-channel attribution. The fieldwork count is still 0/100; software readiness is not participant evidence.
+- **The first weighted V7 recovery diagnostic is complete:** seed 42, validation only, category macro-F1 `0.899862`, sector macro-F1 `0.884312`, partial-sector exact match `4/9`. It recovered from collapse but stopped before test/three-seed/export because the category gate and evidence gate were not met.
 
 Full record: [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · lineage: [17_M1_Repo_Structure_Map.md](17_M1_Repo_Structure_Map.md) and [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) · status ledger: [[final/works/03_FEATURE_CHECKLIST|03_FEATURE_CHECKLIST]].
 
@@ -39,7 +49,7 @@ Full record: [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FR
 
 - Calibration was completed for the annotators, with failed/conditional attempts retested before scale-up.
 - Batches 02, 03, 04, and 05 were dual-annotated and reduced into `research\data\labeling\gold_standard.csv`.
-- Current resolved gold set: 800 rows, 800 unique regulation IDs, 40 manually adjudicated disagreement rows, category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518.
+- Current resolved gold set *at that date*: 800 rows, 800 unique regulation IDs, 40 manually adjudicated disagreement rows, category kappa 0.871534, mean sector kappa 0.863776, SME relevance kappa 0.723518. **Superseded** — Batches 06–07 took the gold set to 1128 rows (v3 category kappa 0.947215), and the ML branch froze at 1110 rows with the fixed 777 / 166 / 167 split.
 - The row-count and category/sector IAA gates for starting model-preparation are now met.
 - The accepted set was frozen as `gold_standard_v1_800.csv`; deterministic `--by key` split produced 560 train, 120 validation, and 120 test rows.
 - TF-IDF baselines are complete: LogReg macro-F1 0.4980 and LinearSVC macro-F1 0.6167.
@@ -73,7 +83,7 @@ Full record: [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FR
 | 17 | [17_M1_Repo_Structure_Map.md](17_M1_Repo_Structure_Map.md) | **The workspace as measured** (against doc 13's designed tree) — top-level inventory with sizes, the root tidy of 2026-08-01, `documentation/` layout, why `scripts/` was deliberately left flat (26 files reference those paths), the vault-vs-repo doc fork and which copy is canonical, and where new files go. |
 | 18 | [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) | **V4 → V5 → V6 dataset lineage and every model trained on them** — per-version label changes, class distribution, per-split SHA256, the five-model comparison table, why the transformer lost, the frozen LinearSVC artifact and its hashes, the confidence contract, and four standing constraints. |
 | 19 | [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) | **Stage-E summarisation method** — the input contract (raw text + the 6 Stage-C metadata fields + classifier context), a measured diagnostic showing the extractors return a *wrong* gazette number on 31.1% of test rows, a 5-way approach comparison (decisive-constraint table + scored matrix + one real gazette walked through every approach), and the selected **field-grounded constrained generation** design with four faithfulness invariants, a reference-free evaluation protocol, and the novelty claim it supports. |
-| 20 | [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) | **V7 multitask upgrade** — one shared XLM-R encoder emitting regulation domain (8-way softmax), affected SME sectors (3 sigmoids) and SME relevance **derived** from the sector output so the two can never contradict. Contains the Step-41 V6 audit: `is_sme_relevant` is absent from the V6 parquet and must be recovered from gold (1110/1110); the derivation rule holds 1109/1110; and 73.2% of rows carry no sector while 84% of the rest carry all three, which makes the sector gate gameable and per-sector thresholds unsupportable. Dataset schema, losses, thresholds, promotion gates including the hybrid outcome, and steps 41–53. |
+| 20 | [20_M1_Multitask_Classifier_Upgrade.md](20_M1_Multitask_Classifier_Upgrade.md) | **V7 multitask upgrade** — one shared XLM-R encoder emitting regulation domain (8-way softmax), affected SME sectors (3 sigmoids) and SME relevance **derived** from the sector output so the two can never contradict. Contains the 1,110-row source audit, the executed 1,103-row no-leak working dataset, parser/trainer fixes, smoke and 3-seed rejected run, plus the still-unbuilt formal enriched V7 package. Weighted-loss recovery and fresh evaluation data are required before any promotion work. |
 
 ---
 
@@ -124,8 +134,8 @@ The frontend route table that maps these workflows to real frontend files is rec
 | B     | Extraction         | PyMuPDF → pdfplumber → Tesseract OCR; fastText language detection                   |
 | C     | Classification     | **TF-IDF + LinearSVC** on the 8-domain taxonomy, frozen 2026-08-01 (test macro-F1 0.9472). Category only — no sector head, and `confidence` is `null` by design. The XLM-R dual-head path exists but was never promoted. See [18_M1_Dataset_And_Model_Lineage.md](18_M1_Dataset_And_Model_Lineage.md) |
 | D     | Secondary Tracking | Watchers on IRD, EPF, ETF, eROC portals; 5 news RSS feeds (every 2h)                |
-| E     | Summarisation      | Stage-E summariser — **specified, not built**. Method: field-grounded constrained generation, [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) → `summary_en` |
-| E2    | Translation        | NLLB-200 on a Colab GPU, pulled from `m1_translation_jobs` → `title_si/ta`, `summary_si/ta` — shipped 2026-07-31, see [10_M1_Sinhala_Tamil_NLP.md §10](10_M1_Sinhala_Tamil_NLP.md) |
+| E     | Summarisation      | **Backend slice shipped and live-backfilled.** The deterministic 80-English audit passed 80/80; four false sentence-count reviews were repaired, leaving 7 genuine low-margin reviews. Human faithfulness review, review UI, and full coverage remain open. See [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) |
+| E2    | Translation        | NLLB-200 pull worker shipped, but the SI/TA numeric audit passed only 10/152 checks. 144 replacement jobs are queued; worker/tunnel recovery and re-audit remain open. See [10_M1_Sinhala_Tamil_NLP.md §10](10_M1_Sinhala_Tamil_NLP.md) |
 | F     | Alerting           | Celery + Redis → sector-matched SME notifications (email/SMS/dashboard)             |
 | G     | Lag Measurement    | Propagation timestamps + SME survey → research findings (RQ3, RQ4)                  |
 
@@ -206,3 +216,45 @@ The following older M1 documents (outside the `m1/` directory) served as the sou
 | `backend/research/12_Module1_End_to_End_Workflow.md` | Happy path timeline, secondary-source matching, 9-failure-modes table, definition-of-done, research findings table, 4 notebooks structure, inter-module connections |
 | `backend/BUILD_PLAN/BUILD_07_Module1_Awareness.md` | Stage-wise acceptance criteria, cross-module linkage (M1→M2→M3 chain), code paths |
 | `backend/research/module_1_and_4_data_architecture.md` | T0-T9 diffusion timeline, 15-source catalogue, 5 additional DB tables, 2 analytical views, multi-pin adapter worked example, survey instrument Q1-Q8 |
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** the whole report — Part I is the four-member group draft, Part II is the Module 1 dissertation.
+
+### The report is one revision behind this ledger
+
+| Claim | Submitted report says | Truth ledger (2026-08-02) |
+|---|---|---|
+| Production model | XLM-R + LoRA, dual head, ONNX INT8 | **TF-IDF + LinearSVC V6**, frozen |
+| XLM-R status | the production architecture | **trained and rejected** — temporal test 0.743563 |
+| Headline score | test macro-F1 0.6415, `gate_pass: false` | **0.947220** temporal test, gate passed |
+| Confidence | calibrated probability, gate 0.55 | uncalibrated **margin**; `confidence: null`; threshold 0.40 provisional |
+| Sector output | 3-label sigmoid head, served | **no sector model in production** — `sectors: []` |
+| Gold dataset | 800 rows | **1128 gold → 1110 ML rows**, fixed split 777 / 166 / 167 |
+| ONNX artifact | exported and serving | **never exported** |
+
+**How to read this.** The report is the *earlier* artefact. Where the two disagree, this vault is authoritative and the report is a record of what was believed at submission time. The report's XLM-R material is preserved as design rationale, not as a description of what serves.
+
+### Operating evidence backing this ledger
+
+From `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json` (generated 2026-08-01T19:30:15Z):
+
+| Signal | Value |
+|---|---:|
+| Classifier backend | `linearsvc` |
+| Regulations classified | 898 |
+| Rows carrying a margin | 898 |
+| Margin min / p10 / p50 / p90 / max | 0.008653 / 1.12149 / 1.809804 / 2.081984 / 2.245461 |
+| Configured review threshold | 0.40 |
+| Rows below threshold (active queue) | 18 |
+| Threshold decision | `provisional_no_review_outcomes` |
+| Stage-E English summary pass rate | 80 / 80 = 100% |
+| Stage-E numeric-locale pass rate | 10 / 152 = **6.58%** |
+| Stage-E rows requiring review | 7 |
+| SME survey sessions / completed | 0 / 0 against a target of 100 |
+
+Two of those are the honest weak points: **numeric-locale checking passes 6.58%**, and **SME recruitment stands at zero against a target of 100**. Neither is visible in the submitted report.

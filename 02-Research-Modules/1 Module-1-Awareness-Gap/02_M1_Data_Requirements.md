@@ -4,6 +4,14 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — where each of the 9 `m1_*` tables is owned in the project tree
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `02_M1_1_Data_Sources_Catalogue`, `02_M1_2_Database_Schema_Validation`, `02_M1_3_Data_Governance_Retention`, and `02_M1_4_Worked_Examples_All_Tables`. Those four files have been retired; every per-source operations row, CHECK constraint, Pydantic validator, `EXPLAIN ANALYZE` trace, retention rule, S3 lifecycle rule, worked example, and as-shipped build note from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> The 9 `m1_*` table schemas here are current, but **two classifier columns were added after this document was written** and must be treated as part of the contract:
+> `classifier_decision_margin numeric(10,6) NULL` and `classifier_model_name varchar(64) NULL`, added by migration `202608010001` and verified live on Supabase.
+> `classifier_confidence numeric(3,2)` was **deliberately left unchanged and is now nullable in practice** — it is written only when the dormant `onnx` backend classifies a row.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -247,7 +255,9 @@ All ingested gazette data maps to the `m1_regulations` table in PostgreSQL. The 
 | `summary_ta` | TEXT | Yes | Tamil translation of summary | Stage E |
 | `change_category` | TEXT | Yes | 8-domain code (see taxonomy) | Stage C (classified) |
 | `category_baseline` | TEXT | Yes | TF-IDF+SVM prediction for ablation | Stage C |
-| `confidence` | NUMERIC(4,3) | Yes | XLM-R softmax probability [0–1] | Stage C |
+| `classifier_confidence` | NUMERIC | Yes | Probability only for a probability-capable backend; **NULL for production LinearSVC** | Stage C |
+| `classifier_decision_margin` | NUMERIC(10,6) | Yes | Uncalibrated LinearSVC ranking margin; never display as a percentage | Stage C |
+| `classifier_model_name` | VARCHAR(64) | Yes | Model/backend identity required to interpret the score fields | Stage C |
 | `domain_code` | TEXT | Yes | High-level regulatory domain | Stage C |
 | `severity_level` | TEXT | Yes | `low` / `medium` / `high` / `critical` | Stage C |
 | `is_sme_relevant` | BOOLEAN | No | Whether regulation affects SMEs | Stage C |
@@ -261,7 +271,7 @@ All ingested gazette data maps to the `m1_regulations` table in PostgreSQL. The 
 | `real_world_example_en` | TEXT | Yes | Narrative SME impact example | Manual/LLM |
 | `real_world_example_si` | TEXT | Yes | Sinhala example | Stage E |
 | `real_world_example_ta` | TEXT | Yes | Tamil example | Stage E |
-| `needs_review` | BOOLEAN | No | True if confidence < 0.70 | Stage C |
+| `needs_review` | BOOLEAN | No | Review decision from the active backend/configuration; not a universal confidence < 0.70 rule | Stage C |
 | `is_verified` | BOOLEAN | No | Admin expert-confirmed | Stage D (manual) |
 | `expert_verified` | BOOLEAN | No | CA/legal professional verification | Admin action |
 | `expert_verified_by` | TEXT | Yes | Verifier name | Admin action |
@@ -611,7 +621,9 @@ class RegulationIn(BaseModel):
     gazette_published_date: date
     primary_language: Literal["en","si","ta","mixed"] | None = None
     change_category: CategoryCode | None = None
-    confidence: float | None = Field(None, ge=0.0, le=1.0)
+    classifier_confidence: float | None = Field(None, ge=0.0, le=1.0)
+    classifier_decision_margin: float | None = Field(None, ge=0.0)
+    classifier_model_name: str | None = None
     affected_sectors: list[SectorCode] = Field(default_factory=list)
     needs_review: bool = False
 
@@ -621,14 +633,9 @@ class RegulationIn(BaseModel):
             raise ValueError("classified row requires change_category")
         return self
 
-    @model_validator(mode="after")
-    def low_confidence_marks_review(self) -> "RegulationIn":
-        if self.confidence is not None and self.confidence < 0.70 and not self.needs_review:
-            raise ValueError("confidence < 0.70 implies needs_review=True")
-        return self
 ```
 
-`low_confidence_marks_review` is the invariant Layer 1 cannot express, because it couples a numeric threshold to a boolean flag rather than restricting a single column's domain. It is also the rule that makes the "< 20 % flagged for manual review" metric in [01_M1_Research_Problem.md](01_M1_Research_Problem.md) §5 meaningful — without it, `needs_review` would be whatever the classifier task remembered to set.
+There is deliberately no universal `confidence < 0.70` validator. Review semantics belong to the active backend and configuration: the production LinearSVC uses an optional decision-margin cutoff; a probability-capable backend may use confidence; and an unconfigured compatible threshold must report `mode='disabled'`. The response contract and `classifier_model_name` keep those signals interpretable instead of collapsing them into one misleading field.
 
 ### 3.4 Layer 3 — Nightly Data-Quality Job
 
@@ -843,15 +850,17 @@ flowchart TD
     BPLUS2 --> BPLUS5[(INSERT m1_sub_documents<br/>one row per detected section<br/>part/schedule/section/notice/numbered_clause/preamble)]
 
     BPLUS3 --> C1[Stage C: Classification<br/>classify_gazette Celery task]
-    C1 --> C2[XLM-R Inference<br/>8-domain softmax]
-    C1 --> C3[TF-IDF+SVM<br/>Baseline inference]
-    C2 --> C4[Sector Mapper<br/>3-sector multi-label]
-    C4 --> C5[(UPDATE m1_regulations<br/>change_category, confidence<br/>affected_sectors, status=classified)]
+    C1 --> C2[TF-IDF + balanced LinearSVC<br/>production 8-domain category]
+    C1 -.->|optional| C3[Legacy ONNX backend<br/>unpromoted]
+    C2 --> C5[(UPDATE m1_regulations<br/>change_category, decision_margin, model_name<br/>confidence=NULL, status=classified)]
+    C3 --> C5B[(Optional backend writes<br/>its own confidence/sector semantics)]
 
-    C5 --> E1[Stage E: Summarization<br/>MarianMT EN to SI and TA]
-    E1 --> E2[(UPDATE m1_regulations<br/>summary_en, summary_si<br/>summary_ta, status=summarized)]
+    C5 --> E1[Stage E: Anchor-bound summary<br/>provenance + quality flags]
+    C5B --> E1
+    E1 --> E2[(UPDATE m1_regulations<br/>summary_en, summary_status<br/>source hash + model version)]
+    E2 --> E3[NLLB translation queue<br/>summary_si / summary_ta drafts]
 
-    E2 --> F1[Stage F: Alert Dispatch<br/>Celery + Redis]
+    E3 --> F1[Stage F: Alert Dispatch<br/>Celery + Redis]
     F1 --> F2[(INSERT m1_propagation_events<br/>channel=alert_delivery)]
 ```
 
@@ -1431,3 +1440,31 @@ Together these structures provide the measurement substrate for all four researc
 - SQLAlchemy. (2024). *Declarative Mapping*. [docs.sqlalchemy.org](https://docs.sqlalchemy.org)
 - Pydantic. (2024). *Data validation using Python type hints*. [docs.pydantic.dev](https://docs.pydantic.dev)
 - Amazon Web Services. (2024). *S3 Lifecycle Configuration*. [docs.aws.amazon.com](https://docs.aws.amazon.com)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I §5.2.4 (database design), Figure 9 (entity-relationship design) and Table 5.1 (principal Module 1 database objects); Part II Figure 5.7.
+
+### Schema delta since this document was written
+
+| Object | Type | Added by | Live state |
+|---|---|---|---|
+| `classifier_decision_margin` | `numeric(10,6)`, nullable | `202608010001` | ✓ verified |
+| `classifier_model_name` | `varchar(64)`, nullable | `202608010001` | ✓ verified |
+| CHECK constraint | `margin IS NULL OR margin >= 0` | `202608010001` | ✓ verified |
+| Partial index | `WHERE classifier_decision_margin IS NOT NULL` | `202608010001` | ✓ verified |
+| `m1_translation_jobs`, `m1_translation_workers` | tables | translation workstream | ✓ applied in the same upgrade |
+
+Alembic chain: 53 migrations, single head, `alembic_version = 202608010001`. Target is the Supabase session pooler (`aws-0-ap-southeast-1`, port 5432) — there is no local Postgres container.
+
+### The column contract that matters
+
+A row carries **either** a confidence **or** a margin, depending on which engine classified it, and never a margin coerced into the probability column. Any consumer that reads `classifier_confidence` and assumes a number will see NULL on every LinearSVC-classified row — which is all 898 of them today.
+
+### Report cross-reference
+
+The report's Table 5.1 lists the same principal objects but predates both new columns and describes `classifier_confidence` as always populated. Treat this document as the schema of record.

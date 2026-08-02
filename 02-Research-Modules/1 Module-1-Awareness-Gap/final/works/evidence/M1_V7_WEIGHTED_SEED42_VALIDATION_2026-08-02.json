@@ -1,0 +1,62 @@
+{
+  "experiment": "v7_weighted_seed42_validation_only",
+  "run_date": "2026-08-02",
+  "seed": 42,
+  "diagnostic_only": true,
+  "test_split_loaded": false,
+  "claim_eligible": false,
+  "promotion_allowed": false,
+  "train_rows": 773,
+  "validation_rows": 163,
+  "category_weights": [
+    1.665948275862069,
+    1.2387820512820513,
+    0.20385021097046413,
+    24.15625,
+    1.8581730769230769,
+    2.6840277777777777,
+    3.865,
+    2.1005434782608696
+  ],
+  "sector_pos_weights": [
+    2.9238579273223877,
+    2.8844220638275146,
+    3.392045497894287
+  ],
+  "best_validation": {
+    "epoch": 13,
+    "selection_macro_f1": 0.8920867808410731,
+    "category_macro_f1": 0.8998619213932764,
+    "category_prediction_counts": {
+      "SECTOR_SPECIFIC": 90,
+      "PRODUCT_STANDARD": 7,
+      "EPF_ETF_CHANGE": 2,
+      "LABOUR_LAW": 15,
+      "IMPORT_EXPORT": 21,
+      "BUSINESS_REGISTRATION": 6,
+      "TAX_RATE_CHANGE": 13,
+      "PENALTY_ENFORCEMENT": 9
+    },
+    "sector_macro_f1": 0.8843116402888699,
+    "sector_micro_f1": 0.8847583643122676,
+    "sector_exact_set_match": 0.9079754601226994,
+    "partial_sector_exact_match": 0.4444444444444444,
+    "partial_sector_validation_rows": 9,
+    "all_three_prediction_share": 0.26993865030674846,
+    "predicted_sector_sets": {
+      "000": 112,
+      "101": 1,
+      "111": 44,
+      "001": 2,
+      "110": 4
+    }
+  },
+  "elapsed_seconds": 284.11,
+  "decision": "stop_before_three_seed_or_test",
+  "decision_reason": "Category macro-F1 remains below 0.92 and only nine partial-sector validation rows exist.",
+  "next_evidence": [
+    "fresh temporal holdout",
+    "genuine EPF/ETF regulations",
+    "genuine one-sector and two-sector regulations"
+  ]
+}

@@ -4,6 +4,14 @@
 > **Code map:** [13_M1_Folder_Structure_and_Implementation_Flow.md](13_M1_Folder_Structure_and_Implementation_Flow.md) — Fly volume layout, rollback path, inference Celery task; `ml/m1/model/export_onnx.py`, `ml/m1/model/inference.py`, `backend/app/tasks/m1/classify_gazette.py`, `fly.toml`.
 > **Consolidation note (2026-07-29):** this document now carries the full content previously split across `07_M1_1_ONNX_Export_Quantization` and `07_M1_2_Fly_io_Deployment_Operations`. Those two files have been retired; every export flag, quantization script, calibration reader, machine-sizing table, canary implementation, health check, and cost alert from them lives below.
 
+> [!warning] Truth-ledger sync — 2026-08-02
+> **This is the most out-of-date document in the set.** It specifies ONNX export, INT8 quantization and Fly.io serving for an XLM-R + LoRA model that was **rejected and never exported**.
+> What actually deploys: a joblib-serialised scikit-learn pipeline loaded in-process by the backend behind `M1_CLASSIFIER_BACKEND` (default `linearsvc`). There is no ONNX session, no quantization step and no Fly volume in the live path.
+> The ONNX/Fly.io material below is retained as the **contingency design** for the dormant `onnx` backend — it is not a description of production.
+>
+> **Canonical record:** [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] · [[18_M1_Dataset_And_Model_Lineage]] · `final/works/evidence/M1_OPERATING_EVIDENCE_2026-08-02.json`
+> **Submitted-report copy:** [[final/report/Enigmatrix_Consolidated_Final_Report_FULL|Enigmatrix_Consolidated_Final_Report_FULL]] (Part I = group report, Part II = Module 1 dissertation).
+
 ---
 
 ## 0. Where This Document Sits in the Pipeline
@@ -51,7 +59,7 @@ flowchart LR
 
 ## Abstract
 
-This document specifies the production deployment architecture for the trained XLM-R + LoRA gazette classifier, covering ONNX export and quantization, inference serving, caching, API integration, and platform selection and operations. Four deployment platforms are evaluated — Render, Railway, Fly.io, and AWS SageMaker — and the self-hosted Fly.io approach with ONNX Runtime CPU inference is selected for its cost predictability, offline-compatible serving, zero cold-start penalty, and persistent-volume rollback path.
+This document specifies the deployment architecture that *was designed* for a trained XLM-R + LoRA gazette classifier, covering ONNX export and quantization, inference serving, caching, API integration, and platform selection and operations. **As of 2026-08-02 none of it is the live path** — see the truth-ledger banner above and §∞ below. It is retained as the contingency design for the dormant `onnx` backend. Four deployment platforms are evaluated — Render, Railway, Fly.io, and AWS SageMaker — and the self-hosted Fly.io approach with ONNX Runtime CPU inference is selected for its cost predictability, offline-compatible serving, zero cold-start penalty, and persistent-volume rollback path.
 
 The trained model is exported to ONNX format (opset 17) with dynamic batch and sequence axes, validated to within 1e-4 of the PyTorch model, and optionally quantized to INT8 for a 2× speedup at a measured 0.9 pp macro-F1 cost. It is served via a FastAPI inference endpoint integrated into the existing Enigmatrix backend, behind a Redis cache keyed on model version plus gazette identity. End-to-end latency from gazette ingestion to API response is targeted at ≤ 2 seconds per gazette, and model version changes roll out through a hash-bucketed canary with a sixty-second rollback.
 
@@ -827,3 +835,50 @@ The Redis cache layer eliminates redundant inference for duplicate gazette submi
 - Celery. (2024). *Celery: Distributed Task Queue*. [docs.celeryq.dev](https://docs.celeryq.dev)
 - Hu et al. (2021). *LoRA: Low-Rank Adaptation of Large Language Models*. [arxiv.org/abs/2106.09685](https://arxiv.org/abs/2106.09685)
 - Redis. (2024). *Redis Documentation*. [redis.io/docs](https://redis.io/docs)
+
+---
+
+## ∞ Final-report reconciliation (2026-08-02)
+
+*Added by the 2026-08-02 consolidation pass. Maps this document onto the submitted final report and records where the two disagree.*
+
+**Where this document appears in the report:** Part I §3.14 (storage and deployment), Table 3.7 (storage and deployment layers) and Figure 4 (deployment-level component view); Part II Figure 5.2.
+
+### What actually deploys
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `M1_CLASSIFIER_BACKEND` | `linearsvc` | `linearsvc` (frozen primary) or `onnx` (dormant XLM-R dual-head) |
+| `M1_MODEL_LINEARSVC_DIR` | `models/m1/linearsvc_v6_primary` | resolved against cwd, then the workspace root |
+| `M1_MODEL_ONNX_DIR` | `storage/models/m1/onnx/v1` | **empty — no artifact was ever exported** |
+| `M1_CLASSIFIER_MIN_CONFIDENCE` | `0.55` | **ONNX path only** — calibrated probability threshold |
+| `M1_CLASSIFIER_MIN_MARGIN` | *(unset)* | LinearSVC path — margin threshold, disabled by default; `.env.example` opts into 0.40 |
+
+Path resolution tries cwd, then the workspace root, then falls back to the cwd form so the error message names the path an operator expects. This matters because artifacts live one level above the backend package and the service can legitimately start from either directory.
+
+### The crash that reading prevented
+
+`classify_gazette.py` contained `Decimal(str(round(result["confidence"], 2)))` and `result["confidence"] < MIN_CONFIDENCE`. The LinearSVC engine returns `confidence: None` by design, so pointing the existing service at the new engine would have raised `TypeError` on **every row** — a total pipeline outage on the first gazette. It was found by reading the call site before switching the backend, not by running it. That is worth recording as a process result, not just a bug fix.
+
+### The inference payload contract
+
+```json
+{
+  "confidence": null,
+  "confidence_type": "not_available_uncalibrated_linearsvc",
+  "decision_score": 1.84,
+  "decision_margin": 0.97,
+  "second_category": "TAX_RATE_CHANGE",
+  "second_decision_score": 0.87,
+  "class_scores": { "…": "…" }
+}
+```
+
+| Permitted | Not permitted |
+|---|---|
+| Ranking rows against each other | Displaying a margin as a percentage |
+| Prioritising a review queue | Thresholding as though 0.5 meant "50% sure" |
+
+### Tests at the freeze
+
+6 targeted + 3 export + 7 chunk-contract tests; the non-slow M1 model suite runs **26 passed, 2 deselected**, reproduced three times. `py_compile` clean across five backend modules.
