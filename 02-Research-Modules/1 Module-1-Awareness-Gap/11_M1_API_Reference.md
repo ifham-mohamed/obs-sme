@@ -1379,3 +1379,42 @@ Three contract inconsistencies surfaced during consolidation and are recorded as
 ### Live queue state (2026-08-01)
 
 898 rows classified, all carrying a margin. At the `.env.example` candidate threshold of 0.40, **18 rows** fall below and form the active queue. The threshold decision is recorded as `provisional_no_review_outcomes` — nine validation errors are too thin to freeze an operating point, so this number will move.
+
+---
+
+## ∞ · Classification response — the RA-HMT four-output shape (2026-08-03)
+
+`M1_CLASSIFIER_BACKEND` now selects among three backends. The response shape is **stable
+across all three**, so no client has to branch on the backend name: the RA-HMT-only fields
+are present as `null`/empty on `linearsvc` and `onnx`.
+
+| Field | `linearsvc` (default) | `rahmt` | `onnx` |
+|---|---|---|---|
+| `category` | ✅ | ✅ | ✅ |
+| `confidence` | **`null` by design** | ✅ calibrated probability | ✅ softmax probability |
+| `confidence_type` | `not_available_uncalibrated_linearsvc` | `calibrated_temperature_scaled` | — |
+| `decision_score` / `decision_margin` | ✅ uncalibrated margin | ✅ derived from the calibrated distribution | — |
+| `class_scores` | ✅ margins | ✅ probabilities summing to 1 | — |
+| `sectors` | `[]` | ✅ multi-label | ✅ |
+| `sector_output_available` | `false` | `true` | `true` |
+| `sector_output_type` | `not_supported_by_primary_model` | `model_multilabel_calibrated` | `model_multilabel` |
+| `is_sme_relevant` | `null` | ✅ boolean | `null` |
+| `status` | `null` | `AUTO_ACCEPT` \| `REVIEW_RECOMMENDED` \| `HUMAN_REVIEW_REQUIRED` | `null` |
+| `evidence_snippet` | `""` | ✅ sentence drawn from the record's own text | `""` |
+| `confidence_breakdown` | `{}` | `{domain, sector, sme_relevance, overall}` | `{}` |
+| `active_branches` | `[]` | e.g. `["tfidf","xlmr","retrieval","rules"]` | `[]` |
+| `language` | `null` | `en` \| `si` \| `ta` \| `mixed` \| `unknown` | `null` |
+| `needs_review` | margin `<` `M1_CLASSIFIER_MIN_MARGIN` | abstention rung at or worse than `M1_RAHMT_REVIEW_STATUS` | `confidence <` `M1_CLASSIFIER_MIN_CONFIDENCE` |
+
+**The `confidence` rule for API clients is unchanged and still binding on the default
+backend:** when `confidence_type` is `not_available_uncalibrated_linearsvc`, `confidence` is
+`null` and `decision_margin` must never be rendered as a percentage. On the `rahmt` backend
+`confidence` **is** a calibrated probability (test domain ECE `0.0319`) and may be shown as
+one. `hasCalibratedConfidence()` in `enigmatrix-frontend/lib/m1/classifier-display.ts` is the
+single check that decides this.
+
+**Health:** `classifier_status()` gains `confidence_type`, `evidence_available`,
+`relevance_output_available` and a `model` block carrying the artifact directory, active
+branches, fitted weights, temperature and thresholds when the backend is `rahmt`.
+
+Design and measurements: [[24_M1_RAHMT_Hybrid_Architecture]].

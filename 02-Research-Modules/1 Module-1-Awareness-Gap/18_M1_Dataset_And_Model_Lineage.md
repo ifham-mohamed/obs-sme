@@ -601,7 +601,70 @@ If a future correction bundle is uploaded as its own Kaggle dataset, download it
 - **Architecture and sampling:** [[05_M1_Model_Architecture]]
 - **Annotation, taxonomy and IAA protocol:** [[09_M1_Annotation_Guidelines]]
 - **Physical layout of `datasets/` and `models/`:** [[17_M1_Repo_Structure_Map]]
+- **Duplicate-text disclosure (dataset-card addendum):** §∞ below
 - **Full chronology with every epoch and error:** `documentation/m1/records/ENIGMATRIX_M1_COMPLETE_END_TO_END_RECORD_2026-07-31_2313_IST.md`
+
+---
+
+## ∞ Duplicate-text disclosure — V6 (2026-08-03)
+
+*Dataset-card addendum requested by [[23_M1_Retrieval_Augmented_Evidence_Branch|23_M1_Retrieval_Augmented_Evidence_Branch]] §7.2. Produced by `enigmatrix-ml/scripts/inventory_m1_datasets.py` against the V6 files on disk. Full session record: [[2026-08-03_Branch_C_Retrieval_Evidence_Implementation|2026-08-03_Branch_C_Retrieval_Evidence_Implementation]].*
+
+### What is in the canonical V6 split
+
+`m1_regulations_v6_1110_clean_fixedsplit` (777 / 166 / 167) contains **8 groups of byte-identical text under different keys** — 16 rows, all `SECTOR_SPECIFIC`. Three groups straddle train↔val:
+
+| Group | Keys | Splits | Chars |
+|---|---|---|---|
+| dup_001 | `GZT_2483_26`, `GZT_2483_31` | **train + val** | 1176 |
+| dup_002 | `GZT_2483_46`, `GZT_2483_54` | **train + val** | 404 |
+| dup_003 | `GZT_2493_63`, `GZT_2493_64` | **train + val** | 348 |
+| dup_004 | `GZT_2469_26`, `GZT_2469_27` | train | 338 |
+| dup_005 | `GZT_2483_59`, `GZT_2483_63` | test | 1223 |
+| dup_006 | `GZT_2485_45`, `GZT_2488_65` | train | 1190 |
+| dup_007 | `GZT_2487_18`, `GZT_2487_19` | train | 348 |
+| dup_008 | `GZT_2493_95`, `GZT_2495_13` | train | 447 |
+
+This reproduces the Step-41 audit ("8 within-split duplicate-text rows and 6 train–val overlap rows") exactly, independently, on the current files.
+
+### Why `dataset_manifest_v6.json` reports zero leakage
+
+The manifest's `leakage: {train_val: 0, train_test: 0, val_test: 0}` is **true as written**. It is a *key*-based check and the keys genuinely do not overlap. It cannot detect the same text filed under two different keys. This is a gap in the check, not an incorrect entry — and it is why the audit now also hashes text.
+
+### Effect on the recorded numbers
+
+> [!warning] Validation macro-F1 0.9245 is optimistic; test macro-F1 0.9472 is not.
+> **3 of 166 validation rows (1.8%)** are byte-identical to a training row. The direction of the bias is known; the magnitude is **not**, because the model may have classified those rows correctly regardless. There is **no train↔test text duplication** — dup_005 is a test↔test pair — so the temporal test number is unaffected. **Quote the test number.**
+
+### Why the de-leaked split is not the canonical one
+
+A cleaned 1103-row / 773-163-167 variant was built and appears in [[22_M1_Data_Usage_and_Row_Count_Register|22_M1_Data_Usage_and_Row_Count_Register]] as the **"V7-W working"** row. That experiment collapsed and was rejected, and the de-leaked artifact went with it — it does not exist in `datasets/`. `linearsvc_v6_primary` is therefore registered against the 1110-row split that still contains the 6 overlap rows.
+
+### The 18 excluded OCR-noise rows
+
+`dataset_manifest.json` records `excluded_ocr_noise_rows: 18` for the V4→V5 clean step. Their full text was extracted for the first time on 2026-08-03 and the exclusion is **confirmed correct**: lengths 2–26 characters, median 8, all labelled `SECTOR_SPECIFIC`.
+
+```
+GZT_2469_28 (5 chars):  '1A 2A'
+GZT_2471_06 (2 chars):  '2A'
+GZT_2471_08 (12 chars): '2A BWග 4A 6A'
+GZT_2471_11 (17 chars): '1A 2A 3A 4A 5A 6A'
+```
+
+They are retrievable for re-inspection in `datasets/m1_regulations_unified_v6core/excluded_rows_for_review.csv` and are never training data.
+
+### Undocumented V5 whitespace normalisation
+
+V4_clean and V5 have **identical 1110-key sets**. 409 texts differ byte-for-byte between them but **0 differ after whitespace normalisation** — V5 applied a whitespace clean-up that its manifest records only as 3 label changes. Benign, recorded here for completeness.
+
+### Open decision
+
+Two defensible dispositions, and this is a lineage call rather than a cleanup task:
+
+1. **Keep V6 as-is and caveat the validation number** with the 1.8% disclosure above. Zero risk; the frozen primary stays comparable. *Current state.*
+2. **Rebuild the 1103-row de-leaked split as a canonical artifact and re-measure Branch A on it.** This invalidates the recorded 0.9245, changes the validation split, and requires a re-freeze plus a new registry entry.
+
+Either way: **on the next re-split, deduplicate on normalised text hash, not just on `key`.** That is the fix for this entire class of defect, and it is one line of the split script.
 
 ---
 
@@ -865,3 +928,51 @@ Upload folder and file manifest: [[03_M1_Data_Collection]] §∞ Step 54A. Evalu
 ### Standing constraint added
 
 8. **The V7-M test split is consumed and old Step 50 must never be rerun.** One pre-declared read, one rejection, done. No later candidate may be selected, tuned, thresholded or compared using those 167 rows or their error table, and no promotion claim may cite them. Promotion now requires the locked fresh holdout or another newly collected set.
+
+---
+
+## ∞ · RA-HMT model lineage — 2026-08-03
+
+A sixth model line now exists. It does **not** replace the frozen primary; the artifact,
+its SHA256 and the confidence contract recorded above are unchanged.
+
+### Line: Gazette-SME-RA-HMT (V7 fixed split, 777 / 166 / 167)
+
+| Component | Artefact | Notes |
+|---|---|---|
+| Branch A | `results/branch_a/branch_a_models.joblib` (10.3 MB) | TF-IDF **word + char** n-grams, `CalibratedClassifierCV`, three targets, 5-fold OOF. Distinct from `linearsvc_v6_primary`, which is word-only, uncalibrated and category-only |
+| Branch B | `results/branch_b/{lora_adapter/, heads.pt, tokenizer/}` | LoRA adapter 3.5 MB + three task heads 39 KB. Base `xlm-roberta-base` @ `e73636d4f797dec63c3081bb6ed5c7b0bb3f2089` is **not** in the bundle |
+| Branch C | `results/branch_c/{index_train.npz, index_labels.csv}` | 777 × 768 float32, L2-normalised, train rows only. Encoder `intfloat/multilingual-e5-base` @ `d128750597153bb5987e10b1c3493a34e5a4502a` |
+| Fusion | `results/fusion/fusion_config.json` | `tfidf 0.35 · retrieval 0.30 · rules 0.20 · xlmr 0.15`; T `0.4625`; relevance `0.52`; sectors `0.50 / 0.50 / 0.43` |
+| Provenance | `results/_huggingface_repos.json`, `*_manifest.json`, `*_training.log` | Per-branch manifests and training logs retained beside each branch |
+
+### Where it sits in the comparison table
+
+| Model | Domain macro-F1 | Sectors | Relevance | Confidence | Evidence | Promoted |
+|---|---|---|---|---|---|---|
+| V3 stratified LinearSVC | 0.9080 | — | — | none | none | no — missed the 0.92 gate |
+| **V6 LinearSVC (frozen primary)** | **0.9472** temporal | — | — | none by design | none | **yes** |
+| XLM-R + LoRA (category) | 0.7436 temporal | — | — | softmax | none | no — generalisation failure |
+| V7-M multitask seed 1 | 0.9105 | 0.8883 | 0.92 | softmax | none | no — failed sector ≥ 0.90 |
+| V7-M seed 13 | validation only | validation only | validation only | — | — | no — never tested |
+| **RA-HMT full (V7 split)** | **0.9351** | **0.9014** | **0.9400** | **calibrated, ECE `0.0319`** | **167/167** | **no — gate below** |
+
+The `0.9472` and `0.9351` figures are **not directly comparable**: the frozen primary was
+scored on the V6 *temporal* test, RA-HMT on the V7 fixed-split test. The comparable pair is
+RA-HMT `0.9351` against its own Branch A `0.9197` on the same 167 rows — `+0.0155`, 95% CI
+`[−0.0411, +0.0767]`, `p = 0.548`.
+
+### Standing constraints this line adds
+
+1. **The V7 fixed-split test is now consumed** by RA-HMT's single scored read. It may not
+   inform any later selection, tuning or claim ([[22_M1_Data_Usage_and_Row_Count_Register]]).
+2. **Promotion requires the fresh holdout v3.** Validation `0.9428` is a selection figure.
+   The V7-M candidate looked equally good on validation and then failed its gate on real
+   held-out data.
+3. **The Branch C encoder is part of the artefact, not a configuration choice.** A different
+   encoder produces a different vector space; every cosine similarity against
+   `index_train.npz` would be meaningless.
+4. **Rebuilding the index is a retraining event** with its own leakage checks. The index must
+   never contain val, test or holdout rows.
+
+Full write-up: [[24_M1_RAHMT_Hybrid_Architecture]].

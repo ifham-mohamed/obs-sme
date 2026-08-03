@@ -297,3 +297,81 @@ py -3 C:\Reasearch\xyz\scripts\_alembic_state_check.py                  # read-o
 - **Training method and acceptance criteria:** [[06_M1_Training_Evaluation]]
 - **API response contract:** [[11_M1_API_Reference]]
 - **Status ledger:** [[03_FEATURE_CHECKLIST]]
+
+---
+
+## ∞ · The RA-HMT backend — added 2026-08-03
+
+The freeze recorded above still holds. This section records a **third selectable backend**
+added beside it, and is explicit about what has *not* changed.
+
+### What did not change
+
+* `M1_CLASSIFIER_BACKEND` still defaults to **`linearsvc`**.
+* `models/m1/linearsvc_v6_primary/linearsvc_pipeline.joblib` is untouched; its SHA256 is unchanged.
+* `LinearSVCGazetteInference` is unmodified. It still returns `confidence=None` with
+  `confidence_type='not_available_uncalibrated_linearsvc'`, and the "a margin is not a
+  percentage" guard in the frontend is unchanged.
+* No production classification was re-run, and no `m1_regulation_sectors` row was written by a model.
+
+### What was added
+
+| Layer | File | Change |
+|---|---|---|
+| ML | `enigmatrix-ml/m1/model/rahmt_inference.py` | `RAHMTGazetteInference` — new serving adapter |
+| ML | `enigmatrix-ml/m1/model/__init__.py` | lazy export, matching the existing `__getattr__` pattern |
+| Backend | `enigmatrix-backend/app/settings.py` | `M1_MODEL_RAHMT_DIR`, `M1_RAHMT_PACKAGE_ROOT`, `M1_RAHMT_USE_XLMR`, `M1_RAHMT_USE_RETRIEVAL`, `M1_RAHMT_REVIEW_STATUS`, `M1_RAHMT_SPLIT_UNITS` |
+| Backend | `app/m1/services/classifier_service.py` | `rahmt` branch in `model_dir()`, `_engine()`, `_SERVING_DEPS`, `_needs_review()`, `_sector_contract()`, `classify_text()`, `classifier_status()` |
+| Frontend | `enigmatrix-frontend/lib/m1/classifier-display.ts` | `isRahmtOutput`, `hasCalibratedConfidence`, `abstentionLabel/Tone/Title`, `formatSectors`, `relevanceLabel/Tone`, `fourOutputSummary()` |
+
+Artifact root: `m1_rahmt/results` — `branch_a/ branch_b/ branch_c/ fusion/`. Validated by
+`m1_rahmt/scripts/validate_artifacts.py`. Design and measurements:
+[[24_M1_RAHMT_Hybrid_Architecture]].
+
+### Four decisions this section exists to record
+
+**1. The adapter locates the research package; it does not vendor it.** `m1_rahmt/src` is the
+artefact the thesis is written against. A second copy inside `enigmatrix-ml` would drift, and
+the drift would be invisible until a number stopped reproducing. `M1_RAHMT_PACKAGE_ROOT`, or
+auto-detection of `m1_rahmt/` next to the workspace root.
+
+**2. Label identity is asserted at load time.** The adapter raises if
+`m1.model.labels.CATEGORIES != src.labels.DOMAINS`, or if the sector orders differ. The fixed
+order is the only thing that makes output index *i* mean class *i*; a silent mismatch would
+relabel every prediction while still looking well-formed.
+
+**3. Review flagging uses the model's own abstention rung.** RA-HMT already routes each record
+from a temperature-calibrated blended confidence (`AUTO_ACCEPT` ≥ 0.85, `REVIEW_RECOMMENDED`
+≥ 0.70, else `HUMAN_REVIEW_REQUIRED`). Re-thresholding that number inside the service would
+decouple the review queue from the calibration the thresholds were fitted with.
+`M1_RAHMT_REVIEW_STATUS` only chooses where to cut.
+
+**4. The response shape is stable across all three backends.** `is_sme_relevant`, `status`,
+`evidence_snippet`, `confidence_breakdown`, `active_branches` and `language` are present as
+`None`/empty on `linearsvc` and `onnx`, so no caller has to branch on the backend name to read
+a record.
+
+### The sector contract changes on promotion — decide before switching
+
+The freeze decision of 2026-08-01 was that the primary model is **category-only**:
+`sector_output_available=false`, and sector assignment stays expert/manual data in
+`m1_regulation_sectors` until a separately evaluated sector model is promoted.
+
+RA-HMT **is** that separately evaluated sector model — multi-label with per-sector thresholds
+tuned on validation (`grocery_retail 0.50`, `food_service 0.50`, `general_retail 0.43`), test
+macro-F1 `0.9014`. Switching `M1_CLASSIFIER_BACKEND=rahmt` therefore also flips sectors from
+expert data to a model output.
+
+That is a data-governance decision, not a config change. Before switching, decide explicitly:
+do model-written sectors overwrite existing expert rows, sit beside them, or land in a review
+queue? Record the answer here.
+
+### Promotion gate
+
+RA-HMT's numbers come from the **V7 fixed-split test**, which that single read consumed. Per
+[[22_M1_Data_Usage_and_Row_Count_Register]], validation figures are selection evidence, not
+promotion evidence — the V7-M candidate looked equally good on validation and then failed its
+gate on real held-out data.
+
+**The gate is: Step 55A fresh-holdout-v3 lock, then one scored read of RA-HMT against it.**
+Until that read exists, the backend stays `linearsvc`.

@@ -882,3 +882,50 @@ Path resolution tries cwd, then the workspace root, then falls back to the cwd f
 ### Tests at the freeze
 
 6 targeted + 3 export + 7 chunk-contract tests; the non-slow M1 model suite runs **26 passed, 2 deselected**, reproduced three times. `py_compile` clean across five backend modules.
+
+---
+
+## ∞ · RA-HMT serving path — 2026-08-03
+
+The ONNX Runtime / INT8 / Fly.io path specified above was never taken: no transformer met
+the promotion gate, so no ONNX artefact was ever exported. The deployed path is the frozen
+LinearSVC primary, and there is now a third selectable backend beside it.
+
+**Serving shape for `M1_CLASSIFIER_BACKEND=rahmt`** ([[24_M1_RAHMT_Hybrid_Architecture]] §11):
+
+```
+Celery worker process
+  └── classifier_service._engine()          @lru_cache(maxsize=1)
+        └── m1.model.RAHMTGazetteInference
+              └── src.predict.RAHMTPredictor      loaded ONCE per process
+                    ├── Branch A  joblib pipeline        ~10 MB
+                    ├── Branch B  xlm-roberta-base + LoRA + heads   ~1.1 GB RSS
+                    ├── Branch C  multilingual-e5-base + 777×768 index  ~1.1 GB RSS
+                    └── rules     in-process keyword lexicon
+```
+
+**Load once per process, never per request.** Constructing a predictor per request would
+reload two ~1.1 GB encoders every time. Both `classifier_service._engine()` and
+`src.rahmt_service.get_predictor()` are `lru_cache`d for exactly this reason.
+
+**Resource envelope.** Roughly 2.5 GB RSS with both neural branches loaded, against ~50 MB
+for the LinearSVC primary. On a CPU-only or memory-constrained worker, set
+`M1_RAHMT_USE_XLMR=false` and/or `M1_RAHMT_USE_RETRIEVAL=false`: the fusion layer
+renormalises its weights over the branches that actually loaded, so degrading to Branch A +
+rules is a supported operating point. Its confidence figures are **not** comparable to the
+full system's — the temperature was fitted for the four-branch mixture.
+
+**Base models are not in the artefact bundle.** `branch_b/lora_adapter/` is 3.5 MB of
+adapter matrices; LoRA freezes the pretrained weights, so `xlm-roberta-base` is still needed
+at inference, and Branch C needs the exact encoder that produced its index. The first run on
+a host needs internet, or `results/models/{xlm-roberta-base,multilingual-e5-base}` populated
+in advance. Commit hashes are pinned in `results/_huggingface_repos.json`.
+
+**Pre-flight.** `m1_rahmt/scripts/validate_artifacts.py` exits `2` when `branches_available`
+in `fusion_config.json` is incomplete — weights fitted while a branch was absent, applied
+when it is present, silently mis-weight the ensemble. Run it in the deploy step, not by hand.
+
+**Health.** `classifier_status()` on the `rahmt` backend returns `confidence_available:true`,
+`confidence_type:'calibrated_temperature_scaled'`, `evidence_available:true`, the active
+branch list, the fitted weights and thresholds, and a review rule expressed as an abstention
+rung rather than a raw threshold.

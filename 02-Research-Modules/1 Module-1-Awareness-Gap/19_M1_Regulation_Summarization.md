@@ -37,7 +37,7 @@ This document specifies **field-grounded constrained generation**: the summary i
 
 The claimed contribution is **faithfulness by construction** — hallucination of regulatory figures is prevented structurally rather than detected statistically. §3 gives the measurement that motivates it, including the finding that verbatim-presence checking alone would catch **0 of 52** observed field errors, which is why the design needs anchor binding and not just span grounding.
 
-**Implementation status:** 🟡 **First conservative backend slice built, not final evidence-complete.** As of 2026-08-02 the deterministic 80-English audit passed 80/80, and the sentence counter was repaired after `No.` in Act citations created four false length failures. Seven genuine low-margin classifier reviews remain. The separate SI/TA numeric audit passed only 10/152 locale checks; 144 replacement translation jobs are queued and must be drained and re-audited. These engineering checks do not replace the planned human harm/faithfulness review, production `cleaned_text` diagnostic, or review workflow.
+**Implementation status:** 🟡 **First conservative backend slice built, not final evidence-complete.** As of 2026-08-02 the deterministic 80-English audit passed 80/80, and the sentence counter was repaired after `No.` in Act citations created four false length failures. Seven genuine low-margin classifier reviews remain. The SI/TA numeric audit had passed only 10/152 locale checks under machine translation; **§8.2 replaces MT for summaries with localised composition from the same verified slots, which makes numeric preservation exact by construction rather than something to re-audit** — the 144 queued replacement jobs are correspondingly no longer the path to a correct Sinhala summary. These engineering checks do not replace the planned human harm/faithfulness review, production `cleaned_text` diagnostic, or review workflow, and the SI/TA template wording still needs a native-speaker legal review.
 
 ### 0.1 Current decision
 
@@ -68,6 +68,21 @@ The first built slice implements the safe part of this design:
 | Tests | Added `app/tests/unit/test_m1_summary_service.py`. |
 
 The service currently emits short controlled English evidence summaries using classification context, sector ledger values, ingest gazette identity, anchored effective-date phrases, and simple anchored figure/legal-reference slots. If a hard gate fails — missing source text, missing category, low-margin model row under the configured threshold, ungrounded output literal, unsafe non-SME wording, or length failure — it does **not** write `summary_en`; it records review flags instead.
+
+### 0.3 2026-08-02 slice — routing hold + localised trilingual composition
+
+Two changes, both consequences of the same observation: *a summary is composed from its classification, so it must not exist before the classification does, and once it does exist it is a template rather than prose.*
+
+| Area | Status |
+|---|---|
+| Routing hold | Unrouted rows park at `summary_status='held'` with ordered `summary_hold_reasons` instead of being summarised or silently skipped. §8.1 |
+| Release paths | Four: hourly Beat sweep, Stage-D completion, admin routing save, manual/force endpoint. §8.1 |
+| Localised composition | `summary_si` / `summary_ta` composed from the same verified slots as `summary_en` via `summary_locale.py` — no MT, no GPU, literal parity asserted per row. §8.2 |
+| Summary language of record | New `summary_lang` records the document's own locale (`eng`/`sin`/`tam` → `en`/`si`/`ta`); `mixed`/`unknown` lead with English |
+| Migration | `202608020002` — `held` job + summary statuses, hold-reason arrays, `summary_lang`, and a backfill that parks the pre-existing unrouted summary queue |
+| Percentage extraction fix | `_PERCENT_RE` could never match `%`; every rate change had been summarised without its rate. §9 failure 14 |
+| Model version | `m1_anchor_bound_summary_v1` → `v2`, so a mixed corpus stays attributable |
+| Tests | `test_m1_localised_summary.py` (32 cases), `test_m1_summary_hold_release.py` (17), `test_m1_summary_translation_gate.py` extended 16 → 18 |
 
 ---
 
@@ -514,14 +529,90 @@ Numeric preservation is the highest-value check in the trilingual leg precisely 
 
 ## 8. Trilingual Handoff
 
-The summariser produces `summary_en` and enqueues a translation job. It does **not** translate.
-
 Two rules inherited from [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md) §10 and worth restating because they constrain the English:
 
 1. **Translate from controlled English, never from Sinhala/Tamil OCR.** English is the pivot because it is the only language whose text has been cleaned, verified and constrained.
 2. **Write English that survives translation.** Short declarative clauses; figures adjacent to their units (`Rs. 50.00 per kg`, not `a levy of fifty rupees on each kilogram`); no idioms; no elliptical constructions. R6 is a constraint on the English generator, not a hope about NLLB.
 
-`summary_en` is already an enqueue trigger in the shipped translation pipeline — `preprocess_gazette` tops up any field that became non-empty. **Stage E writing `summary_en` will therefore cause summaries to be queued for translation automatically**, with no new wiring, because the `UNIQUE (regulation_id, field, target_lang)` contract makes re-enqueue free.
+`summary_en` is an enqueue trigger in the shipped translation pipeline — `preprocess_gazette` tops up any field that became non-empty — so Stage E writing `summary_en` queues translation automatically, with no new wiring, because the `UNIQUE (regulation_id, field, target_lang)` contract makes re-enqueue free.
+
+**As of 2026-08-02 that queue is the exception path for summaries rather than the primary one.** §8.2 explains why.
+
+### 8.1 The routing hold — a waiting queue, not a drop
+
+Stage E2 was gated on 2026-08-02 so that an unrouted regulation's summary is not handed to the borrowed Colab GPU. The gate is four conditions:
+
+| # | Condition | Source |
+|---|---|---|
+| 1 | `domain_code IS NOT NULL` | admin routing |
+| 2 | `change_category IS NOT NULL` | Stage D, or expert override |
+| 3 | ≥ 1 row in `m1_regulation_sectors` | expert sector ledger |
+| 4 | `is_sme_relevant IS TRUE` | derived, admin-settable |
+
+3 and 4 are checked **independently** even though §1.3 derives `is_sme_relevant = any(sectors)`: the ledger is expert routing while the flag can be admin-set, and a disagreement between them is exactly the case that must not be published. `None` is not consent.
+
+The first implementation of that gate **dropped** the work — it removed `summary` from the enqueue field list and returned. Nothing was recorded, so a row that became fully routed later was never revisited: the summary and its translations simply never happened, and the only trace was a log line that scrolled away. Because Stage D runs after extraction and expert routing runs after Stage D, *every* gazette passes through the gate while unrouted, so this was the normal case, not an edge one.
+
+The gate now **holds**:
+
+```text
+Stage E   ──not routed──▶  summary_status = 'held'        (no summary written)
+Stage E2  ──not routed──▶  translation job status='held'  (no GPU slot consumed)
+                                  │
+                          routing completes
+                                  ▼
+              summary composed EN/SI/TA  +  jobs → 'pending'
+```
+
+**Why the summary itself is held, and not merely its translation.** A summary is composed *from* the classification: sentence 1 is derived from `change_category` and sentence 2 names the sectors from the ledger. Composing one before those exist produces a confident paragraph about a routing that is still going to change — and because the applier fills blanks only (it never overwrites), that first wrong summary would then *block* the correct one. The hold is not an optimisation; it is what keeps a summary consistent with the routing it describes.
+
+**A hold is not a review.** The two look identical from outside (no summary) and have completely different owners:
+
+| State | Meaning | Owner | Clears by itself? |
+|---|---|---|---|
+| `held` | waiting on routing metadata | pipeline / routing expert | **yes** |
+| `review_required` | facts could not be anchored | summary reviewer | no |
+
+Conflating them is what made the backlog invisible before this change. `summary_status` now distinguishes them, and `summary_hold_reasons` carries the ordered reason codes so the queue can name the missing field rather than showing an unexplained gap.
+
+**Four release paths**, all funnelling into `summary_hold_service.release_regulation`:
+
+| # | Trigger | Latency | Why it exists |
+|---|---|---|---|
+| 1 | Beat sweep `m1-release-summary-holds-hourly` | ≤ 1 h | The **backstop**. Catches routing changed outside the application — a data import, a direct SQL fix, a hook that raised. Cadence is DB-backed and editable from `/admin/settings`. |
+| 2 | `classify_gazette` completion | immediate | Stage D supplies `change_category`, the condition most rows wait on |
+| 3 | Admin routing save (`update_regulation`, sector ledger write) | immediate | An expert who finishes routing sees the summary appear |
+| 4 | `POST /m1/translation/holds/{id}/release` | on demand | Impatience, and `?force=true` for override |
+
+Having all four is not redundancy. 2 and 3 make the system feel immediate; 1 makes it *correct* regardless of how the data moved. With only the hooks, rows change routing through paths nobody instrumented and are silently missed. With only the sweep, an expert waits an hour to see their own work. Triggers 2 and 3 are best-effort and swallow their errors — a release must never fail the classification or the admin save that triggered it — which is safe precisely because trigger 1 exists.
+
+`force=true` skips the routing gate. It does **not** skip verification: a force-released row must still produce a summary whose every literal is anchored in the source document, because that check is about whether the facts are in the gazette, which no amount of admin intent changes. Forced releases are audited (`m1.summary.hold_release`).
+
+**Backfill.** Migration `202608020002` parks every pre-existing pending non-manual `field='summary'` job whose regulation is not fully routed. This is the "explicit cancel pass" the previous session left open, done as a hold rather than a cancel: it frees the GPU slot *without* losing the request, which a cancel would have.
+
+### 8.2 Localised composition — why SI/TA are not machine-translated
+
+The Stage-E summary is not prose. It is:
+
+```text
+<category frame>   <sector scope>   Verified facts: <slot values>.
+```
+
+Everything except the slot values is a fixed string from a table of about a dozen entries. **A fixed string is translated once, by a human, and reviewed once**; machine translation re-translates it on every row and can be wrong on any of them. So `summary_si` and `summary_ta` are now *composed* from the same verified slots as `summary_en`, using localised templates in `app/m1/services/summary_locale.py`.
+
+The stakes are measured, not hypothetical. The Session-105 SI/TA numeric audit failed **142 of 152 checks** — NLLB rewriting `Rs. 2,500` and `2478/1` into digits that do not appear in the gazette. Those literals are the only part of a summary an SME acts on. Composition makes that class of error *structurally impossible*: the slot value is copied through verbatim, never passed through a model.
+
+Three properties follow, and each is asserted rather than assumed:
+
+1. **Literal parity.** Every gazette number, money amount, percentage, date and legal reference in the English summary appears verbatim in the Sinhala and Tamil ones. `_literal_parity_flags` checks this per row and **drops** a locale that fails rather than shipping figures that disagree across languages. Parity holds by construction, so a failure means a template bug — a `{value}` placeholder dropped from a translated string — which is otherwise silent.
+2. **English stays canonical.** Grounding verification runs against English only; it is the language the slots were anchored in. A Sinhala summary is accepted because it is the same facts in a reviewed template, not because it was independently verified.
+3. **Zero GPU cost.** A trilingual summary now costs no Colab seconds at all. The ~1145-item pull queue keeps its capacity for `title` and `real_world_example`, which are free text and genuinely need a model.
+
+**Language of record vs. language of the document.** `m1_regulations.summary_lang` records which locale is the *document's own* — `eng`/`sin`/`tam` → `en`/`si`/`ta`, with `mixed` and `unknown` leading with English because English is the language the facts were verified in. It changes which summary the UI leads with; it does not change what is composed. A Tamil gazette therefore gets a Tamil summary that leads, plus Sinhala and English renderings of the same verified facts — which is what "summarise in its own language and translate to the others" means once the summary is a template rather than prose.
+
+**What is not translated:** slot values, sector codes (they are join keys), and a `change_category` code that has no frame. They are reproduced exactly as they appear in the source, in every language. Quoting a statute's figure is the one place where literal fidelity outranks fluency.
+
+**Open:** the SI/TA template strings are a first human pass and have not been reviewed by a native-speaker legal translator. They are template copy, not extracted content, so a wording correction is a one-line edit in `summary_locale.py` that takes effect for every row — a much cheaper review surface than per-row MT output. §7.4's numeric-preservation check should now read 1.00 by construction for composed rows; it remains the correct check for any locale still filled by NLLB.
 
 ---
 
@@ -539,8 +630,14 @@ Two rules inherited from [10_M1_Sinhala_Tamil_NLP.md](10_M1_Sinhala_Tamil_NLP.md
 | 8 | Colab/Kaggle session vanishes mid-batch | Lease expiry | Jobs return to `pending`; nothing lost |
 | 9 | Summary drifts from a re-extracted source | `source_sha256` mismatch | Re-open the job |
 | 10 | Everything is omitted and the summary is empty | Slot count zero | Emit no summary rather than a contentless one; the field stays NULL and the row stays visible in the queue |
+| 11 | Summary written against routing that then changes | Cannot be detected after the fact — the applier fills blanks only, so the wrong summary blocks the right one | **Hold before composing** (§8.1). The row waits at `summary_status='held'` instead of being summarised early |
+| 12 | Held row never revisited because its routing changed outside the app | Not detectable by any hook | Hourly Beat sweep re-evaluates every held row (§8.1 trigger 1) |
+| 13 | Localised template drops a `{value}` placeholder | Literal-parity check across locales (§8.2) | Drop that locale, flag `localised_summary_literal_drift_<lang>`; English is unaffected |
+| 14 | Percentage never reaches the summary | *(was undetected until 2026-08-02)* | Fixed: `_PERCENT_RE` ended in `\b` after `%`, which can never match — `%` and the character after it are both non-word, so there is no boundary. Every rate change had been composing its summary without the rate |
 
 Failure 10 is a deliberate choice: **a NULL summary is honest and a contentless summary is not.** The SME discovery page can render a title; it cannot detect that a summary said nothing.
+
+Failure 14 is worth recording as a methodological point rather than a bug note: it was found by *reading the composed output of a worked example*, not by any test — every test asserted on fields the regex did match. A verifier that only checks what was emitted cannot see what was silently never extracted.
 
 ---
 

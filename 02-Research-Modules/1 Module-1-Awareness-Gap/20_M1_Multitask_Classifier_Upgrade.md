@@ -665,3 +665,49 @@ Suggested gate for the fresh-holdout evaluation, unchanged from Step 50 so the t
 - Lock and evaluation protocol, reporting rules: [[06_M1_Training_Evaluation]] §∞ Step 55A/55B
 - Limitations to carry into the lock manifest: [[21_M1_Data_Limitations_and_Risk_Register]]
 - Which model used which split, and the counting rules: [[22_M1_Data_Usage_and_Row_Count_Register]]
+
+---
+
+## ∞∞ · Where the multitask line landed — RA-HMT, 2026-08-03
+
+The V7 multitask ambition recorded in this document — one model emitting regulation domain,
+affected SME sectors and SME relevance together — **has been delivered**, though not by the
+architecture this document pursued. See [[24_M1_RAHMT_Hybrid_Architecture]].
+
+### What changed between this line and the delivered one
+
+| This document's V7 / V7-M line | Gazette-SME-RA-HMT |
+|---|---|
+| One XLM-R encoder carrying all three tasks alone | XLM-R + LoRA is **one branch of three**, fused with a calibrated sparse branch, an e5 retrieval branch and a keyword rule prior |
+| Relevance **derived** from the sector output so the two cannot contradict | Relevance is its **own head** with its own validation-tuned threshold (`0.52`); consistency is enforced afterwards by the R1–R3 constraint layer, and the violation rate is *reported* rather than made structurally impossible |
+| Sector macro-F1 `0.888330` — failed the ≥ 0.90 gate | Sector macro-F1 **`0.9014`** on the V7 fixed-split test |
+| Category macro-F1 `0.910533` | Domain macro-F1 **`0.9351`** (95% CI `0.8697`–`0.9737`) |
+| No calibrated confidence, no evidence output | Domain ECE **`0.0319`**; evidence snippet on **167/167** records; abstention routing 134 / 18 / 15 |
+
+Deriving relevance from sectors made contradiction impossible but also made the
+constraint-violation rate unmeasurable — and that rate is itself a result no single-output
+baseline can be scored on. Predicting relevance independently and repairing afterwards keeps
+the measurement. Measured on the final system: **0 of 167 rows needed repair.**
+
+### The gates in this document that RA-HMT clears — and the one it does not
+
+| Gate from this doc | RA-HMT | Verdict |
+|---|---|---|
+| Category macro-F1 ≥ 0.92 | `0.9351` | cleared |
+| Sector macro-F1 ≥ 0.90 | `0.9014` | cleared — the gate V7-M failed at `0.888330` |
+| Relevance F1 | `0.9400` | cleared |
+| Must not regress against the frozen LinearSVC | `0.9351` vs `0.9472`, **different test splits** | not comparable as stated; the like-for-like comparison is `0.9351` vs Branch A `0.9197` on the same 167 rows |
+| **Evaluated on unspent held-out data** | scored on the V7 fixed-split test, now consumed | **not cleared — this is the open promotion gate** |
+
+The V7-M candidate cleared four of five gates on validation and then failed on real held-out
+data. That precedent is exactly why RA-HMT is **not promoted** on the numbers above. The
+permitted next step is Step 55A fresh-holdout-v3 lock, then one scored read.
+
+### What of this line survives
+
+The 1,110-row source audit, the leakage findings (8 within-split duplicate-text rows, 6
+train-val overlaps), the `labels.py` pyarrow `numpy.ndarray` sector-parsing fix, the metric
+registry in `train_xlmr.py`, and the multi-task loss weighting (`domain 1.0 · sector 1.2 ·
+relevance 1.0 · consistency 0.3`) all carried forward into Branch B unchanged. The V7-M
+line's failure on `general_retail` is also why RA-HMT tunes that sector's threshold down to
+`0.43` while the other two sit at `0.50`.

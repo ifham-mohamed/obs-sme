@@ -863,3 +863,28 @@ Head-to-head on the 167-row temporal test: both correct 150, LinearSVC only 10, 
 Transformer tuning was stopped deliberately rather than continued: the V6 test split had already been used to compare four models, and continuing to tune against it would have converted a held-out measurement into a selection set.
 
 **How to read this.** The report is the *earlier* artefact. Where the two disagree, this vault is authoritative and the report is a record of what was believed at submission time. The report's XLM-R material is preserved as design rationale, not as a description of what serves.
+
+---
+
+## ∞ · Superseded by the RA-HMT hybrid — 2026-08-03
+
+This document's architecture comparison selected **XLM-R + LoRA with a dual head**. That
+selection is preserved above because the reasoning was sound and deleting it would falsify
+the research narrative — but it is no longer the architecture in the artefact bundle.
+
+**What actually shipped is a three-branch hybrid**, [[24_M1_RAHMT_Hybrid_Architecture]]:
+
+| This doc selected | What shipped | Why |
+|---|---|---|
+| XLM-R + LoRA, dual head, as *the* model | XLM-R + LoRA, **three** heads, as **one branch of three** | Standalone it reaches domain macro-F1 `0.6443` on the V7 test — 777 training rows against 278M parameters. Validation-fitted fusion gave it weight `0.15`, the smallest of four. That number is the honest measurement of its contribution at this data scale, not a demotion |
+| One encoder, one prediction path | TF-IDF word+char (`0.9197`) + XLM-R+LoRA (`0.6443`) + multilingual-e5 retrieval (`0.8590`) + a keyword rule prior (`0.6228`) | Error decorrelation. Fusion reached `0.9351` on test and `0.9428` on validation, beating the best single branch by `+0.0328` on a grid that contained every single-branch corner |
+| dual head: category + sector | three heads: domain (8-way softmax) + relevance (sigmoid) + sectors (3 sigmoids), with a consistency term in the loss | The research question needs relevance as its own output, and the consistency term is what makes the constraint layer a guarantee rather than a patch |
+
+**The combined loss in §Combined loss function is the one that shipped**, with weights
+`domain 1.0 · sector 1.2 · relevance 1.0 · consistency 0.3` — sector highest because
+multi-label BCE over three correlated sigmoids has the weakest gradient of the three.
+
+**What this document does not cover, and doc 24 does:** the fusion layer, temperature
+calibration (test domain ECE `0.0319` against `0.1357` uncalibrated), the R1–R5 constraint
+layer, abstention routing, and evidence-snippet extraction. Those five stages are where the
+four-output capability actually comes from.

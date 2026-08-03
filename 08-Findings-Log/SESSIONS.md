@@ -4,6 +4,37 @@ One entry per work session. Newest first.
 
 ---
 
+## 2026-08-03 — Session 74: Branch C retrieval-evidence branch implemented + dataset provenance audit (Cowork)
+
+**Worked on:** Built [[23_M1_Retrieval_Augmented_Evidence_Branch|Branch C]] Phases 1–4 + 8 as code in `enigmatrix-ml`; then audited dataset lineage in place of a requested (and wrong) dataset merge. Findings doc: `08-Findings-Log/2026-08-03_Branch_C_Retrieval_Evidence_Implementation.md`.
+
+**Status flips:** F-244 🟢, F-245 🟢, F-246 🟢, F-247 🟢.
+
+### Done
+
+- **Branch C code-complete (Phases 1–4, 8).** `m1/model/retrieval.py` (char-window chunking with spans, pure-Python BM25-Okapi, LaBSE dense encoder + offline hashing fallback, FAISS-flat→sklearn→NumPy exact search, RRF, train-only `RetrievalIndex`, C1 weighted-vote classifier, Output-4 contract + validator) · `m1/model/calibration.py` (temperature scaling of Branch A margins, λ fusion, ECE/Brier/NLL/reliability/risk–coverage, `FrozenModelGuard`) · 3 CLIs (`build_m1_retrieval_index`, `audit_near_duplicates`, `evaluate_m1_retrieval_branch`) · 3 repo docs · 105 tests.
+- **Every §7 leakage rule and §8 kill criterion enforced in code.** Train-only index (no `add` method exists), val/test key guards at build *and* eval, test split behind `--final-test-once`, timestamped run dirs, λ ties broken toward Branch A, and `leakage_alarm` → exit 5 at C1 accuracy ≥ 0.99 or Recall@1 ≥ 0.99 (verified on a corpus built to trip it).
+- **Dataset provenance tooling** (`scripts/inventory_m1_datasets.py` read-only + `scripts/build_m1_unified_dataset.py` V6-authoritative) + 27 tests. The requested "merge all dataset folders" was the wrong operation — the 11 directories are revisions of one corpus, not separate corpora.
+- **`linearsvc_v6_primary` untouched throughout** — 14/14 SHA-256 verified before and after every run; `git status` on `models/` clean.
+
+### Found
+
+- **Tokenizer defect on Sinhala/Tamil.** `\w+` drops Unicode combining marks, so `බදු` → `බද`; vowel signs were stripped and words split at each one. Would have degraded sparse retrieval on both target languages and looked like §8's "embeddings fail on Sinhala/Tamil" risk. Fixed + regression test.
+- **Step-41 leakage reproduces exactly and the de-leaked split is not canonical.** 8 duplicate-text groups, 3 train↔val (6 rows). The 1103-row cleaned split exists only in the rejected V7-W lineage, so the frozen primary is registered against the 1110-row split that still contains them. **Validation 0.9245 is optimistic (3/166 = 1.8% verbatim train copies); test 0.9472 is unaffected** — keep quoting the test number. `dataset_manifest_v6.json`'s `leakage: 0` is true as written: it is a key-based check and the keys genuinely differ.
+- **The 18 excluded rows are confirmed OCR garbage** — 2–26 chars, median 8, e.g. `'1A 2A 3A 4A 5A 6A'`. Exclusion decision correct, now with evidence.
+- **V4_clean and V5 have identical 1110-key sets**; 409 texts differ byte-wise but 0 after whitespace normalisation (undocumented v5 whitespace clean-up).
+
+### Verified (sandbox)
+
+- 132 tests pass (105 Branch C + 27 dataset), incl. 8 subprocess tests driving the real CLIs. λ=1.00 reproduces Branch A exactly, λ=0.00 Branch C exactly; temperature scaling never moved an argmax.
+- **Not verified:** no real Branch C numbers (no network/`sentence-transformers`); the 5 parquet-only versions under `enigmatrix-ml/datasets/` unreadable (no pyarrow); tests ran under a pytest shim, not pytest.
+
+### Pending
+
+Phase 0 pre-registration (blocks the first real run). `make dataset-inventory` + `make test-branch-c` on Windows. Adjudicate the 3 cross-split pairs. Decide the V6 leakage disposition — caveat validation, or rebuild 1103 as canonical and re-measure Branch A (invalidates 0.9245, needs a re-freeze). Doc 23 Phases 5 (expert evidence eval — long pole), 6, 7.
+
+---
+
 ## 2026-07-15 — Session 73: Full-project documentation sync + Perplexity export bundle + Member-1 report (Cowork)
 
 **Worked on:** Exhaustive re-analysis of `C:\Reasearch\xyz` (all submodules at 2026-07-03 commits) vs this vault; produced the external documentation bundle + Member-1 report; updated vault docs.

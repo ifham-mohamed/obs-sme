@@ -69,12 +69,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
+                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03_FEATURE_CHECKLIST"
+              "title": "23_M1_Retrieval_Augmented_Evidence_Branch"
             }
           },
           {
@@ -315,19 +315,21 @@
   },
   "active": "22d18590d71c8738",
   "lastOpenFiles": [
-    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.19604.b09aa104e167",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.19604.7a148fd74c09",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.19604.550813d1e289",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.19604.2a454d2bad70",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.19604.d8d3bf2d543a",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.19604.ef0d9d778c57",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/24_M1_RAHMT_Hybrid_Architecture.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md.tmp.6088.06a1bf9c2fc3",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md.tmp.6088.74e8578fcb25",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md.tmp.6088.c807fea1801d",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.22876.698accd03e21",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.22876.7be9d577368f",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.22876.cd87ad9d39fe",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/10_M1_Sinhala_Tamil_NLP.md.tmp.22876.bf72785ce2d2",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md.tmp.22876.4dece00bce77",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md.tmp.22876.f07c80281db0",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md.tmp.22876.8919d72a98f2",
     "02-Research-Modules/1 Module-1-Awareness-Gap/22_M1_Data_Usage_and_Row_Count_Register.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/22_M1_Data_Usage_and_Row_Count_Register.md.tmp.19604.c24ab633cc5c",
     "02-Research-Modules/1 Module-1-Awareness-Gap/21_M1_Data_Limitations_and_Risk_Register.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/21_M1_Data_Limitations_and_Risk_Register.md.tmp.19604.b338a9201778",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md.tmp.19604.b3eb6fb2e665",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md.tmp.19604.08dbbd192b13",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/20_M1_Multitask_Classifier_Upgrade.md.tmp.19604.64954f8286f5",
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02_lineage/20_M1_Multitask_Classifier_Upgrade.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02_lineage/18_M1_Dataset_And_Model_Lineage.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02_lineage/06_M1_Training_Evaluation.md",
@@ -337,7 +339,6 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02_holdout/20_M1_Multitask_Classifier_Upgrade.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02_holdout/03_M1_Data_Collection.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_47.png",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_46.png",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_45.jpeg",
@@ -359,7 +360,6 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/13_M1_Folder_Structure_and_Implementation_Flow.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/12_M1_Monitoring_Maintenance.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/11_M1_API_Reference.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/10_M1_Sinhala_Tamil_NLP.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/09_M1_Annotation_Guidelines.md"
+    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/10_M1_Sinhala_Tamil_NLP.md"
   ]
 }

@@ -3,12 +3,39 @@
 > A task-oriented map of the consolidated **Module 1 documentation set** (`1 Module-1-Awareness-Gap/`). Each numbered parent document is the canonical one-file source for its area. Former companion sub-docs are represented below as linked subtasks that point into the relevant parent document sections.
 >
 > Reading order / "start here" is [[16_M1_Development_Roadmap]]; the annotated master map is [[00_INDEX]]. The raw code-feature ledger (F-01…F-242) lives in the vault `FEATURES.md`.
+>
+> **2026-08-03:** sections **21–24** added. Section 24 covers [[24_M1_RAHMT_Hybrid_Architecture]] — the trained four-output hybrid. Nothing in it is promoted: the production classifier is still the frozen category-only LinearSVC primary.
 
 **Legend** — `[x]` shipped + verified · `[~]` code-complete / partial, pending an env/data/GPU gate · `[ ]` deferred or not started.
 
 **How to read this checklist:** each numbered section has one **parent task** and several **subtasks**. The subtask links go to real headings inside the parent `.md` file. The last column explains why that subtask exists and where its output is used next.
 
 **Every `[~]` names its blocking gate.** A partial status with no stated gate is unfinished bookkeeping, not a status — it reads as "in progress" forever. Where a row is `[~]` or `[ ]` and the gate is not obvious from the row itself, §Blocking-Gate Ledger near the end of this file gives the gate and the artifact that would close it. If you mark something `[~]`, add its gate there in the same edit.
+
+---
+
+## 2026-08-03 Implementation Update — Gazette-SME-RA-HMT
+
+The hybrid four-output classifier was trained end-to-end on Kaggle, exported, assembled into a local artifact bundle, and wired into the platform as a **third selectable classifier backend**. This is the first system in Module 1 that emits all four outputs the research question asks for.
+
+| Area | Current state | Evidence / next use |
+|---|---|---|
+| **RA-HMT full system** | **Trained, exported, validated, integrated — not promoted** | V7 fixed-split test (n=167): domain macro-F1 `0.9351` (95% CI `0.8697`–`0.9737`), domain accuracy `0.9461`, sector macro-F1 `0.9014`, relevance F1 `0.9400`, joint exact-match `0.8802`, domain ECE `0.0319`. Paired bootstrap vs Branch A on domain macro-F1: `+0.0155`, 95% CI `[−0.0411, +0.0767]`, `p = 0.548` — a statistical tie. Full write-up: [[24_M1_RAHMT_Hybrid_Architecture]] |
+| Branch A — TF-IDF word+char, calibrated, 3 targets | Completed | domain `0.9197` · sectors `0.8881` · relevance `0.9109` · joint `0.8743` · ECE `0.0805`. Also the term-weight source for the sparse evidence scorer, which is why it is mandatory even in degraded mode |
+| Branch B — XLM-R + LoRA, 3 heads, multi-task loss | Completed | domain `0.6443` — below Branch A, as predicted before the run (777 rows vs 278M params, 4 `EPF_ETF_CHANGE` examples, ~90% English). Its sector `0.8108`, relevance `0.8444` and ECE `0.0581` are far closer; report per-output, not one verdict on the branch |
+| Branch C — multilingual-e5 retrieval | Completed | domain `0.8590` from a mechanism with no discriminative training. Index = 777 train rows only, 768-dim, leave-one-out for train queries. Label-description matching needs zero training rows, which is the direct answer to `EPF_ETF_CHANGE` |
+| Fusion — validation-fitted | Completed | `tfidf 0.35 · retrieval 0.30 · rules 0.20 · xlmr 0.15`. Validation macro-F1 `0.9428` against a best single branch of `0.9100` — `+0.0328`, on a grid that contained every single-branch corner and could have returned that branch alone |
+| Calibration | Completed — **the headline result** | Weighted fusion alone: ECE `0.1357`, worse than any single branch, because blending differently-scaled probability vectors is over-confident. Temperature scaling (T `0.4625`) → `0.0319`, less than half Branch A's. Those two ablation rows differ *only* in this stage |
+| Constraint layer R1–R5 | Completed | Violation rate before repair **0/167** (down from 2/167 on the Branch-A-only build). Read honestly in both directions: the heads agreed without help, so the layer's value here is a guarantee rather than a correction |
+| Abstention routing | Completed | 134 `AUTO_ACCEPT` / 18 `REVIEW_RECOMMENDED` / 15 `HUMAN_REVIEW_REQUIRED`; 80.2% of the corpus clears without a human |
+| Evidence snippet (Output 4b) | Completed | 167/167 records non-empty; keyword-hit-rate `0.7246`. That metric is an automatic proxy — a human evaluation is still open |
+| Local artifact bundle | Completed and validated | `C:\Reasearch\xyz\m1_rahmt\results` — `branch_a/ branch_b/ branch_c/ fusion/ final_eval/ models/`, no double nesting. `scripts/validate_artifacts.py` returns `All runtime artifacts are valid.` |
+| Source correction — Branch C probabilities | Completed | `label_distribution()` accumulated in `float32`, emitting values such as `1.000000119`. `apply_temperature` takes `log()` of these and ECE bins them into `[0,1]`, so an out-of-range probability corrupts calibration and can move a record into the wrong abstention rung. Now float64, nan/inf-scrubbed, clipped, renormalised |
+| Source correction — notice splitting | Completed | `split_notices()` ran `clean_text()` first, which collapses newlines, so the multiline `(?m)^…` boundary regex had no line starts to anchor on. Verified: **1 unit → 3 units** on a three-notice test page |
+| Enigmatrix integration | Completed — backend default unchanged | `enigmatrix-ml/m1/model/rahmt_inference.py`, `rahmt` branch in `classifier_service.py`, `M1_MODEL_RAHMT_DIR` + `M1_RAHMT_*` settings, four-output helpers in `enigmatrix-frontend/lib/m1/classifier-display.ts`. `M1_CLASSIFIER_BACKEND` still defaults to `linearsvc` |
+| **Promotion** | **Not done — deliberately** | RA-HMT has never been scored on the unspent **fresh holdout v3**; the V7 test split above is now consumed. Promoting also flips the sector contract from expert/manual data to a model output |
+
+**One projection this pass falsified.** The Branch-A-only build predicted coverage@98%-accuracy would rise `0.904 → 0.946`. On the full three-branch run it moved `0.904 → 0.880`: temperature scaling with T < 1 *sharpens* the fused distribution, which lowers ECE but slightly worsens the selective-risk ordering at that operating point. The claim has been withdrawn from `README.md` and `NOVELTY_AND_EVALUATION.md` rather than restated. If coverage is the operational priority, `fusion_meta` is the row to quote — `0.934` coverage at `0.0839` ECE.
 
 ---
 
@@ -470,6 +497,68 @@ Relevant parent-document mapping:
 | [x] | [[20_M1_Multitask_Classifier_Upgrade#4. Steps 45–49 — training protocol\|Step 47 real run]] | 3 seeds `42,123,2026`, 8 epochs, output `/kaggle/working/storage/models/m1/xlmr_multitask_v6_noleak_e8_s3`; best seed `123`. Mean test metrics: category accuracy `0.5988`, category macro-F1 `0.0936`, sector micro-F1 `0.2113`, sector macro-F1 `0.1207`, exact-set accuracy `0.4251`, derived relevance accuracy `0.5948`. **Rejected/not promotable.** |
 | [x] | [[20_M1_Multitask_Classifier_Upgrade#3.5 One sampler, not three\|Weighted-loss diagnostic]] | Completed on the no-leak `773/163` train/validation branch: seed 42, category class weights, sector BCE `pos_weight`, 15 epochs. Best validation category macro-F1 `0.899862`, sector macro-F1 `0.884312`; test was not loaded and no model checkpoint was promoted. |
 | [ ] | [[20_M1_Multitask_Classifier_Upgrade#5. Step 48 — thresholds\|Thresholds, promotion, export]] | Correctly stopped. Category stayed below `0.92` and partial-sector evidence is only 9 validation rows. Collect fresh temporal, EPF/ETF, and partial-sector examples before threshold selection, another final run, ONNX/export/inference, or freeze work. |
+## 21 · Data Limitations & Risk Register — [[21_M1_Data_Limitations_and_Risk_Register]]
+
+**Parent task:** [x] Record every known data weakness with its severity and the wording any claim about it must use, so a limitation is disclosed by us rather than discovered by an examiner.
+
+| Status | Linked subtask | Task breakdown and downstream use |
+|---|---|---|
+| [x] | L1–L10 open limitations | `EPF_ETF_CHANGE` 3/8, `PENALTY_ENFORCEMENT` 10/15 all sector-`NONE`, page-1 extraction, English-only holdout, targeted sampling, 286-row spec deviation, formulaic families, context-dependent labels, the self-contradicting `row_count_in_150_200` flag. Every RA-HMT per-class claim must cite the matching L-row. |
+| [x] | R1–R4 resolved limitations | `IMPORT_EXPORT`=0, `general_retail` shortfall, SME-irrelevant majority, the 128-PDF training-leakage trap. The `general_retail` shortfall is why RA-HMT's tuned threshold for that sector is `0.43` rather than `0.50`. |
+| [x] | Verbatim lock-manifest declaration | The wording that must accompany the fresh holdout. Binding on any RA-HMT promotion read. |
+
+---
+
+## 22 · Data Usage & Row-Count Register — [[22_M1_Data_Usage_and_Row_Count_Register]]
+
+**Parent task:** [x] State how much data exists and who spent what, so no report can double-count a row or reuse a consumed split.
+
+| Status | Linked subtask | Task breakdown and downstream use |
+|---|---|---|
+| [x] | Non-additive counting rule | **1110 corpus + 286 holdout = 1396 distinct rows**, not 4,726. RA-HMT trained on the 777/166/167 slice of the 1110. |
+| [x] | Per-model split usage | Which model touched which data. RA-HMT consumed the V7 fixed-split test in one read; that surface is now spent. |
+| [x] | Never-mix table | Why 166 validation rows carrying every selection decision means validation figures are not promotion evidence — the exact reason RA-HMT's `0.9428` validation macro-F1 is *not* the promotion number. |
+
+---
+
+## 23 · Retrieval-Augmented Evidence Branch (design) — [[23_M1_Retrieval_Augmented_Evidence_Branch]]
+
+**Parent task:** [x] Specify Branch C as an additive branch alongside the frozen Branch A, argued on Output 4 rather than on accuracy.
+
+| Status | Linked subtask | Task breakdown and downstream use |
+|---|---|---|
+| [x] | Power arithmetic | 167 test rows, 7 errors → a new branch must fix 6 of 7 and break none for *p* < 0.05; one `EPF_ETF_CHANGE` row is worth 12.5 points of macro-F1. This is what killed the accuracy framing and is confirmed by the delivered result (`p = 0.548`). |
+| [x] | Output-4 argument | `LinearSVCGazetteInference` returns `confidence=None` by design. **Delivered** in doc 24: calibrated confidence + evidence on 167/167 records. |
+| [x] | Leakage rules (§7) | Index = train only; train queries leave-one-out. Both enforced in `branch_c_retrieval.py` and restated in doc 24 §4.3. |
+| [x] | Kill criteria (§8) | Retained. Branch C standalone reached `0.8590` and earned fusion weight `0.30`, so none fired. |
+| [~] | Hybrid BM25 + LaBSE architecture | **Deviation, deliberate.** The shipped branch is dense-only `multilingual-e5-base`; BM25 and LaBSE were not used. Gate: a lexical-hybrid ablation was never run, so the claim "hybrid retrieval beats dense-only here" is unmade rather than disproved. |
+
+---
+
+## 24 · Gazette-SME-RA-HMT Hybrid Classifier — [[24_M1_RAHMT_Hybrid_Architecture]]
+
+**Parent task:** [~] Train, export and integrate the retrieval-augmented hierarchical multi-task hybrid that emits all four required outputs. Trained, validated and wired in on 2026-08-03; **not promoted** — the production backend is still the frozen category-only LinearSVC, and RA-HMT has never been scored on the unspent fresh holdout v3.
+
+| Status | Linked subtask | Task breakdown and downstream use |
+|---|---|---|
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#2. Architecture\|Five-stage architecture]] | preprocess → three branches + rule prior → simplex fusion → hierarchical multi-task decode → constraint/calibration/evidence. Label space asserted identical to `m1.model.labels` at load time, because fixed order is what makes output index *i* mean class *i*. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#4.1 Branch A — TF-IDF + calibrated LinearSVC\|Branch A]] | Word **+ char** n-grams, `CalibratedClassifierCV`, three targets, 5-fold OOF. domain `0.9197`. Mandatory at inference: it is also the evidence term-weight source. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#4.2 Branch B — XLM-R + LoRA, three heads\|Branch B]] | Shared encoder, 3 heads, loss `1.0·CE + 1.2·BCE_sector + 1.0·BCE_rel + 0.3·consistency`. domain `0.6443`; sector `0.8108`; ECE `0.0581` (better than Branch A). Adapter + heads + tokenizer exported. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#4.3 Branch C — multilingual-e5 retrieval\|Branch C]] | 777×768 train-only index, top-k 10, τ `0.05`, label-description prior. domain `0.8590`. Leave-one-out train retrieval enforced in code. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#5. Fusion layer\|Fusion — validation-fitted]] | Simplex grid at step `0.05` including every corner; selected `tfidf 0.35 · retrieval 0.30 · rules 0.20 · xlmr 0.15` at validation `0.9428` (`+0.0328` over the best single branch). Meta fusion also fitted for the ablation. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#7. Confidence calibration and abstention\|Calibration + abstention]] | T `0.4625` on validation NLL; blended `0.45·domain + 0.30·sector + 0.25·relevance`; routing `≥0.85 / ≥0.70 / else`. Test ECE `0.0319` against `0.1357` uncalibrated. Routing 134/18/15. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#6. Constraint layer\|Constraint layer R1–R5]] | Repairs `relevant ⇔ ≥1 sector`, widens economy-wide domains, routes low confidence, requires evidence on every `AUTO_ACCEPT`. Violation rate before repair **0/167** — reported as a result, with the honest reading that the layer did no repairing on this sample. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#8. Evidence snippet\|Evidence snippet]] | `0.40·label-desc + 0.30·tfidf-term + 0.20·neighbour-sim + 0.10·keyword`; sparse CPU implementation used by `predict.py`. 167/167 non-empty, hit-rate `0.7246`. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#12. Results\|Ablation + significance]] | 10 rows (rules / A / B / C / A+B / A+C / B+C / weighted / meta / full) with bootstrap CIs, plus a paired bootstrap test vs Branch A. Figures and tables in `results/final_eval/`. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#10. The local artifact bundle\|Artifact bundle + validator]] | Assembled from `fusion_inputs_clean/` (the exact sanitised inputs fusion was fitted on) because `results (3).zip` lacks `branch_c_report.json`. `scripts/validate_artifacts.py` exits `2` when `branches_available` is incomplete — the failure mode that silently mis-weights the ensemble. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#9. Corrections applied on the way to the local bundle\|Two source corrections]] | float32 → float64 probability accumulation; newline-preserving notice splitting (verified 1 → 3 units). Both were patched in the notebooks and had drifted locally. |
+| [x] | [[24_M1_RAHMT_Hybrid_Architecture#11. Enigmatrix integration\|Platform integration]] | ML adapter (locates the research package rather than vendoring it), backend `rahmt` branch with rung-based review flagging, settings, frontend four-output helpers. Response shape kept stable across all three backends. |
+| [~] | Local end-to-end run on Windows | Bundle, code and validator are in place; the `.venv`, the Branch-A-only smoke run and the full four-branch run still need the Windows shell, and the first full run needs internet for two ~1.1 GB base encoders. Gate below. |
+| [ ] | Promotion to production backend | Deliberately not done. Gate below. |
+| [ ] | Human evidence evaluation | keyword-hit-rate is an automatic proxy. Gate below. |
+| [ ] | 5-fold CV + per-language breakdown + disagreement matrix | Three analyses that would strengthen the thesis and are cheap to run. Gate below. |
+
+
 ---
 
 ### Blocking-Gate Ledger
@@ -510,6 +599,14 @@ Every `[~]` and `[ ]` above, with the one thing that would close it. If a row is
 | 20 | Sector evidence | Only 48/1110 source rows carry partial sector combinations; cleaned test has only 8 partial-sector rows | Report partial-sector exact-set match with denominator and collect more partial-sector evidence before claiming robust three-sector classification |
 | 20 | Promotion | V7 category must not regress against frozen LinearSVC `0.947220`; Step 47 is far below | Do not promote; permitted next outcome is weighted recovery or hybrid sector-only experiment |
 | 20 | Export / inference | `MultitaskGazetteInference` is not built, and the model is not promotable | Build only after weighted diagnostic and promotion decision |
+| 23 | Hybrid BM25 + LaBSE retrieval | The shipped Branch C is dense-only `multilingual-e5-base`; the lexical-hybrid variant was never built or ablated | Run a BM25 + dense ablation on the same index, or withdraw the hybrid-retrieval claim from the design doc |
+| 24 | Local end-to-end run | `.venv` not created; the first full four-branch run needs internet for `xlm-roberta-base` and `multilingual-e5-base` (~1.1 GB each, not shipped in the bundle) | `LOCAL_INFERENCE_RUNBOOK.md` §6 → §9 → §10 in PowerShell |
+| 24 | Promotion to production | RA-HMT was scored on the V7 fixed-split test, which is now consumed. Validation `0.9428` is a selection figure, not promotion evidence ([[22_M1_Data_Usage_and_Row_Count_Register]]) | Step 55A fresh-holdout-v3 lock, then **one** scored read |
+| 24 | Sector contract | Promoting `rahmt` flips sectors from expert/manual `m1_regulation_sectors` data to a model output with validation-tuned thresholds | An explicit decision on what happens to existing sector rows, recorded in [[final/works/11_CLASSIFIER_FREEZE_AND_INTEGRATION\|11_CLASSIFIER_FREEZE_AND_INTEGRATION]] |
+| 24 | Evidence quality | keyword-hit-rate `0.7246` is an automatic proxy; no human has judged whether a snippet justifies its label | 100 sampled records, two raters, report agreement |
+| 24 | Single fixed split | All RA-HMT numbers come from one 777/166/167 split | 5-fold CV over the pooled 1110 rows, report mean ± std alongside |
+| 24 | Ensemble justification | The disagreement matrix between A, B and C was never computed, so the empirical case for fusing them is argued rather than shown | Count per-branch right/wrong off-diagonals on the test predictions already in `results/fusion/predictions_test.csv` |
+| 24 | Offline deployment | `results/models/` is empty; an air-gapped host cannot load Branch B or Branch C | Populate both base-encoder folders per `results/models/README.md` |
 **Two unblocked items with no gate at all** — do these first, they are cheap: the `promotion.decide()` rollback unit test (4 assertions), and writing F6 against the frozen model's recorded numbers.
 
 ### `works/` Document Ledger
@@ -545,7 +642,7 @@ What lives in this folder and whether it is current.
 | Root companion Markdown files | [x] Retired after merge |
 | Program-readiness master index | [x] One active canonical file remains at `PROGRAM_READINESS/M1_PROGRAM_READINESS_MASTER_INDEX.md`; the byte-identical `LOG_AND_WORKS/` copy was removed and an older snapshot remains under `_archive/duplicates/` |
 | Checklist links | [x] Point to canonical parent docs and parent-doc headings |
-| Checklist covers the whole numbered series | [x] Sections 00–20 present; 17/18 added in the documentation gap-closure pass, 19/20 added as Stage-E and V7 work became explicit |
+| Checklist covers the whole numbered series | [x] Sections **00–24** present; 17/18 added in the documentation gap-closure pass, 19/20 added as Stage-E and V7 work became explicit, **21–24 added 2026-08-03** with the RA-HMT build |
 | Wikilink pipes escaped inside tables | [x] 136 cells corrected; 7 headers normalised to 3 columns |
 | 09 annotation content | [x] Taxonomy examples, IAA protocol, annotation workflow, and SME survey instrument are all inside [[09_M1_Annotation_Guidelines]] |
 | 2026-07-30 labeling update | [x] Calibration, Batches 02-05 gold resolution, 800-row gate, IAA metrics, frozen v1 dataset, split, TF-IDF baselines, CPU LoRA smoke, and remaining GPU/rare-domain gates recorded |
@@ -563,6 +660,11 @@ What lives in this folder and whether it is current.
 | Summarization method specified and first slice built | [x] Doc 19 added — input contract, measured extraction diagnostic, 5-way comparison, selected design, novelty claim, reference-free evaluation; backend slice now implements anchor-bound slots, hard review flags, summary provenance, and SI/TA queueing. |
 | V7 multitask classifier upgrade tracked | [x] Frozen LinearSVC boundary retained; Kaggle weighted seed-42 validation diagnostic tracked at `/kaggle/working/v7_weighted_seed42_validation_only.json`. It recovered from collapse but missed the category/evidence gate, so no test or promotion followed. |
 | Every `[~]` names its gate | [x] Inline or in the Blocking-Gate Ledger |
+| Checklist covers documents 21–24 | [x] Added 2026-08-03. Docs 21, 22 and 23 had existed with no checklist section at all; 24 added with the RA-HMT build |
+| RA-HMT hybrid trained, exported and integrated | [x] Doc 24 added — three branches, validation-fitted fusion, temperature calibration, constraint layer, evidence snippet, full ablation with CIs, local artifact bundle validated, platform wiring across ml/backend/frontend |
+| RA-HMT promotion boundary held | [x] `M1_CLASSIFIER_BACKEND` still defaults to `linearsvc`; the frozen primary is untouched; the fresh holdout v3 remains unspent |
+| Falsified projection withdrawn, not restated | [x] The Branch-A-only coverage@98% projection (`0.904 → 0.946`) was contradicted by the full run (`0.904 → 0.880`) and has been removed from `README.md`, `NOVELTY_AND_EVALUATION.md` and doc 24 |
+| Source corrections traced from notebook to local `src/` | [x] Branch C float32→float64 probability accumulation and newline-preserving `split_notices()` applied and verified locally (1 unit → 3 units) |
 
 ### Status Roll-Up
 
@@ -577,8 +679,13 @@ What lives in this folder and whether it is current.
 | Multitask classifier (V7) | **20** *(audit, no-leak dataset, parser/trainer patch, rejected run, weighted validation recovery recorded)* | 20 *(fresh data, thresholds, promotion, export, inference)* | — |
 | Measurement corpus | **09** *(combined workbook built)* | 09 *(708 rows await field truth)* | — |
 | API & tracking UI | — | 11, 14 | — |
+| Data limitations & usage registers | **21**, **22** | — | — |
+| Retrieval branch (design → delivered) | **23** *(design, leakage rules, kill criteria)* | 23 *(BM25+LaBSE hybrid never ablated)* | — |
+| **RA-HMT hybrid (four outputs)** | **24** *(3 branches, fusion, calibration, constraints, evidence, ablation, bundle, platform wiring)* | 24 *(local end-to-end run on Windows)* | 24 *(promotion, human evidence eval, 5-fold CV, offline models)* |
 
 **What moved this pass:** 05 `[~]` → `[x]` (model selection closed, though not with the architecture it selected) · 18 and 17 added as `[x]` · 07 `[ ]` → `[~]` (backend integration shipped; ONNX/Fly.io path not taken) · 16 Phase 5 `[ ]` → `[~]` (two items unblocked) · **19 added** — its method is `[x]`, and the later 2026-08-01 sync moves its build from `[ ]` to `[~]`: the first backend slice is shipped and live-tested, while human evaluation/review remains open · **20 synced** — Steps 41-47 executed in Kaggle: no-leak dataset `1103` rows, parser/trainer patches, smoke, and 3-seed e8 run. The run is recorded but rejected; V7 remains `[~]` because weighted-loss recovery, thresholding, promotion, export, and inference are open.
+
+**What moved on 2026-08-03:** **24 added** — the RA-HMT hybrid is trained, exported, validated and integrated, and is the first system in the module to emit all four required outputs; its build items are `[x]`, the local Windows run is `[~]`, and promotion is `[ ]` behind the fresh-holdout gate. **21, 22 and 23 added** — three documents that had existed since 2026-08-02 with no checklist coverage. **23 marked `[~]` on one row**: the shipped Branch C is dense-only, so the hybrid BM25 + LaBSE claim in its design is unmade rather than disproved. Nothing was promoted and the frozen LinearSVC primary is unchanged.
 
 **The previous highest-value open item is partly closed:** 80 generated English summaries passed the deterministic audit, four false reviews were fixed, and SI/TA numeric preservation was measured. That audit failed 142/152 translated-locale checks, so the highest-value summary task is to drain the 144 replacement jobs, re-audit them, and complete the genuine human review. In parallel, fieldwork remains 0/100 and V7 needs fresh temporal, EPF/ETF, and partial-sector evidence—not another immediate final run.
 

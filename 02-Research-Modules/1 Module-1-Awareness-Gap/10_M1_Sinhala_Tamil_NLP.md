@@ -683,6 +683,25 @@ This is why the new queue and the pre-existing manual queue never fight, with no
 3. **Stage-E summaries now have live draft translations, but quality is not yet established.** The first conservative backfill recorded 380 generated summaries, 11 `review_required`, and 751 pending; the generated set was drained through the NLLB queue with 388 Sinhala and 388 Tamil summary jobs done and zero generated summaries missing SI/TA. Treat all of these as machine-generated drafts until sampled faithfulness and **numeric preservation EN → SI/TA** are reviewed under [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) §7.4.
 4. **`MAX_SOURCE_CHARS = 8000`.** Longer text is skipped with a warning rather than half-translated; NLLB's ~512-token window means long inputs are sentence-chunked by the worker.
 
+### 10.7 Summaries left this pipeline on 2026-08-02
+
+Limit 1 above is why. The SI/TA numeric audit of translated summaries passed **10 of 152** checks: NLLB was rewriting `Rs. 2,500` and `2478/1` into digits that do not appear in the gazette. For a summary an SME acts on, the figures are the content, so an unmeasured-quality path was not merely weak evidence — it was the wrong mechanism.
+
+**Summaries are now composed per locale rather than translated.** The Stage-E summary is a three-sentence template (`<category frame> <sector scope> Verified facts: <slots>.`) in which everything except the slot values is a fixed string. Those fixed strings are translated **once, by a human, and reviewed once**, in `app/m1/services/summary_locale.py`; the slot values — gazette numbers, money, percentages, dates, legal references, sector codes — are copied through verbatim into all three locales. Numeric preservation therefore holds by construction and is asserted per row by a literal-parity check that drops a locale rather than shipping figures that disagree. Full argument: [19_M1_Regulation_Summarization.md](19_M1_Regulation_Summarization.md) §8.2.
+
+What this changes for §10:
+
+| | Before | After |
+|---|---|---|
+| `summary` SI/TA | NLLB job per (row, locale) | composed at Stage E; MT only for a locale the parity check dropped |
+| `title`, `real_world_example` | NLLB | **unchanged** — free text, genuinely needs a model |
+| GPU cost of a trilingual summary | 2 jobs in a ~1145-item queue | zero |
+| Numeric preservation | measured 6.58% | exact by construction, checked per row |
+
+The pull-queue architecture in §10.2 is untouched and remains correct for the fields that still use it. What has changed is the *scope* of the claim this section supports: NLLB carries the two free-text fields, and the reason it no longer carries summaries is a measurement, not a preference.
+
+The direction of translation also stops being a constraint for summaries. §10.3's `eng_Latn` source pivot exists because English is the only cleaned, verified text — still true for titles. A composed summary has no source language at all: the same verified slots are rendered into whichever locale is asked for, so a Tamil gazette gets a native Tamil summary without a `tam→sin` pair NLLB is weak at. `m1_regulations.summary_lang` records which locale is the document's own so the UI leads with it.
+
 > **Full engineering spec:** `enigmatrix-docs/m1/10_M1_3_NLLB_Translation_Pipeline.md` in the code repo — schema table, API surface, and the complete file list.
 
 ---

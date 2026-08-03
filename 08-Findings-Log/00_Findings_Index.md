@@ -21,6 +21,13 @@ module: shared
 | [BUILD_PLAN_COVERAGE](BUILD_PLAN_COVERAGE.md) | Delivered work vs the BUILD spec | At each milestone |
 | [SETUP_COVERAGE](SETUP_COVERAGE.md) | Onboarding-doc completeness audit | When SETUP docs change |
 
+## Dated findings entries
+
+| Entry | Module | What it records |
+|---|---|---|
+| [2026-08-03 — Branch C retrieval-evidence implementation + dataset provenance audit](2026-08-03_Branch_C_Retrieval_Evidence_Implementation.md) | m1 | Branch C Phases 1–4/8 built (retrieval, C1 vote, C2 fusion, Output-4 contract, 132 tests); a Sinhala/Tamil tokenizer defect found and fixed; the Step-41 duplicate-text leakage confirmed still present in canonical V6 (validation 0.9245 optimistic, test 0.9472 unaffected); the 18 excluded rows confirmed OCR garbage; the dataset "merge" shown to be unnecessary. |
+| [2026-06-30 — Extraction + Measurement UI audit & upgrades](2026-06-30_Extraction_Measurement_UI_Audit_and_Upgrades.md) | m1 | Audit of the extraction + accuracy-measurement surface; shipped the Markdown accuracy-report export; 10 prioritized upgrades. |
+
 ## Conventions
 
 See [_Tracker_Conventions](_Tracker_Conventions.md) for the original `tracker/README.md` — status legend, feature-ID format, how to add a session entry.
