@@ -4,151 +4,38 @@
     "type": "split",
     "children": [
       {
-        "id": "e25bc7962f07f76e",
+        "id": "cd9035984a6dfe87",
         "type": "tabs",
         "children": [
           {
-            "id": "a0a69cfaf0e6bd22",
+            "id": "6f73d01be693d609",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
+                "file": "Final-Report/07_ENIGMATRIX_RESEARCH_MASTER_DOCUMENTATION.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03_FEATURE_CHECKLIST"
+              "title": "07_ENIGMATRIX_RESEARCH_MASTER_DOCUMENTATION"
             }
           },
           {
-            "id": "dbca5b5f73906776",
+            "id": "42c81200669f75e5",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Final-Report/00_FINAL_REPORT_CONTEXT_INDEX.md",
+                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/27_M1_COMPLETE_RESEARCH_AND_IMPLEMENTATION_MASTER.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "00_FINAL_REPORT_CONTEXT_INDEX"
-            }
-          },
-          {
-            "id": "58a49c50305a8ab0",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Final-Report/06_M1_FULL_WORK_SESSION_CHRONOLOGY_2026-07-31.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "06_M1_FULL_WORK_SESSION_CHRONOLOGY_2026-07-31"
-            }
-          },
-          {
-            "id": "7043e1588ea30e91",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Final-Report/00_FINAL_REPORT_CONTEXT_INDEX.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "00_FINAL_REPORT_CONTEXT_INDEX"
-            }
-          },
-          {
-            "id": "942cd4de1a311543",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "23_M1_Retrieval_Augmented_Evidence_Branch"
-            }
-          },
-          {
-            "id": "751df9a24f52d75f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "03_M1_Data_Collection"
-            }
-          },
-          {
-            "id": "0aa7303caeaf1b80",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_3_LoRA_Hyperparameter_Justification.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "05_M1_3_LoRA_Hyperparameter_Justification"
-            }
-          },
-          {
-            "id": "e02ba65dd8b1a985",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_2_Architecture_Comparison_Deep_Dive.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "05_M1_2_Architecture_Comparison_Deep_Dive"
-            }
-          },
-          {
-            "id": "450057caa69cf7a9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_1_Sampling_Strategy.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "05_M1_1_Sampling_Strategy"
-            }
-          },
-          {
-            "id": "16653d31c2fa5739",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "02-Research-Modules/1 Module-1-Awareness-Gap/05_M1_Model_Architecture.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "05_M1_Model_Architecture"
+              "title": "27_M1_COMPLETE_RESEARCH_AND_IMPLEMENTATION_MASTER"
             }
           }
-        ],
-        "currentTab": 4
+        ]
       }
     ],
     "direction": "vertical"
@@ -313,21 +200,40 @@
       "obsidian-extract-pdf-highlights:PDF Highlights": false
     }
   },
-  "active": "22d18590d71c8738",
+  "active": "6f73d01be693d609",
   "lastOpenFiles": [
+    "02-Research-Modules/1 Module-1-Awareness-Gap/27_M1_COMPLETE_RESEARCH_AND_IMPLEMENTATION_MASTER.md",
+    "Final-Report/07_ENIGMATRIX_RESEARCH_MASTER_DOCUMENTATION.md",
+    "Final-Report/28_Enigmatrix _Final_Draft_Report.pdf",
+    "tmp/pdfs/final-report/extracted.txt",
+    "tmp/pdfs/final-report/contact_127_129.jpg",
+    "tmp/pdfs/final-report/contact_121_126.jpg",
+    "tmp/pdfs/final-report/contact_115_120.jpg",
+    "tmp/pdfs/final-report/contact_109_114.jpg",
+    "tmp/pdfs/final-report/contact_103_108.jpg",
+    "tmp/pdfs/final-report/contact_097_102.jpg",
+    "tmp/pdfs/final-report/contact_091_096.jpg",
+    "tmp/pdfs/final-report/contact_085_090.jpg",
+    "tmp/pdfs/final-report/contact_079_084.jpg",
+    "tmp/pdfs/final-report/contact_073_078.jpg",
+    "tmp/pdfs/final-report",
+    "tmp/pdfs",
+    "tmp",
+    "Final-Report/00_FINAL_REPORT_CONTEXT_INDEX.md",
+    "Final-Report/05_M1_RARE_DOMAIN_TOPUP_AND_V3_BASELINE.md",
+    "Final-Report/04_OFFICIAL_TEMPLATE_STRUCTURE_MAP.md",
+    "Final-Report/04_M1_KAGGLE_TRAINING_RESULTS_V1.md",
+    "Final-Report/03_M1_EVIDENCE_EVALUATION_AND_COMMANDS.md",
+    "Final-Report/02_CHAPTER_2_RELATED_WORK_DRAFT.md",
+    "Final-Report/01_CHAPTER_1_INTRODUCTION_DRAFT.md",
+    "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/24_M1_RAHMT_Hybrid_Architecture.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/works/03_FEATURE_CHECKLIST.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md.tmp.6088.06a1bf9c2fc3",
     "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md.tmp.6088.74e8578fcb25",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/23_M1_Retrieval_Augmented_Evidence_Branch.md.tmp.6088.c807fea1801d",
     "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.22876.698accd03e21",
     "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.22876.7be9d577368f",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/00_INDEX.md.tmp.22876.cd87ad9d39fe",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/10_M1_Sinhala_Tamil_NLP.md.tmp.22876.bf72785ce2d2",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md.tmp.22876.4dece00bce77",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md.tmp.22876.f07c80281db0",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/19_M1_Regulation_Summarization.md.tmp.22876.8919d72a98f2",
     "02-Research-Modules/1 Module-1-Awareness-Gap/22_M1_Data_Usage_and_Row_Count_Register.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/21_M1_Data_Limitations_and_Risk_Register.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02_lineage/20_M1_Multitask_Classifier_Upgrade.md",
@@ -339,27 +245,7 @@
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02_holdout/20_M1_Multitask_Classifier_Upgrade.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02_holdout/03_M1_Data_Collection.md",
     "02-Research-Modules/1 Module-1-Awareness-Gap/03_M1_Data_Collection.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_47.png",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_46.png",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_45.jpeg",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_44.png",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_43.png",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_42.jpeg",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_41.png",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_40.jpeg",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_39.jpeg",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/assets/pdf_img_38.png",
     "02-Research-Modules/1 Module-1-Awareness-Gap/final/report/Enigmatrix_Consolidated_Final_Report_FULL.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/20_M1_Multitask_Classifier_Upgrade.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/19_M1_Regulation_Summarization.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/18_M1_Dataset_And_Model_Lineage.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/17_M1_Repo_Structure_Map.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/16_M1_Development_Roadmap.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/15_M1_Folder_Reference.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/14_M1_Tracking_Workflows.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/13_M1_Folder_Structure_and_Implementation_Flow.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/12_M1_Monitoring_Maintenance.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/11_M1_API_Reference.md",
-    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/10_M1_Sinhala_Tamil_NLP.md"
+    "02-Research-Modules/1 Module-1-Awareness-Gap/_backup_2026-08-02/20_M1_Multitask_Classifier_Upgrade.md"
   ]
 }
